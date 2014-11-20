@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  post 'github_event_handler' => 'event_handler#github_event_handler'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
