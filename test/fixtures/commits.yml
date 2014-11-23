@@ -1,0 +1,5 @@
+commit:
+  sha1: 12345
+  url: https://github.com/rails/rails/commit/77fbc5358616c131884df4e0b622241ebf2a129b
+  message: Fix somthing.
+  repo: repo

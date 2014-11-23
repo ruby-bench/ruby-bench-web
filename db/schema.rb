@@ -11,14 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141123050150) do
+ActiveRecord::Schema.define(version: 20141123145430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
+
+  create_table "benchmark_runs", force: true do |t|
+    t.string   "category",    null: false
+    t.hstore   "result",      null: false
+    t.text     "environment", null: false
+    t.integer  "commit_id",   null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "benchmark_runs", ["commit_id"], name: "index_benchmark_runs_on_commit_id", using: :btree
 
   create_table "commits", force: true do |t|
     t.string   "sha1",       null: false
     t.string   "url",        null: false
+    t.text     "message",    null: false
     t.integer  "repo_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

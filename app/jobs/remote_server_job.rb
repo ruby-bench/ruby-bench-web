@@ -10,7 +10,8 @@ class RemoteServerJob < ActiveJob::Base
       password: secrets.bare_metal_server_password
     ) do |ssh|
 
-      output = ssh.exec!("sudo docker run --rm --name rails_benchmarks -e
+      ssh.exec!("sudo docker pull tgxworld/rails_bench &&
+        sudo docker run --rm --name rails_benchmarks -e
         \"RAILS_COMMIT_HASH=#{commit_hash}\" -e
         \"RUBY_VERSION=2.1.5\" -e \"KO1TEST_SEED_CNT=100\"
         tgxworld/rails_bench".squish

@@ -1,12 +1,20 @@
 require 'test_helper'
 
 class GithubEventHandlerTest < ActionDispatch::IntegrationTest
+  setup do
+    # FIXME: Called to remove fixtures. Should probably update the test for
+    # better assertions.
+    Repo.destroy_all
+    Commit.destroy_all
+  end
+
   test "#handle for single commits pushed" do
     RemoteServerJob.expects(:perform_later).once
 
     post_to_handler({
       'head_commit' => {
         'id' => '12345',
+        'message' => 'Fix something',
         'url' => 'http://github.com/rails/commit/12345',
         'timestamp' => '2014-11-20T15:45:15-08:00'
       },
@@ -29,11 +37,13 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         [
           {
             'id' => '12345',
+            'message' => 'Fix something',
             'url' => 'http://github.com/rails/commit/12345',
             'timestamp' => '2014-11-20T15:45:15-08:00'
           },
           {
             'id' => '12346',
+            'message' => 'Fix something',
             'url' => 'http://github.com/rails/commit/12346',
             'timestamp' => '2014-11-20T15:45:15-08:00'
           }

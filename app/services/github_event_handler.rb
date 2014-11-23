@@ -37,6 +37,7 @@ class GithubEventHandler
     Commit.create!(
       sha1: commit['id'],
       url: commit['url'],
+      message: commit['message'],
       repo_id: repo_id,
       created_at: commit['timestamp']
     )
