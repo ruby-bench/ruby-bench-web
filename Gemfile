@@ -9,6 +9,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 gem 'net-ssh', '~> 2.9.1'
 gem 'delayed_job_active_record', '~> 4.0.2'
+gem 'platform-api', '~> 0.2.0'
 
 group :development do
   gem 'spring'
@@ -20,4 +21,6 @@ end
 
 group :test do
   gem 'mocha', '~> 1.1.0'
+  gem 'vcr', '~> 2.9.3'
+  gem 'webmock', '~> 1.20.4'
 end

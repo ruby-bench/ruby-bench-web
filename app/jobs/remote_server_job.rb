@@ -1,4 +1,4 @@
-class RemoteServerJob < ActiveJob::Base
+class RemoteServerJob < ApplicationJob
   queue_as :default
 
   def perform(commit_hash)
