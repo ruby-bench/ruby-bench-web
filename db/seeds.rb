@@ -13,7 +13,7 @@ repo = Repo.create!(
 
 10.times do |n|
   commit = Commit.create!(
-    sha1: "#{n.to_s * 5}",
+    sha1: Digest::SHA1.hexdigest("#{n}"),
     url: "http://github.com/#{n}",
     message: 'fix something',
     repo_id: repo.id
