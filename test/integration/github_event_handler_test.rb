@@ -60,6 +60,34 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     assert_equal '12346', Commit.last.sha1
   end
 
+  test "Commits are not created for merge and ci skip commits" do
+    initial = Commit.count
+
+    post_to_handler({
+      'commits' =>
+        [
+          {
+            'id' => '12345',
+            'message' => Commit::MERGE_COMMIT_MESSAGE,
+            'url' => 'http://github.com/rails/commit/12345',
+            'timestamp' => '2014-11-20T15:45:15-08:00'
+          },
+          {
+            'id' => '12346',
+            'message' => Commit::CI_SKIP_COMMIT_MESSAGE,
+            'url' => 'http://github.com/rails/commit/12346',
+            'timestamp' => '2014-11-20T15:45:15-08:00'
+          }
+        ],
+        'repository' => {
+          'name' => 'rails',
+          html_url: 'https://github.com/tgxworld/rails'
+        }
+    })
+
+    assert_equal initial, Commit.count
+  end
+
   private
 
   def post_to_handler(parameters)

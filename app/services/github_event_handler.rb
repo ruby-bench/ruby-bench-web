@@ -24,8 +24,9 @@ class GithubEventHandler
     commits = @payload['commits'] || [@payload['head_commit']]
 
     commits.each do |commit|
-      create_commit(commit, repo.id)
-      RemoteServerJob.perform_later(commit['id'])
+      if create_commit(commit, repo.id)
+        RemoteServerJob.perform_later(commit['id'])
+      end
     end
   end
 
@@ -34,12 +35,14 @@ class GithubEventHandler
   end
 
   def create_commit(commit, repo_id)
-    Commit.create!(
-      sha1: commit['id'],
-      url: commit['url'],
-      message: commit['message'],
-      repo_id: repo_id,
-      created_at: commit['timestamp']
-    )
+    if !Commit.merge_or_skip_ci?(commit['message'])
+      Commit.create!(
+        sha1: commit['id'],
+        url: commit['url'],
+        message: commit['message'],
+        repo_id: repo_id,
+        created_at: commit['timestamp']
+      )
+    end
   end
 end
