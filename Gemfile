@@ -15,6 +15,7 @@ gem 'active_model_serializers', '~> 0.8.0'
 gem 'haml', '~> 4.0.5'
 gem 'bootstrap-sass', '~> 3.3.1'
 gem 'rails-assets-c3', '~> 0.4.6'
+gem 'rails-assets-d3', '~> 3.4.13'
 
 group :development do
   gem 'spring'
