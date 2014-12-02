@@ -19,6 +19,8 @@ gem 'rails-assets-d3', '~> 3.4.13'
 
 group :development do
   gem 'spring'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :development, :test do
