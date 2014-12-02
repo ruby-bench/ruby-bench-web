@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'https://rails-assets.org'
 
 gem 'rails', '4.2.0.beta4'
 gem 'pg'
@@ -13,6 +14,7 @@ gem 'platform-api', '~> 0.2.0'
 gem 'active_model_serializers', '~> 0.8.0'
 gem 'haml', '~> 4.0.5'
 gem 'bootstrap-sass', '~> 3.3.1'
+gem 'rails-assets-c3', '~> 0.4.6'
 
 group :development do
   gem 'spring'
