@@ -1,0 +1,13 @@
+%h1 Repositories
+
+%table.table.table-striped
+  %tr
+    %th= Repo.human_attribute_name(:name)
+    %th= Repo.human_attribute_name(:url).upcase
+
+  - @repos.each do |repo|
+    %tr
+      %td
+        = link_to repo.name.capitalize, repo_path(repo)
+
+      %td= link_to repo.url, repo.url, target: '_blank'

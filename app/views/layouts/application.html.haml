@@ -1,0 +1,23 @@
+!!! 5
+%html{ lang: 'en' }
+  %head
+    %title Long Running Rails Benchmark
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_include_tag 'application'
+    = csrf_meta_tags
+
+    %body
+      .container-fluid
+        .row
+          %header
+            = render 'layouts/top_bar'
+            = render 'layouts/header'
+
+          #main-body
+            .container-fluid
+              .row
+                .col-xs-8.col-xs-offset-2
+                  = yield
+
+          %footer
+            = yield :footer if content_for(:footer)

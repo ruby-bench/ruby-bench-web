@@ -1,0 +1,30 @@
+%h1= @repo.name.capitalize
+
+%table.table.table-striped
+  %tr
+    %th= Commit.human_attribute_name(:message)
+    %th= Commit.human_attribute_name(:sha1)
+    %th= Commit.human_attribute_name(:created_at)
+    %th= Commit.human_attribute_name(:benchmark_runs)
+
+  - @commits.each do |commit|
+    %tr
+      %td= commit.message
+      %td= link_to commit.sha1, commit.url
+      %td= commit.created_at
+
+      %td
+        %table.table.table-bordered.table-striped
+          %tr
+            %th= BenchmarkRun.human_attribute_name(:category)
+            %th= BenchmarkRun.human_attribute_name(:result)
+            %th= BenchmarkRun.human_attribute_name(:environment)
+
+          - commit.benchmark_runs.each do |benchmark_run|
+            %tr
+              %td= benchmark_run.category
+              %td= benchmark_run.result
+              %td
+                %ul
+                  - benchmark_run.environment.split("\n").each do |line|
+                    %li= line
