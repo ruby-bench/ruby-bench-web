@@ -55,9 +55,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     })
 
     assert_equal 'rails', Repo.first.name
-    assert_equal 2, Commit.all.count
-    assert_equal '12345', Commit.first.sha1
-    assert_equal '12346', Commit.last.sha1
+    assert_equal 2, Commit.count
   end
 
   test "Commits are not created for merge and ci skip commits" do

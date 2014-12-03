@@ -2,6 +2,8 @@ class Commit < ActiveRecord::Base
   MERGE_COMMIT_MESSAGE = 'Merge pull request'.freeze
   CI_SKIP_COMMIT_MESSAGE = 'ci skip'.freeze
 
+  default_scope -> { order('created_at DESC') }
+
   belongs_to :repo
   has_many :benchmark_runs
 
