@@ -5,9 +5,20 @@
 
 .header-title {
   margin: 0em;
+  font-family: Roboto;
+  font-weight: 900;
+  font-size: 40px;
 
   a {
-    color: black;
+    color: white;
     text-decoration: none;
   }
+}
+
+.header-title-rails {
+  margin-left: 0.4em;
+}
+
+.header-title-bench {
+  opacity: 0.6;
 }

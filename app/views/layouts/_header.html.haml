@@ -2,4 +2,7 @@
   .row
     .col-xs-8.col-xs-offset-2
       %h1.header-title
-        = link_to 'Long Running Ruby on Rails Benchmark', root_path
+        = link_to root_path do
+          = image_tag('logo.png')
+          %span.header-title-rails> Rails
+          %span.header-title-bench Bench
