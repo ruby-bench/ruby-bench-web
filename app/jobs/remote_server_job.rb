@@ -11,7 +11,7 @@ class RemoteServerJob < ApplicationJob
     ) do |ssh|
 
       ssh.exec!("sudo docker pull tgxworld/rails_bench &&
-        sudo docker run --rm --name rails_benchmarks -e
+        sudo docker run --rm -e
         \"RAILS_COMMIT_HASH=#{commit_hash}\" -e
         \"RUBY_VERSION=2.1.5\" -e \"KO1TEST_SEED_CNT=100\"
         tgxworld/rails_bench".squish
