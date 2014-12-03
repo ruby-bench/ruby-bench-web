@@ -2,6 +2,18 @@
 
 #chart
 
+%table.table.table-striped
+  %tr
+    %th= "#{Commit.name} #{Commit.human_attribute_name(:message)}"
+    %th= Commit.human_attribute_name(:sha1).upcase
+    %th= Commit.human_attribute_name(:created_at)
+
+  - @commits.each do |commit|
+    %tr
+      %td= commit.message
+      %td= link_to commit.sha1, commit.url, target: '_blank'
+      %td= commit.created_at
+
 - content_for(:footer) do
   :javascript
     var char = c3.generate({
