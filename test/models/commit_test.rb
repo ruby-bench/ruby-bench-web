@@ -7,6 +7,7 @@ class CommitTest < ActiveSupport::TestCase
 
   test "default_scope" do
     other_commit = @commit.dup
+    other_commit.sha1 = "123456"
     other_commit.created_at = Time.zone.now
     other_commit.save!
 

@@ -34,11 +34,11 @@ class GithubEventHandler
     organization_name, repo_name = parse_full_name(repository['full_name'])
     repository_url = repository['html_url']
 
-    organization = Organization.find_or_create_by!(
+    organization = Organization.find_or_create_by(
       name: organization_name, url: repository_url[0..((repository_url.length - 1) - repo_name.length)]
     )
 
-    Repo.find_or_create_by!(
+    Repo.find_or_create_by(
       name: repo_name, url: repository_url, organization_id: organization.id
     )
   end
@@ -50,13 +50,12 @@ class GithubEventHandler
 
   def create_commit(commit, repo_id)
     if !Commit.merge_or_skip_ci?(commit['message'])
-      Commit.create!(
-        sha1: commit['id'],
-        url: commit['url'],
-        message: commit['message'],
-        repo_id: repo_id,
-        created_at: commit['timestamp']
-      )
+      Commit.find_or_create_by(sha1: commit['id']) do |c|
+        c.url = commit['url']
+        c.message = commit['message']
+        c.repo_id = repo_id
+        c.created_at = commit['timestamp']
+      end
     end
   end
 end
