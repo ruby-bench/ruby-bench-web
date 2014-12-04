@@ -14,12 +14,12 @@ class ApplicationJob < ActiveJob::Base
 
   def teardown_worker
     production? do
-      @heroku_worker_manager.set_worker(0) if (job_count == 0)
+      @heroku_worker_manager.set_worker(0) if teardown_worker?
     end
   end
 
-  def job_count
-    Delayed::Job.where(failed_at: nil).count
+  def teardown_worker?
+    Delayed::Job.count == 1
   end
 
   def production?

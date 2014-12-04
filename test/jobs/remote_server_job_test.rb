@@ -1,14 +1,10 @@
 require 'test_helper'
 
 class RemoteServerJobTest < ActiveJob::TestCase
-  test 'SSH connection is made to server' do
-    Net::SSH.expects(:start).once
-    RemoteServerJob.perform_now('abcde')
-  end
-
   test 'workers are automatically setup and teardown' do
     Rails.env.stubs(:production?).returns(:true)
     Net::SSH.stubs(:start)
+    RemoteServerJob.any_instance.stubs(:teardown_worker?).returns(true)
 
     heroku_worker_manager = mock('heroku_worker_manager')
     HerokuWorkerManager.stubs(:new).returns(heroku_worker_manager)
