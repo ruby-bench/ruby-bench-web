@@ -6,6 +6,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     # better assertions.
     Repo.destroy_all
     Commit.destroy_all
+    Organization.destroy_all
   end
 
   test "#handle for single commits pushed" do
@@ -19,14 +20,20 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         'timestamp' => '2014-11-20T15:45:15-08:00'
       },
       'repository' => {
-        'name' => 'rails',
+        'full_name' => 'tgxworld/rails',
         html_url: 'https://github.com/tgxworld/rails'
       }
     })
 
-    assert_equal 'rails', Repo.first.name
-    assert_equal 'http://github.com/rails/commit/12345', Commit.first.url
-    assert_equal Repo.first, Commit.first.repo
+    organization = Organization.first
+    repo = Repo.first
+    commit = Commit.first
+
+    assert_equal 'tgxworld', organization.name
+    assert_equal 'rails', repo.name
+    assert_equal organization, repo.organization
+    assert_equal 'http://github.com/rails/commit/12345', commit.url
+    assert_equal repo, commit.repo
   end
 
   test "#handle for multiple commits pushed" do
@@ -49,13 +56,23 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
           }
         ],
         'repository' => {
-          'name' => 'rails',
+          'full_name' => 'tgxworld/rails',
           html_url: 'https://github.com/tgxworld/rails'
         }
     })
 
-    assert_equal 'rails', Repo.first.name
+    organization = Organization.first
+    repo = Repo.first
+    commit = Commit.first
+
+    assert_equal 'tgxworld', organization.name
+    assert_equal 'rails', repo.name
+    assert_equal organization, repo.organization
     assert_equal 2, Commit.count
+
+    Commit.all.each do |commit|
+      assert_equal repo, commit.repo
+    end
   end
 
   test "Commits are not created for merge and ci skip commits" do
@@ -78,7 +95,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
           }
         ],
         'repository' => {
-          'name' => 'rails',
+          'full_name' => 'tgxworld/rails',
           html_url: 'https://github.com/tgxworld/rails'
         }
     })

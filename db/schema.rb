@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141123145430) do
+ActiveRecord::Schema.define(version: 20141204071408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,14 +55,25 @@ ActiveRecord::Schema.define(version: 20141123145430) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
-  create_table "repos", force: true do |t|
+  create_table "organizations", force: true do |t|
     t.string   "name",       null: false
     t.string   "url",        null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  add_index "repos", ["name"], name: "index_repos_on_name", unique: true, using: :btree
+  add_index "organizations", ["name"], name: "index_organizations_on_name", unique: true, using: :btree
+
+  create_table "repos", force: true do |t|
+    t.string   "name",            null: false
+    t.string   "url",             null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "organization_id", null: false
+  end
+
+  add_index "repos", ["name", "organization_id"], name: "index_repos_on_name_and_organization_id", unique: true, using: :btree
+  add_index "repos", ["organization_id"], name: "index_repos_on_organization_id", using: :btree
   add_index "repos", ["url"], name: "index_repos_on_url", unique: true, using: :btree
 
 end

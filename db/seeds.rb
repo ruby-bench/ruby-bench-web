@@ -6,9 +6,15 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+organization = Organization.create!(
+  name: 'rails',
+  url: 'https://github.com/rails/'
+)
+
 repo = Repo.create!(
   name: 'rails',
-  url: 'https://github.com/rails/rails'
+  url: 'https://github.com/rails/rails',
+  organization_id: organization.id
 )
 
 10.times do |n|

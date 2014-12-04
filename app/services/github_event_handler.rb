@@ -31,7 +31,21 @@ class GithubEventHandler
   end
 
   def first_or_create_repo(repository)
-    Repo.find_or_create_by(name: repository['name'], url: repository['html_url'])
+    organization_name, repo_name = parse_full_name(repository['full_name'])
+    repository_url = repository['html_url']
+
+    organization = Organization.find_or_create_by!(
+      name: organization_name, url: repository_url[0..((repository_url.length - 1) - repo_name.length)]
+    )
+
+    Repo.find_or_create_by!(
+      name: repo_name, url: repository_url, organization_id: organization.id
+    )
+  end
+
+  def parse_full_name(full_name)
+    full_name =~ /\A(\w+)\/(\w+)/
+    [$1, $2]
   end
 
   def create_commit(commit, repo_id)

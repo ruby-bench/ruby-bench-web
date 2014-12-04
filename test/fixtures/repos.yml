@@ -1,3 +1,4 @@
 repo:
   name: rails
   url: https://github.com/rails/rails
+  organization: organization
