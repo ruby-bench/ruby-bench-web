@@ -6,7 +6,7 @@ class ReposController < ApplicationController
     @commits_sha1s = []
     @commits_data = {}
 
-    @commits.includes(:benchmark_runs).each do |commit|
+    @commits.includes(:benchmark_runs).reverse.each do |commit|
       if commit_benchmark_run = commit.benchmark_runs.first
         @commits_sha1s << commit.sha1[0..4]
 
