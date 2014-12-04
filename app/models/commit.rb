@@ -1,6 +1,7 @@
 class Commit < ActiveRecord::Base
   MERGE_COMMIT_MESSAGE = 'Merge pull request'.freeze
   CI_SKIP_COMMIT_MESSAGE = 'ci skip'.freeze
+  SKIP_CI_COMMIT_MESSAGE = 'skip ci'.freeze
 
   default_scope -> { order('created_at DESC') }
 
@@ -15,7 +16,9 @@ class Commit < ActiveRecord::Base
 
   class << self
     def merge_or_skip_ci?(message)
-      !message.match(/(#{CI_SKIP_COMMIT_MESSAGE})|(#{MERGE_COMMIT_MESSAGE})/).nil?
+      !message.match(
+        /#{CI_SKIP_COMMIT_MESSAGE}|#{MERGE_COMMIT_MESSAGE}|#{SKIP_CI_COMMIT_MESSAGE}/
+      ).nil?
     end
   end
 end
