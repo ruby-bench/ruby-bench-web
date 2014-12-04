@@ -19,6 +19,8 @@ class ApplicationJob < ActiveJob::Base
   end
 
   def teardown_worker?
+    # For some reason, jobs might be left stranded with Heroku causing this
+    # condition to fail and not do its job. Investigate further and fix.
     Delayed::Job.count == 1
   end
 
