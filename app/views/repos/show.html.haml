@@ -10,15 +10,16 @@
       %th= Commit.human_attribute_name(:created_at)
 
     - @commits.each do |commit|
-      %tr
-        %td.col-xs-6
-          = commit.message
+      - if !commit.benchmark_runs.empty?
+        %tr
+          %td.col-xs-6
+            = commit.message
 
-        %td.col-xs-4
-          = link_to commit.sha1, commit.url, target: '_blank'
+          %td.col-xs-4
+            = link_to commit.sha1, commit.url, target: '_blank'
 
-        %td.col-xs-2
-          = commit.created_at
+          %td.col-xs-2
+            = commit.created_at
 
 - content_for(:footer) do
   :javascript
