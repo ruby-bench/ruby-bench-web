@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
-  root 'repos#index'
+  root 'organizations#index'
 
   post 'github_event_handler' => 'event_handler#github_event_handler'
   resources :benchmark_runs, only: [:create]
 
-  resources :repos
+  get ':name' => 'organizations#show', as: :organization
+  get ':organization_name/:repo_name' => 'repos#show', as: :repo
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

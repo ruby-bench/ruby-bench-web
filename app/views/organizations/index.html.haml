@@ -1,0 +1,13 @@
+%h1 Organizations
+
+%table.table.table-striped
+  %tr
+    %th= Organization.human_attribute_name(:name)
+    %th= Organization.human_attribute_name(:url).upcase
+
+  - @organizations.each do |organization|
+    %tr
+      %td
+        = link_to organization.name.capitalize, organization_path(organization.name)
+
+      %td= link_to organization.url, organization.url, target: '_blank'

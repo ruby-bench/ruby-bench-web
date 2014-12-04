@@ -1,10 +1,6 @@
 class ReposController < ApplicationController
-  def index
-    @repos = Repo.all
-  end
-
   def show
-    @repo = Repo.find(params[:id])
+    @repo = Repo.find_by(name: params[:repo_name])
     @commits = @repo.commits
 
     @commits_sha1s = []

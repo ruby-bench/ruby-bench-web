@@ -1,4 +1,6 @@
-%h1 Repositories
+%h1
+  = @organization.name.capitalize
+  Repositories
 
 %table.table.table-striped
   %tr
@@ -8,6 +10,7 @@
   - @repos.each do |repo|
     %tr
       %td
-        = link_to repo.name.capitalize, repo_path(repo)
+        = link_to repo.name.capitalize,
+          repo_path(repo_name: repo.name, organization_name: @organization.name)
 
       %td= link_to repo.url, repo.url, target: '_blank'
