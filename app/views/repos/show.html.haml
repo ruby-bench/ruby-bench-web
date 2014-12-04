@@ -11,9 +11,14 @@
 
     - @commits.each do |commit|
       %tr
-        %td= commit.message
-        %td= link_to commit.sha1, commit.url, target: '_blank'
-        %td= commit.created_at
+        %td.col-xs-6
+          = commit.message
+
+        %td.col-xs-4
+          = link_to commit.sha1, commit.url, target: '_blank'
+
+        %td.col-xs-2
+          = commit.created_at
 
 - content_for(:footer) do
   :javascript
