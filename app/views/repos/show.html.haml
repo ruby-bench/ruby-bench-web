@@ -2,24 +2,40 @@
 
 #chart
 
-.table-responsive
-  %table.table.table-striped
-    %tr
-      %th= "#{Commit.name} #{Commit.human_attribute_name(:message)}"
-      %th= Commit.human_attribute_name(:sha1).upcase
-      %th= Commit.human_attribute_name(:created_at)
+= form_tag repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
+    role: 'form', method: :get do
 
-    - @commits.each do |commit|
-      - if !commit.benchmark_runs.empty?
-        %tr
-          %td.col-xs-6
-            = commit.message
+  .form-group
+    = label_tag('result_type', 'Result Type')
 
-          %td.col-xs-4
-            = link_to commit.sha1, commit.url, target: '_blank'
+    = select_tag 'result_type',
+        options_for_select(@result_types, selected: @result_type),
+        class: 'form-control'
 
-          %td.col-xs-2
-            = commit.created_at
+  .form-group
+    = submit_tag 'Submit', class: 'btn btn-block btn-primary'
+
+.row
+  %h1 List of Commits
+
+  .table-responsive
+    %table.table.table-striped
+      %tr
+        %th= "#{Commit.name} #{Commit.human_attribute_name(:message)}"
+        %th= Commit.human_attribute_name(:sha1).upcase
+        %th= Commit.human_attribute_name(:created_at)
+
+      - @commits.each do |commit|
+        - if !commit.benchmark_runs.empty?
+          %tr
+            %td.col-xs-6
+              = commit.message
+
+            %td.col-xs-4
+              = link_to commit.sha1, commit.url, target: '_blank'
+
+            %td.col-xs-2
+              = commit.created_at
 
 - content_for(:footer) do
   :javascript
@@ -27,27 +43,7 @@
       bindto: "#chart",
       data: {
         x: 'Commit SHA1',
-        columns: [
-          #{['Commit SHA1'].concat(@commits_sha1s)},
-          #{@commits_data['TOTAL']},
-          #{@commits_data['FREE']},
-          #{@commits_data['T_OBJECT']},
-          #{@commits_data['T_MODULE']},
-          #{@commits_data['T_FLOAT']},
-          #{@commits_data['T_STRING']},
-          #{@commits_data['T_REGEXP']},
-          #{@commits_data['T_ARRAY']},
-          #{@commits_data['T_HASH']},
-          #{@commits_data['T_STRUCT']},
-          #{@commits_data['T_BIGNUM']},
-          #{@commits_data['T_FILE']},
-          #{@commits_data['T_DATA']},
-          #{@commits_data['T_MATCH']},
-          #{@commits_data['T_COMPLEX']},
-          #{@commits_data['T_RATIONAL']},
-          #{@commits_data['T_NODE']},
-          #{@commits_data['T_ICLASS']}
-        ]
+        columns: #{@columns}
       },
       zoom: {
         enabled: true
@@ -58,7 +54,7 @@
           show: false
         },
         y: {
-          label: 'Objects Allocated'
+          label: 'Objects Allocated / Time(secs)'
         }
       }
     })
