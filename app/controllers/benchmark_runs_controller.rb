@@ -4,7 +4,11 @@ class BenchmarkRunsController < ApplicationController
   def create
     benchmark_run = BenchmarkRun.new(benchmark_run_params)
     benchmark_run.result = params[:benchmark_run][:result]
-    commit = Commit.find_by_sha1(params[:commit_hash])
+
+    commit = Organization.find_by_name(params[:organization])
+      .repos.find_by_name(params[:repo])
+      .commits.find_by_sha1(params[:commit_hash])
+
     benchmark_run.commit = commit
     benchmark_run.save!
     # Some notifications feature to say this failed
