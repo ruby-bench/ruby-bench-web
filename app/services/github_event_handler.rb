@@ -25,7 +25,7 @@ class GithubEventHandler
 
     commits.each do |commit|
       if create_commit(commit, repo.id)
-        RemoteServerJob.perform_later(commit['id'])
+        RemoteServerJob.perform_later(commit['id'], repo.name)
       end
     end
   end
