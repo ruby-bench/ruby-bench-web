@@ -1,5 +1,5 @@
 class Repo < ActiveRecord::Base
-  has_many :commits
+  has_many :commits, dependent: :destroy
   belongs_to :organization
 
   validates :name, presence: true, uniqueness: { scope: :organization_id }
