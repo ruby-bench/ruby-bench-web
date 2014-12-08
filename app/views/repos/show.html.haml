@@ -1,60 +1,75 @@
-%h1= @repo.name.capitalize
+- params_result_types = params[:result_types]
 
-#chart
+%h1.l-align-center
+  = @repo.name.capitalize
+  Benchmarks
 
-= form_tag repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
-    role: 'form', method: :get do
+.container
+  .row
+    .col-xs-2
+      = form_tag repo_path(organization_name: @repo.organization.name,
+          repo_name: @repo.name),
+          role: 'form', method: :get do
 
-  .form-group
-    = label_tag('result_type', 'Result Type')
+        %h4.l-text-underline Benchmark Types
 
-    = select_tag 'result_type',
-        options_for_select(@result_types, selected: @result_type),
-        class: 'form-control'
+        .form-group
+          %ul.list-unstyled
+            %li
+              = radio_button_tag("result_types[]", 'all',
+                  params_result_types.try(:include?, 'all'))
 
-  .form-group
-    = submit_tag 'Submit', class: 'btn btn-block btn-primary'
+              = label_tag('Display all')
 
-.row
-  %h1 List of Commits
+            %li
+              = radio_button_tag("result_types[]", 'none',
+                  params_result_types.try(:include?, 'none'))
 
-  .table-responsive
-    %table.table.table-striped
-      %tr
-        %th= "#{Commit.name} #{Commit.human_attribute_name(:message)}"
-        %th= Commit.human_attribute_name(:sha1).upcase
-        %th= Commit.human_attribute_name(:created_at)
+              = label_tag('Display none')
 
-      - @commits.each do |commit|
-        - if !commit.benchmark_runs.empty?
-          %tr
-            %td.col-xs-6
-              = commit.message
+            %hr
 
-            %td.col-xs-4
-              = link_to commit.sha1, commit.url, target: '_blank'
+            - @result_types.each do |result_type|
+              %li
+                = radio_button_tag("result_types[]", result_type,
+                  params_result_types.try(:include?, result_type))
 
-            %td.col-xs-2
-              = commit.created_at
+                = label_tag(result_type)
 
-- content_for(:footer) do
-  :javascript
-    var char = c3.generate({
-      bindto: "#chart",
-      data: {
-        x: 'Commit SHA1',
-        columns: #{@columns}
-      },
-      zoom: {
-        enabled: true
-      },
-      axis: {
-        x: {
-          type: 'category',
-          show: false
-        },
-        y: {
-          label: 'Objects Allocated / Time(secs)'
-        }
-      }
-    })
+        .form-group
+          = submit_tag 'Submit', class: 'btn btn-block btn-primary'
+
+    .col-xs-10
+      - if !@graphs_columns || @graphs_columns.empty?
+        .alert.alert-warning
+          .l-align-center
+            Please select an option on the left.
+
+      - else
+        - @graphs_columns.each_with_index do |columns, index|
+          %h2.l-text-underline
+            = columns[1][0]
+
+          #chart{ id: "#{index}" }
+
+          - content_for(:footer) do
+            :javascript
+              c3.generate({
+                bindto: "#chart_#{index}",
+                data: {
+                  x: 'Commit SHA1',
+                  columns: #{columns}
+                },
+                zoom: {
+                  enabled: true
+                },
+                axis: {
+                  x: {
+                    type: 'category',
+                    show: false
+                  },
+                  y: {
+                    label: 'Objects Allocated / Time(secs)'
+                  }
+                }
+              })

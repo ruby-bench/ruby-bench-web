@@ -3,37 +3,58 @@ class ReposController < ApplicationController
   # TODO: Refactor and add tests.
   def show
     @repo = Repo.find_by(name: params[:repo_name])
-    @commits = @repo.commits
-    @result_type = params[:result_type]
 
-    commits_sha1s = ['Commit SHA1']
-    commits_data = {}
+    @commits = @repo.commits
+      .joins(:benchmark_runs)
+      .where("(SELECT COUNT(*) FROM commits WHERE benchmark_runs.commit_id=commits.id) != 0")
+
+    form_result_types = params[:result_types]
+    @result_types = @commits.first.benchmark_runs.map(&:category).sort
+
+    case form_result_types.try(:first)
+    when 'all'
+      form_result_types = @result_types
+    when 'none', nil
+      form_result_types = []
+    end
+
+    commits_sha1s ||= ['Commit SHA1']
+    commits_data ||= {}
 
     @commits.includes(:benchmark_runs).reverse.each do |commit|
       commit_benchmark_runs = commit.benchmark_runs
       next if commit_benchmark_runs.empty?
 
-      if !@result_types
-        @result_types = commit_benchmark_runs.map(&:category)
-        @result_types.uniq
-      end
+      commits_sha1s << "Commit: #{commit.sha1[0..4]}"
 
-      @result_type ||= commit.benchmark_runs.first.category
+      form_result_types.each do |result_type|
+        commits_data[result_type] ||= {}
 
-      commit.benchmark_runs.where(category: @result_type).each do |benchmark_run|
-        commits_sha1s << "Commit: #{commit.sha1[0..4]}"
-
-        benchmark_run.result.each do |key, value|
-          commits_data[key] ||= [key]
-          commits_data[key] << value
+        commit.benchmark_runs.where(category: result_type).each do |benchmark_run|
+          benchmark_run.result.each do |key, value|
+            commits_data[result_type][key] ||= [key]
+            commits_data[result_type][key] << value
+          end
         end
       end
     end
 
-    @columns = [commits_sha1s]
+    @graphs_columns = build_graphs_columns(commits_sha1s, commits_data)
+  end
 
-    commits_data.each do |_, value|
-      @columns << value
+  private
+
+  def build_graphs_columns(commits_sha1s, commits_data)
+    if !commits_data.empty?
+      commits_data.map do |result_type, result_data|
+        graphs_columns = [commits_sha1s]
+
+        result_data.map do |_, value|
+          graphs_columns << value
+        end
+
+        graphs_columns
+      end
     end
   end
 end

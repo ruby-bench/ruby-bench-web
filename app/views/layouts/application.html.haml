@@ -17,8 +17,7 @@
           #main-body
             .container-fluid
               .row
-                .col-xs-8.col-xs-offset-2
-                  = yield
+                = yield
 
           %footer
             = yield :footer if content_for(:footer)

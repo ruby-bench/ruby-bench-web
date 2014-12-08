@@ -3,7 +3,7 @@ class Commit < ActiveRecord::Base
   CI_SKIP_COMMIT_MESSAGE = 'ci skip'.freeze
   SKIP_CI_COMMIT_MESSAGE = 'skip ci'.freeze
 
-  default_scope -> { order('created_at DESC') }
+  default_scope -> { order('commits.created_at DESC') }
 
   belongs_to :repo
   has_many :benchmark_runs, dependent: :destroy
