@@ -21,7 +21,7 @@ class ReposController < ApplicationController
       @result_type ||= commit.benchmark_runs.first.category
 
       commit.benchmark_runs.where(category: @result_type).each do |benchmark_run|
-        commits_sha1s << commit.sha1[0..4]
+        commits_sha1s << "Commit: #{commit.sha1[0..4]}"
 
         benchmark_run.result.each do |key, value|
           commits_data[key] ||= [key]
