@@ -1,6 +1,6 @@
 class ReposController < ApplicationController
-  # ZOMG too much logic here.
-  # TODO: Refactor and add tests.
+  # ZOMG too much logic here and we really need to clean this up.
+  # ActiveRecord queries are taking wayyy tooo long.
   def show
     organization = Organization.find_by_name(params[:organization_name]) || not_found
     @repo = Repo.find_by(name: params[:repo_name], organization_id: organization.id)
