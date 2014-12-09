@@ -3,8 +3,7 @@ class ReposController < ApplicationController
   # ActiveRecord queries are taking wayyy tooo long.
   def show
     organization = Organization.find_by_name(params[:organization_name]) || not_found
-    @repo = Repo.find_by(name: params[:repo_name], organization_id: organization.id)
-
+    @repo = organization.repos.find_by_name(params[:repo_name])
     @commits = @repo.commits
       .joins(:benchmark_runs)
       .where("(SELECT COUNT(*) FROM commits WHERE benchmark_runs.commit_id=commits.id) != 0")
