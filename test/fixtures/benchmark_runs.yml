@@ -1,0 +1,6 @@
+benchmark_run:
+  category: array_iterations
+  commit: commit
+  result:
+    :some_time: 0.123
+  environment: ruby 2.2dev
