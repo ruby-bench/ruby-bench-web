@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'organizations#index'
+  root 'static_pages#homepage'
 
   post 'github_event_handler' => 'event_handler#github_event_handler'
   resources :benchmark_runs, only: [:create]
