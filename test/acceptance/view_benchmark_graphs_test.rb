@@ -1,10 +1,12 @@
 require 'acceptance/test_helper'
 
 class ViewBenchmarkGraphsTest < AcceptanceTest
-  test "User should be able to view benchmark graphs" do
+  setup do
     require_js
-    benchmark_run = benchmark_runs(:benchmark_run)
+    @benchmark_run = benchmark_runs(:benchmark_run)
+  end
 
+  test "User should be able to view a single benchmark graphs" do
     visit root_path
 
     within first(".table.table-striped") do
@@ -15,10 +17,40 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_content?("Please select an option on the left.")
 
     within "form" do
-      choose("result_type_#{benchmark_run.category}")
+      choose("result_type_#{@benchmark_run.category}")
       click_button 'Submit'
     end
 
     assert page.has_css?("#chart_0.c3")
+  end
+
+
+  test "User should be able to clear all benchmark graphs" do
+    visit "/rails/rails?result_type=#{@benchmark_run.category}"
+
+    assert page.has_content?("Rails Benchmarks")
+    assert page.has_css?("#chart_0.c3")
+
+    within "form" do
+      choose("result_type_none")
+      click_button 'Submit'
+    end
+
+    assert page.has_content?("Please select an option on the left.")
+  end
+
+  test "User should be able to view all benchmark graphs" do
+    visit "/rails/rails"
+
+    assert page.has_content?("Rails Benchmarks")
+    assert page.has_content?("Please select an option on the left.")
+
+    within "form" do
+      choose("result_type_all")
+      click_button 'Submit'
+    end
+
+    assert page.has_css?("#chart_0.c3")
+    assert page.has_css?("#chart_1.c3")
   end
 end

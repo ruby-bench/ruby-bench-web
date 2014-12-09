@@ -4,3 +4,11 @@ benchmark_run:
   result:
     :some_time: 0.123
   environment: ruby 2.2dev
+
+benchmark_run2:
+  category: array_count
+  commit: commit
+  result:
+    :some_time: 0.123
+  environment: ruby 2.2dev
+
