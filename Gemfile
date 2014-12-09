@@ -21,6 +21,7 @@ group :development do
   gem 'spring'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'bullet', '~> 4.14.0'
 end
 
 group :development, :test do
