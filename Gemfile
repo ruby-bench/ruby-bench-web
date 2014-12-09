@@ -31,6 +31,9 @@ group :test do
   gem 'mocha', '~> 1.1.0'
   gem 'vcr', '~> 2.9.3'
   gem 'webmock', '~> 1.20.4'
+  gem 'capybara', '~> 2.4.4'
+  gem 'capybara-webkit', '~> 1.3.1'
+  gem 'launchy', '~> 2.4.3'
 end
 
 group :production do
