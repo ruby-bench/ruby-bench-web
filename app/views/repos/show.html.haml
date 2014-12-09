@@ -4,72 +4,71 @@
   = @repo.name.capitalize
   Benchmarks
 
-.container
-  .row
-    .col-xs-2
-      = form_tag repo_path(organization_name: @repo.organization.name,
-          repo_name: @repo.name),
-          role: 'form', method: :get do
+.row
+  .col-xs-2
+    = form_tag repo_path(organization_name: @repo.organization.name,
+        repo_name: @repo.name),
+        role: 'form', method: :get do
 
-        %h4.l-text-underline Benchmark Types
+      %h4.l-text-underline Benchmark Types
 
-        .form-group
-          %ul.list-unstyled
+      .form-group
+        %ul.list-unstyled
+          %li
+            = radio_button_tag("result_types[]", 'all',
+                params_result_types.try(:include?, 'all'))
+
+            = label_tag('Display all')
+
+          %li
+            = radio_button_tag("result_types[]", 'none',
+                params_result_types.try(:include?, 'none'))
+
+            = label_tag('Display none')
+
+          %hr
+
+          - @result_types.each do |result_type|
             %li
-              = radio_button_tag("result_types[]", 'all',
-                  params_result_types.try(:include?, 'all'))
+              = radio_button_tag("result_types[]", result_type,
+                params_result_types.try(:include?, result_type))
 
-              = label_tag('Display all')
+              = label_tag(result_type)
 
-            %li
-              = radio_button_tag("result_types[]", 'none',
-                  params_result_types.try(:include?, 'none'))
+      .form-group
+        = submit_tag 'Submit', class: 'btn btn-block btn-primary'
 
-              = label_tag('Display none')
+  .col-xs-10
+    - if !@graphs_columns || @graphs_columns.empty?
+      .alert.alert-warning
+        .l-align-center
+          Please select an option on the left.
 
-            %hr
+    - else
+      - @graphs_columns.each_with_index do |columns, index|
+        %h2.l-text-underline
+          = columns[1][0]
 
-            - @result_types.each do |result_type|
-              %li
-                = radio_button_tag("result_types[]", result_type,
-                  params_result_types.try(:include?, result_type))
+        #chart{ id: "#{index}" }
 
-                = label_tag(result_type)
-
-        .form-group
-          = submit_tag 'Submit', class: 'btn btn-block btn-primary'
-
-    .col-xs-10
-      - if !@graphs_columns || @graphs_columns.empty?
-        .alert.alert-warning
-          .l-align-center
-            Please select an option on the left.
-
-      - else
-        - @graphs_columns.each_with_index do |columns, index|
-          %h2.l-text-underline
-            = columns[1][0]
-
-          #chart{ id: "#{index}" }
-
-          - content_for(:footer) do
-            :javascript
-              c3.generate({
-                bindto: "#chart_#{index}",
-                data: {
-                  x: 'Commit SHA1',
-                  columns: #{columns}
+        - content_for(:footer) do
+          :javascript
+            c3.generate({
+              bindto: "#chart_#{index}",
+              data: {
+                x: 'Commit SHA1',
+                columns: #{columns}
+              },
+              zoom: {
+                enabled: true
+              },
+              axis: {
+                x: {
+                  type: 'category',
+                  show: false
                 },
-                zoom: {
-                  enabled: true
-                },
-                axis: {
-                  x: {
-                    type: 'category',
-                    show: false
-                  },
-                  y: {
-                    label: 'Objects Allocated / Time(secs)'
-                  }
+                y: {
+                  label: 'Objects Allocated / Time(secs)'
                 }
-              })
+              }
+            })
