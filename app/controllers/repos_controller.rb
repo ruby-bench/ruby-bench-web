@@ -2,7 +2,8 @@ class ReposController < ApplicationController
   # ZOMG too much logic here.
   # TODO: Refactor and add tests.
   def show
-    @repo = Repo.find_by(name: params[:repo_name])
+    organization = Organization.find_by_name(params[:organization_name]) || not_found
+    @repo = Repo.find_by(name: params[:repo_name], organization_id: organization.id)
 
     @commits = @repo.commits
       .joins(:benchmark_runs)
