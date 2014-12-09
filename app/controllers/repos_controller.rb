@@ -25,12 +25,16 @@ class ReposController < ApplicationController
       commit_benchmark_runs = commit.benchmark_runs
       next if commit_benchmark_runs.empty?
 
-      commits_sha1s << "Commit: #{commit.sha1[0..4]}"
-
       form_result_types.each do |result_type|
         commits_data[result_type] ||= {}
 
         commit.benchmark_runs.where(category: result_type).each do |benchmark_run|
+          commits_sha1s << "
+            Commit: #{commit.sha1[0..6]}<br>
+            Commit Date: #{commit.created_at}<br>
+            Environment: #{benchmark_run.environment}<br>
+          ".squish
+
           benchmark_run.result.each do |key, value|
             commits_data[result_type][key] ||= [key]
             commits_data[result_type][key] << value
