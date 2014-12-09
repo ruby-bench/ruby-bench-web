@@ -5,9 +5,6 @@ class ReposController < ApplicationController
     organization = Organization.find_by_name(params[:organization_name]) || not_found
     @repo = organization.repos.find_by_name(params[:repo_name])
     @commits = @repo.commits
-      .joins(:benchmark_runs)
-      .where("(SELECT COUNT(*) FROM commits WHERE benchmark_runs.commit_id=commits.id) != 0")
-
     @form_result_type = params[:result_type]
     @result_types = @commits.first.benchmark_runs.map(&:category).sort
 
