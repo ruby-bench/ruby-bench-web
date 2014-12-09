@@ -1,9 +1,8 @@
 require "#{Rails.root}/test/test_helper"
-require 'capybara/rails'
-require 'capybara/poltergeist'
 
-Capybara.javascript_driver = :webkit
+Dir["#{Rails.root}/test/acceptance/support/**/*"].each { |file| require file }
 
 class AcceptanceTest < ActionDispatch::IntegrationTest
   include Capybara::DSL
+  include Capybara::JavaScriptDriver
 end

@@ -8,15 +8,18 @@ class ReposController < ApplicationController
       .joins(:benchmark_runs)
       .where("(SELECT COUNT(*) FROM commits WHERE benchmark_runs.commit_id=commits.id) != 0")
 
-    form_result_types = params[:result_types]
+    @form_result_type = params[:result_type]
     @result_types = @commits.first.benchmark_runs.map(&:category).sort
 
-    case form_result_types.try(:first)
-    when 'all'
-      form_result_types = @result_types
-    when 'none', nil
-      form_result_types = []
-    end
+    form_result_types =
+      case @form_result_type
+      when 'all'
+        @result_types
+      when 'none', nil
+        []
+      else
+        [@form_result_type]
+      end
 
     commits_sha1s ||= ['Commit SHA1']
     commits_data ||= {}

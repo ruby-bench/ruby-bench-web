@@ -1,4 +1,4 @@
-- params_result_types = params[:result_types]
+- params_result_type = params[:result_type]
 
 %h1.l-align-center
   = @repo.name.capitalize
@@ -15,14 +15,14 @@
       .form-group
         %ul.list-unstyled
           %li
-            = radio_button_tag("result_types[]", 'all',
-                params_result_types.try(:include?, 'all'))
+            = radio_button_tag("result_type", 'all',
+                params_result_type == 'all')
 
             = label_tag('Display all')
 
           %li
-            = radio_button_tag("result_types[]", 'none',
-                params_result_types.try(:include?, 'none'))
+            = radio_button_tag("result_type", 'none',
+                params_result_type == 'none')
 
             = label_tag('Display none')
 
@@ -30,8 +30,8 @@
 
           - @result_types.each do |result_type|
             %li
-              = radio_button_tag("result_types[]", result_type,
-                params_result_types.try(:include?, result_type))
+              = radio_button_tag("result_type", result_type,
+                params_result_type == result_type)
 
               = label_tag(result_type)
 
@@ -46,9 +46,6 @@
 
     - else
       - @graphs_columns.each_with_index do |columns, index|
-        %h2.l-text-underline
-          = columns[1][0]
-
         #chart{ id: "#{index}" }
 
         - content_for(:footer) do

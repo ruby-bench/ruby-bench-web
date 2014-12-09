@@ -2,6 +2,7 @@ require 'acceptance/test_helper'
 
 class ViewBenchmarkGraphsTest < AcceptanceTest
   test "User should be able to view benchmark graphs" do
+    require_js
     benchmark_run = benchmark_runs(:benchmark_run)
 
     visit root_path
@@ -14,10 +15,10 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_content?("Please select an option on the left.")
 
     within "form" do
-      choose("result_types__#{benchmark_run.category}")
+      choose("result_type_#{benchmark_run.category}")
       click_button 'Submit'
     end
 
-    assert page.find('h2', text: benchmark_run.result.keys.first)
+    assert page.has_css?("#chart_0.c3")
   end
 end
