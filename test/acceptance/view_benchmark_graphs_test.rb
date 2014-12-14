@@ -53,4 +53,16 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_css?("#chart_0.c3")
     assert page.has_css?("#chart_1.c3")
   end
+
+  test "User should see benchmark categories as sorted" do
+    visit "/rails/rails"
+
+    within "form" do
+      lis = page.all('li input')[2..-1]
+
+      assert_equal 2, lis.count
+      assert_equal benchmark_runs(:benchmark_run2).category, lis.first.value
+      assert_equal @benchmark_run.category, lis.last.value
+    end
+  end
 end

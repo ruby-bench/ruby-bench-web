@@ -7,7 +7,7 @@ class ReposController < ApplicationController
     @commits = @repo.commits
     @form_result_type = params[:result_type]
     benchmark_runs = BenchmarkRun.where(commit_id: @commits.map(&:id)).includes(:commit)
-    @result_types = benchmark_runs.pluck(:category).uniq
+    @result_types = benchmark_runs.pluck(:category).uniq.sort
 
     form_result_types =
       case @form_result_type
