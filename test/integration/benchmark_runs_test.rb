@@ -11,6 +11,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
         category: 'allocated_objects',
         result: { fast: 'slow' },
         environment: 'ruby-2.1.5',
+        unit: 'seconds'
       },
       commit_hash: commit.sha1,
       repo: repo.name,

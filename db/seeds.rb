@@ -61,7 +61,8 @@ repo2 = Repo.create!(
       T_ICLASS: 0.066
     },
     environment: "About your application's environment\nRails version             5.0.0.alpha\nRuby version              2.1.5-p273 (x86_64-linux)\nRubyGems version          2.4.4\nRack version              1.5\nJavaScript Runtime        therubyracer (V8)\nMiddleware                Rack::Sendfile, ActionDispatch::Static, Rack::Lock, #<ActiveSupport::Cache::Strategy::LocalCache::Middleware:0x000000030f5700>, Rack::Runtime, Rack::MethodOverride, ActionDispatch::RequestId, Rails::Rack::Logger, ActionDispatch::ShowExceptions, ActionDispatch::DebugExceptions, ActionDispatch::RemoteIp, ActionDispatch::Reloader, ActionDispatch::Callbacks, ActiveRecord::Migration::CheckPending, ActiveRecord::ConnectionAdapters::ConnectionManagement, ActiveRecord::QueryCache, ActionDispatch::Cookies, ActionDispatch::Session::CookieStore, ActionDispatch::Flash, ActionDispatch::ParamsParser, Rack::Head, Rack::ConditionalGet, Rack::ETag, Warden::Manager\nApplication root          /home/guoxiang/rails-bench/ko1-test-app\nEnvironment               development\nDatabase adapter          sqlite3\nDatabase schema version   20130808072142\n",
-    commit_id: commit.id
+    commit_id: commit.id,
+    unit: 'objects'
   )
 end
 
@@ -77,13 +78,15 @@ end
     category: 'ao_bench',
     result: { 'ao_bench' => 0.22 },
     environment: 'ruby 2.2.0dev',
-    commit_id: commit.id
+    commit_id: commit.id,
+    unit: 'seconds'
   )
 
   BenchmarkRun.create!(
     category: 'ab_bench',
     result: { 'ab_bench' => 1.23 },
     environment: 'ruby 2.2.0dev',
-    commit_id: commit.id
+    commit_id: commit.id,
+    unit: 'seconds'
   )
 end

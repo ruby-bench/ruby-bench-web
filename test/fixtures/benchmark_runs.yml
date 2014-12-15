@@ -4,6 +4,7 @@ benchmark_run:
   result:
     :some_time: 0.123
   environment: ruby 2.2dev
+  unit: seconds
 
 benchmark_run2:
   category: array_count
@@ -11,4 +12,4 @@ benchmark_run2:
   result:
     :some_time: 0.123
   environment: ruby 2.2dev
-
+  unit: seconds

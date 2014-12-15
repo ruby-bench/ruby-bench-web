@@ -40,7 +40,7 @@
               bindto: "#chart_#{index}",
               data: {
                 x: 'Commit SHA1',
-                columns: #{columns}
+                columns: #{columns[2..-1].unshift(columns[0])}
               },
               zoom: {
                 enabled: true
@@ -54,7 +54,7 @@
                   }
                 },
                 y: {
-                  label: 'Seconds'
+                  label: "#{columns[1]}"
                 }
               }
             })

@@ -5,4 +5,5 @@ class BenchmarkRun < ActiveRecord::Base
   validates :result, presence: true
   validates :environment, presence: true
   validates :commit_id, presence: true
+  validates :unit, presence: true
 end
