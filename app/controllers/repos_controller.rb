@@ -15,8 +15,7 @@ class ReposController < ApplicationController
     benchmark_runs.where(category: @form_result_types).each do |benchmark_run|
       commits_sha1s << "
         Commit: #{benchmark_run.commit.sha1[0..6]}<br>
-        Commit Date: #{benchmark_run.commit.created_at}<br>
-        Environment: #{benchmark_run.environment}<br>
+        Commit Date: #{benchmark_run.commit.created_at}
       ".squish
 
       benchmark_run.result.each do |key, value|
