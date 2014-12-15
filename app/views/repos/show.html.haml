@@ -39,7 +39,7 @@
         #chart{ id: "#{index}" }
 
         - if script_url = columns[2]
-          %h2
+          %h2.l-align-center
             = t('.benchmark_script')
 
           = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
