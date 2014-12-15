@@ -18,6 +18,7 @@ gem 'haml', '~> 4.0.5'
 gem 'bootstrap-sass', '~> 3.3.1'
 gem 'rails-assets-c3', '~> 0.4.6'
 gem 'rails-assets-d3', '~> 3.4.13'
+gem 'pygments.rb', '~> 0.6.0'
 
 group :development do
   gem 'spring'

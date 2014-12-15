@@ -4,6 +4,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
   setup do
     require_js
     @benchmark_run = benchmark_runs(:benchmark_run)
+    Net::HTTP.stubs(:get).returns("def abc\n  puts haha\nend")
   end
 
   test "User should be able to view a single benchmark graphs" do
@@ -23,6 +24,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
     assert page.has_css?("#chart_0.c3")
     assert_not page.has_css?("#chart_1.c3")
+    assert page.has_content?("def abc")
   end
 
   test "User should be able to view multiple benchmark graphs" do

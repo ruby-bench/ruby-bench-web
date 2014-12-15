@@ -5,6 +5,7 @@ benchmark_run:
     :some_time: 0.123
   environment: ruby 2.2dev
   unit: seconds
+  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
 
 benchmark_run2:
   category: array_count

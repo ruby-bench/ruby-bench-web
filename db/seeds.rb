@@ -79,7 +79,8 @@ end
     result: { 'ao_bench' => 0.22 },
     environment: 'ruby 2.2.0dev',
     commit_id: commit.id,
-    unit: 'seconds'
+    unit: 'seconds',
+    script_url: 'https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb'
   )
 
   BenchmarkRun.create!(

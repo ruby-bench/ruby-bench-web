@@ -32,7 +32,16 @@
 
     - else
       - @graphs_columns.each_with_index do |columns, index|
+        %h2.l-align-center
+          = columns.last.first
+
         #chart{ id: "#{index}" }
+
+        - if script_url = columns[2]
+          = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
+              lexer: :ruby, options: { linenos: true }).html_safe
+
+        %hr
 
         - content_for(:footer) do
           :javascript
@@ -40,7 +49,7 @@
               bindto: "#chart_#{index}",
               data: {
                 x: 'Commit SHA1',
-                columns: #{columns[2..-1].unshift(columns[0])}
+                columns: #{columns[3..-1].unshift(columns[0])}
               },
               zoom: {
                 enabled: true

@@ -18,6 +18,8 @@ class BenchmarkRunsController < ApplicationController
   private
 
   def benchmark_run_params
-    params.require(:benchmark_run).permit(:category, :environment, :unit)
+    params.require(:benchmark_run).permit(
+      :category, :environment, :unit, :script_url
+    )
   end
 end
