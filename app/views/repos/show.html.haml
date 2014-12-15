@@ -1,5 +1,3 @@
-- params_result_type = params[:result_type]
-
 %h1.l-align-center
   = @repo.name.capitalize
   Benchmarks
@@ -14,26 +12,14 @@
 
       .form-group
         %ul.list-unstyled
-          %li
-            = radio_button_tag("result_type", 'all',
-                params_result_type == 'all')
-
-            = label_tag('Display all')
-
-          %li
-            = radio_button_tag("result_type", 'none',
-                params_result_type == 'none')
-
-            = label_tag('Display none')
-
-          %hr
-
           - @result_types.each do |result_type|
             %li
-              = radio_button_tag("result_type", result_type,
-                params_result_type == result_type)
+              - id = "result_type_#{result_type}"
 
-              = label_tag(result_type)
+              = check_box_tag("result_types[]", result_type,
+                @form_result_types.try(:include?, result_type), id: id)
+
+              = label_tag(id, result_type)
 
       .form-group
         = submit_tag 'Submit', class: 'btn btn-block btn-primary'
@@ -42,7 +28,7 @@
     - if !@graphs_columns || @graphs_columns.empty?
       .alert.alert-warning
         .l-align-center
-          Please select an option on the left.
+          Please check the check boxes on the left.
 
     - else
       - @graphs_columns.each_with_index do |columns, index|

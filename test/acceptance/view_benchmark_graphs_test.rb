@@ -14,39 +14,26 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     end
 
     assert page.has_content?("Rails Benchmarks")
-    assert page.has_content?("Please select an option on the left.")
+    assert page.has_content?("Please check the check boxes on the left.")
 
     within "form" do
-      choose("result_type_#{@benchmark_run.category}")
+      check(@benchmark_run.category)
       click_button 'Submit'
     end
 
     assert page.has_css?("#chart_0.c3")
+    assert_not page.has_css?("#chart_1.c3")
   end
 
-
-  test "User should be able to clear all benchmark graphs" do
-    visit "/rails/rails?result_type=#{@benchmark_run.category}"
-
-    assert page.has_content?("Rails Benchmarks")
-    assert page.has_css?("#chart_0.c3")
-
-    within "form" do
-      choose("result_type_none")
-      click_button 'Submit'
-    end
-
-    assert page.has_content?("Please select an option on the left.")
-  end
-
-  test "User should be able to view all benchmark graphs" do
+  test "User should be able to view multiple benchmark graphs" do
     visit "/rails/rails"
 
     assert page.has_content?("Rails Benchmarks")
-    assert page.has_content?("Please select an option on the left.")
+    assert page.has_content?("Please check the check boxes on the left.")
 
     within "form" do
-      choose("result_type_all")
+      check("result_type_#{@benchmark_run.category}")
+      check("result_type_#{benchmark_runs(:benchmark_run2).category}")
       click_button 'Submit'
     end
 
@@ -58,7 +45,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     visit "/rails/rails"
 
     within "form" do
-      lis = page.all('li input')[2..-1]
+      lis = page.all('li input')
 
       assert_equal 2, lis.count
       assert_equal benchmark_runs(:benchmark_run2).category, lis.first.value

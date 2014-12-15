@@ -5,37 +5,24 @@ class ReposController < ApplicationController
     organization = Organization.find_by_name(params[:organization_name]) || not_found
     @repo = organization.repos.find_by_name(params[:repo_name])
     @commits = @repo.commits
-    @form_result_type = params[:result_type]
+    @form_result_types = params[:result_types]
     benchmark_runs = BenchmarkRun.where(commit_id: @commits.map(&:id)).includes(:commit)
     @result_types = benchmark_runs.pluck(:category).uniq.sort
-
-    form_result_types =
-      case @form_result_type
-      when 'all'
-        @result_types
-      when 'none', nil
-        []
-      else
-        [@form_result_type]
-      end
 
     commits_sha1s ||= ['Commit SHA1']
     commits_data ||= {}
 
-    form_result_types.each do |result_type|
-      commits_data[result_type] ||= {}
+    benchmark_runs.where(category: @form_result_types).each do |benchmark_run|
+      commits_sha1s << "
+        Commit: #{benchmark_run.commit.sha1[0..6]}<br>
+        Commit Date: #{benchmark_run.commit.created_at}<br>
+        Environment: #{benchmark_run.environment}<br>
+      ".squish
 
-      benchmark_runs.where(category: result_type).each do |benchmark_run|
-        commits_sha1s << "
-          Commit: #{benchmark_run.commit.sha1[0..6]}<br>
-          Commit Date: #{benchmark_run.commit.created_at}<br>
-          Environment: #{benchmark_run.environment}<br>
-        ".squish
-
-        benchmark_run.result.each do |key, value|
-          commits_data[result_type][key] ||= [key]
-          commits_data[result_type][key] << value
-        end
+      benchmark_run.result.each do |key, value|
+        commits_data[benchmark_run.category] ||= {}
+        commits_data[benchmark_run.category][key] ||= [key]
+        commits_data[benchmark_run.category][key] << value
       end
     end
 
