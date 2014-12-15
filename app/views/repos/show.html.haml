@@ -1,6 +1,6 @@
 %h1.l-align-center
   = @repo.name.capitalize
-  Benchmarks
+  = t('.benchmarks')
 
 .row
   .col-xs-2
@@ -8,7 +8,7 @@
         repo_name: @repo.name),
         role: 'form', method: :get do
 
-      %h4.l-text-underline Benchmark Types
+      %h4.l-text-underline= t('benchmark_types')
 
       .form-group
         %ul.list-unstyled
@@ -22,22 +22,26 @@
               = label_tag(id, result_type)
 
       .form-group
-        = submit_tag 'Submit', class: 'btn btn-block btn-primary'
+        = submit_tag t('submit'), class: 'btn btn-block btn-primary'
 
   .col-xs-10
     - if !@graphs_columns || @graphs_columns.empty?
       .alert.alert-warning
         .l-align-center
-          Please check the check boxes on the left.
+          = t('.select_benchmark')
 
     - else
       - @graphs_columns.each_with_index do |columns, index|
         %h2.l-align-center
           = columns.last.first
+          = t('.graph')
 
         #chart{ id: "#{index}" }
 
         - if script_url = columns[2]
+          %h2
+            = t('.benchmark_script')
+
           = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
               lexer: :ruby, options: { linenos: true }).html_safe
 

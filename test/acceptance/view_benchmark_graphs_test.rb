@@ -15,11 +15,11 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     end
 
     assert page.has_content?("Rails Benchmarks")
-    assert page.has_content?("Please check the check boxes on the left.")
+    assert page.has_content?(I18n.t('repos.show.select_benchmark'))
 
     within "form" do
       check(@benchmark_run.category)
-      click_button 'Submit'
+      click_button I18n.t('submit')
     end
 
     assert page.has_css?("#chart_0.c3")
@@ -31,12 +31,12 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     visit "/rails/rails"
 
     assert page.has_content?("Rails Benchmarks")
-    assert page.has_content?("Please check the check boxes on the left.")
+    assert page.has_content?(I18n.t('repos.show.select_benchmark'))
 
     within "form" do
       check("result_type_#{@benchmark_run.category}")
       check("result_type_#{benchmark_runs(:benchmark_run2).category}")
-      click_button 'Submit'
+      click_button I18n.t('submit')
     end
 
     assert page.has_css?("#chart_0.c3")
