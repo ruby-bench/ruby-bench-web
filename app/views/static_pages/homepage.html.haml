@@ -1,95 +1,22 @@
-%h2 About RailsBench
+.col-xs-10.col-xs-offset-1
+  .homepage
+    %h1.homepage-blurb.l-align-center
+      = t('.blurb')
 
-%p
-  RailsBench aims to provide a long running benchmark of Ruby and Ruby on Rails.
-  In order to help developers easily isolate performance regression, RailsBench
-  tracks the performance of each repository on a per-commit basis.
+    %hr
 
-%hr
+    %h1.l-align-center
+      = t('.repositories')
 
-%h2 Repositories currently being tracked
-
-%table.table.table-striped
-  %tr
-    %th= Repo.human_attribute_name(:name)
-    %th= Repo.human_attribute_name(:url).upcase
-
-  - @repos.each do |repo|
-    %tr
-      %td
-        = link_to repo.name.capitalize,
-          repo_path(repo_name: repo.name, organization_name: repo.organization.name)
-
-      %td= link_to repo.url, repo.url, target: '_blank'
-
-%hr
-
-%h2 Benchmark Scripts
-
-%p
-  The benchmark scripts can be found at the following URLs:
-
-  %ul
-    %li
-      Rails:
-
-      = link_to "https://github.com/rails-bench/ko1-test-app/blob/master/perf.rake",
-          "https://github.com/rails-bench/ko1-test-app/blob/master/perf.rake",
-          target: '_blank'
-
-    %li
-      Ruby:
-      = link_to "https://github.com/ruby/ruby/tree/trunk/benchmark",
-        "https://github.com/ruby/ruby/tree/trunk/benchmark",
-        target: '_blank'
-
-%hr
-
-%h2 Builder
-
-%p
-  Currently, Benchmarks are being run on a Softlayer Bare Metal Server with the
-  following configurations:
-
-  %table.table.table-striped
-    %thead
+    %table.table.table-striped
       %tr
-        %th System Type
-        %th Component
+        %th= Repo.human_attribute_name(:name)
+        %th= Repo.human_attribute_name(:url).upcase
 
-    %tbody
-      %tr
-        %td Operating System
-        %td Ubuntu14.04-64 Minimal for Bare Metal
+      - @repos.each do |repo|
+        %tr
+          %td
+            = link_to repo.name.capitalize,
+              repo_path(repo_name: repo.name, organization_name: repo.organization.name)
 
-      %tr
-        %td RAM
-        %td 2x4GB Kingston 4GB DDR3 1Rx8
-
-      %tr
-        %td Processor
-        %td 3.5GHz Intel Xeon-Haswell (E3-1270-V3-Quadcore)
-
-      %tr
-        %td Motherboard
-        %td SuperMicro X10SLM+-LN4F
-
-      %tr
-        %td Drive Controller
-        %td Mainboard Onboard
-
-      %tr
-        %td Power Supply
-        %td SuperMicro PWS-341P-1H
-
-      %tr
-        %td Security Device
-        %td SuperMicro AOM-TPM-9655V
-
-      %tr
-        %td Remote Management Card
-        %td SuperMicro Aspeed AST2400 - Onboard
-
-      %tr
-        %td Backplane
-        %td SuperMicro BPN-SAS-815TQ
+          %td= link_to repo.url, repo.url, target: '_blank'

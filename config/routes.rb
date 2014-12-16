@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   post 'github_event_handler' => 'event_handler#github_event_handler'
   resources :benchmark_runs, only: [:create]
 
+  get 'builder' => 'static_pages#builder'
   get ':name' => 'organizations#show', as: :organization
   get ':organization_name/:repo_name' => 'repos#show', as: :repo
   # The priority is based upon order of creation: first created -> highest priority.

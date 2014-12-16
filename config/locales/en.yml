@@ -14,8 +14,13 @@ en:
       benchmark_types: Benchmark Types
       select_benchmark: Please select and submit to view benchmarks.
 
+  static_pages:
+    homepage:
+      blurb: >-
+        Long running benchmarks for Ruby and Ruby on Rails
+      repositories: Repositories
+
   top_nav:
     bench: Bench
-    benchmarks: Benchmarks
     builder: Builder
     rails: Rails
