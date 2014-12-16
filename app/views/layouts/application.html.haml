@@ -7,15 +7,18 @@
     = javascript_include_tag 'application'
     = csrf_meta_tags
 
-    %header
-      .row.top-nav
-        .col-xs-8.col-xs-offset-2
-          = render 'layouts/top_nav'
+  %header
+    .row.top-nav
+      .col-xs-8.col-xs-offset-2
+        = render 'layouts/top_nav'
 
-    %body
-      .row
-        .col-xs-8.col-xs-offset-2
-          = yield
+  %body
+    .row
+      .col-xs-8.col-xs-offset-2
+        = yield
 
   %footer
-    = yield :footer if content_for(:footer)
+    .row.footer
+      .col-xs-8.col-xs-offset-2
+        = render 'layouts/footer'
+        = yield :footer if content_for(:footer)
