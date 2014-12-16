@@ -8,3 +8,9 @@ en:
       benchmarks: Benchmarks
       benchmark_types: Benchmark Types
       select_benchmark: Please select and submit to view benchmarks.
+
+  top_nav:
+    bench: Bench
+    benchmarks: Benchmarks
+    builder: Builder
+    rails: Rails

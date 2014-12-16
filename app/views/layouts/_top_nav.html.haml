@@ -1,0 +1,11 @@
+.row
+  .col-xs-6
+    %h1.top-nav-title
+      = link_to root_path do
+        %span>= t('top_nav.rails')
+        %span= t('top_nav.bench')
+
+  .col-xs-6
+    %ul.top-nav-list.list-unstyled
+      %li= link_to t('top_nav.benchmarks'), '#'
+      %li= link_to t('top_nav.builder'), '#'

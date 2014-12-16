@@ -1,0 +1,28 @@
+.top-nav {
+  background-color: #660000;
+  padding: 1.5em 0;
+  font-family: Roboto;
+
+  a {
+    color: white;
+    text-decoration: none;
+  }
+}
+
+.top-nav-title {
+  margin: 0em;
+  font-weight: 700;
+  font-size: 35px;
+}
+
+.top-nav-list {
+  float: right;
+  margin-bottom: 0;
+  padding: 0.5em 0;
+
+  li {
+    display: inline;
+    font-size: 20px;
+    margin-right: 0.5em
+  }
+}
