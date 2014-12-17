@@ -8,7 +8,7 @@ en:
 
   repos:
     show:
-      benchmark_script: Benchmark Script
+      script: Script
       graph: Graph
       benchmarks: Benchmarks
       benchmark_types: Benchmark Types

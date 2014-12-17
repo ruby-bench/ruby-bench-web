@@ -33,15 +33,18 @@
 
   - else
     - @graphs_columns.each_with_index do |columns, index|
+      - benchmark_name = columns.last.first
+
       %h2.l-align-center
-        = columns.last.first
+        = benchmark_name
         = t('.graph')
 
       #chart{ id: "#{index}" }
 
       - if script_url = columns[2]
         %h2.l-align-center
-          = t('.benchmark_script')
+          = benchmark_name
+          = t('.script')
 
         = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
             lexer: :ruby, options: { linenos: 'inline' }).html_safe
