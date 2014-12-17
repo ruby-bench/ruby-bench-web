@@ -5,7 +5,7 @@ class ReposController < ApplicationController
     organization = Organization.find_by_name(params[:organization_name]) || not_found
     @repo = organization.repos.find_by_name(params[:repo_name])
     @commits = @repo.commits
-    @form_result_types = params[:result_types]
+    @form_result_types = params[:result_types].try(:sort)
     benchmark_runs = BenchmarkRun.where(commit_id: @commits.map(&:id)).includes(:commit)
     @result_types = benchmark_runs.pluck(:category).uniq.sort
 
