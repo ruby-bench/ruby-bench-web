@@ -33,7 +33,7 @@
 
   - else
     - @graphs_columns.each_with_index do |columns, index|
-      - benchmark_name = columns.last.first
+      - benchmark_name = columns[3]
 
       %h2.l-align-center
         = benchmark_name
@@ -57,7 +57,7 @@
             bindto: "#chart_#{index}",
             data: {
               x: 'Commit SHA1',
-              columns: #{columns[3..-1].unshift(columns[0])}
+              columns: #{columns[4..-1].unshift(columns[0])}
             },
             zoom: {
               enabled: true

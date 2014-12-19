@@ -22,6 +22,7 @@ class ReposController < ApplicationController
         commits_data[benchmark_run.category] ||= {}
         commits_data[benchmark_run.category][:unit] ||= benchmark_run.unit
         commits_data[benchmark_run.category][:script_url] ||= benchmark_run.script_url
+        commits_data[benchmark_run.category][:category] ||= benchmark_run.category
         commits_data[benchmark_run.category][key] ||= [key]
         commits_data[benchmark_run.category][key] << value
       end
