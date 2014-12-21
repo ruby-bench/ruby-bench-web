@@ -25,9 +25,16 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_css?("#chart_0.c3")
     assert_not page.has_css?("#chart_1.c3")
     assert page.has_content?("def abc")
+
+    benchmark_run_category_humanize = @benchmark_run.category.humanize
+
+    assert page.has_content?("#{benchmark_run_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} Script")
   end
 
   test "User should be able to view multiple benchmark graphs" do
+    benchmark_run2 = benchmark_runs(:benchmark_run2)
+
     visit "/rails/rails"
 
     assert page.has_content?("Rails Benchmarks")
@@ -35,12 +42,19 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
     within "form" do
       check("result_type_#{@benchmark_run.category}")
-      check("result_type_#{benchmark_runs(:benchmark_run2).category}")
+      check("result_type_#{benchmark_run2.category}")
       click_button I18n.t('submit')
     end
 
     assert page.has_css?("#chart_0.c3")
     assert page.has_css?("#chart_1.c3")
+
+    benchmark_run_category_humanize = @benchmark_run.category.humanize
+    benchmark_run2_category_humanize = benchmark_run2.category.humanize
+
+    assert page.has_content?("#{benchmark_run_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} Script")
+    assert page.has_content?("#{benchmark_run2_category_humanize} Graph")
   end
 
   test "User should see benchmark categories as sorted" do

@@ -33,7 +33,7 @@
 
   - else
     - @graphs_columns.each_with_index do |columns, index|
-      - benchmark_name = columns[3]
+      - benchmark_name = columns[3].humanize
 
       %h2.l-align-center
         = benchmark_name
