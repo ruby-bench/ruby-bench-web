@@ -1,7 +1,7 @@
 class RemoteServerJob < ApplicationJob
   queue_as :default
 
-  def perform(commit_hash, repo_name)
+  def perform(commit_hash, benchmark)
     secrets = Rails.application.secrets
 
     Net::SSH.start(
@@ -10,8 +10,8 @@ class RemoteServerJob < ApplicationJob
       password: secrets.bare_metal_server_password
     ) do |ssh|
 
-      ssh.exec!(send("#{repo_name}_command", commit_hash)) do |channel, stream, data|
-        puts data
+      ssh.exec!(send(benchmark, commit_hash)) do |channel, stream, data|
+        puts data if stream == :stdout
       end
     end
   end
@@ -24,7 +24,7 @@ class RemoteServerJob < ApplicationJob
       \"KO1TEST_SEED_CNT=100\" tgxworld/rails_bench".squish
   end
 
-  def ruby_command(commit_hash)
+  def ruby_bench(commit_hash)
     "sudo docker pull tgxworld/ruby_bench && sudo docker run --rm -e
       \"RUBY_COMMIT_HASH=#{commit_hash}\" tgxworld/ruby_bench".squish
   end

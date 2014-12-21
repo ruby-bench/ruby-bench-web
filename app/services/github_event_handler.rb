@@ -25,7 +25,9 @@ class GithubEventHandler
 
     commits.each do |commit|
       if create_commit(commit, repo.id)
-        RemoteServerJob.perform_later(commit['id'], repo.name)
+        ActiveSupport::Notifications.instrument(
+          repo.name, { commit_sha1: commit['id'] }
+        )
       end
     end
   end
