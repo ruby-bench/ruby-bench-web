@@ -10,22 +10,25 @@ class RemoteServerJob < ApplicationJob
       password: secrets.bare_metal_server_password
     ) do |ssh|
 
-      ssh.exec!(send(benchmark, commit_hash)) do |channel, stream, data|
-        puts data if stream == :stdout
-      end
+      send(benchmark, ssh, commit_hash)
     end
   end
 
   private
 
-  def rails_command(commit_hash)
-    "sudo docker pull tgxworld/rails_bench && sudo docker run --rm -e
-      \"RAILS_COMMIT_HASH=#{commit_hash}\" -e \"RUBY_VERSION=2.1.5\" -e
-      \"KO1TEST_SEED_CNT=100\" tgxworld/rails_bench".squish
+  def ruby_bench(ssh, commit_hash)
+    [
+      "docker pull tgxworld/ruby_bench",
+      "docker run --rm -e \"RUBY_COMMIT_HASH=#{commit_hash}\" tgxworld/ruby_bench"
+    ].each do |command|
+
+      ssh_exec!(ssh, command)
+    end
   end
 
-  def ruby_bench(commit_hash)
-    "sudo docker pull tgxworld/ruby_bench && sudo docker run --rm -e
-      \"RUBY_COMMIT_HASH=#{commit_hash}\" tgxworld/ruby_bench".squish
+  def ssh_exec!(ssh, command)
+    ssh.exec!(command) do |channel, stream, data|
+      puts data if stream == :stdout
+    end
   end
 end
