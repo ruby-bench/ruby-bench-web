@@ -29,8 +29,8 @@ class RemoteServerJob < ApplicationJob
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/discourse_rails_head_bench",
-        "docker run --name discourse_redis -d -P redis:2.8.19 && docker
-          run --name discourse_postgres -d -P postgres:9.3.5 &&
+        "docker run --name discourse_redis -d redis:2.8.19 && docker
+          run --name discourse_postgres -d postgres:9.3.5 &&
           docker run --rm --link discourse_postgres:postgres
           --link discourse_redis:redis -e \"RAILS_COMMIT_HASH=#{commit_hash}\"
           tgxworld/discourse_rails_head_bench".squish,
@@ -44,11 +44,11 @@ class RemoteServerJob < ApplicationJob
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/discourse_ruby_trunk_bench",
-        "docker run --name discourse_redis -d -P redis:2.8.19 && docker
-          run --name discourse_postgres -d -P postgres:9.3.5
+        "docker run --name discourse_redis -d redis:2.8.19 && docker
+          run --name discourse_postgres -d postgres:9.3.5 &&
           docker run --rm --link discourse_postgres:postgres
           --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
-          tgxworld/discourse_rails_head_bench".squish,
+          tgxworld/discourse_ruby_trunk_bench".squish,
         "docker stop discourse_postgres discourse_redis",
         "docker rm discourse_postgres discourse_redis"
       ]
