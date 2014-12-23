@@ -14,13 +14,14 @@
         .form-group
           %ul.list-unstyled.list-inline
             - @result_types.each do |result_type|
-              %li
-                - id = "result_type_#{result_type}"
+              .list-checkbox
+                %li
+                  - id = "result_type_#{result_type}"
 
-                = check_box_tag("result_types[]", result_type,
-                  @form_result_types.try(:include?, result_type), id: id)
+                  = check_box_tag("result_types[]", result_type,
+                    @form_result_types.try(:include?, result_type), id: id)
 
-                = label_tag(id, result_type)
+                  = label_tag(id, result_type)
 
         .form-group
           = submit_tag t('submit'), class: 'btn btn-block btn-primary'
