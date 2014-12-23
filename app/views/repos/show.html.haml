@@ -2,7 +2,7 @@
   = @repo.name.capitalize
   = t('.benchmarks')
 
-.row
+.col-xs-4
   .panel.panel-primary
     .panel-heading= t('benchmark_types')
 
@@ -29,7 +29,7 @@
         .form-group
           = submit_tag t('submit'), class: 'btn btn-block btn-primary'
 
-.row
+.col-xs-8
   - if !@graphs_columns || @graphs_columns.empty?
     .alert.alert-warning
       .l-align-center
