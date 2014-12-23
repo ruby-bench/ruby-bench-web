@@ -9,7 +9,10 @@ class RemoteServerJobTest < ActiveJob::TestCase
   test "#perform ruby_bench" do
     [
       'docker pull tgxworld/ruby_bench',
-      "docker run --rm -e \"RUBY_COMMIT_HASH=commit_hash\" tgxworld/ruby_bench"
+      "docker run --rm -e \"RUBY_COMMIT_HASH=commit_hash\"
+        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        tgxworld/ruby_bench".squish
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
@@ -25,6 +28,8 @@ class RemoteServerJobTest < ActiveJob::TestCase
         run --name discourse_postgres -d postgres:9.3.5 &&
         docker run --rm --link discourse_postgres:postgres
         --link discourse_redis:redis -e \"RAILS_COMMIT_HASH=commit_hash\"
+        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         tgxworld/discourse_rails_head_bench".squish,
       "docker stop discourse_postgres discourse_redis",
       "docker rm discourse_postgres discourse_redis"
@@ -43,6 +48,8 @@ class RemoteServerJobTest < ActiveJob::TestCase
         run --name discourse_postgres -d postgres:9.3.5 &&
         docker run --rm --link discourse_postgres:postgres
         --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=commit_hash\"
+        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         tgxworld/discourse_ruby_trunk_bench".squish,
       "docker stop discourse_postgres discourse_redis",
       "docker rm discourse_postgres discourse_redis"
