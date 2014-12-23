@@ -3,6 +3,11 @@
   padding: 0.5em 0;
   font-family: Roboto;
   box-shadow: 0 8px 6px -6px #141c22;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
 
   a {
     color: white;
