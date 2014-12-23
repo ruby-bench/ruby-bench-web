@@ -109,7 +109,14 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
   def post_to_handler(parameters)
     post(
       '/github_event_handler', parameters,
-      { "#{GithubEventHandler::HEADER}" => "#{GithubEventHandler::PUSH}" }
+      {
+        "#{GithubEventHandler::HEADER}" => "#{GithubEventHandler::PUSH}",
+        'HTTP_AUTHORIZATION' =>
+          ActionController::HttpAuthentication::Basic.encode_credentials(
+            Rails.application.secrets.api_name,
+            Rails.application.secrets.api_password
+          )
+      }
     )
   end
 end

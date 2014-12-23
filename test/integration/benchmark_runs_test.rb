@@ -6,18 +6,27 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     repo = repos(:repo)
     organization = organizations(:organization)
 
-    post('/benchmark_runs', {
-      benchmark_run: {
-        category: 'allocated_objects',
-        result: { fast: 'slow' },
-        environment: 'ruby-2.1.5',
-        unit: 'seconds',
-        script_url: 'http://something.com'
+    post('/benchmark_runs',
+      {
+        benchmark_run: {
+          category: 'allocated_objects',
+          result: { fast: 'slow' },
+          environment: 'ruby-2.1.5',
+          unit: 'seconds',
+          script_url: 'http://something.com'
+        },
+        commit_hash: commit.sha1,
+        repo: repo.name,
+        organization: organization.name
       },
-      commit_hash: commit.sha1,
-      repo: repo.name,
-      organization: organization.name
-    })
+      {
+        'HTTP_AUTHORIZATION' =>
+          ActionController::HttpAuthentication::Basic.encode_credentials(
+            Rails.application.secrets.api_name,
+            Rails.application.secrets.api_password
+          )
+      }
+    )
 
     # FIXME: This is acting like a smoke test.
     benchmark_run = BenchmarkRun.last
