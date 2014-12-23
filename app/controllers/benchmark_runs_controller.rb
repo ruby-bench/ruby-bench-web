@@ -1,6 +1,4 @@
-class BenchmarkRunsController < ApplicationController
-  skip_before_action :verify_authenticity_token
-
+class BenchmarkRunsController < APIController
   def create
     benchmark_run = BenchmarkRun.new(benchmark_run_params)
     benchmark_run.result = params[:benchmark_run][:result]
