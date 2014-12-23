@@ -7,7 +7,11 @@ class ReposController < ApplicationController
     @commits = @repo.commits
     @form_result_types = params[:result_types].try(:sort)
     benchmark_runs = BenchmarkRun.where(commit_id: @commits.map(&:id)).includes(:commit)
-    @result_types = benchmark_runs.pluck(:category).uniq.sort
+
+    @result_types = benchmark_runs.pluck(:category).uniq.sort.group_by do |category|
+      category =~ /\A([^_]+)_/
+      $1
+    end
 
     commits_sha1s ||= ['Commit SHA1']
     commits_data ||= {}
