@@ -14,7 +14,7 @@
         .form-group
           %ul.list-unstyled.list-inline
             - @result_types.each do |category_name, categories|
-              = field_set_tag category_name
+              = field_set_tag category_name.try(:titleize)
 
               - categories.each do |result_type|
                 .list-checkbox
