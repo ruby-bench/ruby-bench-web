@@ -1,0 +1,32 @@
+.col-xs-8.col-xs-offset-2
+  %h1= t('.title')
+
+  %hr
+
+  %h3 Where to start contributing?
+
+  %p
+    The RubyBench project consist of the following components:
+
+    %ul
+      %li
+        = link_to 'rails-bench-web: Web Application to Display Results', 'https://github.com/rails-bench/rails-bench-web', target: '_blank'
+
+      %li
+        = link_to 'rails-bench-docker: Docker Scripts to Run Benchmarks', 'https://github.com/rails-bench/rails-bench-docker'
+
+    There is a
+    = link_to 'list of features and bugs', 'https://trello.com/b/mdMX7CeK/todo'
+    we would like to have people work on. If you're interested,
+    feel free to tag yourself on the cards and submit a pull request with a link
+    to the respective Trello card.
+
+  %hr
+
+  %h3 Feature requests/discussion
+
+  %p
+    All discussion of features and directions for RubyBench will be done at
+    = link_to 'http://community.miniprofiler.com/t/status-progress-cooperation',
+        'http://community.miniprofiler.com/t/status-progress-cooperation'
+

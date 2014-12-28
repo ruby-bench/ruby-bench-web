@@ -20,8 +20,11 @@ en:
       blurb: >-
         Long running benchmarks for Ruby and Ruby on Rails
       repositories: Repositories
+    contribute:
+      title: Contributing
 
   top_nav:
     bench: Bench
     builder: Builder
+    contribute: Contribute
     rails: Rails

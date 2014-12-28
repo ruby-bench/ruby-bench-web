@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :benchmark_runs, only: [:create]
 
   get 'builder' => 'static_pages#builder'
+  get 'contributing' => 'static_pages#contribute', as: :contribute
   get ':name' => 'organizations#show', as: :organization
   get ':organization_name/:repo_name' => 'repos#show', as: :repo
   # The priority is based upon order of creation: first created -> highest priority.
