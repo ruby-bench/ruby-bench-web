@@ -3,13 +3,23 @@ class BenchmarkRunsController < APIController
     benchmark_run = BenchmarkRun.new(benchmark_run_params)
     benchmark_run.result = params[:benchmark_run][:result]
 
-    commit = Organization.find_by_name(params[:organization])
+    repo = Organization.find_by_name(params[:organization])
       .repos.find_by_name(params[:repo])
-      .commits.find_by_sha1(params[:commit_hash])
 
-    benchmark_run.initiator = commit
+    # FIXME: Probably bad code.
+    if params[:commit_hash]
+      benchmark_run.initiator = repo.commits.find_by_sha1(params[:commit_hash])
+    end
+
+    # FIXME: Probably bad code.
+    if params[:ruby_version]
+      release = repo.releases.find_or_create_by!(version: params[:ruby_version])
+      benchmark_run.initiator = release
+    end
+
+    # TODO: Some notifications feature to say this failed
     benchmark_run.save!
-    # Some notifications feature to say this failed
+
     render nothing: true
   end
 
