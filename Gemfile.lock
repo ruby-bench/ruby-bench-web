@@ -119,6 +119,7 @@ GEM
     multi_json (1.10.1)
     net-ssh (2.9.1)
     netrc (0.8.0)
+    newrelic_rpm (3.8.0.218)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
     pg (0.17.1)
@@ -220,6 +221,7 @@ DEPENDENCIES
   launchy (~> 2.4.3)
   mocha (~> 1.1.0)
   net-ssh (~> 2.9.1)
+  newrelic_rpm
   pg
   platform-api (~> 0.2.0)
   puma (~> 2.9.2)
