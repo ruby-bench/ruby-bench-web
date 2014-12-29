@@ -11,7 +11,7 @@ en:
     show:
       script: Script
       graph: Graph
-      benchmarks: Benchmarks
+      benchmarks: "%{repo_name} Long Running Benchmarks"
       benchmark_types: Benchmark Types
       select_benchmark: Please select and submit to view benchmarks.
 

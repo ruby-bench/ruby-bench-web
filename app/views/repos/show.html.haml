@@ -1,6 +1,5 @@
 %h1.l-align-center
-  = @repo.name.capitalize
-  = t('.benchmarks')
+  = t('.benchmarks', repo_name: @repo.name.capitalize)
 
 .col-xs-4
   .panel.panel-primary
