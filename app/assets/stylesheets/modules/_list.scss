@@ -1,24 +1,24 @@
-.list-checkbox {
+.list-radio {
   display: inline-block;
   padding: 0.2em 0.5em;
   margin-bottom: 0.5em;
   background-color: $gray-lighter;
 }
 
-.list-checkbox {
-  input[type=checkbox] + label {
+.list-radio {
+  input[type=radio] + label {
     color: $brand-primary;
   }
 }
 
-.list-checkbox:hover {
-  input[type=checkbox] + label {
+.list-radio:hover {
+  input[type=radio] + label {
     color: $brand-warning;
   }
 }
 
-.list-checkbox {
-  input[type=checkbox]:checked + label {
+.list-radio {
+  input[type=radio]:checked + label {
     color: $brand-success;
   }
 }

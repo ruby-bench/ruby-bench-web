@@ -16,17 +16,14 @@
               = field_set_tag category_name.try(:titleize)
 
               - categories.each do |result_type|
-                .list-checkbox
+                .list-radio
                   %li
                     - id = "result_type_#{result_type}"
 
-                    = check_box_tag("result_types[]", result_type,
-                      @form_result_types.try(:include?, result_type), id: id)
+                    = radio_button_tag("result_types[]", result_type,
+                      @form_result_types.try(:include?, result_type), id: id, onclick: "this.form.submit();")
 
                     = label_tag(id, result_type)
-
-        .form-group
-          = submit_tag t('submit'), class: 'btn btn-block btn-primary'
 
 .col-xs-8
   - if !@graphs_columns || @graphs_columns.empty?

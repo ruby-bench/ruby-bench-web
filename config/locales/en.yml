@@ -13,7 +13,7 @@ en:
       graph: Graph
       benchmarks: "%{repo_name} Long Running Benchmarks"
       benchmark_types: Benchmark Types
-      select_benchmark: Please select and submit to view benchmarks.
+      select_benchmark: Please select a benchmark.
 
   static_pages:
     homepage:
