@@ -21,6 +21,21 @@ class RemoteServerJobTest < ActiveJob::TestCase
     RemoteServerJob.new.perform('commit_hash', 'ruby_bench')
   end
 
+  test "#perform ruby_releases" do
+    [
+      'docker pull tgxworld/ruby_releases',
+      "docker run --rm -e \"RUBY_VERSION=2.2.0\"
+        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        tgxworld/ruby_releases".squish
+    ].each do |command|
+
+      @ssh.expects(:exec!).with(command)
+    end
+
+    RemoteServerJob.new.perform('2.2.0', 'ruby_releases')
+  end
+
   test "#perform discourse_rails_head_bench" do
     [
       "docker pull tgxworld/discourse_rails_head_bench",

@@ -28,6 +28,18 @@ class RemoteServerJob < ApplicationJob
     )
   end
 
+  def ruby_releases(ssh, ruby_version)
+    execute_ssh_commands(ssh,
+      [
+        "docker pull tgxworld/ruby_releases",
+        "docker run --rm -e \"RUBY_VERSION=#{ruby_version}\"
+          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          tgxworld/ruby_releases".squish
+      ]
+    )
+  end
+
   def discourse_rails_head_bench(ssh, commit_hash)
     execute_ssh_commands(ssh,
       [
