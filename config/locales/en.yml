@@ -18,7 +18,7 @@ en:
   static_pages:
     homepage:
       blurb: >-
-        Long running benchmarks for Ruby and Ruby on Rails
+        Long running benchmarks for Ruby
       repositories: Repositories
     contribute:
       title: Contributing
