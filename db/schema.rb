@@ -11,26 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141215060051) do
+ActiveRecord::Schema.define(version: 20141229025804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
-  create_table "benchmark_runs", force: true do |t|
-    t.string   "category",    null: false
-    t.hstore   "result",      null: false
-    t.text     "environment", null: false
-    t.integer  "commit_id",   null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.string   "unit",        null: false
+  create_table "benchmark_runs", force: :cascade do |t|
+    t.string   "category",       null: false
+    t.hstore   "result",         null: false
+    t.text     "environment",    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "unit",           null: false
     t.string   "script_url"
+    t.integer  "initiator_id"
+    t.string   "initiator_type"
   end
 
-  add_index "benchmark_runs", ["commit_id"], name: "index_benchmark_runs_on_commit_id", using: :btree
+  add_index "benchmark_runs", ["initiator_type", "initiator_id"], name: "index_benchmark_runs_on_initiator_type_and_initiator_id", using: :btree
 
-  create_table "commits", force: true do |t|
+  create_table "commits", force: :cascade do |t|
     t.string   "sha1",       null: false
     t.string   "url",        null: false
     t.text     "message",    null: false
@@ -42,7 +43,7 @@ ActiveRecord::Schema.define(version: 20141215060051) do
   add_index "commits", ["repo_id"], name: "index_commits_on_repo_id", using: :btree
   add_index "commits", ["sha1", "repo_id"], name: "index_commits_on_sha1_and_repo_id", unique: true, using: :btree
 
-  create_table "delayed_jobs", force: true do |t|
+  create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
     t.integer  "attempts",   default: 0, null: false
     t.text     "handler",                null: false
@@ -58,7 +59,7 @@ ActiveRecord::Schema.define(version: 20141215060051) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
-  create_table "organizations", force: true do |t|
+  create_table "organizations", force: :cascade do |t|
     t.string   "name",       null: false
     t.string   "url",        null: false
     t.datetime "created_at", null: false
@@ -67,7 +68,14 @@ ActiveRecord::Schema.define(version: 20141215060051) do
 
   add_index "organizations", ["name"], name: "index_organizations_on_name", unique: true, using: :btree
 
-  create_table "repos", force: true do |t|
+  create_table "releases", force: :cascade do |t|
+    t.integer  "repo_id",    null: false
+    t.string   "version",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "repos", force: :cascade do |t|
     t.string   "name",            null: false
     t.string   "url",             null: false
     t.datetime "created_at",      null: false

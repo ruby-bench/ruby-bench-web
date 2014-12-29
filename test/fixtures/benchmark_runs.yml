@@ -1,6 +1,6 @@
 benchmark_run:
   category: array_iterations
-  commit: commit
+  initiator: commit (Commit)
   result:
     :some_time: 0.123
   environment: ruby 2.2dev
@@ -9,7 +9,7 @@ benchmark_run:
 
 benchmark_run2:
   category: array_count
-  commit: commit
+  initiator: commit (Commit)
   result:
     :some_time: 0.123
   environment: ruby 2.2dev
