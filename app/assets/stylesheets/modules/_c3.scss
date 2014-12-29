@@ -1,5 +1,5 @@
 // CSS hack to hide all the ticks on X axis for C3 charts.
-.c3-axis-x g.tick text {
+.c3-hide-ticks .c3-axis-x g.tick text {
   fill: none;
   pointer-events: all;
 }

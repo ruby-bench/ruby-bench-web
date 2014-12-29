@@ -14,3 +14,20 @@ benchmark_run2:
     :some_time: 0.123
   environment: ruby 2.2dev
   unit: seconds
+
+benchmark_run3:
+  category: array_iterations
+  initiator: release (Release)
+  result:
+    :some_time: 0.123
+  environment: ruby 2.2dev
+  unit: seconds
+  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
+
+benchmark_run4:
+  category: array_count
+  initiator: release (Release)
+  result:
+    :some_time: 0.123
+  environment: ruby 2.2dev
+  unit: seconds

@@ -8,12 +8,27 @@ en:
   submit: Submit
 
   repos:
+    select_benchmark: &select_benchmark
+      Please select a benchmark.
+    script_title: &script_title
+      "%{graph_name} Script"
+    graph_title: &graph_title
+      "%{graph_name} Graph"
+    benchmark_types: &benchmark_types
+      Benchmark Types
+
     show:
-      script: Script
-      graph: Graph
-      benchmarks: "%{repo_name} Long Running Benchmarks"
-      benchmark_types: Benchmark Types
-      select_benchmark: Please select a benchmark.
+      script_title: *script_title
+      graph_title: *graph_title
+      title: "%{repo_name} Long Running Benchmarks"
+      benchmark_types: *benchmark_types
+      select_benchmark: *select_benchmark
+    show_releases:
+      title: "%{repo_name} Releases Benchmarks"
+      benchmark_types: *benchmark_types
+      select_benchmark: *select_benchmark
+      graph_title: *graph_title
+      script_title: *script_title
 
   static_pages:
     homepage:

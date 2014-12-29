@@ -1,0 +1,74 @@
+= render 'title', title: t('.title', repo_name: @repo.name.capitalize)
+
+.col-xs-4
+  .panel.panel-primary
+    .panel-heading= t('.benchmark_types')
+
+    .panel-body
+      = form_tag releases_repo_path(organization_name: @repo.organization.name,
+          repo_name: @repo.name),
+          role: 'form', method: :get do
+
+        .form-group
+          %ul.list-unstyled.list-inline
+            - @result_types.each do |category_name, categories|
+              = field_set_tag category_name.try(:titleize)
+
+              - categories.each do |result_type|
+                .list-radio
+                  %li
+                    - id = "result_type_#{result_type}"
+
+                    = radio_button_tag("result_types[]", result_type,
+                      @form_result_types.try(:include?, result_type), id: id, onclick: "this.form.submit();")
+
+                    = label_tag(id, result_type)
+
+.col-xs-8
+  - if !@graphs_columns || @graphs_columns.empty?
+    .alert.alert-warning
+      .l-align-center
+        = t('.select_benchmark')
+
+  - else
+    - @graphs_columns.each_with_index do |columns, index|
+      - benchmark_name = columns[3].humanize
+
+      %h2.l-align-center
+        = t('.graph_title', graph_name: benchmark_name)
+
+      #chart{ id: "#{index}" }
+
+      - if script_url = columns[2]
+        %h2.l-align-center
+          = t('.script_title', graph_name: benchmark_name)
+
+        = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
+            lexer: :ruby, options: { linenos: 'inline' }).html_safe
+
+      %hr
+
+      - content_for(:footer) do
+        :javascript
+          c3.generate({
+            bindto: "#chart_#{index}",
+            data: {
+              x: 'Ruby Version',
+              columns: #{columns[4..-1].unshift(columns[0])},
+              type: 'bar'
+            },
+            zoom: {
+              enabled: true
+            },
+            axis: {
+              x: {
+                type: 'category',
+                tick: {
+                  centered: true
+                }
+              },
+              y: {
+                label: "#{columns[1]}"
+              }
+            }
+          })
