@@ -1,28 +1,5 @@
 = render 'title', title: t('.title', repo_name: @repo.name.capitalize)
-
-.col-xs-4
-  .panel.panel-primary
-    .panel-heading= t('.benchmark_types')
-
-    .panel-body
-      = form_tag releases_repo_path(organization_name: @repo.organization.name,
-          repo_name: @repo.name),
-          role: 'form', method: :get do
-
-        .form-group
-          %ul.list-unstyled.list-inline
-            - @result_types.each do |category_name, categories|
-              = field_set_tag category_name.try(:titleize)
-
-              - categories.each do |result_type|
-                .list-radio
-                  %li
-                    - id = "result_type_#{result_type}"
-
-                    = radio_button_tag("result_types[]", result_type,
-                      @form_result_types.try(:include?, result_type), id: id, onclick: "this.form.submit();")
-
-                    = label_tag(id, result_type)
+= render 'form', form_path: releases_repo_path(organization_name: @repo.organization.name, repo_name: @repo.name)
 
 .col-xs-8
   - if !@graphs_columns || @graphs_columns.empty?
