@@ -5,5 +5,8 @@
       %span= t('top_nav.bench')
 
   %ul.top-nav-list.list-unstyled.l-right
+    %li= link_to t('top_nav.benchmarks'),
+      repo_path(organization_name: 'tgxworld', repo_name: 'ruby')
+
     %li= link_to t('top_nav.builder'), builder_path
     %li= link_to t('top_nav.contribute'), contribute_path
