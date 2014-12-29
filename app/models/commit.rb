@@ -6,7 +6,7 @@ class Commit < ActiveRecord::Base
   default_scope -> { order('commits.created_at DESC') }
 
   belongs_to :repo
-  has_many :benchmark_runs, dependent: :destroy
+  has_many :benchmark_runs, as: :initiator, dependent: :destroy
 
   validates :sha1, presence: true, length: { minimum: 5 }, uniqueness: { scope: :repo_id }
   # TODO: Add validation of URL

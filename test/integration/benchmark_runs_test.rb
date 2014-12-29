@@ -31,8 +31,8 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     # FIXME: This is acting like a smoke test.
     benchmark_run = BenchmarkRun.last
     assert_equal 'allocated_objects', benchmark_run.category
-    assert_equal commit, benchmark_run.commit
-    assert_equal repo, benchmark_run.commit.repo
-    assert_equal organization, benchmark_run.commit.repo.organization
+    assert_equal commit, benchmark_run.initiator
+    assert_equal repo, benchmark_run.initiator.repo
+    assert_equal organization, benchmark_run.initiator.repo.organization
   end
 end

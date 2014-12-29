@@ -6,7 +6,11 @@ class ReposController < ApplicationController
     @repo = organization.repos.find_by_name(params[:repo_name])
     @commits = @repo.commits
     @form_result_types = params[:result_types].try(:sort)
-    benchmark_runs = BenchmarkRun.where(commit_id: @commits.map(&:id)).includes(:commit)
+
+    benchmark_runs = BenchmarkRun.where(
+      initiator_id: @commits.map(&:id),
+      initiator_type: 'Commit'
+    ).preload(:initiator)
 
     @result_types = benchmark_runs.pluck(:category).uniq.sort.group_by do |category|
       category =~ /\A([^_]+)_/
@@ -18,8 +22,8 @@ class ReposController < ApplicationController
 
     benchmark_runs.where(category: @form_result_types).each do |benchmark_run|
       commits_sha1s << "
-        Commit: #{benchmark_run.commit.sha1[0..6]}<br>
-        Commit Date: #{benchmark_run.commit.created_at}
+        Commit: #{benchmark_run.initiator.sha1[0..6]}<br>
+        Commit Date: #{benchmark_run.initiator.created_at}
       ".squish
 
       benchmark_run.result.each do |key, value|

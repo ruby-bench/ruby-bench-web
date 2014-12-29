@@ -7,7 +7,7 @@ class BenchmarkRunsController < APIController
       .repos.find_by_name(params[:repo])
       .commits.find_by_sha1(params[:commit_hash])
 
-    benchmark_run.commit = commit
+    benchmark_run.initiator = commit
     benchmark_run.save!
     # Some notifications feature to say this failed
     render nothing: true
