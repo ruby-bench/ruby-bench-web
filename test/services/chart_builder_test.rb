@@ -22,7 +22,7 @@ class ChartBuilderTest < ActiveSupport::TestCase
         columns: [
           { name: "some_time", data: [benchmark_run.result['some_time'].to_f, other_benchmark_run.result['some_time'].to_f] },
           { name: "some_other_time", data: [benchmark_run.result['some_other_time'].to_f, other_benchmark_run.result['some_other_time'].to_f] }
-        ]
+        ].to_json
       },
       chart_columns
     )

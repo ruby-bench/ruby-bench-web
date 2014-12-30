@@ -28,7 +28,7 @@ class ChartBuilder
       data[:columns].each do |name, data|
         new_columns << { name: name, data: data }
       end
-      data[:columns] = new_columns
+      data[:columns] = new_columns.to_json
 
       data
     end
