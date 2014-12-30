@@ -2,13 +2,13 @@ class ReposController < ApplicationController
   def show
     organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(organization, params[:repo_name])
-    @form_result_types = sort_form_result_types(params[:result_types])
+    @form_result_type = params[:result_type]
     benchmark_runs = fetch_benchmark_runs(@repo.commits, 'Commit')
     @result_types = fetch_benchmark_runs_categories(benchmark_runs)
 
-    if @form_result_types
+    if @form_result_type
       chart_builder = ChartBuilder.new(
-        benchmark_runs.where(category: @form_result_types)
+        benchmark_runs.where(category: @form_result_type)
       )
 
       @chart_columns = chart_builder.build_columns do |benchmark_run|
@@ -25,15 +25,15 @@ class ReposController < ApplicationController
     organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(organization, params[:repo_name])
     releases = @repo.releases
-    @form_result_types = sort_form_result_types(params[:result_types])
+    @form_result_type = params[:result_type]
     benchmark_runs = fetch_benchmark_runs(releases, 'Release')
     @result_types = fetch_benchmark_runs_categories(benchmark_runs)
 
-    if @form_result_types
+    if @form_result_type
       chart_categories ||= ['Ruby Version']
 
       chart_builder = ChartBuilder.new(
-        benchmark_runs.where(category: @form_result_types)
+        benchmark_runs.where(category: @form_result_type)
       )
 
       @chart_columns = chart_builder.build_columns do |benchmark_run|
@@ -50,10 +50,6 @@ class ReposController < ApplicationController
 
   def find_organization_repos_by_name(organization, name)
     organization.repos.find_by_name(name)
-  end
-
-  def sort_form_result_types(result_types)
-    result_types.try(:sort)
   end
 
   def fetch_benchmark_runs(initiators, initiator_type)

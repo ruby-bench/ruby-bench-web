@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  root 'static_pages#homepage'
+  root 'repos#show_releases', organization_name: 'tgxworld', repo_name: 'ruby',
+    result_type: 'app_aobench'
 
   post 'github_event_handler' => 'event_handler#github_event_handler'
   resources :benchmark_runs, only: [:create]

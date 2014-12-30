@@ -14,7 +14,7 @@
                   - id = "result_type_#{result_type}"
 
                   = label_tag(id, class: 'list-label') do
-                    = radio_button_tag("result_types[]", result_type,
-                      @form_result_types.try(:include?, result_type), id: id, onclick: "this.form.submit();")
+                    = radio_button_tag("result_type", result_type,
+                      (@form_result_type == result_type), id: id, onclick: "this.form.submit();")
 
                     %span= result_type
