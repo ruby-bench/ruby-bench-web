@@ -1,3 +1,4 @@
+
 source 'https://rubygems.org'
 source 'https://rails-assets.org'
 
@@ -12,7 +13,6 @@ gem 'jquery-rails'
 gem 'net-ssh', '~> 2.9.1'
 gem 'delayed_job_active_record', '~> 4.0.3'
 gem 'platform-api', '~> 0.2.0'
-gem 'active_model_serializers', '~> 0.8.0'
 gem 'haml', '~> 4.0.5'
 gem 'bootstrap-sass', '~> 3.3.1'
 gem 'pygments.rb', '~> 0.6.0'
