@@ -40,7 +40,8 @@ en:
 
   top_nav:
     logo: RubyBench
-    benchmarks: Benchmarks
+    benchmarks: Per-Commit Benchmarks
     builder: Builder
     contribute: Contribute
     discuss: Discuss
+    releases: Releases Benchmarks
