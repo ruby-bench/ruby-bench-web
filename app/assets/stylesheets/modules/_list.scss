@@ -1,24 +1,20 @@
-.list-radio {
+.list-label {
   display: inline-block;
   padding: 0.2em 0.5em;
   margin-bottom: 0.5em;
   background-color: $gray-lighter;
 }
 
-.list-radio {
-  input[type=radio] + label {
-    color: $brand-primary;
-  }
+.list-label {
+  color: $brand-primary;
 }
 
-.list-radio:hover {
-  input[type=radio] + label {
-    color: $brand-warning;
-  }
+.list-label:hover {
+  color: $brand-warning;
 }
 
-.list-radio {
-  input[type=radio]:checked + label {
+.list-label {
+  input[type=radio]:checked + span {
     color: $brand-success;
   }
 }

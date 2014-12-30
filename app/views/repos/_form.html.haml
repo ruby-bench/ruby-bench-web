@@ -10,11 +10,11 @@
               = field_set_tag category_name.try(:titleize)
 
               - categories.each do |result_type|
-                .list-radio
-                  %li
-                    - id = "result_type_#{result_type}"
+                %li.l-padding-sides-1
+                  - id = "result_type_#{result_type}"
 
+                  = label_tag(id, class: 'list-label') do
                     = radio_button_tag("result_types[]", result_type,
                       @form_result_types.try(:include?, result_type), id: id, onclick: "this.form.submit();")
 
-                    = label_tag(id, result_type)
+                    %span= result_type
