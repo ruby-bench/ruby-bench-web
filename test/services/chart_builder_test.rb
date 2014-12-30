@@ -21,7 +21,8 @@ class ChartBuilderTest < ActiveSupport::TestCase
           "seconds",
           "#{benchmark_run.script_url}",
           "#{benchmark_run.category}",
-          ["some_time", benchmark_run.result['some_time'], other_benchmark_run.result['some_time']]
+          ["some_time", benchmark_run.result['some_time'], other_benchmark_run.result['some_time']],
+          ["some_other_time", benchmark_run.result['some_other_time'], other_benchmark_run.result['some_other_time']]
         ]
       ],
       chart_columns

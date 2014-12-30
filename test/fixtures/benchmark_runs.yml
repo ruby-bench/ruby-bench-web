@@ -3,6 +3,7 @@ benchmark_run:
   initiator: commit (Commit)
   result:
     :some_time: 0.123
+    :some_other_time: 0.125
   environment: ruby 2.2dev
   unit: seconds
   script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
@@ -12,6 +13,7 @@ benchmark_run2:
   initiator: commit (Commit)
   result:
     :some_time: 0.123
+    :some_other_time: 0.125
   environment: ruby 2.2dev
   unit: seconds
 
@@ -20,6 +22,7 @@ benchmark_run3:
   initiator: release (Release)
   result:
     :some_time: 0.123
+    :some_other_time: 0.125
   environment: ruby 2.2dev
   unit: seconds
   script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
@@ -29,6 +32,7 @@ benchmark_run4:
   initiator: release (Release)
   result:
     :some_time: 0.123
+    :some_other_time: 0.125
   environment: ruby 2.2dev
   unit: seconds
 
@@ -36,7 +40,8 @@ benchmark_run5:
   category: array_iterations
   initiator: commit2 (Commit)
   result:
-    :some_time: 0.127
+    :some_time: 0.125
+    :some_other_time: 0.127
   environment: ruby 2.2dev
   unit: seconds
   script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
