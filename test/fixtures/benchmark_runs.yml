@@ -1,6 +1,6 @@
 benchmark_run:
   category: array_iterations
-  initiator: commit (Commit)
+  initiator: ruby_commit (Commit)
   result:
     :some_time: 0.123
     :some_other_time: 0.125
@@ -10,7 +10,7 @@ benchmark_run:
 
 benchmark_run2:
   category: array_count
-  initiator: commit (Commit)
+  initiator: ruby_commit (Commit)
   result:
     :some_time: 0.123
     :some_other_time: 0.125
@@ -19,7 +19,7 @@ benchmark_run2:
 
 benchmark_run3:
   category: array_iterations
-  initiator: release (Release)
+  initiator: ruby_2_2_0 (Release)
   result:
     :some_time: 0.123
     :some_other_time: 0.125
@@ -29,7 +29,7 @@ benchmark_run3:
 
 benchmark_run4:
   category: array_count
-  initiator: release (Release)
+  initiator: ruby_2_2_0 (Release)
   result:
     :some_time: 0.123
     :some_other_time: 0.125
@@ -38,7 +38,7 @@ benchmark_run4:
 
 benchmark_run5:
   category: array_iterations
-  initiator: commit2 (Commit)
+  initiator: ruby_commit2 (Commit)
   result:
     :some_time: 0.125
     :some_other_time: 0.127

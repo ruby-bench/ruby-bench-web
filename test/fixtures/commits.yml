@@ -1,11 +1,17 @@
-commit:
+rails_commit:
   sha1: 12345
   url: https://github.com/rails/rails/commit/77fbc5358616c131884df4e0b622241ebf2a129b
   message: Fix somthing.
-  repo: repo
+  repo: rails
 
-commit2:
+ruby_commit:
   sha1: 12346
-  url: https://github.com/rails/rails/commit/77fbc5358616c131884df4e0b622241ebf2a129b
+  url: https://github.com/ruby/ruby/commit/77fbc5358616c131884df4e0b622241ebf2a129b
   message: Fix somthing else.
-  repo: repo
+  repo: ruby
+
+ruby_commit2:
+  sha1: 12347
+  url: https://github.com/ruby/ruby/commit/77fbc5358616c131884df4e0b622241ebf2a129b
+  message: Fix somthing else.
+  repo: ruby
