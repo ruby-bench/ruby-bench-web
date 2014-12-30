@@ -6,16 +6,18 @@ class ReposController < ApplicationController
     benchmark_runs = fetch_benchmark_runs(@repo.commits, 'Commit')
     @result_types = fetch_benchmark_runs_categories(benchmark_runs)
 
-    chart_builder = ChartBuilder.new(
-      benchmark_runs.where(category: @form_result_types)
-    )
+    if @form_result_types
+      chart_builder = ChartBuilder.new(
+        benchmark_runs.where(category: @form_result_types)
+      )
 
-    @chart_columns = chart_builder.build_columns do |benchmark_run|
-      "
-        Commit: #{benchmark_run.initiator.sha1[0..6]}<br>
-        Commit Date: #{benchmark_run.initiator.created_at}<br>
-        Environment: #{benchmark_run.environment}
-      ".squish
+      @chart_columns = chart_builder.build_columns do |benchmark_run|
+        "
+          Commit: #{benchmark_run.initiator.sha1[0..6]}<br>
+          Commit Date: #{benchmark_run.initiator.created_at}<br>
+          Environment: #{benchmark_run.environment}
+        ".squish
+      end
     end
   end
 
@@ -26,14 +28,17 @@ class ReposController < ApplicationController
     @form_result_types = sort_form_result_types(params[:result_types])
     benchmark_runs = fetch_benchmark_runs(releases, 'Release')
     @result_types = fetch_benchmark_runs_categories(benchmark_runs)
-    chart_categories ||= ['Ruby Version']
 
-    chart_builder = ChartBuilder.new(
-      benchmark_runs.where(category: @form_result_types)
-    )
+    if @form_result_types
+      chart_categories ||= ['Ruby Version']
 
-    @chart_columns = chart_builder.build_columns do |benchmark_run|
-      benchmark_run.initiator.version
+      chart_builder = ChartBuilder.new(
+        benchmark_runs.where(category: @form_result_types)
+      )
+
+      @chart_columns = chart_builder.build_columns do |benchmark_run|
+        benchmark_run.initiator.version
+      end
     end
   end
 
