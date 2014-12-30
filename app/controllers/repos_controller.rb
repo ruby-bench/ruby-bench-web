@@ -57,10 +57,8 @@ class ReposController < ApplicationController
   end
 
   def fetch_benchmark_runs(initiators, initiator_type)
-    BenchmarkRun.where(
-      initiator_id: initiators.map(&:id),
-      initiator_type: initiator_type
-    ).preload(:initiator)
+    BenchmarkRun.initiators(initiators.map(&:id), initiator_type)
+      .preload(:initiator)
   end
 
   def fetch_benchmark_runs_categories(benchmark_runs)
