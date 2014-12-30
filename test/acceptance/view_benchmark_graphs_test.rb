@@ -21,7 +21,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       choose(benchmark_run.category)
     end
 
-    assert page.has_css?("#chart_0 #highcharts-0")
+    assert page.has_css?("#chart #highcharts-0")
     assert page.has_content?("def abc")
 
     benchmark_run_category_humanize = benchmark_run.category.humanize
@@ -59,7 +59,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       choose(benchmark_run.category)
     end
 
-    assert page.has_css?("#chart_0 #highcharts-0")
+    assert page.has_css?("#chart #highcharts-0")
     assert page.has_content?("def abc")
 
     benchmark_run_category_humanize = benchmark_run.category.humanize

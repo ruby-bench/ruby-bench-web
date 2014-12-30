@@ -7,7 +7,7 @@ class ReposController < ApplicationController
     @result_types = fetch_benchmark_runs_categories(benchmark_runs)
 
     chart_builder = ChartBuilder.new(
-      benchmark_runs.where(category: @form_result_types),
+      benchmark_runs.where(category: @form_result_types)
     )
 
     @chart_columns = chart_builder.build_columns do |benchmark_run|
@@ -29,7 +29,7 @@ class ReposController < ApplicationController
     chart_categories ||= ['Ruby Version']
 
     chart_builder = ChartBuilder.new(
-      benchmark_runs.where(category: @form_result_types),
+      benchmark_runs.where(category: @form_result_types)
     )
 
     @chart_columns = chart_builder.build_columns do |benchmark_run|

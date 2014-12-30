@@ -14,16 +14,16 @@ class ChartBuilderTest < ActiveSupport::TestCase
     end
 
     assert_equal(
-      [
-        [
-          ["Commit: #{benchmark_run.initiator.sha1}", "Commit: #{other_benchmark_run.initiator.sha1}"],
-          "seconds",
-          "#{benchmark_run.script_url}",
-          "#{benchmark_run.category}",
-          [benchmark_run.result['some_time'].to_f, other_benchmark_run.result['some_time'].to_f],
-          [benchmark_run.result['some_other_time'].to_f, other_benchmark_run.result['some_other_time'].to_f]
+      {
+        category: "#{benchmark_run.category}",
+        unit: "#{benchmark_run.unit}",
+        script_url: "#{benchmark_run.script_url}",
+        categories: ["Commit: #{benchmark_run.initiator.sha1}", "Commit: #{other_benchmark_run.initiator.sha1}"],
+        columns: [
+          { name: "some_time", data: [benchmark_run.result['some_time'].to_f, other_benchmark_run.result['some_time'].to_f] },
+          { name: "some_other_time", data: [benchmark_run.result['some_other_time'].to_f, other_benchmark_run.result['some_other_time'].to_f] }
         ]
-      ],
+      },
       chart_columns
     )
   end

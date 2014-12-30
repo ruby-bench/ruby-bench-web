@@ -8,69 +8,61 @@
         = t('.select_benchmark')
 
   - else
-    - @chart_columns.each_with_index do |columns, index|
-      - benchmark_name = columns[3].humanize
+    - benchmark_name = @chart_columns[:category].humanize
 
+    %h2.l-align-center
+      = t('.graph_title', graph_name: benchmark_name)
+
+    #chart
+
+    - if script_url = @chart_columns[:script_url]
       %h2.l-align-center
-        = t('.graph_title', graph_name: benchmark_name)
+        = t('.script_title', graph_name: benchmark_name)
 
-      #chart{ id: "#{index}" }
+      = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
+          lexer: :ruby, options: { linenos: 'inline' }).html_safe
 
-      - if script_url = columns[2]
-        %h2.l-align-center
-          = t('.script_title', graph_name: benchmark_name)
-
-        = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
-            lexer: :ruby, options: { linenos: 'inline' }).html_safe
-
-      %hr
-
-      - content_for(:footer) do
-        :javascript
-          $(function () {
-            $("#chart_#{index}").highcharts({
-              chart: {
-                type: 'column',
-                zoomType: 'x'
-              },
-              subtitle: {
-                text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
-              },
+    - content_for(:footer) do
+      :javascript
+        $(function () {
+          $("#chart").highcharts({
+            chart: {
+              type: 'column',
+              zoomType: 'x'
+            },
+            subtitle: {
+              text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+            },
+            title: {
+              text: ""
+            },
+            exporting: {
+              enabled: false
+            },
+            tooltip: {
+              useHTML: true,
+              crosshairs: true,
+              shared: true
+            },
+            xAxis: {
+              categories: #{@chart_columns[:categories]},
               title: {
-                text: ""
+                text: "Commits displayed in ascending order based on the commit date",
+                margin: 10
+              }
+            },
+            yAxis: {
+              title: {
+                text: "#{@chart_columns[:unit].capitalize}",
               },
-              exporting: {
-                enabled: false
-              },
-              tooltip: {
-                useHTML: true,
-                crosshairs: true,
-                shared: true
-              },
-              xAxis: {
-                categories: #{columns[0]},
-                title: {
-                  text: "Commits displayed in ascending order based on the commit date",
-                  margin: 10
-                }
-              },
-              yAxis: {
-                title: {
-                  text: "#{columns[1].capitalize}",
-                },
-                type: 'logarithmic'
-              },
-              legend: {
-                layout: 'vertical',
-                align: 'center',
-                verticalAlign: 'bottom',
-                borderWidth: 0
-              },
-              series: [
-                {
-                  name: "#{columns[3]}",
-                  data: #{columns[4]}
-                }
-              ]
-            });
+              type: 'logarithmic'
+            },
+            legend: {
+              layout: 'vertical',
+              align: 'center',
+              verticalAlign: 'bottom',
+              borderWidth: 0
+            },
+            series: #{@chart_columns[:columns].to_json}
           });
+        });
