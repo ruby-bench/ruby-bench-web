@@ -1,17 +1,26 @@
 .footer-sponsors
-  %h4= t('footer.sponsors')
+  We are currently looking for the following sponsors in order to help us sustain
+  RubyBench:
 
-  %hr.footer-hr
-
-  %ul.list-unstyled
-    %li
-      %h4
-        = t('footer.hosting_sponsored_by')
+  %ol
+    %li Hosting sponsor
 
     %li
-      %h4
-        = t('footer.builder_sponsored_by')
+      %strong
+        Sponsor for bare metal server. We're currently running the bare metal
+        server using a free one month trial from Softlayer. While the lowest
+        bare metal server costs around USD170, we would prefer a bare metal
+        server in the range of USD500 such that the benchmarks do not take forever
+        to complete.
 
-    %li
-      %h4
-        = t('footer.contributors')
+  For parties interested in sponsoring any of the above, please drop us a note
+  at our
+  = succeed '.' do
+    = link_to ' discussion forum', 'http://community.miniprofiler.com/t/status-progress-cooperation/337', target: '_blank', class: 'alert-link'
+
+%hr
+
+.l-align-center
+  %h5
+    Built and maintained by
+    = link_to '@tgxworld', 'https://github.com/tgxworld'
