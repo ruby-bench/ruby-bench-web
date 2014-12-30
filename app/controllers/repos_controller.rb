@@ -8,7 +8,9 @@ class ReposController < ApplicationController
 
     if @form_result_type
       chart_builder = ChartBuilder.new(
-        benchmark_runs.where(category: @form_result_type)
+        benchmark_runs.where(category: @form_result_type).sort_by do |benchmark_run|
+          benchmark_run.initiator.created_at
+        end
       )
 
       @chart_columns = chart_builder.build_columns do |benchmark_run|
@@ -33,7 +35,9 @@ class ReposController < ApplicationController
       chart_categories ||= ['Ruby Version']
 
       chart_builder = ChartBuilder.new(
-        benchmark_runs.where(category: @form_result_type)
+        benchmark_runs.where(category: @form_result_type).sort_by do |benchmark_run|
+          benchmark_run.initiator.version
+        end
       )
 
       @chart_columns = chart_builder.build_columns do |benchmark_run|
