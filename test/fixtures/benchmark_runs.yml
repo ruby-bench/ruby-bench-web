@@ -31,3 +31,12 @@ benchmark_run4:
     :some_time: 0.123
   environment: ruby 2.2dev
   unit: seconds
+
+benchmark_run5:
+  category: array_iterations
+  initiator: commit2 (Commit)
+  result:
+    :some_time: 0.127
+  environment: ruby 2.2dev
+  unit: seconds
+  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb

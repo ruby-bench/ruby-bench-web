@@ -5,13 +5,13 @@
       form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name)
 
   .col-xs-8
-    - if !@graphs_columns || @graphs_columns.empty?
+    - if !@chart_columns || @chart_columns.empty?
       .alert.alert-warning
         .l-align-center
           = t('.select_benchmark')
 
     - else
-      - @graphs_columns.each_with_index do |columns, index|
+      - @chart_columns.each_with_index do |columns, index|
         - benchmark_name = columns[3].humanize
 
         %h2.l-align-center
