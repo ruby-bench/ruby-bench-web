@@ -33,15 +33,14 @@ en:
   static_pages:
     homepage:
       blurb: >-
-        Long running benchmarks for Ruby
-      repositories: Repositories
+        Long Running Benchmarks for Ruby Projects
+      repositories: Projects Being Tracked
     contribute:
       title: Contributing
 
   top_nav:
-    bench: Bench
+    logo: RubyBench
     benchmarks: Benchmarks
     builder: Builder
     contribute: Contribute
     discuss: Discuss
-    rails: Rails
