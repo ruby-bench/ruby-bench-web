@@ -37,8 +37,8 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
         choose(@benchmark_run.category)
       end
 
-      assert page.has_css?("#chart_0.c3")
-      assert_not page.has_css?("#chart_1.c3")
+      assert page.has_css?("#chart_0 #highcharts-0")
+      assert_not page.has_css?("#chart_1 #highcharts-1")
       assert page.has_content?("def abc")
 
       benchmark_run_category_humanize = @benchmark_run.category.humanize

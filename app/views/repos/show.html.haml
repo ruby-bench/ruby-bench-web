@@ -1,54 +1,80 @@
 = render 'title', title: t('.title', repo_name: @repo.name.capitalize)
 
-.c3-hide-ticks
-  = render 'form',
-      form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name)
+= render 'form',
+    form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name)
 
-  .col-xs-8
-    - if !@chart_columns || @chart_columns.empty?
-      .alert.alert-warning
-        .l-align-center
-          = t('.select_benchmark')
+.col-xs-8
+  - if !@chart_columns || @chart_columns.empty?
+    .alert.alert-warning
+      .l-align-center
+        = t('.select_benchmark')
 
-    - else
-      - @chart_columns.each_with_index do |columns, index|
-        - benchmark_name = columns[3].humanize
+  - else
+    - @chart_columns.each_with_index do |columns, index|
+      - benchmark_name = columns[3].humanize
 
+      %h2.l-align-center
+        = t('.graph_title', graph_name: benchmark_name)
+
+      #chart{ id: "#{index}" }
+
+      - if script_url = columns[2]
         %h2.l-align-center
-          = t('.graph_title', graph_name: benchmark_name)
+          = t('.script_title', graph_name: benchmark_name)
 
-        #chart{ id: "#{index}" }
+        = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
+            lexer: :ruby, options: { linenos: 'inline' }).html_safe
 
-        - if script_url = columns[2]
-          %h2.l-align-center
-            = t('.script_title', graph_name: benchmark_name)
+      %hr
 
-          = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
-              lexer: :ruby, options: { linenos: 'inline' }).html_safe
-
-        %hr
-
-        - content_for(:footer) do
-          :javascript
-            c3.generate({
-              bindto: "#chart_#{index}",
-              data: {
-                x: 'Commit SHA1',
-                columns: #{columns[4..-1].unshift(columns[0])}
+      - content_for(:footer) do
+        :javascript
+          $(function () {
+            $("#chart_#{index}").highcharts({
+              chart: {
+                zoomType: 'x'
               },
-              zoom: {
-                enabled: true
+              subtitle: {
+                text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
               },
-              axis: {
-                x: {
-                  type: 'category',
-                  label: 'Commits displayed in ascending order based on the commit date',
-                  tick: {
-                    centered: true
-                  }
+              title: {
+                text: ""
+              },
+              exporting: {
+                enabled: false
+              },
+              tooltip: {
+                useHTML: true,
+                crosshairs: true,
+                shared: true
+              },
+              xAxis: {
+                categories: #{columns[0]},
+                labels: {
+                  enabled: false
                 },
-                y: {
-                  label: "#{columns[1]}"
+                title: {
+                  text: "Commits displayed in ascending order based on the commit date",
+                  margin: 10
                 }
-              }
-            })
+              },
+              yAxis: {
+                title: {
+                  text: "#{columns[1].capitalize}",
+                },
+                type: 'logarithmic'
+              },
+              legend: {
+                layout: 'vertical',
+                align: 'center',
+                verticalAlign: 'bottom',
+                borderWidth: 0
+              },
+              series: [
+                {
+                  name: "#{columns[3]}",
+                  data: #{columns[4]}
+                }
+              ]
+            });
+          });

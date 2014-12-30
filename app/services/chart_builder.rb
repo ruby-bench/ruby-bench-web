@@ -1,7 +1,7 @@
 class ChartBuilder
-  def initialize(benchmark_runs, categories)
+  def initialize(benchmark_runs)
     @benchmark_runs = benchmark_runs
-    @categories = categories
+    @categories = []
   end
 
   def build_columns(&block)
@@ -35,8 +35,8 @@ class ChartBuilder
         data[benchmark_run.category][:unit] ||= benchmark_run.unit
         data[benchmark_run.category][:script_url] ||= benchmark_run.script_url
         data[benchmark_run.category][:category] ||= benchmark_run.category
-        data[benchmark_run.category][key] ||= [key]
-        data[benchmark_run.category][key] << value
+        data[benchmark_run.category][key] ||= []
+        data[benchmark_run.category][key] << value.to_f
       end
     end
 

@@ -8,13 +8,13 @@ class ReposController < ApplicationController
 
     chart_builder = ChartBuilder.new(
       benchmark_runs.where(category: @form_result_types),
-      ['Commit SHA1']
     )
 
     @chart_columns = chart_builder.build_columns do |benchmark_run|
       "
         Commit: #{benchmark_run.initiator.sha1[0..6]}<br>
-        Commit Date: #{benchmark_run.initiator.created_at}
+        Commit Date: #{benchmark_run.initiator.created_at}<br>
+        Environment: #{benchmark_run.environment}
       ".squish
     end
   end
@@ -30,7 +30,6 @@ class ReposController < ApplicationController
 
     chart_builder = ChartBuilder.new(
       benchmark_runs.where(category: @form_result_types),
-      chart_categories
     )
 
     @chart_columns = chart_builder.build_columns do |benchmark_run|

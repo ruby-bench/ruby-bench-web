@@ -145,9 +145,7 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.2.0)
       sprockets-rails
-    rails-assets-c3 (0.4.6)
-      rails-assets-d3 (~> 3.4.4)
-    rails-assets-d3 (3.4.13)
+    rails-assets-highcharts (4.0.4)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.5)
@@ -227,8 +225,7 @@ DEPENDENCIES
   puma (~> 2.9.2)
   pygments.rb (~> 0.6.0)
   rails (= 4.2.0)
-  rails-assets-c3 (~> 0.4.6)
-  rails-assets-d3 (~> 3.4.13)
+  rails-assets-highcharts (~> 4.0.4)
   rails_12factor
   sass-rails (~> 5.0.0.beta1)
   spring

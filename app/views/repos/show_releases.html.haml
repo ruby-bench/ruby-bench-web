@@ -27,25 +27,50 @@
 
       - content_for(:footer) do
         :javascript
-          c3.generate({
-            bindto: "#chart_#{index}",
-            data: {
-              x: 'Ruby Version',
-              columns: #{columns[4..-1].unshift(columns[0])},
-              type: 'bar'
-            },
-            zoom: {
-              enabled: true
-            },
-            axis: {
-              x: {
-                type: 'category',
-                tick: {
-                  centered: true
+          $(function () {
+            $("#chart_#{index}").highcharts({
+              chart: {
+                type: 'column',
+                zoomType: 'x'
+              },
+              subtitle: {
+                text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+              },
+              title: {
+                text: ""
+              },
+              exporting: {
+                enabled: false
+              },
+              tooltip: {
+                useHTML: true,
+                crosshairs: true,
+                shared: true
+              },
+              xAxis: {
+                categories: #{columns[0]},
+                title: {
+                  text: "Commits displayed in ascending order based on the commit date",
+                  margin: 10
                 }
               },
-              y: {
-                label: "#{columns[1]}"
-              }
-            }
-          })
+              yAxis: {
+                title: {
+                  text: "#{columns[1].capitalize}",
+                },
+                type: 'logarithmic'
+              },
+              legend: {
+                layout: 'vertical',
+                align: 'center',
+                verticalAlign: 'bottom',
+                borderWidth: 0
+              },
+              series: [
+                {
+                  name: "#{columns[3]}",
+                  data: #{columns[4]}
+                }
+              ]
+            });
+          });

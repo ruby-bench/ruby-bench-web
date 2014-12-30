@@ -7,7 +7,6 @@ class ChartBuilderTest < ActiveSupport::TestCase
 
     chart_builder = ChartBuilder.new(
       [benchmark_run, other_benchmark_run],
-      ['Commit SHA1']
     )
 
     chart_columns = chart_builder.build_columns do |benchmark_run|
@@ -17,12 +16,12 @@ class ChartBuilderTest < ActiveSupport::TestCase
     assert_equal(
       [
         [
-          ["Commit SHA1", "Commit: #{benchmark_run.initiator.sha1}", "Commit: #{other_benchmark_run.initiator.sha1}"],
+          ["Commit: #{benchmark_run.initiator.sha1}", "Commit: #{other_benchmark_run.initiator.sha1}"],
           "seconds",
           "#{benchmark_run.script_url}",
           "#{benchmark_run.category}",
-          ["some_time", benchmark_run.result['some_time'], other_benchmark_run.result['some_time']],
-          ["some_other_time", benchmark_run.result['some_other_time'], other_benchmark_run.result['some_other_time']]
+          [benchmark_run.result['some_time'].to_f, other_benchmark_run.result['some_time'].to_f],
+          [benchmark_run.result['some_other_time'].to_f, other_benchmark_run.result['some_other_time'].to_f]
         ]
       ],
       chart_columns
