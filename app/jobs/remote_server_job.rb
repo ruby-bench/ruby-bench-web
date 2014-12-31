@@ -40,6 +40,25 @@ class RemoteServerJob < ApplicationJob
     )
   end
 
+  def ruby_releases_discourse(ssh, ruby_version)
+    execute_ssh_commands(ssh,
+      [
+        "docker pull tgxworld/ruby_releases_discourse",
+        "docker run --name discourse_redis -d redis:2.8.19 && docker
+          run --name discourse_postgres -d postgres:9.3.5 &&
+          docker run --rm
+          --link discourse_postgres:postgres
+          --link discourse_redis:redis
+          -e \"RUBY_VERSION=#{ruby_version}\"
+          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          tgxworld/ruby_releases_discourse".squish,
+        "docker stop discourse_postgres discourse_redis",
+        "docker rm discourse_postgres discourse_redis"
+      ]
+    )
+  end
+
   def discourse_rails_head_bench(ssh, commit_hash)
     execute_ssh_commands(ssh,
       [
