@@ -41,7 +41,7 @@ class ReposController < ApplicationController
       )
 
       @chart_columns = chart_builder.build_columns do |benchmark_run|
-        benchmark_run.environment.split(" ")[0..1].join(" ")
+        benchmark_run.initiator.version
       end
     end
   end
