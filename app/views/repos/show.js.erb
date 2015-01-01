@@ -1,0 +1,44 @@
+$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_chart', locals: { chart_columns: @chart_columns })) %>");
+
+$("#chart").highcharts({
+  chart: {
+    zoomType: 'x'
+  },
+  subtitle: {
+    text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+  },
+  title: {
+    text: ""
+  },
+  exporting: {
+    enabled: false
+  },
+  tooltip: {
+    useHTML: true,
+    crosshairs: true,
+    shared: true
+  },
+  xAxis: {
+    categories: <%= raw @chart_columns[:categories] %>,
+    labels: {
+      enabled: false
+    },
+    title: {
+      text: "Commits displayed in ascending order based on the commit date",
+      margin: 10
+    }
+  },
+  yAxis: {
+    title: {
+      text: "<%= @chart_columns[:unit].capitalize %>",
+    },
+    type: 'logarithmic'
+  },
+  legend: {
+    layout: 'horizontal',
+    align: 'center',
+    verticalAlign: 'bottom',
+    borderWidth: 0
+  },
+  series: <%= raw @chart_columns[:columns] %>
+});

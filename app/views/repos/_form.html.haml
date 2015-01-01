@@ -3,7 +3,7 @@
     .panel-heading= t('.benchmark_types')
 
     .panel-body
-      = form_tag form_path, role: 'form', method: :get do
+      = form_tag form_path, role: 'form', method: :get, class: 'result-types-form', data: { organization_name: @organization.name, repo_name: @repo.name, name: name } do
         .form-group
           %ul.list-unstyled.list-inline
             - @result_types.each do |category_name, categories|
@@ -15,6 +15,6 @@
 
                   = label_tag(id, class: 'list-label') do
                     = radio_button_tag("result_type", result_type,
-                      (@form_result_type == result_type), id: id, onclick: "this.form.submit();")
+                      (@form_result_type == result_type), id: id)
 
                     %span= result_type

@@ -1,10 +1,9 @@
 class ReposController < ApplicationController
   def show
-    organization = find_organization_by_name(params[:organization_name])
-    @repo = find_organization_repos_by_name(organization, params[:repo_name])
+    @organization = find_organization_by_name(params[:organization_name])
+    @repo = find_organization_repos_by_name(@organization, params[:repo_name])
     @form_result_type = params[:result_type]
     benchmark_runs = fetch_benchmark_runs(@repo.commits, 'Commit')
-    @result_types = fetch_benchmark_runs_categories(benchmark_runs)
 
     if @form_result_type
       chart_builder = ChartBuilder.new(
@@ -21,15 +20,22 @@ class ReposController < ApplicationController
         ".squish
       end
     end
+
+    respond_to do |format|
+      format.html do
+        @result_types = fetch_benchmark_runs_categories(benchmark_runs)
+      end
+
+      format.js
+    end
   end
 
   def show_releases
-    organization = find_organization_by_name(params[:organization_name])
-    @repo = find_organization_repos_by_name(organization, params[:repo_name])
+    @organization = find_organization_by_name(params[:organization_name])
+    @repo = find_organization_repos_by_name(@organization, params[:repo_name])
     releases = @repo.releases
     @form_result_type = params[:result_type]
     benchmark_runs = fetch_benchmark_runs(releases, 'Release')
-    @result_types = fetch_benchmark_runs_categories(benchmark_runs)
 
     if @form_result_type
       chart_categories ||= ['Ruby Version']
@@ -43,6 +49,14 @@ class ReposController < ApplicationController
       @chart_columns = chart_builder.build_columns do |benchmark_run|
         benchmark_run.initiator.version
       end
+    end
+
+    respond_to do |format|
+      format.html do
+        @result_types = fetch_benchmark_runs_categories(benchmark_runs)
+      end
+
+      format.js
     end
   end
 

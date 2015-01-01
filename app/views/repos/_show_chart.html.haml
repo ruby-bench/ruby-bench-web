@@ -1,0 +1,66 @@
+- if !chart_columns || chart_columns.empty?
+  .alert.alert-warning
+    .l-align-center
+      = t('repos.show.select_benchmark')
+
+- else
+  - benchmark_name = chart_columns[:category].humanize
+
+  %h2.l-align-center
+    = t('repos.show.graph_title', graph_name: benchmark_name)
+
+  #chart
+
+  - if script_url = chart_columns[:script_url]
+    %h2.l-align-center
+      = t('repos.show.script_title', graph_name: benchmark_name)
+
+    = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
+        lexer: :ruby, options: { linenos: 'inline' }).html_safe
+
+  - content_for(:footer) do
+    :javascript
+      $(function () {
+        $("#chart").highcharts({
+          chart: {
+            zoomType: 'x'
+          },
+          subtitle: {
+            text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+          },
+          title: {
+            text: ""
+          },
+          exporting: {
+            enabled: false
+          },
+          tooltip: {
+            useHTML: true,
+            crosshairs: true,
+            shared: true
+          },
+          xAxis: {
+            categories: #{chart_columns[:categories]},
+            labels: {
+              enabled: false
+            },
+            title: {
+              text: "Commits displayed in ascending order based on the commit date",
+              margin: 10
+            }
+          },
+          yAxis: {
+            title: {
+              text: "#{chart_columns[:unit].capitalize}",
+            },
+            type: 'logarithmic'
+          },
+          legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            borderWidth: 0
+          },
+          series: #{chart_columns[:columns]}
+        });
+      });
