@@ -5,6 +5,7 @@
     = stylesheet_link_tag 'application', media: 'all'
     = stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Roboto:100,400'
     = javascript_include_tag 'application'
+    = render 'layouts/ga' if Rails.env.production?
     = csrf_meta_tags
 
   %header
