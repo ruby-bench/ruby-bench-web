@@ -5,4 +5,4 @@
   = render 'loading'
 
   #chart-container
-    = render 'show_releases_chart', chart_columns: @chart_columns
+    = render 'show_releases_chart', charts: [@chart_columns, @memory_chart_columns]

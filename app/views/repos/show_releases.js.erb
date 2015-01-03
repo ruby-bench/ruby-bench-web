@@ -1,4 +1,4 @@
-$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_releases_chart', locals: { chart_columns: @chart_columns })) %>");
+$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_releases_chart', locals: { charts: [@chart_columns, @memory_chart_columns] })) %>");
 
 $("#chart").highcharts({
   chart: {
@@ -39,3 +39,45 @@ $("#chart").highcharts({
   },
   series: <%= raw @chart_columns[:columns] %>
 });
+
+<% if @memory_chart_columns %>
+  $("#chart-memory").highcharts({
+    chart: {
+      type: 'column',
+      zoomType: 'x'
+    },
+    subtitle: {
+      text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+    },
+    title: {
+      text: ""
+    },
+    exporting: {
+      enabled: false
+    },
+    tooltip: {
+      useHTML: true,
+      crosshairs: true,
+      shared: true
+    },
+    xAxis: {
+      categories: <%= raw @memory_chart_columns[:categories] %>,
+      labels: {
+        rotation: -30
+      }
+    },
+    yAxis: {
+      title: {
+        text: "<%= @memory_chart_columns[:unit].capitalize %>",
+      },
+      type: 'logarithmic'
+    },
+    legend: {
+      layout: 'horizontal',
+      align: 'center',
+      verticalAlign: 'bottom',
+      borderWidth: 0
+    },
+    series: <%= raw @memory_chart_columns[:columns] %>
+  });
+<% end %>

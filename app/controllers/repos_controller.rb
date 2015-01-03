@@ -49,6 +49,17 @@ class ReposController < ApplicationController
       @chart_columns = chart_builder.build_columns do |benchmark_run|
         benchmark_run.initiator.version
       end
+
+      # Refactor
+      chart_builder = ChartBuilder.new(
+        benchmark_runs.where(category: "#{@form_result_type}_memory").sort_by do |benchmark_run|
+          benchmark_run.initiator.version
+        end
+      )
+
+      @memory_chart_columns = chart_builder.build_columns do |benchmark_run|
+        benchmark_run.initiator.version
+      end
     end
 
     respond_to do |format|
@@ -76,9 +87,14 @@ class ReposController < ApplicationController
   end
 
   def fetch_benchmark_runs_categories(benchmark_runs)
-    benchmark_runs.pluck(:category).uniq.sort.group_by do |category|
-      category =~ /\A([^_]+)_/
-      $1
-    end
+    benchmark_runs
+      .pluck(:category)
+      .uniq
+      .sort
+      .select { |category| category if !category.match(/memory\Z/)}
+      .group_by do |category|
+        category =~ /\A([^_]+)_/
+        $1
+      end
   end
 end
