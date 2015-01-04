@@ -1,4 +1,14 @@
 .footer-sponsors
+  %ul.list-inline.footer-sponsors-list
+    %li.footer-sponsors-list-item
+      = link_to 'http://www.jollygoodcode.com/', target: '_blank' do
+        %h4.l-align-center
+          %i= t('footer.supported_by')
+
+        = image_tag 'sponsors/jolly_good_code.png', class: 'footer-sponsors-list-item-image', alt: 'Jolly Good Code'
+
+  %hr
+
   We are currently looking for the following sponsors in order to help us sustain
   RubyBench:
 
