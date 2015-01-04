@@ -19,16 +19,21 @@ $(document).ready(function() {
     var organizationName = $resultTypesForm.data('organization-name');
     var repoName = $resultTypesForm.data('repo-name');
     var name = $resultTypesForm.data('name')
+    var resultType = $(this).val();
 
     xhr = $.ajax({
       url: "/" + organizationName + "/" + repoName + "/" + name,
       type: 'GET',
-      data: { result_type: $(this).val() },
+      data: { result_type: resultType },
       dataType: 'script',
       beforeSend: function() {
         $loading.toggleClass('hide');
         $("#chart-container").empty();
         $('html,body').animate({scrollTop:0},0);
+
+        if (history && history.pushState) {
+          history.pushState(null, '', "/" + organizationName + "/" + repoName + "/" + name + '?result_type=' + resultType);
+        }
       },
       complete: function() {
         $loading.toggleClass('hide');

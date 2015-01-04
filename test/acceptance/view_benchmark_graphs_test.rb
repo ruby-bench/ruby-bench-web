@@ -28,6 +28,12 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
     assert page.has_content?("#{benchmark_run_category_humanize} Script")
+
+    assert_equal(
+      URI.parse(page.current_url).request_uri,
+      "/#{benchmark_run.initiator.repo.organization.name}" \
+      "/#{benchmark_run.initiator.repo.name}/?result_type=#{benchmark_run.category}"
+    )
   end
 
   test "User should see long running benchmark categories as sorted" do
@@ -66,6 +72,12 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
     assert page.has_content?("#{benchmark_run_category_humanize} Script")
+
+    assert_equal(
+      URI.parse(page.current_url).request_uri,
+      "/#{benchmark_run.initiator.repo.organization.name}" \
+      "/#{benchmark_run.initiator.repo.name}/releases?result_type=#{benchmark_run.category}"
+    )
   end
 
   test "User should see releases benchmark categories as sorted" do
