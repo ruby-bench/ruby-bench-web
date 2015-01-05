@@ -13,10 +13,22 @@ class ReposController < ApplicationController
       )
 
       @chart_columns = chart_builder.build_columns do |benchmark_run|
+        environment = YAML.load(benchmark_run.environment)
+
+        if environment.is_a?(Hash)
+          temp = ""
+
+          environment.each do |key, value|
+            temp << "#{key}: #{value}<br>"
+          end
+
+          environment = temp
+        end
+
         "
           Commit: #{benchmark_run.initiator.sha1[0..6]}<br>
           Commit Date: #{benchmark_run.initiator.created_at}<br>
-          Environment: #{benchmark_run.environment}
+          #{environment}
         ".squish
       end
     end
