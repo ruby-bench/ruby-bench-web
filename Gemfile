@@ -5,7 +5,6 @@ ruby '2.2.0'
 
 gem 'rails', '4.2.0'
 gem 'pg'
-gem 'puma', '~> 2.9.2'
 gem 'sass-rails', '~> 5.0.1'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
@@ -17,11 +16,16 @@ gem 'bootstrap-sass', '~> 3.3.1'
 gem 'pygments.rb', '~> 0.6.0'
 gem 'rails-assets-highcharts', '~> 4.0.4'
 
+group :production do
+  gem 'passenger', '4.0.57'
+end
+
 group :development do
   gem 'spring'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet', '~> 4.14.0'
+  gem 'puma', '~> 2.9.2'
 end
 
 group :development, :test do
