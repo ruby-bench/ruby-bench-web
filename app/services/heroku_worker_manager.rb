@@ -8,6 +8,6 @@ class HerokuWorkerManager
   end
 
   def set_worker(count)
-    @client.formation.update('railsbench', 'worker', { "quantity" => "#{count}" })
+    @client.formation.update('rubybench', 'worker', { "quantity" => "#{count}" })
   end
 end

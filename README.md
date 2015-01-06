@@ -1,4 +1,4 @@
-https://railsbench.herokuapp.com/
+https://rubybench.herokuapp.com/
 
 # Introduction
 
