@@ -42,3 +42,8 @@ en:
     contribute: Contribute
     discuss: Discuss
     releases: Releases Benchmarks
+
+  highcharts:
+    subtitle:
+      desktop: 'Click and drag in the plot area to zoom in'
+      mobile: 'Pinch the chart to zoom in'
