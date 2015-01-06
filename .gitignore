@@ -15,7 +15,4 @@
 /log/*.log
 /tmp
 
-# Ignore configuration file for database.
-config/database.yml
-
 /test/vcr_cassettes/**/*.yml

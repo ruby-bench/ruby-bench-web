@@ -78,8 +78,8 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-production:
-  <<: *default
-  database: ruby-bench-web_production
-  username: ruby-bench-web
-  password: <%= ENV['RUBY-BENCH-WEB_DATABASE_PASSWORD'] %>
+# production:
+#   <<: *default
+#   database: ruby-bench-web_production
+#   username: ruby-bench-web
+#   password: <%= ENV['RUBY-BENCH-WEB_DATABASE_PASSWORD'] %>
