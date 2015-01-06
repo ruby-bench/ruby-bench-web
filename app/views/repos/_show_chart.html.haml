@@ -42,12 +42,11 @@
           xAxis: {
             categories: #{chart_columns[:categories]},
             labels: {
-              enabled: false
+              formatter: function () {
+                return /Commit Date: (\d{4}-\d{2}-\d{2})/.exec(this.value)[1]
+              }
             },
-            title: {
-              text: "Commits displayed in ascending order based on the commit date",
-              margin: 10
-            }
+            tickInterval: 50
           },
           yAxis: {
             title: {
