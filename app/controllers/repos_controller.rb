@@ -50,52 +50,30 @@ class ReposController < ApplicationController
     benchmark_runs = fetch_benchmark_runs(releases, 'Release')
 
     if @form_result_type
-      chart_categories ||= ['Ruby Version']
+      @chart_columns, @memory_chart_columns =
+        [@form_result_type, "#{@form_result_type}_memory"].map do |result_type|
+          chart_builder = ChartBuilder.new(
+            benchmark_runs.where(category: result_type).sort_by do |benchmark_run|
+              benchmark_run.initiator.version
+            end
+          )
 
-      chart_builder = ChartBuilder.new(
-        benchmark_runs.where(category: @form_result_type).sort_by do |benchmark_run|
-          benchmark_run.initiator.version
-        end
-      )
+          chart_builder.build_columns do |benchmark_run|
+            environment = YAML.load(benchmark_run.environment)
 
-      @chart_columns = chart_builder.build_columns do |benchmark_run|
-        environment = YAML.load(benchmark_run.environment)
+            if environment.is_a?(Hash)
+              temp = ""
 
-        if environment.is_a?(Hash)
-          temp = ""
+              environment.each do |key, value|
+                temp << "#{key}: #{value}<br>"
+              end
 
-          environment.each do |key, value|
-            temp << "#{key}: #{value}<br>"
+              environment = temp
+            end
+
+            "Version: #{benchmark_run.initiator.version}<br> #{environment}"
           end
-
-          environment = temp
         end
-
-        "Version: #{benchmark_run.initiator.version}<br> #{environment}"
-      end
-
-      # Refactor
-      chart_builder = ChartBuilder.new(
-        benchmark_runs.where(category: "#{@form_result_type}_memory").sort_by do |benchmark_run|
-          benchmark_run.initiator.version
-        end
-      )
-
-      @memory_chart_columns = chart_builder.build_columns do |benchmark_run|
-        environment = YAML.load(benchmark_run.environment)
-
-        if environment.is_a?(Hash)
-          temp = ""
-
-          environment.each do |key, value|
-            temp << "#{key}: #{value}<br>"
-          end
-
-          environment = temp
-        end
-
-        "Version: #{benchmark_run.initiator.version}<br> #{environment}"
-      end
     end
 
     respond_to do |format|
