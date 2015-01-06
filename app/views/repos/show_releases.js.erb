@@ -29,6 +29,7 @@ $("#chart").highcharts({
     title: {
       text: "<%= @chart_columns[:unit].capitalize %>",
     },
+    min: 0,
     type: 'logarithmic'
   },
   legend: {
@@ -70,6 +71,7 @@ $("#chart").highcharts({
       title: {
         text: "<%= @memory_chart_columns[:unit].capitalize %>",
       },
+      min: 0,
       type: 'logarithmic'
     },
     legend: {
