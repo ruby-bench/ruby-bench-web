@@ -3,4 +3,10 @@ rvm:
   - "2.2.0"
 notifications:
   email: false
-bundler_args: --without production
+bundler_args: --without development:production --deployment --retry=3 --jobs=3
+before_script:
+  - bundle exec rake db:create
+  - bundle exec rake db:migrate
+script: bundle exec rake test
+addons:
+  postgresql: "9.3"
