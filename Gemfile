@@ -16,10 +16,6 @@ gem 'bootstrap-sass', '~> 3.3.1'
 gem 'pygments.rb', '~> 0.6.0'
 gem 'rails-assets-highcharts', '~> 4.0.4'
 
-group :production do
-  gem 'passenger', '4.0.57'
-end
-
 group :development do
   gem 'spring'
   gem 'better_errors'
@@ -44,4 +40,5 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'newrelic_rpm'
+  gem 'passenger', '4.0.57'
 end
