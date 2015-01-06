@@ -9,11 +9,11 @@ RubyBench was born out from
 
 Ruby Scripts: https://github.com/ruby/ruby/tree/trunk/benchmark
 
-Discourse Scripts for Rails: https://github.com/discourse/discourse/tree/master/script
+Discourse Scripts: https://github.com/discourse/discourse/tree/master/script
 
 The scripts are executed in a bare metal server using Docker containers to ensure
 consistent results. To view how the scripts are executed, head over to
-https://github.com/rails-bench/rails-bench-docker.
+https://github.com/ruby-bench/ruby-bench-docker.
 
 # Hardware
 
