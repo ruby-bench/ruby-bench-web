@@ -33,4 +33,4 @@ Backplane | SuperMicro BPN-SAS-815TQ
 
 # Contribute
 List of things we need to do: https://trello.com/b/mdMX7CeK/todo
-Discuss features and direction of project: http://community.miniprofiler.com/t/status-progress-cooperation/337
+Discuss features and direction of project: http://community.rubybench.org
