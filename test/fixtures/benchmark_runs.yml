@@ -17,16 +17,6 @@ benchmark_run2:
   environment: "ruby 2.2.0dev (something)"
   unit: seconds
 
-benchmark_run3:
-  category: array_iterations
-  initiator: ruby_2_2_0 (Release)
-  result:
-    :some_time: 0.123
-    :some_other_time: 0.125
-  environment: "ruby 2.2.0dev (something)"
-  unit: seconds
-  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
-
 benchmark_run4:
   category: array_count
   initiator: ruby_2_2_0 (Release)
@@ -42,6 +32,25 @@ benchmark_run5:
   result:
     :some_time: 0.125
     :some_other_time: 0.127
+  environment: "ruby 2.2.0dev (something)"
+  unit: seconds
+  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
+
+array_iterations_memory:
+  category: array_iterations_memory
+  initiator: ruby_2_2_0 (Release)
+  result:
+    :rss_kb: 200
+  environment: "ruby 2.2.0dev (something)"
+  unit: kilobytes
+  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
+
+array_iterations:
+  category: array_iterations
+  initiator: ruby_2_2_0 (Release)
+  result:
+    :some_time: 0.123
+    :some_other_time: 0.125
   environment: "ruby 2.2.0dev (something)"
   unit: seconds
   script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb

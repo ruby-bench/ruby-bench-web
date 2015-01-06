@@ -51,7 +51,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
   end
 
   test "User should be able to view a single release benchmark graph" do
-    benchmark_run = benchmark_runs(:benchmark_run)
+    benchmark_run = benchmark_runs(:array_iterations)
 
     visit '/ruby/ruby/releases'
 
@@ -71,6 +71,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     benchmark_run_category_humanize = benchmark_run.category.humanize
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} memory Graph")
     assert page.has_content?("#{benchmark_run_category_humanize} Script")
 
     assert_equal(
