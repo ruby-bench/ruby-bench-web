@@ -38,7 +38,7 @@ en:
   top_nav:
     logo: RubyBench
     benchmarks: Per-Commit Benchmarks
-    builder: Builder
+    hardware: Hardware
     contribute: Contribute
     discuss: Discuss
     releases: Releases Benchmarks
