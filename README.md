@@ -1,4 +1,4 @@
-https://rubybench.herokuapp.com/
+http://rubybench.org
 
 # Introduction
 
@@ -15,7 +15,7 @@ The scripts are executed in a bare metal server using Docker containers to ensur
 consistent results. To view how the scripts are executed, head over to
 https://github.com/rails-bench/rails-bench-docker.
 
-# Builder
+# Hardware
 
 All benchmarks are ran on a Softlayer bare metal server in order to achieve consistent results. The bare metal server has the following configurations:
 
