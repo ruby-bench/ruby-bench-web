@@ -55,7 +55,10 @@
               xAxis: {
                 categories: #{chart_columns[:categories]},
                 labels: {
-                  rotation: -30
+                  rotation: -30,
+                  formatter: function () {
+                    return /Version: ([^<]+)/.exec(this.value)[1]
+                  }
                 }
               },
               yAxis: {

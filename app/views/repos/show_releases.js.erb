@@ -22,7 +22,10 @@ $("#chart").highcharts({
   xAxis: {
     categories: <%= raw @chart_columns[:categories] %>,
     labels: {
-      rotation: -30
+      rotation: -30,
+      formatter: function () {
+        return /Version: ([^<]+)/.exec(this.value)[1]
+      }
     }
   },
   yAxis: {
@@ -63,7 +66,10 @@ $("#chart").highcharts({
     xAxis: {
       categories: <%= raw @memory_chart_columns[:categories] %>,
       labels: {
-        rotation: -30
+        rotation: -30,
+        formatter: function () {
+          return /Version: ([^<]+)/.exec(this.value)[1]
+        }
       }
     },
     yAxis: {

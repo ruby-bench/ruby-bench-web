@@ -59,7 +59,19 @@ class ReposController < ApplicationController
       )
 
       @chart_columns = chart_builder.build_columns do |benchmark_run|
-        benchmark_run.initiator.version
+        environment = YAML.load(benchmark_run.environment)
+
+        if environment.is_a?(Hash)
+          temp = ""
+
+          environment.each do |key, value|
+            temp << "#{key}: #{value}<br>"
+          end
+
+          environment = temp
+        end
+
+        "Version: #{benchmark_run.initiator.version}<br> #{environment}"
       end
 
       # Refactor
@@ -70,7 +82,19 @@ class ReposController < ApplicationController
       )
 
       @memory_chart_columns = chart_builder.build_columns do |benchmark_run|
-        benchmark_run.initiator.version
+        environment = YAML.load(benchmark_run.environment)
+
+        if environment.is_a?(Hash)
+          temp = ""
+
+          environment.each do |key, value|
+            temp << "#{key}: #{value}<br>"
+          end
+
+          environment = temp
+        end
+
+        "Version: #{benchmark_run.initiator.version}<br> #{environment}"
       end
     end
 
