@@ -6,7 +6,7 @@ en:
 
   repos:
     select_benchmark: &select_benchmark
-      Please select a benchmark.
+      Please select a benchmark on the left.
     script_title: &script_title
       "%{graph_name} Script"
     graph_title: &graph_title
