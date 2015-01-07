@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  root 'repos#show_releases', organization_name: 'ruby', repo_name: 'ruby',
-    result_type: 'app_aobench'
+  root 'repos#show_releases', organization_name: 'ruby', repo_name: 'ruby'
 
   post 'github_event_handler' => 'event_handler#github_event_handler'
   resources :benchmark_runs, only: [:create]
