@@ -1,5 +1,7 @@
 = render 'title', title: t('.title', repo_name: @repo.name.capitalize)
 
+%hr
+
 = render 'form',
     form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name), name: 'commits'
 

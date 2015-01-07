@@ -1,7 +1,10 @@
 - if !chart_columns || chart_columns.empty?
   .alert.alert-warning
     .l-align-center
-      = t('repos.show.select_benchmark')
+      %strong= t('repos.show.select_benchmark')
+
+  .alert.alert-info
+    = render 'description'
 
 - else
   - benchmark_name = chart_columns[:category].humanize

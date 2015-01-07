@@ -1,7 +1,10 @@
 - if charts.compact.empty?
   .alert.alert-warning
     .l-align-center
-      = t('repos.show_releases.select_benchmark')
+      %strong= t('repos.show_releases.select_benchmark')
+
+  .alert.alert-info
+    = render 'description'
 
 - else
   - benchmark_name = charts.first[:category].humanize

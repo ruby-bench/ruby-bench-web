@@ -1,0 +1,55 @@
+%h3 Introduction
+
+%hr
+
+%h4
+  RubyBench was born after
+  = link_to "Sam Saffron's call",
+      'http://samsaffron.com/archive/2013/12/11/call-to-action-long-running-ruby-benchmark',
+      target: '_blank'
+  for a long running Ruby benchmark.
+
+  Currently,
+  = link_to 'Ruby benchmark scripts',
+      'https://github.com/ruby/ruby/tree/trunk/benchmark',
+      target: '_blank'
+  and
+  = link_to 'Discourse benchmark scripts',
+      'https://github.com/discourse/discourse/blob/master/script/bench.rb',
+      target: '_blank'
+  have been implemented and are run for every commit and release. If you've
+  noticed a regression, feel free to use RubyBench when opening a new issue.
+
+%h3 Hardware
+
+%hr
+
+%h4
+  All benchmarks are run on the same Softlayer bare metal server in order to
+  ensure consistent and accurate results. Sponsor Note: We're currently
+  looking for a sponsor for the Softlayer bare metal server which accounts
+  for majority of the cost of this project. For parties interested in sponsoring, please drop us a note at our
+  = succeed '.' do
+    = link_to 'discussion forum', 'http://community.rubybench.org/', target: '_blank'
+
+%h3 Plans
+
+%hr
+
+%h4
+  RubyBench is currently still in its early stages but has already proven to
+  be useful in
+  = succeed '.' do
+    = link_to 'identifying performance regressions',
+        'http://community.rubybench.org/t/ruby-bench-already-helped-catch-a-regression-in-mri/14/2',
+        target: '_blank'
+  We do believe that there are more improvements to be made. For instance,
+  = link_to 'Go Performance Dashboard', 'http://goperfd.appspot.com/',
+      target: '_blank'
+  provides an overview of the percentage differences for every commit.
+  In the near future, RubyBench will also monitor and track popular Ruby
+  libraries such as Rails. In fact, the initial work has
+  already
+  = succeed '.' do
+    = link_to 'started', 'https://github.com/ruby-bench/ruby-bench-docker/tree/master/discourse_benchmarks/rails_head',
+        target: '_blank'
