@@ -9,8 +9,8 @@ class BenchmarkRunTest < ActiveSupport::TestCase
       [
         benchmark_runs(:benchmark_run), benchmark_runs(:benchmark_run2),
         benchmark_runs(:benchmark_run5)
-      ],
-      BenchmarkRun.initiators([commit.id, other_commit.id], 'Commit')
+      ].sort,
+      BenchmarkRun.initiators([commit.id, other_commit.id], 'Commit').sort
     )
   end
 end
