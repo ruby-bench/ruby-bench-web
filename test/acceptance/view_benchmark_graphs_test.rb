@@ -9,7 +9,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
   test "User should be able to view a single long running benchmark graph" do
     benchmark_run = benchmark_runs(:benchmark_run)
 
-    visit '/ruby/ruby'
+    visit '/ruby/ruby/commits'
 
     assert page.has_content?(
       I18n.t('repos.show.title', repo_name: benchmark_run.initiator.repo.name.capitalize)
@@ -32,14 +32,14 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert_equal(
       URI.parse(page.current_url).request_uri,
       "/#{benchmark_run.initiator.repo.organization.name}" \
-      "/#{benchmark_run.initiator.repo.name}/?result_type=#{benchmark_run.category}"
+      "/#{benchmark_run.initiator.repo.name}/commits?result_type=#{benchmark_run.category}"
     )
   end
 
   test "User should see long running benchmark categories as sorted" do
     benchmark_run = benchmark_runs(:benchmark_run)
 
-    visit '/ruby/ruby'
+    visit '/ruby/ruby/commits'
 
     within "form" do
       lis = page.all('li input')

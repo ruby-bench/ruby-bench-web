@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'repos#show_releases', organization_name: 'tgxworld', repo_name: 'ruby',
+  root 'repos#show_releases', organization_name: 'ruby', repo_name: 'ruby',
     result_type: 'app_aobench'
 
   post 'github_event_handler' => 'event_handler#github_event_handler'
@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'hardware' => 'static_pages#hardware'
   get 'contributing' => 'static_pages#contribute', as: :contribute
   get ':name' => 'organizations#show', as: :organization
-  get ':organization_name/:repo_name' => 'repos#show', as: :repo
+  get ':organization_name/:repo_name/commits' => 'repos#show', as: :repo
   get ':organization_name/:repo_name/releases' => 'repos#show_releases', as: :releases_repo
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

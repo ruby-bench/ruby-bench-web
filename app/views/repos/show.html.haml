@@ -1,7 +1,7 @@
 = render 'title', title: t('.title', repo_name: @repo.name.capitalize)
 
 = render 'form',
-    form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name), name: ''
+    form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name), name: 'commits'
 
 .col-xs-8
   = render 'loading'

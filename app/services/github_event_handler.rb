@@ -36,6 +36,12 @@ class GithubEventHandler
     organization_name, repo_name = parse_full_name(repository['full_name'])
     repository_url = repository['html_url']
 
+    # Remove this once Github hook is actually coming from the original Ruby
+    # repo.
+    if organization_name == 'tgxworld'
+      organization_name = 'ruby'
+    end
+
     organization = Organization.find_or_create_by(
       name: organization_name, url: repository_url[0..((repository_url.length - 1) - repo_name.length)]
     )

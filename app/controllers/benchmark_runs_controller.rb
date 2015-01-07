@@ -3,6 +3,12 @@ class BenchmarkRunsController < APIController
     benchmark_run = BenchmarkRun.new(benchmark_run_params)
     benchmark_run.result = params[:benchmark_run][:result]
 
+    # Remove this once Github hook is actually coming from the original Ruby
+    # repo.
+    if params[:organization] == 'tgxworld'
+      params[:organization] = 'ruby'
+    end
+
     repo = Organization.find_by_name(params[:organization])
       .repos.find_by_name(params[:repo])
 
