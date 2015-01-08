@@ -1,3 +1,5 @@
+![Build Status](https://api.travis-ci.org/ruby-bench/ruby-bench-web.svg?branch=master)
+
 http://rubybench.org
 
 # Introduction
