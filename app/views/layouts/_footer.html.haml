@@ -1,32 +1,20 @@
-.footer-sponsors
+.footer-sponsors.l-align-center
   %ul.list-inline.footer-sponsors-list
     %li.footer-sponsors-list-item
       = link_to 'http://www.jollygoodcode.com/', target: '_blank' do
-        %h4.l-align-center
+        %h5.l-align-center
           %i= t('footer.supported_by')
 
-        = image_tag 'sponsors/jolly_good_code.png', class: 'footer-sponsors-list-item-image', alt: 'Jolly Good Code'
+        .footer-sponsors-list-item-image
+          = image_tag 'sponsors/jolly_good_code.png', alt: 'Jolly Good Code'
 
-  %hr.footer-hr
+    %li.footer-sponsors-list-item
+      = link_to 'http://www.discourse.org/', target: '_blank' do
+        %h5.l-align-center
+          %i= t('footer.domain_and_community')
 
-  We are currently looking for the following sponsors in order to help us sustain
-  RubyBench:
-
-  %ol
-    %li Hosting sponsor
-
-    %li
-      %strong
-        Sponsor for bare metal server. We're currently running the bare metal
-        server using a free one month trial from Softlayer. While the lowest
-        bare metal server costs around USD170, we would prefer a bare metal
-        server in the range of USD500 such that the benchmarks do not take forever
-        to complete.
-
-  For parties interested in sponsoring any of the above, please drop us a note
-  at our
-  = succeed '.' do
-    = link_to 'discussion forum', 'http://community.rubybench.org', target: '_blank', class: 'alert-link'
+        .footer-sponsors-list-item-image
+          = image_tag 'sponsors/discourse.png', alt: 'Discourse'
 
 %hr.footer-hr
 
