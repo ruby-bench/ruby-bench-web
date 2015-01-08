@@ -1,0 +1,11 @@
+shared: &shared
+  forum_url: 'http://community.rubybench.org'
+
+test:
+  <<: *shared
+
+development:
+  <<: *shared
+
+production:
+  <<: *shared

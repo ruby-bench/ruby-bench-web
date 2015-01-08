@@ -14,4 +14,4 @@
     %li= link_to t('top_nav.contribute'), contribute_path
 
     %li
-      = link_to t('top_nav.discuss'), 'http://community.rubybench.org', target: '_blank'
+      = link_to t('top_nav.discuss'), AppSettings.forum_url, target: '_blank'
