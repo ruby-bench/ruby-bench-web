@@ -1,8 +1,8 @@
 require 'net/ssh'
 
 class GithubEventHandler
-  PUSH = "push".freeze
-  HEADER = 'HTTP_X_GITHUB_EVENT'.freeze
+  PUSH = "push"
+  HEADER = 'HTTP_X_GITHUB_EVENT'
 
   def initialize(request, payload)
     @request = request
