@@ -57,7 +57,7 @@ class GithubEventHandler
   end
 
   def create_commit(commit, repo_id)
-    if !Commit.merge_or_skip_ci?(commit['message'])
+    if !Commit.merge_or_skip_ci?(commit['message']) && Commit.valid_author?(commit['author']['name'])
       Commit.find_or_create_by(sha1: commit['id']) do |c|
         c.url = commit['url']
         c.message = commit['message']

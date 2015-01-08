@@ -17,7 +17,10 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         'id' => '12345',
         'message' => 'Fix something',
         'url' => 'http://github.com/ruby/commit/12345',
-        'timestamp' => '2014-11-20T15:45:15-08:00'
+        'timestamp' => '2014-11-20T15:45:15-08:00',
+        'author' => {
+          'name' => 'Alan'
+        }
       },
       'repository' => {
         'full_name' => 'ruby/ruby',
@@ -47,14 +50,20 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
             'id' => '12345',
             'message' => 'Fix something',
             'url' => 'http://github.com/ruby/commit/12345',
-            'timestamp' => '2014-11-20T15:45:15-08:00'
+            'timestamp' => '2014-11-20T15:45:15-08:00',
+            'author' => {
+              'name' => 'Alan'
+            }
           },
           {
             'id' => '12346',
             'message' => 'Fix something',
             'url' => 'http://github.com/ruby/commit/12346',
-            'timestamp' => '2014-11-20T15:45:15-08:00'
-          }
+            'timestamp' => '2014-11-20T15:45:15-08:00',
+            'author' => {
+              'name' => 'Alan'
+            }
+          },
         ],
         'repository' => {
           'full_name' => 'ruby/ruby',
@@ -84,15 +93,30 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         [
           {
             'id' => '12345',
-            'message' => Commit::MERGE_COMMIT_MESSAGE,
+            'message' => CommitReviewer::MERGE_COMMIT_MESSAGE,
             'url' => 'http://github.com/ruby/commit/12345',
-            'timestamp' => '2014-11-20T15:45:15-08:00'
+            'timestamp' => '2014-11-20T15:45:15-08:00',
+            'author' => {
+              'name' => 'Alan'
+            }
           },
           {
             'id' => '12346',
-            'message' => Commit::CI_SKIP_COMMIT_MESSAGE,
+            'message' => CommitReviewer::CI_SKIP_COMMIT_MESSAGE,
             'url' => 'http://github.com/ruby/commit/12346',
-            'timestamp' => '2014-11-20T15:45:15-08:00'
+            'timestamp' => '2014-11-20T15:45:15-08:00',
+            'author' => {
+              'name' => 'Alan'
+            }
+          },
+          {
+            'id' => '13456',
+            'message' => 'ok',
+            'author' => {
+              'name' => 'svn'
+            },
+            'url' => 'http://github.com/ruby/commit/12346',
+            'timestamp' => '2014-11-20T15:45:15-08:00',
           }
         ],
         'repository' => {
@@ -115,7 +139,10 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
             'id' => '12345',
             'message' => 'Fix something',
             'url' => 'http://github.com/ruby/commit/12345',
-            'timestamp' => '2014-11-20T15:45:15-08:00'
+            'timestamp' => '2014-11-20T15:45:15-08:00',
+            'author' => {
+              'name' => 'Alan'
+            }
           }
         ],
         'repository' => {
