@@ -1,21 +1,14 @@
 require 'test_helper'
 
 class CommitTest < ActiveSupport::TestCase
-  setup do
-    @commit = commits(:rails_commit)
-  end
-
   test ".merge_or_skip_ci? for merge commits" do
-    @commit.message = CommitReviewer::MERGE_COMMIT_MESSAGE
-    assert_equal true, Commit.merge_or_skip_ci?(@commit.message)
+    assert_equal true, Commit.merge_or_skip_ci?(CommitReviewer::MERGE_COMMIT_MESSAGE)
+    assert_equal false, Commit.merge_or_skip_ci?('haha')
   end
 
   test ".merge_or_skip_ci? for ci skip commits" do
-    @commit.message = CommitReviewer::CI_SKIP_COMMIT_MESSAGE
-    assert_equal true, Commit.merge_or_skip_ci?(@commit.message)
-
-    @commit.message = CommitReviewer::SKIP_CI_COMMIT_MESSAGE
-    assert_equal true, Commit.merge_or_skip_ci?(@commit.message)
+    assert_equal true, Commit.merge_or_skip_ci?(CommitReviewer::CI_SKIP_COMMIT_MESSAGE)
+    assert_equal true, Commit.merge_or_skip_ci?(CommitReviewer::SKIP_CI_COMMIT_MESSAGE)
   end
 
   test ".valid_author?" do
