@@ -19,7 +19,6 @@ $("#chart").highcharts({
     crosshairs: true,
     shared: true,
     positioner: function (labelWidth, labelHeight, point) {
-      console.log(point.plotX);
       if ((this.chart.chartWidth / 2) > point.plotX ) {
         return { x: 900, y: 50 };
       } else {
@@ -73,7 +72,6 @@ $("#chart").highcharts({
       crosshairs: true,
       shared: true,
       positioner: function (labelWidth, labelHeight, point) {
-        console.log(point.plotX);
         if ((this.chart.chartWidth / 2) > point.plotX ) {
           return { x: 900, y: 50 };
         } else {
