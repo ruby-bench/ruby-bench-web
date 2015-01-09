@@ -53,7 +53,18 @@
               tooltip: {
                 useHTML: true,
                 crosshairs: true,
-                shared: true
+                shared: true,
+                positioner: function (labelWidth, labelHeight, point) {
+                  console.log(point.plotX);
+                  if ((this.chart.chartWidth / 2) > point.plotX ) {
+                    return { x: 900, y: 50 };
+                  } else {
+                    return { x: 80, y: 50 };
+                  }
+                },
+                shadow: false,
+                animation: false,
+                shape: 'square'
               },
               xAxis: {
                 categories: #{chart_columns[:categories]},
