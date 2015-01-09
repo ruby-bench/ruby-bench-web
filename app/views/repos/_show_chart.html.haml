@@ -56,7 +56,10 @@
             categories: #{chart_columns[:categories]},
             labels: {
               formatter: function () {
-                return /Commit Date: (\d{4}-\d{2}-\d{2})/.exec(this.value)[1]
+                var date = /Commit Date: (\d{4}-\d{2}-\d{2})/.exec(this.value);
+                if (date != null) {
+                  return date[1];
+                }
               }
             },
             tickInterval: #{JSON.parse(chart_columns[:columns]).first['data'].count / 4}
