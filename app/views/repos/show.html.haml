@@ -6,7 +6,7 @@
     form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name), name: 'commits'
 
 .col-xs-8
-  = render 'loading'
+  = render 'layouts/spinner'
 
   #chart-container
     = render 'show_chart', chart_columns: @chart_columns

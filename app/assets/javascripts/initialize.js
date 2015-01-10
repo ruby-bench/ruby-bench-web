@@ -5,7 +5,7 @@ $(document).ready(function() {
     $(".top-nav a[href='" + location.pathname + "']").addClass('current');
   }
 
-  var $loading = $("#loading");
+  var $spinner = $(".spinner");
   var xhr;
 
   $(".result-types-form input[type=radio]").change(function(value) {
@@ -27,7 +27,7 @@ $(document).ready(function() {
       data: { result_type: resultType },
       dataType: 'script',
       beforeSend: function() {
-        $loading.toggleClass('hide');
+        $spinner.toggleClass('hide');
         $("#chart-container").empty();
         $('html,body').animate({scrollTop:0},0);
 
@@ -36,7 +36,7 @@ $(document).ready(function() {
         }
       },
       complete: function() {
-        $loading.toggleClass('hide');
+        $spinner.toggleClass('hide');
       }
     });
   })

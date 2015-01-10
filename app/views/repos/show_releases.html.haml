@@ -5,7 +5,7 @@
 = render 'form', form_path: releases_repo_path(organization_name: @repo.organization.name, repo_name: @repo.name), name: 'releases'
 
 .col-xs-8
-  = render 'loading'
+  = render 'layouts/spinner'
 
   #chart-container
     = render 'show_releases_chart', charts: [@chart_columns, @memory_chart_columns]
