@@ -20,7 +20,7 @@ $("#chart").highcharts({
     shared: true,
     positioner: function (labelWidth, labelHeight, point) {
       if ((this.chart.chartWidth / 2) > point.plotX ) {
-        return { x: 900, y: 50 };
+        return { x: this.chart.chartWidth - labelWidth - 20, y: 50 };
       } else {
         return { x: 80, y: 50 };
       }
@@ -73,7 +73,7 @@ $("#chart").highcharts({
       shared: true,
       positioner: function (labelWidth, labelHeight, point) {
         if ((this.chart.chartWidth / 2) > point.plotX ) {
-          return { x: 900, y: 50 };
+          return { x: this.chart.chartWidth - labelWidth - 20, y: 50 };
         } else {
           return { x: 80, y: 50 };
         }
