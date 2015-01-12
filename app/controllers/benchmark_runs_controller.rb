@@ -1,8 +1,5 @@
 class BenchmarkRunsController < APIController
   def create
-    benchmark_run = BenchmarkRun.new(benchmark_run_params)
-    benchmark_run.result = params[:benchmark_run][:result]
-
     # Remove this once Github hook is actually coming from the original Ruby
     # repo.
     if params[:organization] == 'tgxworld'
@@ -14,17 +11,22 @@ class BenchmarkRunsController < APIController
 
     # FIXME: Probably bad code.
     if params[:commit_hash]
-      benchmark_run.initiator = repo.commits.find_by_sha1(params[:commit_hash])
+      initiator = repo.commits.find_by_sha1(params[:commit_hash])
     end
 
     # FIXME: Probably bad code.
     if params[:ruby_version]
-      release = repo.releases.find_or_create_by!(version: params[:ruby_version])
-      benchmark_run.initiator = release
+      initiator = repo.releases.find_or_create_by!(version: params[:ruby_version])
     end
 
     benchmark_type = repo.benchmark_types.find_or_create_by!(benchmark_type_params)
-    benchmark_run.benchmark_type = benchmark_type
+
+    benchmark_run = BenchmarkRun.find_or_initialize_by(
+      initiator: initiator, benchmark_type: benchmark_type
+    )
+
+    benchmark_run.update_attributes(benchmark_run_params)
+    benchmark_run.result = params[:benchmark_run][:result]
 
     # TODO: Some notifications feature to say this failed
     benchmark_run.save!

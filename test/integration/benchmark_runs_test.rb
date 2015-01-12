@@ -54,6 +54,39 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     assert_results(release)
   end
 
+  test "repeated benchmark_runs are replaced" do
+    @repo = repos(:ruby)
+    release = releases(:ruby_2_2_0)
+
+    post_results(
+      ruby_version: release.version,
+      repo: @repo.name,
+      organization: @repo.organization.name
+    )
+
+    assert_results(release)
+    initial_count = release.benchmark_runs.count
+    initial_benchmark_run = release.benchmark_runs.last
+    expected_result = { 'fast' => 'fast', 'slow' => 'slow' }
+
+    post_results(
+      {
+        ruby_version: release.version,
+        repo: @repo.name,
+        organization: @repo.organization.name
+      },
+      {
+        result: expected_result
+      }
+    )
+
+    assert_results(release)
+    final_benchmark_run = BenchmarkRun.last
+    assert_equal expected_result, final_benchmark_run.result
+    assert_equal initial_benchmark_run.id, final_benchmark_run.id
+    assert_equal initial_count, release.benchmark_runs.count
+  end
+
   private
 
   def assert_results(commit_or_release)
@@ -64,7 +97,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     assert_equal @repo.organization, benchmark_run.initiator.repo.organization
   end
 
-  def post_results(params = {})
+  def post_results(params = {}, attribute_params = {})
     post('/benchmark_runs',
       {
         benchmark_type: {
@@ -75,7 +108,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
         benchmark_run: {
           result: { fast: 'slow' },
           environment: 'ruby-2.1.5'
-        },
+        }.merge(attribute_params),
       }.merge(params),
       {
         'HTTP_AUTHORIZATION' =>
