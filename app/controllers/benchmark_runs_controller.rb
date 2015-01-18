@@ -23,6 +23,9 @@ class BenchmarkRunsController < APIController
       benchmark_run.initiator = release
     end
 
+    benchmark_type = repo.benchmark_types.find_or_create_by!(benchmark_type_params)
+    benchmark_run.benchmark_type = benchmark_type
+
     # TODO: Some notifications feature to say this failed
     benchmark_run.save!
 
@@ -33,7 +36,13 @@ class BenchmarkRunsController < APIController
 
   def benchmark_run_params
     params.require(:benchmark_run).permit(
-      :category, :environment, :unit, :script_url
+      :environment
+    )
+  end
+
+  def benchmark_type_params
+    params.require(:benchmark_type).permit(
+      :category, :unit, :script_url
     )
   end
 end

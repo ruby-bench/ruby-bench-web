@@ -58,7 +58,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
 
   def assert_results(commit_or_release)
     benchmark_run = BenchmarkRun.last
-    assert_equal 'allocated_objects', benchmark_run.category
+    assert_equal 'allocated_objects', benchmark_run.benchmark_type.category
     assert_equal commit_or_release, benchmark_run.initiator
     assert_equal @repo, benchmark_run.initiator.repo
     assert_equal @repo.organization, benchmark_run.initiator.repo.organization
@@ -67,12 +67,14 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   def post_results(params = {})
     post('/benchmark_runs',
       {
-        benchmark_run: {
+        benchmark_type: {
           category: 'allocated_objects',
-          result: { fast: 'slow' },
-          environment: 'ruby-2.1.5',
           unit: 'seconds',
           script_url: 'http://something.com'
+        },
+        benchmark_run: {
+          result: { fast: 'slow' },
+          environment: 'ruby-2.1.5'
         },
       }.merge(params),
       {

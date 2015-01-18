@@ -7,8 +7,8 @@ class BenchmarkRunTest < ActiveSupport::TestCase
 
     assert_equal(
       [
-        benchmark_runs(:benchmark_run), benchmark_runs(:benchmark_run2),
-        benchmark_runs(:benchmark_run5)
+        benchmark_runs(:array_count_run),
+        benchmark_runs(:array_iterations_run2)
       ].sort,
       BenchmarkRun.initiators([commit.id, other_commit.id], 'Commit').sort
     )

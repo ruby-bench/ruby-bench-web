@@ -7,7 +7,7 @@ class ReposController < ApplicationController
 
     if @form_result_type
       chart_builder = ChartBuilder.new(
-        benchmark_runs.where(category: @form_result_type).sort_by do |benchmark_run|
+        benchmark_runs.joins(:benchmark_type).where('benchmark_types.category = ?', @form_result_type).sort_by do |benchmark_run|
           benchmark_run.initiator.created_at
         end
       )
@@ -35,7 +35,7 @@ class ReposController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @result_types = fetch_benchmark_runs_categories(benchmark_runs)
+        @result_types = fetch_categories
       end
 
       format.js
@@ -53,7 +53,7 @@ class ReposController < ApplicationController
       @chart_columns, @memory_chart_columns =
         [@form_result_type, "#{@form_result_type}_memory"].map do |result_type|
           chart_builder = ChartBuilder.new(
-            benchmark_runs.where(category: result_type).sort_by do |benchmark_run|
+            benchmark_runs.joins(:benchmark_type).where('benchmark_types.category = ?', result_type).sort_by do |benchmark_run|
               benchmark_run.initiator.version
             end
           )
@@ -78,7 +78,7 @@ class ReposController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @result_types = fetch_benchmark_runs_categories(benchmark_runs)
+        @result_types = fetch_categories
       end
 
       format.js
@@ -100,15 +100,12 @@ class ReposController < ApplicationController
       .preload(:initiator)
   end
 
-  def fetch_benchmark_runs_categories(benchmark_runs)
-    benchmark_runs
+  def fetch_categories
+    @repo
+      .benchmark_types
       .pluck(:category)
-      .uniq
       .sort
-      .select { |category| category if !category.match(/memory\Z/)}
-      .group_by do |category|
-        category =~ /\A([^_]+)_/
-        $1
-      end
+      .select { |category| category if !category.match(/memory\Z/) }
+      .group_by { |category| category =~ /\A([^_]+)_/; $1 }
   end
 end

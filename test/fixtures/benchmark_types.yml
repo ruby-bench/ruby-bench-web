@@ -1,0 +1,17 @@
+array_iterations:
+  category: array_iterations
+  unit: seconds
+  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
+  repo: ruby
+
+array_iterations_memory:
+  category: array_iterations_memory
+  unit: kilobytes
+  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
+  repo: ruby
+
+array_count:
+  category: array_count
+  unit: seconds
+  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_array_count.rb
+  repo: ruby
