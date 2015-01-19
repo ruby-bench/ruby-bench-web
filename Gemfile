@@ -15,6 +15,7 @@ gem 'haml', '~> 4.0.5'
 gem 'bootstrap-sass', '~> 3.3.1'
 gem 'pygments.rb', '~> 0.6.0'
 gem 'rails-assets-highcharts', '~> 4.0.4'
+gem 'rollbar', '~> 1.3.1'
 
 group :development do
   gem 'spring'
