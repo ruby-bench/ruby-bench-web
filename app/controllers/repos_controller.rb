@@ -2,9 +2,8 @@ class ReposController < ApplicationController
   def show
     @organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
-    @form_result_type = params[:result_type]
 
-    if @form_result_type
+    if @form_result_type = params[:result_type]
       chart_builder = ChartBuilder.new(
         fetch_benchmark_runs(@repo.commits, 'Commit', @form_result_type).sort_by do |benchmark_run|
           benchmark_run.initiator.created_at
@@ -45,9 +44,8 @@ class ReposController < ApplicationController
     @organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
     releases = @repo.releases
-    @form_result_type = params[:result_type]
 
-    if @form_result_type
+    if @form_result_type = params[:result_type]
       @chart_columns, @memory_chart_columns =
         [@form_result_type, "#{@form_result_type}_memory"].map do |result_type|
           chart_builder = ChartBuilder.new(
