@@ -1,5 +1,5 @@
 class BenchmarkType < ActiveRecord::Base
-  default_scope { order("#{self.table_name} ASC") }
+  default_scope { order("#{self.table_name}.category ASC") }
 
   has_many :benchmark_runs, dependent: :destroy
   belongs_to :repo
