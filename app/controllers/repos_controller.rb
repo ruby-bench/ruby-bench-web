@@ -2,12 +2,10 @@ class ReposController < ApplicationController
   def show
     @organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
-    @form_result_type = params[:result_type]
-    benchmark_runs = fetch_benchmark_runs(@repo.commits, 'Commit')
 
-    if @form_result_type
+    if @form_result_type = params[:result_type]
       chart_builder = ChartBuilder.new(
-        benchmark_runs.where(category: @form_result_type).sort_by do |benchmark_run|
+        fetch_benchmark_runs(@repo.commits, 'Commit', @form_result_type).sort_by do |benchmark_run|
           benchmark_run.initiator.created_at
         end
       )
@@ -35,7 +33,7 @@ class ReposController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @result_types = fetch_benchmark_runs_categories(benchmark_runs)
+        @result_types = fetch_categories
       end
 
       format.js
@@ -46,14 +44,12 @@ class ReposController < ApplicationController
     @organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
     releases = @repo.releases
-    @form_result_type = params[:result_type]
-    benchmark_runs = fetch_benchmark_runs(releases, 'Release')
 
-    if @form_result_type
+    if @form_result_type = params[:result_type]
       @chart_columns, @memory_chart_columns =
         [@form_result_type, "#{@form_result_type}_memory"].map do |result_type|
           chart_builder = ChartBuilder.new(
-            benchmark_runs.where(category: result_type).sort_by do |benchmark_run|
+            fetch_benchmark_runs(@repo.releases, 'Release', result_type).sort_by do |benchmark_run|
               benchmark_run.initiator.version
             end
           )
@@ -78,7 +74,7 @@ class ReposController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @result_types = fetch_benchmark_runs_categories(benchmark_runs)
+        @result_types = fetch_categories
       end
 
       format.js
@@ -95,20 +91,20 @@ class ReposController < ApplicationController
     organization.repos.find_by_name(name)
   end
 
-  def fetch_benchmark_runs(initiators, initiator_type)
-    BenchmarkRun.initiators(initiators.map(&:id), initiator_type)
+  def fetch_benchmark_runs(initiators, initiator_type, form_result_type)
+    BenchmarkRun
+      .initiators(initiators.map(&:id), initiator_type)
       .preload(:initiator)
+      .joins(:benchmark_type)
+      .where('benchmark_types.category = ?', form_result_type)
   end
 
-  def fetch_benchmark_runs_categories(benchmark_runs)
-    benchmark_runs
+  def fetch_categories
+    @repo
+      .benchmark_types
       .pluck(:category)
-      .uniq
       .sort
-      .select { |category| category if !category.match(/memory\Z/)}
-      .group_by do |category|
-        category =~ /\A([^_]+)_/
-        $1
-      end
+      .select { |category| category if !category.match(/memory\Z/) }
+      .group_by { |category| category =~ /\A([^_]+)_/; $1 }
   end
 end

@@ -1,56 +1,38 @@
-benchmark_run:
-  category: array_iterations
+array_count_run:
   initiator: ruby_commit (Commit)
   result:
     :some_time: 0.123
     :some_other_time: 0.125
   environment: "ruby 2.2.0dev (something)"
-  unit: seconds
-  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
+  benchmark_type: array_count
 
-benchmark_run2:
-  category: array_count
-  initiator: ruby_commit (Commit)
-  result:
-    :some_time: 0.123
-    :some_other_time: 0.125
-  environment: "ruby 2.2.0dev (something)"
-  unit: seconds
-
-benchmark_run4:
-  category: array_count
+array_count_run2:
   initiator: ruby_2_2_0 (Release)
   result:
     :some_time: 0.123
     :some_other_time: 0.125
   environment: "ruby 2.2.0dev (something)"
-  unit: seconds
+  benchmark_type: array_count
 
-benchmark_run5:
-  category: array_iterations
+array_iterations_memory_run:
+  initiator: ruby_2_2_0 (Release)
+  result:
+    :rss_kb: 200
+  environment: "ruby 2.2.0dev (something)"
+  benchmark_type: array_iterations_memory
+
+array_iterations_run:
+  initiator: ruby_2_2_0 (Release)
+  result:
+    :some_time: 0.123
+    :some_other_time: 0.125
+  environment: "ruby 2.2.0dev (something)"
+  benchmark_type: array_iterations
+
+array_iterations_run2:
   initiator: ruby_commit2 (Commit)
   result:
     :some_time: 0.125
     :some_other_time: 0.127
   environment: "ruby 2.2.0dev (something)"
-  unit: seconds
-  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
-
-array_iterations_memory:
-  category: array_iterations_memory
-  initiator: ruby_2_2_0 (Release)
-  result:
-    :rss_kb: 200
-  environment: "ruby 2.2.0dev (something)"
-  unit: kilobytes
-  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
-
-array_iterations:
-  category: array_iterations
-  initiator: ruby_2_2_0 (Release)
-  result:
-    :some_time: 0.123
-    :some_other_time: 0.125
-  environment: "ruby 2.2.0dev (something)"
-  unit: seconds
-  script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb
+  benchmark_type: array_iterations

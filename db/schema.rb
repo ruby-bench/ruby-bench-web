@@ -11,25 +11,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141229025804) do
+ActiveRecord::Schema.define(version: 20150118042300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "benchmark_runs", force: :cascade do |t|
-    t.string   "category",       null: false
-    t.hstore   "result",         null: false
-    t.text     "environment",    null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.string   "unit",           null: false
-    t.string   "script_url"
+    t.hstore   "result",                        null: false
+    t.text     "environment",                   null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.integer  "initiator_id"
     t.string   "initiator_type"
+    t.integer  "benchmark_type_id", default: 0, null: false
   end
 
+  add_index "benchmark_runs", ["benchmark_type_id"], name: "index_benchmark_runs_on_benchmark_type_id", using: :btree
   add_index "benchmark_runs", ["initiator_type", "initiator_id"], name: "index_benchmark_runs_on_initiator_type_and_initiator_id", using: :btree
+
+  create_table "benchmark_types", force: :cascade do |t|
+    t.string   "category",   null: false
+    t.string   "unit",       null: false
+    t.string   "script_url", null: false
+    t.integer  "repo_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "benchmark_types", ["repo_id", "category", "script_url"], name: "index_benchmark_types_on_repo_id_and_category_and_script_url", unique: true, using: :btree
+  add_index "benchmark_types", ["repo_id"], name: "index_benchmark_types_on_repo_id", using: :btree
 
   create_table "commits", force: :cascade do |t|
     t.string   "sha1",       null: false

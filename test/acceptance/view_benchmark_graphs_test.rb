@@ -7,7 +7,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
   end
 
   test "User should be able to view a single long running benchmark graph" do
-    benchmark_run = benchmark_runs(:benchmark_run)
+    benchmark_run = benchmark_runs(:array_iterations_run2)
 
     visit '/ruby/ruby/commits'
 
@@ -18,13 +18,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_content?(I18n.t('repos.show.select_benchmark'))
 
     within "form" do
-      choose(benchmark_run.category)
+      choose(benchmark_run.benchmark_type.category)
     end
 
     assert page.has_css?("#chart #highcharts-0")
     assert page.has_content?("def abc")
 
-    benchmark_run_category_humanize = benchmark_run.category.humanize
+    benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
     assert page.has_content?("#{benchmark_run_category_humanize} Script")
@@ -32,12 +32,12 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert_equal(
       URI.parse(page.current_url).request_uri,
       "/#{benchmark_run.initiator.repo.organization.name}" \
-      "/#{benchmark_run.initiator.repo.name}/commits?result_type=#{benchmark_run.category}"
+      "/#{benchmark_run.initiator.repo.name}/commits?result_type=#{benchmark_run.benchmark_type.category}"
     )
   end
 
   test "User should see long running benchmark categories as sorted" do
-    benchmark_run = benchmark_runs(:benchmark_run)
+    benchmark_run = benchmark_runs(:array_iterations_run2)
 
     visit '/ruby/ruby/commits'
 
@@ -45,13 +45,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       lis = page.all('li input')
 
       assert_equal 2, lis.count
-      assert_equal benchmark_runs(:benchmark_run2).category, lis.first.value
-      assert_equal benchmark_run.category, lis.last.value
+      assert_equal benchmark_runs(:array_count_run).benchmark_type.category, lis.first.value
+      assert_equal benchmark_run.benchmark_type.category, lis.last.value
     end
   end
 
   test "User should be able to view a single release benchmark graph" do
-    benchmark_run = benchmark_runs(:array_iterations)
+    benchmark_run = benchmark_runs(:array_iterations_run)
 
     visit '/ruby/ruby/releases'
 
@@ -62,13 +62,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_content?(I18n.t('repos.show_releases.select_benchmark'))
 
     within "form" do
-      choose(benchmark_run.category)
+      choose(benchmark_run.benchmark_type.category)
     end
 
     assert page.has_css?("#chart #highcharts-0")
     assert page.has_content?("def abc")
 
-    benchmark_run_category_humanize = benchmark_run.category.humanize
+    benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
     assert page.has_content?("#{benchmark_run_category_humanize} memory Graph")
@@ -77,12 +77,12 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert_equal(
       URI.parse(page.current_url).request_uri,
       "/#{benchmark_run.initiator.repo.organization.name}" \
-      "/#{benchmark_run.initiator.repo.name}/releases?result_type=#{benchmark_run.category}"
+      "/#{benchmark_run.initiator.repo.name}/releases?result_type=#{benchmark_run.benchmark_type.category}"
     )
   end
 
   test "User should see releases benchmark categories as sorted" do
-    benchmark_run = benchmark_runs(:benchmark_run)
+    benchmark_run = benchmark_runs(:array_iterations_run)
 
     visit '/ruby/ruby/releases'
 
@@ -90,8 +90,8 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       lis = page.all('li input')
 
       assert_equal 2, lis.count
-      assert_equal benchmark_runs(:benchmark_run2).category, lis.first.value
-      assert_equal benchmark_run.category, lis.last.value
+      assert_equal benchmark_runs(:array_count_run).benchmark_type.category, lis.first.value
+      assert_equal benchmark_run.benchmark_type.category, lis.last.value
     end
   end
 end
