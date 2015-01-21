@@ -4,6 +4,8 @@ class ReposController < ApplicationController
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
 
     if @form_result_type = params[:result_type]
+      @benchmark_type = find_repo_benchmark_type_by_category(@form_result_type)
+
       chart_builder = ChartBuilder.new(
         fetch_benchmark_runs(@repo.commits, 'Commit', @form_result_type).sort_by do |benchmark_run|
           benchmark_run.initiator.created_at
@@ -46,6 +48,8 @@ class ReposController < ApplicationController
     releases = @repo.releases
 
     if @form_result_type = params[:result_type]
+      @benchmark_type = find_repo_benchmark_type_by_category(@form_result_type)
+
       @charts =
         [@form_result_type, "#{@form_result_type}_memory"].map do |result_type|
           benchmark_runs = fetch_benchmark_runs(@repo.releases, 'Release', result_type)
@@ -92,6 +96,10 @@ class ReposController < ApplicationController
 
   def find_organization_repos_by_name(organization, name)
     organization.repos.find_by_name(name)
+  end
+
+  def find_repo_benchmark_type_by_category(category)
+    @repo.benchmark_types.find_by_category(category)
   end
 
   def fetch_benchmark_runs(initiators, initiator_type, form_result_type)

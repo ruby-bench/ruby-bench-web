@@ -1,4 +1,4 @@
-$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_chart', locals: { chart_columns: @chart_columns })) %>");
+$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_chart', locals: { chart_columns: @chart_columns, benchmark_type: @benchmark_type })) %>");
 
 $("#chart").highcharts({
   chart: {
@@ -42,7 +42,7 @@ $("#chart").highcharts({
   },
   yAxis: {
     title: {
-      text: "<%= @chart_columns[:unit].capitalize %>",
+      text: "<%= @benchmark_type.unit.capitalize %>",
     },
     type: 'logarithmic'
   },

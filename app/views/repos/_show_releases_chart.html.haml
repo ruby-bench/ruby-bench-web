@@ -7,22 +7,19 @@
     = render 'description'
 
 - else
-  - benchmark_name = charts.first[:category].humanize
-
   %h2.l-align-center
+    - benchmark_name = benchmark_type.category.humanize
     = t('repos.show_releases.graph_title', graph_name: benchmark_name)
 
   #chart
 
   - if charts.count > 1
-    - benchmark_name_memory = charts.last[:category].humanize
-
     %h2.l-align-center
-      = t('repos.show_releases.graph_title', graph_name: benchmark_name_memory)
+      = t('repos.show_releases.graph_title', graph_name: "#{benchmark_name} memory")
 
     #chart-memory
 
-  - if script_url = charts.first[:script_url]
+  - if script_url = benchmark_type.script_url
     %h2.l-align-center
       = t('repos.show_releases.script_title', graph_name: benchmark_name)
 
@@ -76,7 +73,7 @@
               },
               yAxis: {
                 title: {
-                  text: "#{chart_columns[:unit].capitalize}",
+                  text: "#{benchmark_type.unit.capitalize}",
                 }
               },
               legend: {

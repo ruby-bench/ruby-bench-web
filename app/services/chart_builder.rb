@@ -10,10 +10,6 @@ class ChartBuilder
       data[:columns] ||= {}
 
       @benchmark_runs.each do |benchmark_run|
-        data[:category] ||= benchmark_run.benchmark_type.category
-        data[:unit] ||= benchmark_run.benchmark_type.unit
-        data[:script_url] ||= benchmark_run.benchmark_type.script_url
-
         if block_given?
            data[:categories] << yield(benchmark_run)
         end

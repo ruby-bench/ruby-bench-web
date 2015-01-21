@@ -15,9 +15,6 @@ class ChartBuilderTest < ActiveSupport::TestCase
 
     assert_equal(
       {
-        category: "#{benchmark_run.benchmark_type.category}",
-        unit: "#{benchmark_run.benchmark_type.unit}",
-        script_url: "#{benchmark_run.benchmark_type.script_url}",
         categories: ["Commit: #{benchmark_run.initiator.sha1}", "Commit: #{other_benchmark_run.initiator.sha1}"],
         columns: [
           { name: "some_time", data: [benchmark_run.result['some_time'].to_f, other_benchmark_run.result['some_time'].to_f] },

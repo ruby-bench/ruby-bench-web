@@ -7,14 +7,14 @@
     = render 'description'
 
 - else
-  - benchmark_name = chart_columns[:category].humanize
+  - benchmark_name = benchmark_type.category.humanize
 
   %h2.l-align-center
     = t('repos.show.graph_title', graph_name: benchmark_name)
 
   #chart
 
-  - if script_url = chart_columns[:script_url]
+  - if script_url = benchmark_type.script_url
     %h2.l-align-center
       = t('repos.show.script_title', graph_name: benchmark_name)
 
@@ -66,7 +66,7 @@
           },
           yAxis: {
             title: {
-              text: "#{chart_columns[:unit].capitalize}",
+              text: "#{benchmark_type.unit.capitalize}",
             },
             type: 'logarithmic'
           },

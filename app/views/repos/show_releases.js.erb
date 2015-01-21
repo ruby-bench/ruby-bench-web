@@ -1,4 +1,7 @@
-$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_releases_chart', locals: { charts: @charts })) %>");
+$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_releases_chart', locals: { charts: @charts, benchmark_type: @benchmark_type })) %>");
+
+
+<%- unit = @benchmark_type.unit.capitalize %>
 
 $("#chart").highcharts({
   chart: {
@@ -40,7 +43,7 @@ $("#chart").highcharts({
   },
   yAxis: {
     title: {
-      text: "<%= @charts.first[:unit].capitalize %>",
+      text: "<%= unit %>",
     }
   },
   legend: {
@@ -93,7 +96,7 @@ $("#chart").highcharts({
     },
     yAxis: {
       title: {
-        text: "<%= @charts.last[:unit].capitalize %>",
+        text: "<%= unit %>",
       }
     },
     legend: {
