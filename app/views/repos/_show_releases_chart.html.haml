@@ -74,6 +74,23 @@
               yAxis: {
                 title: {
                   text: "#{benchmark_type.unit.capitalize}",
+                },
+              },
+              plotOptions: {
+                column: {
+                  animation: false,
+                  dataLabels: {
+                    enabled: true,
+                    useHTML: true,
+                    formatter: function () {
+                      if (this.y == this.series.dataMin) {
+                        return "<strong style=\"color:green\">Best</strong>"
+                      } else {
+                        var percentage = ((this.y - this.series.dataMin) / this.series.dataMin * 100).toFixed(2);
+                        return '<strong style="color:red"> +' + percentage + '% </strong>';
+                      }
+                    }
+                  }
                 }
               },
               legend: {
