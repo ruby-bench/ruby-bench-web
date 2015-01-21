@@ -67,9 +67,9 @@ $('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_re
     },
     legend: {
       layout: 'horizontal',
-      align: 'center',
-      verticalAlign: 'bottom',
-      borderWidth: 0
+      align: 'right',
+      floating: true,
+      verticalAlign: 'top'
     },
     series: <%= raw chart_columns[:columns] %>
   });
