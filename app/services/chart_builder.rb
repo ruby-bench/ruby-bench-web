@@ -21,8 +21,10 @@ class ChartBuilder
       end
 
       new_columns = []
+      visible = true
       data[:columns].each do |name, data|
-        new_columns << { name: name, data: data }
+        new_columns << { name: name, data: data, visible: visible }
+        visible = false
       end
       data[:columns] = new_columns.to_json
 
