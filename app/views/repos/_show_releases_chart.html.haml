@@ -81,15 +81,18 @@
                   animation: false,
                   dataLabels: {
                     enabled: true,
-                    useHTML: true,
                     formatter: function () {
                       if (this.y == this.series.dataMin) {
-                        return "<strong style=\"color:green\">Best</strong>"
+                        return "<span style=\"color:white;z-index: 0\">Best</span>"
                       } else {
                         var percentage = ((this.y - this.series.dataMin) / this.series.dataMin * 100).toFixed(2);
-                        return '<strong style="color:red"> +' + percentage + '% </strong>';
+                        return '<span style="color:red"> +' + percentage + '% </span>';
                       }
-                    }
+                    },
+                    zIndex: 0,
+                    rotation: -90,
+                    x: 4,
+                    inside: true
                   }
                 }
               },
