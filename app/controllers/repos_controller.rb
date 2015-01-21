@@ -46,10 +46,13 @@ class ReposController < ApplicationController
     releases = @repo.releases
 
     if @form_result_type = params[:result_type]
-      @chart_columns, @memory_chart_columns =
+      @charts =
         [@form_result_type, "#{@form_result_type}_memory"].map do |result_type|
+          benchmark_runs = fetch_benchmark_runs(@repo.releases, 'Release', result_type)
+          next if benchmark_runs.empty?
+
           chart_builder = ChartBuilder.new(
-            fetch_benchmark_runs(@repo.releases, 'Release', result_type).sort_by do |benchmark_run|
+            benchmark_runs.sort_by do |benchmark_run|
               benchmark_run.initiator.version
             end
           )
@@ -69,7 +72,7 @@ class ReposController < ApplicationController
 
             "Version: #{benchmark_run.initiator.version}<br> #{environment}"
           end
-        end
+        end.compact
     end
 
     respond_to do |format|

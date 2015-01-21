@@ -1,4 +1,4 @@
-$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_releases_chart', locals: { charts: [@chart_columns, @memory_chart_columns] })) %>");
+$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_releases_chart', locals: { charts: @charts })) %>");
 
 $("#chart").highcharts({
   chart: {
@@ -30,7 +30,7 @@ $("#chart").highcharts({
     shape: 'square'
   },
   xAxis: {
-    categories: <%= raw @chart_columns[:categories] %>,
+    categories: <%= raw @charts.first[:categories] %>,
     labels: {
       rotation: -30,
       formatter: function () {
@@ -40,7 +40,7 @@ $("#chart").highcharts({
   },
   yAxis: {
     title: {
-      text: "<%= @chart_columns[:unit].capitalize %>",
+      text: "<%= @charts.first[:unit].capitalize %>",
     }
   },
   legend: {
@@ -49,10 +49,10 @@ $("#chart").highcharts({
     verticalAlign: 'bottom',
     borderWidth: 0
   },
-  series: <%= raw @chart_columns[:columns] %>
+  series: <%= raw @charts.first[:columns] %>
 });
 
-<% if @memory_chart_columns %>
+<% if @charts.count > 1 %>
   $("#chart-memory").highcharts({
     chart: {
       type: 'column',
@@ -83,7 +83,7 @@ $("#chart").highcharts({
       shape: 'square'
     },
     xAxis: {
-      categories: <%= raw @memory_chart_columns[:categories] %>,
+      categories: <%= raw @charts.last[:categories] %>,
       labels: {
         rotation: -30,
         formatter: function () {
@@ -93,7 +93,7 @@ $("#chart").highcharts({
     },
     yAxis: {
       title: {
-        text: "<%= @memory_chart_columns[:unit].capitalize %>",
+        text: "<%= @charts.last[:unit].capitalize %>",
       }
     },
     legend: {
@@ -102,6 +102,6 @@ $("#chart").highcharts({
       verticalAlign: 'bottom',
       borderWidth: 0
     },
-    series: <%= raw @memory_chart_columns[:columns] %>
+    series: <%= raw @charts.last[:columns] %>
   });
 <% end %>

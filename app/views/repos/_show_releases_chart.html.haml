@@ -1,4 +1,4 @@
-- if charts.compact.empty?
+- if !charts || charts.empty?
   .alert.alert-warning
     .l-align-center
       %strong= t('repos.show_releases.select_benchmark')
@@ -14,7 +14,7 @@
 
   #chart
 
-  - if charts.last
+  - if charts.count > 1
     - benchmark_name_memory = charts.last[:category].humanize
 
     %h2.l-align-center
