@@ -1,85 +1,17 @@
 $('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_releases_chart', locals: { charts: @charts, benchmark_type: @benchmark_type })) %>");
 
-
 <%- unit = @benchmark_type.unit.capitalize %>
 
-$("#chart").highcharts({
-  chart: {
-    type: 'column',
-    zoomType: 'x'
-  },
-  subtitle: {
-    text: document.ontouchstart === undefined ? "<%= I18n.t('highcharts.subtitle.desktop') %>" : "<%= I18n.t('highcharts.subtitle.mobile') %>"
-  },
-  title: {
-    text: ""
-  },
-  exporting: {
-    enabled: false
-  },
-  tooltip: {
-    useHTML: true,
-    crosshairs: true,
-    shared: true,
-    positioner: function (labelWidth, labelHeight, point) {
-      if ((this.chart.chartWidth / 2) > point.plotX ) {
-        return { x: this.chart.chartWidth - labelWidth - 20, y: 50 };
-      } else {
-        return { x: 80, y: 50 };
-      }
-    },
-    shadow: false,
-    animation: false,
-    shape: 'square'
-  },
-  xAxis: {
-    categories: <%= raw @charts.first[:categories] %>,
-    labels: {
-      rotation: -30,
-      formatter: function () {
-        return /Version: ([^<]+)/.exec(this.value)[1]
-      }
-    }
-  },
-  yAxis: {
-    title: {
-      text: "<%= unit %>",
-    }
-  },
-  plotOptions: {
-    column: {
-      animation: false,
-      dataLabels: {
-        enabled: true,
-        useHTML: true,
-        formatter: function () {
-          if (this.y == this.series.dataMin) {
-            return "<strong style=\"color:green\">Best</strong>"
-          } else {
-            var percentage = ((this.y - this.series.dataMin) / this.series.dataMin * 100).toFixed(2);
-            return '<strong style="color:red"> +' + percentage + '% </strong>';
-          }
-        }
-      }
-    }
-  },
-  legend: {
-    layout: 'horizontal',
-    align: 'center',
-    verticalAlign: 'bottom',
-    borderWidth: 0
-  },
-  series: <%= raw @charts.first[:columns] %>
-});
+<%- @charts.each_with_index do |chart_columns, index| %>
+  <%- selector = index == 0 ? "#chart" : "#chart-memory" %>
 
-<% if @charts.count > 1 %>
-  $("#chart-memory").highcharts({
+  $("<%= selector %>").highcharts({
     chart: {
       type: 'column',
       zoomType: 'x'
     },
     subtitle: {
-      text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+      text: document.ontouchstart === undefined ? "<%= I18n.t('highcharts.subtitle.desktop') %>" : "<%= I18n.t('highcharts.subtitle.mobile') %>"
     },
     title: {
       text: ""
@@ -103,7 +35,7 @@ $("#chart").highcharts({
       shape: 'square'
     },
     xAxis: {
-      categories: <%= raw @charts.last[:categories] %>,
+      categories: <%= raw chart_columns[:categories] %>,
       labels: {
         rotation: -30,
         formatter: function () {
@@ -139,6 +71,6 @@ $("#chart").highcharts({
       verticalAlign: 'bottom',
       borderWidth: 0
     },
-    series: <%= raw @charts.last[:columns] %>
+    series: <%= raw chart_columns[:columns] %>
   });
 <% end %>
