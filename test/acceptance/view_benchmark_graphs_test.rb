@@ -129,4 +129,16 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       assert_equal benchmark_run.benchmark_type.category, lis.last.value
     end
   end
+
+  test "User should not see benchmark categories which have no benchmark runs" do
+    benchmark_run = benchmark_runs(:array_shift_run)
+
+    visit '/rails/rails/releases'
+
+    within "form" do
+      lis = page.all('li input')
+      values = lis.map { |l| l.value }
+      assert_not values.include?(benchmark_run.benchmark_type.category)
+    end
+  end
 end

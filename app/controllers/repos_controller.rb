@@ -35,7 +35,7 @@ class ReposController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @result_types = fetch_categories
+        @result_types = fetch_categories('Commit')
       end
 
       format.js
@@ -81,7 +81,7 @@ class ReposController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @result_types = fetch_categories
+        @result_types = fetch_categories('Release')
       end
 
       format.js
@@ -110,9 +110,12 @@ class ReposController < ApplicationController
       .where('benchmark_types.category = ?', form_result_type)
   end
 
-  def fetch_categories
-    @repo
-      .benchmark_types
+  def fetch_categories(initiator_type)
+    BenchmarkType
+      .where(repo: @repo)
+      .joins(:benchmark_runs)
+      .where(benchmark_runs: { initiator_type: initiator_type })
+      .uniq
       .pluck(:category)
       .select { |category| category if !category.match(/memory\Z/) }
       .group_by { |category| category =~ /\A([^_]+)_/; $1 }

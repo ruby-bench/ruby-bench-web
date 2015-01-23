@@ -36,3 +36,10 @@ array_iterations_run2:
     :some_other_time: 0.127
   environment: "ruby 2.2.0dev (something)"
   benchmark_type: array_iterations
+
+array_shift_run:
+  initiator: rails_commit (Commit)
+  result:
+    :some_time: 0.123
+  environment: some environment
+  benchmark_type: array_shift
