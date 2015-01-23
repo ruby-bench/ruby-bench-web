@@ -114,7 +114,6 @@ class ReposController < ApplicationController
     @repo
       .benchmark_types
       .pluck(:category)
-      .sort
       .select { |category| category if !category.match(/memory\Z/) }
       .group_by { |category| category =~ /\A([^_]+)_/; $1 }
   end
