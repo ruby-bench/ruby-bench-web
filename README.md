@@ -19,19 +19,25 @@ https://github.com/ruby-bench/ruby-bench-docker.
 
 # Hardware
 
-All benchmarks are ran on a Softlayer bare metal server in order to achieve consistent results. The bare metal server has the following configurations:
+Our current bare metal server is sponsored by the team over at
+[RubyTune.com](https://rubytune.com/).
+
+All benchmarks are run on a Softlayer bare metal server in order to achieve
+consistent and repeatable results. We **will not** publish CPU results gathered
+on virtual hosts where we can not control our CPU allocation. The only results
+published are run on production level bare metal servers.
+
+The bare metal server is purchased from
+[Hetzner Online](http://www.hetzner.de/en/hosting/produkte_rootserver/px60ssd)
+and has the following configurations:
 
 System | Type Component
 --- | ---
-Operating System | Ubuntu14.04-64 Minimal for Bare Metal
-RAM 4x4GB Kingston | 4GB DDR3 1Rx8
-Processor | 3GHz Intel Xeon-IvyBridge (E5-2690-V2-DecaCore)
-Motherboard | SuperMicro X9DRI-LN4F+_R1.2A
-Drive Controller | Mainboard Onboard
-Power Supply | SuperMicro PWS-605P-1H
-Security Device | SuperMicro AOM-TPM-9655V
-Remote Management Card | SuperMicro Winbond WPCM450 - Onboard
-Backplane | SuperMicro BPN-SAS-815TQ
+Operating System | Ubuntu-1404-trusty-64-minimal
+RAM | 4 x 8GB Micron ECC, Part Number: 18KSF1G72AZ-1G6E1
+Processor | 3.6GHz Intel® Xeon® E3-1270 v3 Quad-Core Haswell incl. Hyper-Threading Technology
+Hard Drive | 2 x Samsung SSD 845DC EVO - 240 GB - 2,5" SATA III
+Motherboard | Intel Coporation S1200RP
 
 # Contribute
 List of things we need to do: https://trello.com/b/mdMX7CeK/todo
