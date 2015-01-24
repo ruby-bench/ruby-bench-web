@@ -16,13 +16,6 @@
   %body
     .row.body
       .col-xs-12
-        .alert.alert-danger.l-align-center
-          %strong
-            We're currently transistioning to our new bare metal server provided by
-            = succeed '.' do
-              = link_to 'RubyTune', 'http://rubytune.com/'
-            Therefore, benchmark results may not be accurate during this period.
-
         = yield
 
   %footer
