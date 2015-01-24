@@ -3,9 +3,29 @@
 
   %hr
 
+  %blockquote
+    %p
+      Our current bare metal server is sponsored by the team over at
+      = succeed '.' do
+        = link_to 'RubyTune.com', 'https://rubytune.com/', target: '_blank'
+
+    %p
+      = image_tag 'sponsors/ruby_tune.png', alt: 'RubyTune'
+
   %p
-    All benchmarks are ran on a Softlayer bare metal server in order to achieve
-    consistent results. The bare metal server has the following configurations:
+    All benchmarks are run on a bare metal server in order to achieve
+    consistent and repeatable results. We
+    %strong will not
+    publish CPU results gathered on virtual hosts where we can not control
+    our CPU allocation. The only results published are run on
+    production level bare metal servers.
+
+  %p
+    The bare metal server is purchased from
+    = link_to 'Hetzner Online',
+      'http://www.hetzner.de/en/hosting/produkte_rootserver/px60ssd',
+      target: '_blank'
+    and has the following configurations:
 
     %table.table.table-striped
       %thead
@@ -15,37 +35,24 @@
 
       %tbody
         %tr
-          %td Operating System
-          %td Ubuntu14.04-64 Minimal for Bare Metal
+          %th Operating System
+          %td Ubuntu-1404-trusty-64-minimal
 
         %tr
-          %td RAM
-          %td 4x4GB Kingston 4GB DDR3 1Rx8
+          %th RAM
+          %td
+            4 x 8GB Micron ECC
+            %br
+            Part Number: 18KSF1G72AZ-1G6E1
 
         %tr
-          %td Processor
-          %td 3GHz Intel Xeon-IvyBridge (E5-2690-V2-DecaCore)
+          %th Processor
+          %td 3.6GHz Intel® Xeon® E3-1270 v3 Quad-Core Haswell incl. Hyper-Threading Technology
 
         %tr
-          %td Motherboard
-          %td SuperMicro X9DRI-LN4F+_R1.2A
+          %th Hard Drive
+          %td Samsung SSD 845DC EVO - 240 GB - 2,5" SATA III
 
         %tr
-          %td Drive Controller
-          %td Mainboard Onboard
-
-        %tr
-          %td Power Supply
-          %td SuperMicro PWS-605P-1H
-
-        %tr
-          %td Security Device
-          %td SuperMicro AOM-TPM-9655V
-
-        %tr
-          %td Remote Management Card
-          %td SuperMicro Winbond WPCM450 - Onboard
-
-        %tr
-          %td Backplane
-          %td SuperMicro BPN-SAS-815TQ
+          %th Motherboard
+          %td Intel Coporation S1200RP
