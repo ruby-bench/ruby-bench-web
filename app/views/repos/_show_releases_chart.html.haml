@@ -28,7 +28,12 @@
 
   - charts.each_with_index do |chart_columns, index|
     - if chart_columns
-      - selector = index == 0 ? "#chart" : "#chart-memory"
+      - if index == 0
+        - selector = "#chart"
+        - unit = benchmark_type.unit
+      - else
+        - selector = "#chart-memory"
+        - unit = benchmark_type_memory.unit
 
       - content_for(:footer) do
         :javascript
@@ -73,7 +78,7 @@
               },
               yAxis: {
                 title: {
-                  text: "#{benchmark_type.unit.capitalize}",
+                  text: "#{unit.capitalize}",
                 },
               },
               plotOptions: {

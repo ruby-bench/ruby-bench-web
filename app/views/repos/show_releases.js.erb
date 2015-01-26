@@ -1,9 +1,13 @@
-$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_releases_chart', locals: { charts: @charts, benchmark_type: @benchmark_type })) %>");
-
-<%- unit = @benchmark_type.unit.capitalize %>
+$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_releases_chart', locals: { charts: @charts, benchmark_type: @benchmark_type, benchmark_type_memory: @benchmark_type_memory })) %>");
 
 <%- @charts.each_with_index do |chart_columns, index| %>
-  <%- selector = index == 0 ? "#chart" : "#chart-memory" %>
+  <% if index == 0 %>
+    <%- selector = "#chart" %>
+    <%- unit = @benchmark_type.unit.capitalize %>
+  <% else %>
+    <%- selector = "#chart-memory" %>
+    <%- unit = @benchmark_type_memory.unit.capitalize %>
+  <% end %>
 
   $("<%= selector %>").highcharts({
     chart: {

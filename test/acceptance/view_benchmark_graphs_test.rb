@@ -65,8 +65,16 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       choose(benchmark_run.benchmark_type.category)
     end
 
-    assert page.has_css?("#chart .highcharts-container")
-    assert page.has_css?("#chart-memory .highcharts-container")
+    within "#chart .highcharts-container .highcharts-yaxis-title" do
+      assert page.has_content?(benchmark_run.benchmark_type.unit.capitalize)
+    end
+
+    within "#chart-memory .highcharts-container .highcharts-yaxis-title" do
+      assert page.has_content?(
+        benchmark_runs(:array_iterations_memory_run).benchmark_type.unit.capitalize
+      )
+    end
+
     assert page.has_content?("def abc")
 
     benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize

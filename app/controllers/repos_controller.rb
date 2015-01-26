@@ -48,10 +48,14 @@ class ReposController < ApplicationController
     releases = @repo.releases
 
     if @form_result_type = params[:result_type]
-      @benchmark_type = find_repo_benchmark_type_by_category(@form_result_type)
-
       @charts =
-        [@form_result_type, "#{@form_result_type}_memory"].map do |result_type|
+        [@form_result_type, "#{@form_result_type}_memory"].each_with_index.map do |result_type, index|
+          instance_variable_name = index == 0 ? :@benchmark_type : :@benchmark_type_memory
+
+          self.instance_variable_set(
+            instance_variable_name, find_repo_benchmark_type_by_category(result_type)
+          )
+
           benchmark_runs = fetch_benchmark_runs(@repo.releases, 'Release', result_type)
           next if benchmark_runs.empty?
 
