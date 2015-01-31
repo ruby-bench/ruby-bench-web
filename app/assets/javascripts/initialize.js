@@ -40,4 +40,7 @@ $(document).ready(function() {
       }
     });
   })
+
+  drawReleaseChart(".release-chart");
+  drawChart(".chart");
 })
