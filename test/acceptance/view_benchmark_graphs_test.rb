@@ -24,6 +24,10 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_css?(".chart #highcharts-0")
     assert page.has_content?("def abc")
 
+    within ".highcharts-xaxis-labels" do
+      assert_equal find('text').text, benchmark_run.created_at.strftime("%Y-%m-%d")
+    end
+
     benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
