@@ -12,7 +12,9 @@
   %h2.l-align-center
     = t('repos.show.graph_title', graph_name: benchmark_name)
 
-  #chart
+  .chart{ data: { tick_interval: JSON.parse(chart_columns[:columns]).first['data'].count / 4,
+    unit: benchmark_type.unit.capitalize,
+    columns: chart_columns[:columns] } }
 
   - if script_url = benchmark_type.script_url
     %h2.l-align-center
@@ -20,62 +22,3 @@
 
     = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
         lexer: :ruby, options: { linenos: 'inline' }).html_safe
-
-  - content_for(:footer) do
-    :javascript
-      $(function () {
-        $("#chart").highcharts({
-          chart: {
-            zoomType: 'x'
-          },
-          subtitle: {
-            text: document.ontouchstart === undefined ? "#{t('highcharts.subtitle.desktop')}" : "#{t('highcharts.subtitle.mobile')}"
-          },
-          title: {
-            text: ""
-          },
-          exporting: {
-            enabled: false
-          },
-          tooltip: {
-            useHTML: true,
-            crosshairs: true,
-            shared: true,
-            positioner: function (labelWidth, labelHeight, point) {
-              if ((this.chart.chartWidth / 2) > point.plotX ) {
-                return { x: this.chart.chartWidth - labelWidth - 20, y: 50 };
-              } else {
-                return { x: 80, y: 50 };
-              }
-            },
-            shadow: false,
-            animation: false,
-            shape: 'square'
-          },
-          xAxis: {
-            categories: #{chart_columns[:categories]},
-            labels: {
-              formatter: function () {
-                var date = /Commit Date: (\d{4}-\d{2}-\d{2})/.exec(this.value);
-                if (date != null) {
-                  return date[1];
-                }
-              }
-            },
-            tickInterval: #{JSON.parse(chart_columns[:columns]).first['data'].count / 4}
-          },
-          yAxis: {
-            title: {
-              text: "#{benchmark_type.unit.capitalize}",
-            },
-            type: 'logarithmic'
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'right',
-            floating: true,
-            verticalAlign: 'top'
-          },
-          series: #{chart_columns[:columns]}
-        });
-      });

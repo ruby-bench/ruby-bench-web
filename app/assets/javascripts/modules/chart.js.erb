@@ -1,0 +1,60 @@
+var drawChart = function(chartClass) {
+  $this = $(chartClass);
+
+  if($this.length) {
+    $this.highcharts({
+      chart: {
+        zoomType: 'x'
+      },
+      subtitle: {
+        text: document.ontouchstart === undefined ? "<%= I18n.t('highcharts.subtitle.desktop') %>" : "<%= I18n.t('highcharts.subtitle.mobile') %>"
+      },
+      title: {
+        text: ""
+      },
+      exporting: {
+        enabled: false
+      },
+      tooltip: {
+        useHTML: true,
+        crosshairs: true,
+        shared: true,
+        positioner: function (labelWidth, labelHeight, point) {
+          if ((this.chart.chartWidth / 2) > point.plotX ) {
+            return { x: this.chart.chartWidth - labelWidth - 20, y: 50 };
+          } else {
+            return { x: 80, y: 50 };
+          }
+        },
+        shadow: false,
+        animation: false,
+        shape: 'square'
+      },
+      xAxis: {
+        categories: $this.data('categories'),
+        labels: {
+          formatter: function () {
+            var date = /Commit Date: (\d{4}-\d{2}-\d{2})/.exec(this.value);
+            if (date != null) {
+              return date[1];
+            }
+          }
+        },
+        tickInterval: $this.data('tick_interval')
+      },
+      yAxis: {
+        title: {
+          text: $this.data('unit'),
+        },
+        type: 'logarithmic'
+      },
+      legend: {
+        layout: 'horizontal',
+        align: 'right',
+        floating: true,
+        verticalAlign: 'top'
+      },
+      series: $this.data('columns')
+    });
+  }
+};

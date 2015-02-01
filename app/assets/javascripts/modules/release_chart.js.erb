@@ -1,0 +1,82 @@
+var drawReleaseChart = function(chartClass) {
+  $(chartClass).each(function() {
+    $this = $(this);
+
+    if($this.length) {
+      $this.highcharts({
+        chart: {
+          type: 'column',
+          zoomType: 'x'
+        },
+        subtitle: {
+          text: document.ontouchstart === undefined ? "<%= I18n.t('highcharts.subtitle.desktop') %>" : "<%= I18n.t('highcharts.subtitle.mobile') %>"
+        },
+        title: {
+          text: ""
+        },
+        exporting: {
+          enabled: false
+        },
+        tooltip: {
+          useHTML: true,
+          crosshairs: true,
+          shared: true,
+          positioner: function (labelWidth, labelHeight, point) {
+            if ((this.chart.chartWidth / 2) > point.plotX ) {
+              return { x: this.chart.chartWidth - labelWidth - 20, y: 50 };
+            } else {
+              return { x: 80, y: 50 };
+            }
+          },
+          shadow: false,
+          animation: false,
+          shape: 'square'
+        },
+        xAxis: {
+          categories: $this.data("categories"),
+          labels: {
+            rotation: -30,
+            formatter: function () {
+              return /Version: ([^<]+)/.exec(this.value)[1]
+            }
+          }
+        },
+        yAxis: {
+          title: {
+            text: $this.data("unit"),
+          },
+        },
+        plotOptions: {
+          column: {
+            animation: false,
+            dataLabels: {
+              enabled: true,
+              formatter: function () {
+                if (this.y == this.series.dataMax) {
+                  return "<span style=\"color:red;z-index: 0\">Worst</span>"
+                } else {
+                  var label = "";
+
+                  if (this.y == this.series.dataMin) {
+                    label = "<span style=\"color:green\">Best</span><br>";
+                  }
+
+                  var percentage = ((this.y - this.series.dataMax) / this.series.dataMax * 100).toFixed(2);
+                  return label + '<span style="color:black">' + percentage + '% </span>';
+                }
+              },
+              zIndex: 0
+            }
+          }
+        },
+        legend: {
+          layout: 'horizontal',
+          align: 'right',
+          floating: true,
+          verticalAlign: 'top'
+        },
+        series: $this.data("columns")
+      });
+    }
+  });
+}

@@ -21,7 +21,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       choose(benchmark_run.benchmark_type.category)
     end
 
-    assert page.has_css?("#chart #highcharts-0")
+    assert page.has_css?(".chart #highcharts-0")
     assert page.has_content?("def abc")
 
     benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
@@ -65,15 +65,19 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       choose(benchmark_run.benchmark_type.category)
     end
 
-    within "#chart .highcharts-container .highcharts-yaxis-title" do
+    within ".release-chart .highcharts-container .highcharts-yaxis-title",
+      match: :first do
+
       assert page.has_content?(benchmark_run.benchmark_type.unit.capitalize)
     end
 
-    within "#chart-memory .highcharts-container .highcharts-yaxis-title" do
-      assert page.has_content?(
-        benchmark_runs(:array_iterations_memory_run).benchmark_type.unit.capitalize
-      )
-    end
+    assert(
+      all(".release-chart .highcharts-container .highcharts-yaxis-title")
+        .last
+        .has_content?(
+          benchmark_runs(:array_iterations_memory_run).benchmark_type.unit.capitalize
+        )
+    )
 
     assert page.has_content?("def abc")
 
@@ -107,8 +111,8 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       choose(benchmark_run.benchmark_type.category)
     end
 
-    assert page.has_css?("#chart .highcharts-container")
-    assert_not page.has_css?("#chart-memory .highcharts-container")
+    assert page.has_css?(".release-chart .highcharts-container")
+    assert_not page.has_css?(".release-chart.memory .highcharts-container")
     assert page.has_content?("def abc")
 
     benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize

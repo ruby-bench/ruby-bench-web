@@ -4,7 +4,6 @@
     %title Long Running Ruby Benchmark
     = stylesheet_link_tag 'application', media: 'all'
     = stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Roboto:100,400'
-    = javascript_include_tag 'application'
     = render 'layouts/ga' if Rails.env.production?
     = csrf_meta_tags
 
@@ -22,4 +21,5 @@
     .row.footer
       .col-xs-10.col-xs-offset-1
         = render 'layouts/footer'
+        = javascript_include_tag 'application'
         = yield :footer if content_for(:footer)
