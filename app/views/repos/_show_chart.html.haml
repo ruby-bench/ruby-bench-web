@@ -14,7 +14,8 @@
 
   .chart{ data: { tick_interval: JSON.parse(chart_columns[:columns]).first['data'].count / 4,
     unit: benchmark_type.unit.capitalize,
-    columns: chart_columns[:columns] } }
+    columns: chart_columns[:columns],
+    categories: chart_columns[:categories] } }
 
   - if script_url = benchmark_type.script_url
     %h2.l-align-center
