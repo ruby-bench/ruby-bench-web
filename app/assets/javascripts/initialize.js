@@ -2,10 +2,10 @@ $(document).ready(function() {
   var locationPathName = location.pathname != '/' ? location.pathname : '/ruby/ruby/releases';
   $(".top-nav a[href='" + locationPathName + "']").addClass('current');
 
-  var $spinner = $(".spinner");
-  var xhr;
-
   $(".result-types-form input[type=radio]").change(function(value) {
+    var $spinner = $(".spinner");
+    var xhr;
+
     // http://stackoverflow.com/questions/4551175/how-to-cancel-abort-jquery-ajax-request
     if(xhr && xhr.readyState != 4){
       xhr.abort();
