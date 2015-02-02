@@ -1,9 +1,6 @@
 $(document).ready(function() {
-  var location_pathname = location.pathname;
-
-  if (location_pathname != '/') {
-    $(".top-nav a[href='" + location.pathname + "']").addClass('current');
-  }
+  var locationPathName = location.pathname != '/' ? location.pathname : '/ruby/ruby/releases';
+  $(".top-nav a[href='" + locationPathName + "']").addClass('current');
 
   var $spinner = $(".spinner");
   var xhr;
