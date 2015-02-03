@@ -1,28 +1,28 @@
 .footer-sponsors.l-align-center
   %ul.list-inline.footer-sponsors-list
-    %li.footer-sponsors-list-item
+    %li.footer-sponsor-list
       = link_to 'http://www.jollygoodcode.com/', target: '_blank' do
         %h5.l-align-center
           %i= t('footer.supported_by')
 
-        .footer-sponsors-list-item-image
-          = image_tag 'sponsors/jolly_good_code.png', alt: 'Jolly Good Code'
+        .sponsor-jolly-good-code
+          %span.l-text-hidden Jolly Good Code
 
-    %li.footer-sponsors-list-item
+    %li.footer-sponsor-list
       = link_to 'http://www.discourse.org/', target: '_blank' do
         %h5.l-align-center
           %i= t('footer.domain_and_community')
 
-        .footer-sponsors-list-item-image
-          = image_tag 'sponsors/discourse.png', alt: 'Discourse'
+        .sponsor-discourse
+          %span.l-text-hidden Discourse
 
-    %li.footer-sponsors-list-item
+    %li.footer-sponsor-list
       = link_to 'http://www.rubytune.com/', target: '_blank' do
         %h5.l-align-center
           %i= t('footer.bare_metal_server')
 
-        .footer-sponsors-list-item-image
-          = image_tag 'sponsors/ruby_tune.png', alt: 'RubyTune'
+        .sponsor-ruby-tune
+          %span.l-text-hidden RubyTune
 
 %hr.footer-hr
 

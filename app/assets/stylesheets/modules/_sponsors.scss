@@ -1,0 +1,19 @@
+@mixin inline-image($background-image, $image-height, $image-width) {
+  display: inline-block;
+  height: $image-height;
+  width: $image-width;
+  background-image: image-url($background-image);
+}
+
+.sponsor-discourse {
+  @include inline-image('sponsors/discourse.png', 75px, 256px);
+}
+
+.sponsor-jolly-good-code {
+  @include inline-image('sponsors/jolly_good_code.png', 100px, 100px);
+
+}
+
+.sponsor-ruby-tune {
+  @include inline-image('sponsors/ruby_tune.png', 60px, 300px);
+}
