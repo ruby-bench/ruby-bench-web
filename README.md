@@ -40,5 +40,4 @@ Hard Drive | 2 x Samsung SSD 845DC EVO - 240 GB - 2,5" SATA III
 Motherboard | Intel Coporation S1200RP
 
 # Contribute
-List of things we need to do: https://trello.com/b/mdMX7CeK/todo
 Discuss features and direction of project: http://community.rubybench.org
