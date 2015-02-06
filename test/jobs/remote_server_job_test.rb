@@ -98,16 +98,16 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform discourse_ruby_trunk_bench" do
     [
-      "docker pull tgxworld/discourse_ruby_trunk_bench",
-      "docker run --name discourse_redis -d redis:2.8.19 && docker
+      "tsp docker pull tgxworld/discourse_ruby_trunk_bench",
+      "tsp docker run --name discourse_redis -d redis:2.8.19 && tsp docker
         run --name discourse_postgres -d postgres:9.3.5 &&
-        docker run --rm --link discourse_postgres:postgres
+        tsp docker run --rm --link discourse_postgres:postgres
         --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=commit_hash\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         tgxworld/discourse_ruby_trunk_bench".squish,
-      "docker stop discourse_postgres discourse_redis",
-      "docker rm discourse_postgres discourse_redis"
+      "tsp docker stop discourse_postgres discourse_redis",
+      "tsp docker rm discourse_postgres discourse_redis"
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
