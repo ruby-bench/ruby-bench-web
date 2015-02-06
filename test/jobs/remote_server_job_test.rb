@@ -8,8 +8,11 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform ruby_bench" do
     [
-      'docker pull tgxworld/ruby_bench',
-      "docker run --rm -e \"RUBY_COMMIT_HASH=commit_hash\"
+      'tsp docker pull tgxworld/ruby_bench',
+      "tsp docker run --rm
+        -e \"RUBY_BENCHMARKS=true\"
+        -e \"RUBY_MEMORY_BENCHMARKS=true\"
+        -e \"RUBY_COMMIT_HASH=commit_hash\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         tgxworld/ruby_bench".squish
