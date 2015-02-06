@@ -40,4 +40,16 @@ Hard Drive | 2 x Samsung SSD 845DC EVO - 240 GB - 2,5" SATA III
 Motherboard | Intel Coporation S1200RP
 
 # Contribute
+
+## Dependency
+PostgreSQL 9.x in order to enable the hstore extension.
+
+## Setup
+```bash
+bundle exec rake db:create
+bundle exec rake db:setup
+bundle exec rake test
+```
+
+## Discussion
 Discuss features and direction of project: http://community.rubybench.org
