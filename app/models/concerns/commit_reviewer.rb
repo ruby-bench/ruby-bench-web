@@ -6,7 +6,7 @@ module CommitReviewer
 
   def merge_or_skip_ci?(message)
     !message.match(
-      /#{CI_SKIP_COMMIT_MESSAGE}|#{MERGE_COMMIT_MESSAGE}|#{SKIP_CI_COMMIT_MESSAGE}/
+      /#{CI_SKIP_COMMIT_MESSAGE}|#{MERGE_COMMIT_MESSAGE}|#{SKIP_CI_COMMIT_MESSAGE}/i
     ).nil?
   end
 
