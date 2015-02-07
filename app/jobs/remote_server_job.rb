@@ -19,8 +19,8 @@ class RemoteServerJob < ApplicationJob
   def ruby_bench(ssh, commit_hash)
     execute_ssh_commands(ssh,
       [
-        "tsp docker pull tgxworld/ruby_bench",
-        "tsp docker run --rm
+        "docker pull tgxworld/ruby_bench",
+        "docker run --rm
           -e \"RUBY_BENCHMARKS=true\"
           -e \"RUBY_MEMORY_BENCHMARKS=false\"
           -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
@@ -59,9 +59,9 @@ class RemoteServerJob < ApplicationJob
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/ruby_releases_discourse",
-        "docker run --name discourse_redis -d redis:2.8.19 && docker
-          run --name discourse_postgres -d postgres:9.3.5 &&
-          docker run --rm
+        "docker run --name discourse_redis -d redis:2.8.19",
+        "docker run --name discourse_postgres -d postgres:9.3.5",
+        "docker run --rm
           --link discourse_postgres:postgres
           --link discourse_redis:redis
           -e \"RUBY_VERSION=#{ruby_version}\"
@@ -78,9 +78,9 @@ class RemoteServerJob < ApplicationJob
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/discourse_rails_head_bench",
-        "docker run --name discourse_redis -d redis:2.8.19 && docker
-          run --name discourse_postgres -d postgres:9.3.5 &&
-          docker run --rm --link discourse_postgres:postgres
+        "docker run --name discourse_redis -d redis:2.8.19",
+        "docker run --name discourse_postgres -d postgres:9.3.5",
+        "docker run --rm --link discourse_postgres:postgres
           --link discourse_redis:redis -e \"RAILS_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
@@ -94,16 +94,16 @@ class RemoteServerJob < ApplicationJob
   def discourse_ruby_trunk_bench(ssh, commit_hash)
     execute_ssh_commands(ssh,
       [
-        "tsp docker pull tgxworld/discourse_ruby_trunk_bench",
-        "tsp docker run --name discourse_redis -d redis:2.8.19 && tsp docker
-          run --name discourse_postgres -d postgres:9.3.5 &&
-          tsp docker run --rm --link discourse_postgres:postgres
+        "docker pull tgxworld/discourse_ruby_trunk_bench",
+        "docker run --name discourse_redis -d redis:2.8.19",
+        "docker run --name discourse_postgres -d postgres:9.3.5",
+        "docker run --rm --link discourse_postgres:postgres
           --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           tgxworld/discourse_ruby_trunk_bench".squish,
-        "tsp docker stop discourse_postgres discourse_redis",
-        "tsp docker rm discourse_postgres discourse_redis"
+        "docker stop discourse_postgres discourse_redis",
+        "docker rm discourse_postgres discourse_redis"
       ]
     )
   end
@@ -115,7 +115,7 @@ class RemoteServerJob < ApplicationJob
   end
 
   def ssh_exec!(ssh, command)
-    ssh.exec!(command) do |channel, stream, data|
+    ssh.exec!("tsp #{command}") do |channel, stream, data|
       puts data
     end
   end
