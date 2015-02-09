@@ -27,7 +27,10 @@ class RemoteServerJobTest < ActiveJob::TestCase
   test "#perform ruby_releases" do
     [
       'tsp docker pull tgxworld/ruby_releases',
-      "tsp docker run --rm -e \"RUBY_VERSION=2.2.0\"
+      "tsp docker run --rm
+        -e \"RUBY_BENCHMARKS=true\"
+        -e \"RUBY_MEMORY_BENCHMARKS=false\"
+        -e \"RUBY_VERSION=2.2.0\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         tgxworld/ruby_releases".squish
@@ -41,11 +44,14 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform ruby_releases_memory" do
     [
-      'tsp docker pull tgxworld/ruby_releases_memory',
-      "tsp docker run --rm -e \"RUBY_VERSION=2.2.0\"
+      "tsp docker pull tgxworld/ruby_releases",
+      "tsp docker run --rm
+        -e \"RUBY_BENCHMARKS=false\"
+        -e \"RUBY_MEMORY_BENCHMARKS=true\"
+        -e \"RUBY_VERSION=2.2.0\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-        tgxworld/ruby_releases_memory".squish
+        tgxworld/ruby_releases".squish
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)

@@ -35,7 +35,10 @@ class RemoteServerJob < ApplicationJob
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/ruby_releases",
-        "docker run --rm -e \"RUBY_VERSION=#{ruby_version}\"
+        "docker run --rm
+          -e \"RUBY_BENCHMARKS=true\"
+          -e \"RUBY_MEMORY_BENCHMARKS=false\"
+          -e \"RUBY_VERSION=#{ruby_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           tgxworld/ruby_releases".squish
@@ -46,11 +49,14 @@ class RemoteServerJob < ApplicationJob
   def ruby_releases_memory(ssh, ruby_version)
     execute_ssh_commands(ssh,
       [
-        "docker pull tgxworld/ruby_releases_memory",
-        "docker run --rm -e \"RUBY_VERSION=#{ruby_version}\"
+        "docker pull tgxworld/ruby_releases",
+        "docker run --rm
+          -e \"RUBY_BENCHMARKS=false\"
+          -e \"RUBY_MEMORY_BENCHMARKS=true\"
+          -e \"RUBY_VERSION=#{ruby_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          tgxworld/ruby_releases_memory".squish
+          tgxworld/ruby_releases".squish
       ]
     )
   end
