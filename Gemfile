@@ -40,6 +40,6 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'newrelic_rpm'
-  gem 'passenger', '4.0.57'
+  gem 'passenger', '5.0.0.beta3'
   gem 'rollbar', '~> 1.3.1'
 end
