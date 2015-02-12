@@ -102,16 +102,16 @@ class RemoteServerJobTest < ActiveJob::TestCase
     RemoteServerJob.new.perform('commit_hash', 'discourse_rails_head_bench')
   end
 
-  test "#perform discourse_ruby_trunk_bench" do
+  test "#perform ruby_bench_discourse" do
     [
-      "tsp docker pull tgxworld/discourse_ruby_trunk_bench",
+      "tsp docker pull tgxworld/ruby_bench_discourse",
       "tsp docker run --name discourse_redis -d redis:2.8.19",
       "tsp docker run --name discourse_postgres -d postgres:9.3.5",
       "tsp docker run --rm --link discourse_postgres:postgres
         --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=commit_hash\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-        tgxworld/discourse_ruby_trunk_bench".squish,
+        tgxworld/ruby_bench_discourse".squish,
       "tsp docker stop discourse_postgres discourse_redis",
       "tsp docker rm discourse_postgres discourse_redis"
     ].each do |command|
@@ -119,6 +119,6 @@ class RemoteServerJobTest < ActiveJob::TestCase
       @ssh.expects(:exec!).with(command)
     end
 
-    RemoteServerJob.new.perform('commit_hash', 'discourse_ruby_trunk_bench')
+    RemoteServerJob.new.perform('commit_hash', 'ruby_bench_discourse')
   end
 end
