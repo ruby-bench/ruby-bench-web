@@ -1,7 +1,7 @@
 class RemoteServerJob < ApplicationJob
   queue_as :default
 
-  def perform(commit_hash, benchmark)
+  def perform(initiator_key, benchmark)
     secrets = Rails.application.secrets
 
     Net::SSH.start(
@@ -10,7 +10,7 @@ class RemoteServerJob < ApplicationJob
       password: secrets.bare_metal_server_password
     ) do |ssh|
 
-      send(benchmark, ssh, commit_hash)
+      send(benchmark, ssh, initiator_key)
     end
   end
 
