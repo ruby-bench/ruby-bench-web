@@ -15,6 +15,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"RUBY_COMMIT_HASH=commit_hash\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        -e \"INCLUDE_PATTERNS=bm_app_answer,bm_abc\"
         tgxworld/ruby_bench".squish
     ].each do |command|
 
@@ -23,7 +24,10 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
     RemoteServerJob.new.perform(
       'commit_hash', 'ruby_bench',
-      { ruby_benchmarks: true, ruby_memory_benchmarks: false }
+      {
+        ruby_benchmarks: true, ruby_memory_benchmarks: false,
+        include_patterns: 'bm_app_answer,bm_abc'
+      }
     )
   end
 
@@ -36,6 +40,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"RUBY_VERSION=2.2.0\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        -e \"INCLUDE_PATTERNS=bm_app_answer,bm_abc\"
         tgxworld/ruby_releases".squish
     ].each do |command|
 
@@ -44,7 +49,10 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
     RemoteServerJob.new.perform(
       '2.2.0', 'ruby_releases',
-      { ruby_benchmarks: true, ruby_memory_benchmarks: false }
+      {
+        ruby_benchmarks: true, ruby_memory_benchmarks: false,
+        include_patterns: 'bm_app_answer,bm_abc'
+      }
     )
   end
 

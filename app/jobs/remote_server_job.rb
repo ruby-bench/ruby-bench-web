@@ -20,6 +20,13 @@ class RemoteServerJob < ApplicationJob
   def ruby_bench(ssh, commit_hash, options)
     options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
 
+    include_patterns =
+      if options[:include_patterns]
+        "-e \"INCLUDE_PATTERNS=#{options[:include_patterns]}\""
+      else
+        ""
+      end
+
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/ruby_bench",
@@ -29,6 +36,7 @@ class RemoteServerJob < ApplicationJob
           -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          #{include_patterns}
           tgxworld/ruby_bench".squish
       ]
     )
@@ -36,6 +44,13 @@ class RemoteServerJob < ApplicationJob
 
   def ruby_releases(ssh, ruby_version, options)
     options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
+
+    include_patterns =
+      if options[:include_patterns]
+        "-e \"INCLUDE_PATTERNS=#{options[:include_patterns]}\""
+      else
+        ""
+      end
 
     execute_ssh_commands(ssh,
       [
@@ -46,6 +61,7 @@ class RemoteServerJob < ApplicationJob
           -e \"RUBY_VERSION=#{ruby_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          #{include_patterns}
           tgxworld/ruby_releases".squish
       ]
     )
