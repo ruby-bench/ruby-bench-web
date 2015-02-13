@@ -22,8 +22,8 @@ class RemoteServerJobTest < ActiveJob::TestCase
     end
 
     RemoteServerJob.new.perform(
-      'commit_hash', 'ruby_bench', ruby_benchmarks: true,
-      ruby_memory_benchmarks: false
+      'commit_hash', 'ruby_bench',
+      { ruby_benchmarks: true, ruby_memory_benchmarks: false }
     )
   end
 
@@ -43,8 +43,8 @@ class RemoteServerJobTest < ActiveJob::TestCase
     end
 
     RemoteServerJob.new.perform(
-      '2.2.0', 'ruby_releases', ruby_benchmarks: true,
-      ruby_memory_benchmarks: false
+      '2.2.0', 'ruby_releases',
+      { ruby_benchmarks: true, ruby_memory_benchmarks: false }
     )
   end
 

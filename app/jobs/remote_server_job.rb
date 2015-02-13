@@ -1,7 +1,8 @@
 class RemoteServerJob < ApplicationJob
   queue_as :default
 
-  def perform(initiator_key, benchmark, *kwargs)
+  # Use keyword arguments once Rails 4.2.1 has been released.
+  def perform(initiator_key, benchmark, options = {})
     secrets = Rails.application.secrets
 
     Net::SSH.start(
@@ -10,19 +11,21 @@ class RemoteServerJob < ApplicationJob
       password: secrets.bare_metal_server_password
     ) do |ssh|
 
-      send(benchmark, ssh, initiator_key, *kwargs)
+      send(benchmark, ssh, initiator_key, options)
     end
   end
 
   private
 
-  def ruby_bench(ssh, commit_hash, ruby_benchmarks: true, ruby_memory_benchmarks: true)
+  def ruby_bench(ssh, commit_hash, options)
+    options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
+
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/ruby_bench",
         "docker run --rm
-          -e \"RUBY_BENCHMARKS=#{ruby_benchmarks}\"
-          -e \"RUBY_MEMORY_BENCHMARKS=#{ruby_memory_benchmarks}\"
+          -e \"RUBY_BENCHMARKS=#{options[:ruby_benchmarks]}\"
+          -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
           -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
@@ -31,13 +34,15 @@ class RemoteServerJob < ApplicationJob
     )
   end
 
-  def ruby_releases(ssh, ruby_version, ruby_benchmarks: true, ruby_memory_benchmarks: true)
+  def ruby_releases(ssh, ruby_version, options)
+    options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
+
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/ruby_releases",
         "docker run --rm
-          -e \"RUBY_BENCHMARKS=#{ruby_benchmarks}\"
-          -e \"RUBY_MEMORY_BENCHMARKS=#{ruby_memory_benchmarks}\"
+          -e \"RUBY_BENCHMARKS=#{options[:ruby_benchmarks]}\"
+          -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
           -e \"RUBY_VERSION=#{ruby_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
@@ -46,7 +51,7 @@ class RemoteServerJob < ApplicationJob
     )
   end
 
-  def ruby_releases_discourse(ssh, ruby_version)
+  def ruby_releases_discourse(ssh, ruby_version, options)
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/ruby_releases_discourse",
@@ -65,7 +70,7 @@ class RemoteServerJob < ApplicationJob
     )
   end
 
-  def discourse_rails_head_bench(ssh, commit_hash)
+  def discourse_rails_head_bench(ssh, commit_hash, options)
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/discourse_rails_head_bench",
@@ -82,7 +87,7 @@ class RemoteServerJob < ApplicationJob
     )
   end
 
-  def ruby_bench_discourse(ssh, commit_hash)
+  def ruby_bench_discourse(ssh, commit_hash, options)
     execute_ssh_commands(ssh,
       [
         "docker pull tgxworld/ruby_bench_discourse",
