@@ -21,7 +21,10 @@ class RemoteServerJobTest < ActiveJob::TestCase
       @ssh.expects(:exec!).with(command)
     end
 
-    RemoteServerJob.new.perform('commit_hash', 'ruby_bench')
+    RemoteServerJob.new.perform(
+      'commit_hash', 'ruby_bench', ruby_benchmarks: true,
+      ruby_memory_benchmarks: false
+    )
   end
 
   test "#perform ruby_releases" do
@@ -39,25 +42,10 @@ class RemoteServerJobTest < ActiveJob::TestCase
       @ssh.expects(:exec!).with(command)
     end
 
-    RemoteServerJob.new.perform('2.2.0', 'ruby_releases')
-  end
-
-  test "#perform ruby_releases_memory" do
-    [
-      "tsp docker pull tgxworld/ruby_releases",
-      "tsp docker run --rm
-        -e \"RUBY_BENCHMARKS=false\"
-        -e \"RUBY_MEMORY_BENCHMARKS=true\"
-        -e \"RUBY_VERSION=2.2.0\"
-        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-        tgxworld/ruby_releases".squish
-    ].each do |command|
-
-      @ssh.expects(:exec!).with(command)
-    end
-
-    RemoteServerJob.new.perform('2.2.0', 'ruby_releases_memory')
+    RemoteServerJob.new.perform(
+      '2.2.0', 'ruby_releases', ruby_benchmarks: true,
+      ruby_memory_benchmarks: false
+    )
   end
 
   test "#perform ruby_releases_discourse" do
