@@ -1,20 +1,19 @@
-.col-xs-4
-  .panel.panel-primary
-    .panel-heading= t('.benchmark_types')
+.panel.panel-primary
+  .panel-heading= t('.benchmark_types')
 
-    .panel-body
-      = form_tag form_path, role: 'form', method: :get, class: 'result-types-form', data: { organization_name: @organization.name, repo_name: @repo.name, name: name } do
-        .form-group
-          %ul.list-unstyled.list-inline
-            - @result_types.each do |category_name, categories|
-              = field_set_tag category_name.try(:titleize)
+  .panel-body
+    = form_tag form_path, role: 'form', method: :get, class: 'result-types-form', data: { organization_name: @organization.name, repo_name: @repo.name, name: name } do
+      .form-group
+        %ul.list-unstyled.list-inline
+          - @result_types.each do |category_name, categories|
+            = field_set_tag category_name.try(:titleize)
 
-              - categories.each do |result_type|
-                %li.l-padding-sides-1
-                  - id = "result_type_#{result_type}"
+            - categories.each do |result_type|
+              %li.l-padding-sides-1
+                - id = "result_type_#{result_type}"
 
-                  = label_tag(id, class: 'list-label') do
-                    = radio_button_tag("result_type", result_type,
-                      (@form_result_type == result_type), id: id)
+                = label_tag(id, class: 'list-label') do
+                  = radio_button_tag("result_type", result_type,
+                    (@form_result_type == result_type), id: id)
 
-                    %span= result_type
+                  %span= result_type

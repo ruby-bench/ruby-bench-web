@@ -2,8 +2,10 @@
 
 %hr
 
-= render 'form',
-    form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name), name: 'commits'
+.col-xs-4
+  = render 'form',
+      form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
+      name: 'commits'
 
 .col-xs-8
   = render 'layouts/spinner'

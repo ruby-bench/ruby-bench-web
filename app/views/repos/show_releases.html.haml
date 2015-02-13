@@ -2,7 +2,10 @@
 
 %hr
 
-= render 'form', form_path: releases_repo_path(organization_name: @repo.organization.name, repo_name: @repo.name), name: 'releases'
+.col-xs-4
+  = render 'form',
+      form_path: releases_repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
+      name: 'releases'
 
 .col-xs-8
   = render 'layouts/spinner'
