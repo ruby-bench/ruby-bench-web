@@ -1,5 +1,11 @@
 .panel.panel-primary
-  .panel-heading= t('.benchmark_types')
+  .panel-heading.clearfix
+    = t('repos.benchmark_types')
+
+    .l-right
+      = link_to '#', id: 'benchmark-types-form-hide', class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-menu-left{ aria: 'hidden' }
+        %span= t('repos.hide_benchmark_types_form')
 
   .panel-body
     = form_tag form_path, role: 'form', method: :get, class: 'result-types-form', data: { organization_name: @organization.name, repo_name: @repo.name, name: name } do

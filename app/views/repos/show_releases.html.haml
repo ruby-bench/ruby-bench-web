@@ -2,12 +2,13 @@
 
 %hr
 
-.col-xs-4
+#benchmark-types-form-container.col-xs-4
   = render 'form',
       form_path: releases_repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
       name: 'releases'
 
-.col-xs-8
+#charts-container.col-xs-8
+  = render 'hide_form_button'
   = render 'layouts/spinner'
 
   #chart-container

@@ -157,4 +157,21 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       assert_not values.include?(benchmark_run.benchmark_type.category)
     end
   end
+
+  test "User should be able to hide benchmark types form" do
+    ['/ruby/ruby/releases', '/ruby/ruby/commits'].each do |path|
+      visit path
+      click_link "benchmark-types-form-hide"
+
+      within "#benchmark-types-form-container" do
+        assert page.has_css?('.panel.panel-primary.hide', visible: false)
+      end
+
+      click_link  "benchmark-types-form-show"
+
+      within "#benchmark-types-form-container" do
+        assert page.has_css?('.panel.panel-primary', visible: true)
+      end
+    end
+  end
 end

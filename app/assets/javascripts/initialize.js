@@ -40,4 +40,29 @@ $(document).ready(function() {
 
   drawReleaseChart(".release-chart");
   drawChart(".chart");
+
+  // Toggles benchmark types panel.
+  $('#benchmark-types-form-hide').click(function(e) {
+    e.preventDefault();
+    $("#benchmark-types-form-container").removeClass().toggleClass('col-xs-0');
+    $("#charts-container").removeClass().toggleClass('col-xs-12');
+    $("#benchmark-types-form-container .panel").toggleClass('hide');
+    $("#benchmark-types-form-show").toggleClass('hide');
+
+    // FIXME: Figure out a way to determine which chart we have to draw
+    drawReleaseChart(".release-chart");
+    drawChart(".chart");
+  })
+
+  $('#benchmark-types-form-show').click(function(e) {
+    e.preventDefault();
+    $("#benchmark-types-form-container").removeClass().toggleClass('col-xs-4');
+    $("#charts-container").removeClass().toggleClass('col-xs-8');
+    $("#benchmark-types-form-container .panel").toggleClass('hide');
+    $("#benchmark-types-form-show").toggleClass('hide');
+
+    // FIXME: Figure out a way to determine which chart we have to draw
+    drawReleaseChart(".release-chart");
+    drawChart(".chart");
+  })
 })
