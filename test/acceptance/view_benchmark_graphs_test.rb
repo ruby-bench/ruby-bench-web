@@ -174,4 +174,26 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       end
     end
   end
+
+  test "User should be able to view commit's GitHub URL by clicking on a point" do
+    benchmark_run = benchmark_runs(:array_count_run)
+
+    visit '/ruby/ruby/commits'
+
+    within "form" do
+      choose(benchmark_run.benchmark_type.category)
+    end
+
+    assert page.has_content?(I18n.t("highcharts.subtitle.commit_url"))
+
+    # FIXME: Window not being opened. Capybara can't find the position of the
+    # element in HighCharts, so resort to JavaScript.
+    # github_window = window_opened_by do
+    #   page.execute_script('$(".highcharts-markers.highcharts-tracker path").click()')
+    # end
+
+    # within_window(github_window) do
+    #   assert_equal current_url, 'haha'
+    # end
+  end
 end

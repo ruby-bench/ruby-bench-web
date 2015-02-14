@@ -1,3 +1,16 @@
+var getSubtitle = function() {
+  var subtitle = "";
+
+  if(document.ontouchstart === undefined) {
+    subtitle += "<%= I18n.t('highcharts.subtitle.desktop') %>";
+  } else {
+    subtitle += "<%= I18n.t('highcharts.subtitle.mobile') %>";
+  }
+
+  subtitle += "<br><%= I18n.t('highcharts.subtitle.commit_url') %>";
+  return subtitle;
+}
+
 var drawChart = function(chartClass) {
   $this = $(chartClass);
 
@@ -7,7 +20,7 @@ var drawChart = function(chartClass) {
         zoomType: 'x'
       },
       subtitle: {
-        text: document.ontouchstart === undefined ? "<%= I18n.t('highcharts.subtitle.desktop') %>" : "<%= I18n.t('highcharts.subtitle.mobile') %>"
+        text: getSubtitle()
       },
       title: {
         text: ""
@@ -53,7 +66,22 @@ var drawChart = function(chartClass) {
         align: 'center',
         verticalAlign: 'bottom'
       },
-      series: $this.data('columns')
+      series: $this.data('columns'),
+      plotOptions: {
+        series: {
+          point: {
+            events: {
+              click: function(event) {
+                var commitHash = /^Commit: (.{7})/.exec(this.category)[1];
+
+                window.open("https://github.com/" + $this.data('organization') +
+                  "/" + $this.data('repo') + "/commit/" + commitHash
+                );
+              }
+            }
+          }
+        }
+      }
     });
   }
 };

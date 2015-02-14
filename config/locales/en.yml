@@ -51,3 +51,4 @@ en:
     subtitle:
       desktop: 'Click and drag in the plot area to zoom in'
       mobile: 'Pinch the chart to zoom in'
+      commit_url: Click on a point to view commit on GitHub
