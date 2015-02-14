@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   get 'hardware' => 'static_pages#hardware'
   get 'contributing' => 'static_pages#contribute', as: :contribute
+  get 'sponsors' => 'static_pages#sponsors',  as: :sponsors
   get ':name' => 'organizations#show', as: :organization
   get ':organization_name/:repo_name/commits' => 'repos#show', as: :repo
   get ':organization_name/:repo_name/releases' => 'repos#show_releases', as: :releases_repo

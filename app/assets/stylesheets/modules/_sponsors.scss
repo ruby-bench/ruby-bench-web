@@ -5,13 +5,17 @@
   background-image: image-url($background-image);
 }
 
+.sponsor-row {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
 .sponsor-discourse {
   @include inline-image('sponsors/discourse.png', 75px, 256px);
 }
 
 .sponsor-jolly-good-code {
   @include inline-image('sponsors/jolly_good_code.png', 100px, 100px);
-
 }
 
 .sponsor-ruby-tune {
