@@ -1,0 +1,18 @@
+.col-xs-8.col-xs-offset-2
+  %h1= t('.title')
+
+  %hr
+
+  %h3= t('sponsors.thanks')
+
+  - @sponsors.each do |sponsor|
+    .row.sponsor-row
+      = link_to t("sponsors.#{sponsor}.link"), target: '_blank' do
+        .col-xs-5
+          %div{class: t("sponsors.#{sponsor}.class_name")}
+            %span.l-text-hidden
+              = t("sponsors.#{sponsor}.name")
+
+        .col-xs-7
+          %h3= t("sponsors.#{sponsor}.name")
+          = t("sponsors.#{sponsor}.desc")

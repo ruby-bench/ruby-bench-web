@@ -4,6 +4,24 @@ en:
     domain_and_community: Community and Domain by
     bare_metal_server: Bare Metal Servers by
 
+  sponsors:
+    thanks: Many thanks to our sponsors!
+    jolly_good_code:
+      name: Jolly Good Code
+      desc: Modern craftsmen specialising in Agile practices and Ruby on Rails.
+      link: http://www.jollygoodcode.com/
+      class_name: sponsor-jolly-good-code
+    discourse:
+      name: Discourse
+      desc: Discourse is a simple, flat forum, where replies flow down the page in a line.
+      link: http://www.discourse.org/
+      class_name: sponsor-discourse
+    rubytune:
+      name: Rubytune
+      desc: Tune and troubleshoot rails apps.
+      link: https://rubytune.com/
+      class_name: sponsor-ruby-tune
+
   submit: Submit
 
   repos:
@@ -57,6 +75,8 @@ en:
       ruby_bench_server:
         text: 'ruby-bench-server: Script to set up new bare metal servers'
         url: https://github.com/ruby-bench/ruby-bench-server
+    sponsors:
+      title: Sponsors
 
   top_nav:
     logo: RubyBench
@@ -65,6 +85,7 @@ en:
     contribute: Contribute
     discuss: Discuss
     releases: Releases Benchmarks
+    sponsors: Sponsors
 
   highcharts:
     subtitle:
