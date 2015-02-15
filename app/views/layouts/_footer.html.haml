@@ -1,9 +1,33 @@
+.footer-sponsors.l-align-center
+  %ul.list-inline.footer-sponsors-list
+    %li.footer-sponsor-list
+      = link_to 'http://www.jollygoodcode.com/', target: '_blank' do
+        %h5.l-align-center
+          %i= t('footer.supported_by')
+
+        .sponsor-jolly-good-code
+          %span.l-text-hidden Jolly Good Code
+
+    %li.footer-sponsor-list
+      = link_to 'http://www.discourse.org/', target: '_blank' do
+        %h5.l-align-center
+          %i= t('footer.domain_and_community')
+
+        .sponsor-discourse
+          %span.l-text-hidden Discourse
+
+    %li.footer-sponsor-list
+      = link_to 'http://www.rubytune.com/', target: '_blank' do
+        %h5.l-align-center
+          %i= t('footer.bare_metal_server')
+
+        .sponsor-ruby-tune
+          %span.l-text-hidden RubyTune
+
 %hr.footer-hr
 
 .l-align-center
   %h5
     Built and maintained by
-    = link_to '@tgxworld.', 'https://github.com/tgxworld', target: '_blank'
-
-    Many thanks to our
-    = link_to 'sponsors.', sponsors_path, target: '_blank'
+    = succeed "." do
+      = link_to '@tgxworld', 'https://github.com/tgxworld', target: '_blank'

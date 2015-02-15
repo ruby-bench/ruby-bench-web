@@ -1,5 +1,6 @@
 en:
   sponsors:
+    thanks: Many thanks to our sponsors!
     jolly_good_code:
       name: Jolly Good Code
       desc: Modern craftsmen specialising in Agile practices and Ruby on Rails.
@@ -13,7 +14,7 @@ en:
     rubytune:
       name: Rubytune
       desc: Tune and troubleshoot rails apps.
-      link: http://www.rubytune.com/
+      link: https://rubytune.com/
       class_name: sponsor-ruby-tune
 
   submit: Submit
@@ -60,6 +61,7 @@ en:
     contribute: Contribute
     discuss: Discuss
     releases: Releases Benchmarks
+    sponsors: Sponsors
 
   highcharts:
     subtitle:
