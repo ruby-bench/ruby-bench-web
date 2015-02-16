@@ -3,19 +3,15 @@
 
   %hr
 
-  %h3 Where to start contributing?
+  %h3= t('.blurb')
 
   %p
-    The RubyBench project consist of the following components:
+    = t('.component_title')
 
     %ul
-      %li
-        = link_to 'ruby-bench-web: Web Application to Display and Store Results',
-            'https://github.com/ruby-bench/ruby-bench-web', target: '_blank'
-
-      %li
-        = link_to 'ruby-bench-docker: Docker Scripts to Run Benchmarks',
-            'https://github.com/ruby-bench/ruby-bench-docker'
+      - %w{ruby_bench_web ruby_bench_docker ruby_bench_suite ruby_bench_server}.each do |repo|
+        %li
+          = link_to t(".#{repo}.text"), t(".#{repo}.url")
 
   %hr
 

@@ -38,6 +38,20 @@ en:
       repositories: Projects Being Tracked
     contribute:
       title: Contributing
+      blurb: Where to start contributing?
+      component_title: "The RubyBench project consists of the following components:"
+      ruby_bench_web:
+        text: 'ruby-bench-web: Web Application to Display and Store Results'
+        url: https://github.com/ruby-bench/ruby-bench-web
+      ruby_bench_docker:
+        text: 'ruby-bench-docker: Docker Scripts to Run Benchmarks'
+        url: https://github.com/ruby-bench/ruby-bench-docker
+      ruby_bench_suite:
+        text: 'ruby-bench-suite: Benchmark scripts'
+        url: https://github.com/ruby-bench/ruby-bench-suite
+      ruby_bench_server:
+        text: 'ruby-bench-server: Script to set up new bare metal servers'
+        url: https://github.com/ruby-bench/ruby-bench-server
 
   top_nav:
     logo: RubyBench
