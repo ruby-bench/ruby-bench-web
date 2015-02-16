@@ -4,14 +4,12 @@ Capybara.javascript_driver = :webkit
 
 module Capybara
   module JavaScriptDriver
-    def before_setup
-      super
+    def require_js
       Capybara.current_driver = :webkit
     end
 
-    def teardown
+    def reset_driver
       Capybara.use_default_driver
-      super
     end
   end
 end

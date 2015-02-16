@@ -2,7 +2,12 @@ require 'acceptance/test_helper'
 
 class ViewBenchmarkGraphsTest < AcceptanceTest
   setup do
+    require_js
     Net::HTTP.stubs(:get).returns("def abc\n  puts haha\nend")
+  end
+
+  teardown do
+    reset_driver
   end
 
   test "User should be able to view a single long running benchmark graph" do
@@ -24,7 +29,8 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_content?("def abc")
 
     within ".highcharts-xaxis-labels" do
-      assert_equal find('text').text, benchmark_run.created_at.strftime("%Y-%m-%d")
+      assert_equal benchmark_run.initiator.created_at.strftime("%Y-%m-%d"),
+        find('text').text
     end
 
     benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
@@ -172,27 +178,5 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
         assert page.has_css?('.panel.panel-primary', visible: true)
       end
     end
-  end
-
-  test "User should be able to view commit's GitHub URL by clicking on a point" do
-    benchmark_run = benchmark_runs(:array_count_run)
-
-    visit '/ruby/ruby/commits'
-
-    within "form" do
-      choose(benchmark_run.benchmark_type.category)
-    end
-
-    assert page.has_content?(I18n.t("highcharts.subtitle.commit_url"))
-
-    # FIXME: Window not being opened. Capybara can't find the position of the
-    # element in HighCharts, so resort to JavaScript.
-    # github_window = window_opened_by do
-    #   page.execute_script('$(".highcharts-markers.highcharts-tracker path").click()')
-    # end
-
-    # within_window(github_window) do
-    #   assert_equal current_url, 'haha'
-    # end
   end
 end

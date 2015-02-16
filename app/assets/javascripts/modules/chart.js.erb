@@ -71,12 +71,90 @@ var drawChart = function(chartClass) {
         series: {
           point: {
             events: {
-              click: function(event) {
-                var commitHash = /^Commit: (.{7})/.exec(this.category)[1];
+              click: function() {
+                var getCommitHash = function(category) {
+                  return /^Commit: (.{7})/.exec(category)[1];
+                }
 
-                window.open("https://github.com/" + $this.data('organization') +
-                  "/" + $this.data('repo') + "/commit/" + commitHash
+                var getCommitMessage = function(category) {
+                  return /Commit Message: (.*)<br>/.exec(category)[1];
+                }
+
+                var generateCommitRow = function(commitHash, index, styleColor) {
+                  return "<tr><td><a target='_blank' style='color:" + styleColor +
+                    ";' href=" + githubCommitURL + commitHash + ">" +
+                    commitHash + " " + getCommitMessage(data[index].category) +
+                    " - " + data[index].y + " " + units + "</a></td></tr>";
+                }
+
+                var generateCompareRow = function(startCommitHash, endCommitHash) {
+                  return "<tr><td><p>~</p>" +
+                    "<a target='_blank' href='" + githubCompareURL + startCommitHash +
+                    "..." + endCommitHash + "'>" +
+                    "There may be untested commits between this range. " +
+                    "Click to view them on Github." +
+                    "</a><br>" + "<p>~</p></td></tr>";
+                }
+
+                var currentIndex = this.index;
+                var prevIndex = currentIndex - 1;
+                var nextIndex = currentIndex + 1;
+                var data = this.series.data;
+                var currentCommitHash = getCommitHash(this.category);
+                var units = this.series.yAxis.axisTitle.textStr;
+
+                var githubURL = 'https://github.com/' +
+                  $this.data('organization') + '/' + $this.data('repo') + '/';
+
+                var githubCommitURL = githubURL + "commit/";
+                var githubCompareURL = githubURL + "compare/";
+
+                if(prevIndex >= 0) {
+                  var prevCommitHash = getCommitHash(data[prevIndex].category);
+                } else {
+                  var prevCommitHash = currentCommitHash;
+                  prevIndex = currentIndex;
+                }
+
+                if(nextIndex <= (data.length -1)) {
+                  var nextCommitHash = getCommitHash(data[nextIndex].category);
+                } else {
+                  var nextCommitHash = currentCommitHash;
+                  nextIndex = currentIndex;
+                }
+
+                var $spinner = $("#chart-modal .spinner");
+                var $modalTbody = $("#chart-modal .modal-body table tbody");
+
+                $('#chart-modal .modal-title').empty().append(this.category);
+                $modalTbody.empty();
+                $spinner.toggleClass('hide');
+
+                var commitRows = "";
+
+                if(prevIndex > 0 || (data.length == 3 && currentIndex == 1)) {
+                  commitRows += generateCommitRow(
+                    prevCommitHash, prevIndex, 'black'
+                  );
+
+                  commitRows += generateCompareRow(prevCommitHash, currentCommitHash);
+                }
+
+                commitRows += generateCommitRow(
+                  currentCommitHash ,currentIndex, 'green'
                 );
+
+                if(nextIndex < (data.length - 1) || (data.length == 3 && currentIndex == 1)) {
+                  commitRows += generateCompareRow(currentCommitHash, nextCommitHash);
+
+                  commitRows += generateCommitRow(
+                    nextCommitHash ,nextIndex, 'black'
+                  );
+                }
+
+                $spinner.toggleClass('hide');
+                $modalTbody.append(commitRows);
+                $('#chart-modal').modal('show');
               }
             }
           }
