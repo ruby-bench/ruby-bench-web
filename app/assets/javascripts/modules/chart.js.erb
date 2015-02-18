@@ -77,7 +77,7 @@ var drawChart = function(chartClass) {
                 }
 
                 var getCommitMessage = function(category) {
-                  return /Commit Message: (.*)<br>/.exec(category)[1];
+                  return /Commit Message: (.{0,30})<br>/.exec(category)[1];
                 }
 
                 var generateCommitRow = function(commitHash, index, styleColor) {
