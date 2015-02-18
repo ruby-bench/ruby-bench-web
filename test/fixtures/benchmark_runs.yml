@@ -14,6 +14,22 @@ array_count_run2:
   environment: "ruby 2.2.0dev (something)"
   benchmark_type: array_count
 
+array_count_run3:
+  initiator: ruby_commit2 (Commit)
+  result:
+    :some_time: 0.123
+    :some_other_time: 0.125
+  environment: "ruby 2.2.0dev (something)"
+  benchmark_type: array_count
+
+array_count_run4:
+  initiator: ruby_commit3 (Commit)
+  result:
+    :some_time: 0.123
+    :some_other_time: 0.125
+  environment: "ruby 2.2.0dev (something)"
+  benchmark_type: array_count
+
 array_iterations_memory_run:
   initiator: ruby_2_2_0 (Release)
   result:

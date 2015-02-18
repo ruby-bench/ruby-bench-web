@@ -25,9 +25,12 @@ class ReposController < ApplicationController
           environment = temp
         end
 
+        commit = benchmark_run.initiator
+
         "
-          Commit: #{benchmark_run.initiator.sha1[0..6]}<br>
-          Commit Date: #{benchmark_run.initiator.created_at}<br>
+          Commit: #{commit.sha1[0..6]}<br>
+          Commit Date: #{commit.created_at}<br>
+          Commit Message: #{commit.message.truncate(30)}<br>
           #{environment}
         ".squish
       end
