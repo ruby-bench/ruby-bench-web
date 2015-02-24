@@ -10,7 +10,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     reset_driver
   end
 
-  test "User should be able to view a single long running benchmark graph" do
+  test "User should be able to view long running benchmark graphs" do
     benchmark_run = benchmark_runs(:array_iterations_run2)
 
     visit '/ruby/ruby/commits'
@@ -25,10 +25,23 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       choose(benchmark_run.benchmark_type.category)
     end
 
-    assert page.has_css?(".chart #highcharts-0")
+    within ".chart .highcharts-container .highcharts-yaxis-title",
+      match: :first do
+
+      assert page.has_content?(benchmark_run.benchmark_type.unit.capitalize)
+    end
+
+    assert(
+      all(".chart .highcharts-container .highcharts-yaxis-title")
+        .last
+        .has_content?(
+          benchmark_runs(:array_iterations_memory_run2).benchmark_type.unit.capitalize
+        )
+    )
+
     assert page.has_content?("def abc")
 
-    within ".highcharts-xaxis-labels" do
+    within ".highcharts-xaxis-labels", match: :first do
       assert_equal benchmark_run.initiator.created_at.strftime("%Y-%m-%d"),
         find('text').text
     end
@@ -36,6 +49,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} memory Graph")
     assert page.has_content?("#{benchmark_run_category_humanize} Script")
 
     assert_equal(
@@ -43,6 +57,17 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       "/#{benchmark_run.initiator.repo.organization.name}" \
       "/#{benchmark_run.initiator.repo.name}/commits?result_type=#{benchmark_run.benchmark_type.category}"
     )
+
+    benchmark_run = benchmark_runs(:array_count_run)
+    benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
+
+    within "form" do
+      choose(benchmark_run.benchmark_type.category)
+    end
+
+    assert page.has_css?(".chart .highcharts-container")
+    assert page.has_content?("#{benchmark_run_category_humanize} Graph")
+    assert_not page.has_content?("#{benchmark_run_category_humanize} memory Graph")
   end
 
   test "User should see long running benchmark categories as sorted" do

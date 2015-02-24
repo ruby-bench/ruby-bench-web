@@ -53,6 +53,13 @@ array_iterations_run2:
   environment: "ruby 2.2.0dev (something)"
   benchmark_type: array_iterations
 
+array_iterations_memory_run2:
+  initiator: ruby_commit2 (Commit)
+  result:
+    :rss_kb: 200
+  environment: "ruby 2.2.0dev (something)"
+  benchmark_type: array_iterations_memory
+
 array_shift_run:
   initiator: rails_commit (Commit)
   result:

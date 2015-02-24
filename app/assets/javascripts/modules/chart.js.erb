@@ -12,154 +12,156 @@ var getSubtitle = function() {
 }
 
 var drawChart = function(chartClass) {
-  $this = $(chartClass);
+  $(chartClass).each(function() {
+    $this = $(this);
 
-  if($this.length) {
-    $this.highcharts({
-      chart: {
-        zoomType: 'x'
-      },
-      subtitle: {
-        text: getSubtitle()
-      },
-      title: {
-        text: ""
-      },
-      exporting: {
-        enabled: false
-      },
-      tooltip: {
-        useHTML: true,
-        crosshairs: true,
-        shared: true,
-        positioner: function (labelWidth, labelHeight, point) {
-          if ((this.chart.chartWidth / 2) > point.plotX ) {
-            return { x: this.chart.chartWidth - labelWidth - 20, y: 50 };
-          } else {
-            return { x: 80, y: 50 };
-          }
+    if($this.length) {
+      $this.highcharts({
+        chart: {
+          zoomType: 'x'
         },
-        shadow: false,
-        animation: false,
-        shape: 'square'
-      },
-      xAxis: {
-        categories: $this.data('categories'),
-        labels: {
-          formatter: function () {
-            var date = /Commit Date: (\d{4}-\d{2}-\d{2})/.exec(this.value);
-            if (date != null) {
-              return date[1];
-            }
-          }
+        subtitle: {
+          text: getSubtitle()
         },
-        tickInterval: $this.data('tick-interval')
-      },
-      yAxis: {
         title: {
-          text: $this.data('unit'),
+          text: ""
         },
-        type: 'logarithmic'
-      },
-      legend: {
-        layout: 'horizontal',
-        align: 'center',
-        verticalAlign: 'bottom'
-      },
-      series: $this.data('columns'),
-      plotOptions: {
-        series: {
-          point: {
-            events: {
-              click: function() {
-                var getCommitHash = function(category) {
-                  return /^Commit: (.{7})/.exec(category)[1];
-                }
+        exporting: {
+          enabled: false
+        },
+        tooltip: {
+          useHTML: true,
+          crosshairs: true,
+          shared: true,
+          positioner: function (labelWidth, labelHeight, point) {
+            if ((this.chart.chartWidth / 2) > point.plotX ) {
+              return { x: this.chart.chartWidth - labelWidth - 20, y: 50 };
+            } else {
+              return { x: 80, y: 50 };
+            }
+          },
+          shadow: false,
+          animation: false,
+          shape: 'square'
+        },
+        xAxis: {
+          categories: $this.data('categories'),
+          labels: {
+            formatter: function () {
+              var date = /Commit Date: (\d{4}-\d{2}-\d{2})/.exec(this.value);
+              if (date != null) {
+                return date[1];
+              }
+            }
+          },
+          tickInterval: $this.data('tick-interval')
+        },
+        yAxis: {
+          title: {
+            text: $this.data('unit'),
+          },
+          type: 'logarithmic'
+        },
+        legend: {
+          layout: 'horizontal',
+          align: 'center',
+          verticalAlign: 'bottom'
+        },
+        series: $this.data('columns'),
+        plotOptions: {
+          series: {
+            point: {
+              events: {
+                click: function() {
+                  var getCommitHash = function(category) {
+                    return /^Commit: (.{7})/.exec(category)[1];
+                  }
 
-                var getCommitMessage = function(category) {
-                  return /Commit Message: (.{0,30})<br>/.exec(category)[1];
-                }
+                  var getCommitMessage = function(category) {
+                    return /Commit Message: (.{0,30})<br>/.exec(category)[1];
+                  }
 
-                var generateCommitRow = function(commitHash, index, styleColor) {
-                  return "<tr><td><a target='_blank' style='color:" + styleColor +
-                    ";' href=" + githubCommitURL + commitHash + ">" +
-                    commitHash + " " + getCommitMessage(data[index].category) +
-                    " - " + data[index].y + " " + units + "</a></td></tr>";
-                }
+                  var generateCommitRow = function(commitHash, index, styleColor) {
+                    return "<tr><td><a target='_blank' style='color:" + styleColor +
+                      ";' href=" + githubCommitURL + commitHash + ">" +
+                      commitHash + " " + getCommitMessage(data[index].category) +
+                      " - " + data[index].y + " " + units + "</a></td></tr>";
+                  }
 
-                var generateCompareRow = function(startCommitHash, endCommitHash) {
-                  return "<tr><td><p>~</p>" +
-                    "<a target='_blank' href='" + githubCompareURL + startCommitHash +
-                    "..." + endCommitHash + "'>" +
-                    "There may be untested commits between this range. " +
-                    "Click to view them on GitHub." +
-                    "</a><br>" + "<p>~</p></td></tr>";
-                }
+                  var generateCompareRow = function(startCommitHash, endCommitHash) {
+                    return "<tr><td><p>~</p>" +
+                      "<a target='_blank' href='" + githubCompareURL + startCommitHash +
+                      "..." + endCommitHash + "'>" +
+                      "There may be untested commits between this range. " +
+                      "Click to view them on GitHub." +
+                      "</a><br>" + "<p>~</p></td></tr>";
+                  }
 
-                var currentIndex = this.index;
-                var prevIndex = currentIndex - 1;
-                var nextIndex = currentIndex + 1;
-                var data = this.series.data;
-                var currentCommitHash = getCommitHash(this.category);
-                var units = this.series.yAxis.axisTitle.textStr;
+                  var currentIndex = this.index;
+                  var prevIndex = currentIndex - 1;
+                  var nextIndex = currentIndex + 1;
+                  var data = this.series.data;
+                  var currentCommitHash = getCommitHash(this.category);
+                  var units = this.series.yAxis.axisTitle.textStr;
 
-                var githubURL = 'https://github.com/' +
-                  $this.data('organization') + '/' + $this.data('repo') + '/';
+                  var githubURL = 'https://github.com/' +
+                    $this.data('organization') + '/' + $this.data('repo') + '/';
 
-                var githubCommitURL = githubURL + "commit/";
-                var githubCompareURL = githubURL + "compare/";
+                  var githubCommitURL = githubURL + "commit/";
+                  var githubCompareURL = githubURL + "compare/";
 
-                if(prevIndex >= 0) {
-                  var prevCommitHash = getCommitHash(data[prevIndex].category);
-                } else {
-                  var prevCommitHash = currentCommitHash;
-                  prevIndex = currentIndex;
-                }
+                  if(prevIndex >= 0) {
+                    var prevCommitHash = getCommitHash(data[prevIndex].category);
+                  } else {
+                    var prevCommitHash = currentCommitHash;
+                    prevIndex = currentIndex;
+                  }
 
-                if(nextIndex <= (data.length -1)) {
-                  var nextCommitHash = getCommitHash(data[nextIndex].category);
-                } else {
-                  var nextCommitHash = currentCommitHash;
-                  nextIndex = currentIndex;
-                }
+                  if(nextIndex <= (data.length -1)) {
+                    var nextCommitHash = getCommitHash(data[nextIndex].category);
+                  } else {
+                    var nextCommitHash = currentCommitHash;
+                    nextIndex = currentIndex;
+                  }
 
-                var $spinner = $("#chart-modal .spinner");
-                var $modalTbody = $("#chart-modal .modal-body table tbody");
+                  var $spinner = $("#chart-modal .spinner");
+                  var $modalTbody = $("#chart-modal .modal-body table tbody");
 
-                $('#chart-modal .modal-title').empty().append(this.category);
-                $modalTbody.empty();
-                $spinner.toggleClass('hide');
+                  $('#chart-modal .modal-title').empty().append(this.category);
+                  $modalTbody.empty();
+                  $spinner.toggleClass('hide');
 
-                var commitRows = "";
+                  var commitRows = "";
 
-                if(prevIndex > 0 || (data.length == 3 && currentIndex == 1)) {
+                  if(prevIndex > 0 || (data.length == 3 && currentIndex == 1)) {
+                    commitRows += generateCommitRow(
+                      prevCommitHash, prevIndex, 'black'
+                    );
+
+                    commitRows += generateCompareRow(prevCommitHash, currentCommitHash);
+                  }
+
                   commitRows += generateCommitRow(
-                    prevCommitHash, prevIndex, 'black'
+                    currentCommitHash ,currentIndex, 'green'
                   );
 
-                  commitRows += generateCompareRow(prevCommitHash, currentCommitHash);
+                  if(nextIndex < (data.length - 1) || (data.length == 3 && currentIndex == 1)) {
+                    commitRows += generateCompareRow(currentCommitHash, nextCommitHash);
+
+                    commitRows += generateCommitRow(
+                      nextCommitHash ,nextIndex, 'black'
+                    );
+                  }
+
+                  $spinner.toggleClass('hide');
+                  $modalTbody.append(commitRows);
+                  $('#chart-modal').modal('show');
                 }
-
-                commitRows += generateCommitRow(
-                  currentCommitHash ,currentIndex, 'green'
-                );
-
-                if(nextIndex < (data.length - 1) || (data.length == 3 && currentIndex == 1)) {
-                  commitRows += generateCompareRow(currentCommitHash, nextCommitHash);
-
-                  commitRows += generateCommitRow(
-                    nextCommitHash ,nextIndex, 'black'
-                  );
-                }
-
-                $spinner.toggleClass('hide');
-                $modalTbody.append(commitRows);
-                $('#chart-modal').modal('show');
               }
             }
           }
         }
-      }
-    });
-  }
+      });
+    }
+  })
 };

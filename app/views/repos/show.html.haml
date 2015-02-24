@@ -12,6 +12,7 @@
   = render 'layouts/spinner'
 
   #chart-container
-    = render 'show_chart', chart_columns: @chart_columns, benchmark_type: @benchmark_type
+    = render 'show_chart', charts: @charts, benchmark_type: @benchmark_type,
+        benchmark_type_memory: @benchmark_type_memory
 
 = render 'chart_modal'
