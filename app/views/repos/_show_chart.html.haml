@@ -1,4 +1,4 @@
-- if !chart_columns || chart_columns.empty?
+- if !charts || charts.empty?
   .alert.alert-warning
     .l-align-center
       %strong= t('repos.show.select_benchmark')
@@ -12,12 +12,23 @@
   %h2.l-align-center
     = t('repos.show.graph_title', graph_name: benchmark_name)
 
-  .chart{ data: { tick_interval: JSON.parse(chart_columns[:columns]).first['data'].count / 4,
+  .chart{ data: { tick_interval: JSON.parse(charts.first[:columns]).first['data'].count / 4,
     unit: benchmark_type.unit.capitalize,
-    columns: chart_columns[:columns],
-    categories: chart_columns[:categories],
+    columns: charts.first[:columns],
+    categories: charts.first[:categories],
     organization: @organization.name,
     repo: @repo.name } }
+
+  - if charts.count > 1
+    %h2.l-align-center
+      = t('repos.show.graph_title', graph_name: "#{benchmark_name} memory")
+
+    .chart{ data: { tick_interval: JSON.parse(charts.last[:columns]).first['data'].count / 4,
+      unit: benchmark_type_memory.unit.capitalize,
+      columns: charts.last[:columns],
+      categories: charts.last[:categories],
+      organization: @organization.name,
+      repo: @repo.name } }
 
   - if script_url = benchmark_type.script_url
     %h2.l-align-center

@@ -4,36 +4,43 @@ class ReposController < ApplicationController
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
 
     if @form_result_type = params[:result_type]
-      @benchmark_type = find_repo_benchmark_type_by_category(@form_result_type)
+      @charts =
+        [@form_result_type, "#{@form_result_type}_memory"].each_with_index.map do |result_type, index|
+          instance_variable_name = index == 0 ? :@benchmark_type : :@benchmark_type_memory
 
-      chart_builder = ChartBuilder.new(
-        fetch_benchmark_runs(@repo.commits, 'Commit', @form_result_type).sort_by do |benchmark_run|
-          benchmark_run.initiator.created_at
-        end
-      )
+          self.instance_variable_set(
+            instance_variable_name, find_repo_benchmark_type_by_category(result_type)
+          )
 
-      @chart_columns = chart_builder.build_columns do |benchmark_run|
-        environment = YAML.load(benchmark_run.environment)
+          chart_builder = ChartBuilder.new(
+            fetch_benchmark_runs(@repo.commits, 'Commit', result_type).sort_by do |benchmark_run|
+              benchmark_run.initiator.created_at
+            end
+          )
 
-        if environment.is_a?(Hash)
-          temp = ""
+          chart_builder.build_columns do |benchmark_run|
+            environment = YAML.load(benchmark_run.environment)
 
-          environment.each do |key, value|
-            temp << "#{key}: #{value}<br>"
+            if environment.is_a?(Hash)
+              temp = ""
+
+              environment.each do |key, value|
+                temp << "#{key}: #{value}<br>"
+              end
+
+              environment = temp
+            end
+
+            commit = benchmark_run.initiator
+
+            "
+              Commit: #{commit.sha1[0..6]}<br>
+              Commit Date: #{commit.created_at}<br>
+              Commit Message: #{commit.message.truncate(30)}<br>
+              #{environment}
+            ".squish
           end
-
-          environment = temp
-        end
-
-        commit = benchmark_run.initiator
-
-        "
-          Commit: #{commit.sha1[0..6]}<br>
-          Commit Date: #{commit.created_at}<br>
-          Commit Message: #{commit.message.truncate(30)}<br>
-          #{environment}
-        ".squish
-      end
+        end.compact
     end
 
     respond_to do |format|
