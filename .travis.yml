@@ -8,6 +8,9 @@ bundler_args: --without development:production --deployment --retry=3 --jobs=3
 before_script:
   - bundle exec rake db:create
   - bundle exec rake db:migrate
-script: xvfb-run bundle exec rake test
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+script: bundle exec rake test
 addons:
   postgresql: "9.3"
