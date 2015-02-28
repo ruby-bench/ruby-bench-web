@@ -16,6 +16,7 @@ gem 'bootstrap-sass', '~> 3.3.3'
 gem 'pygments.rb', '~> 0.6.0'
 gem 'rails-assets-highcharts', '~> 4.0.4'
 gem 'redis', '~> 3.2.1'
+gem 'redis-rails', '~> 4.0.0'
 
 group :development do
   gem 'spring'
