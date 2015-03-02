@@ -20,6 +20,7 @@ class BenchmarkRunsController < APIController
     end
 
     benchmark_type = repo.benchmark_types.find_or_create_by!(benchmark_type_params)
+    BenchmarkTypeDigestJob.perform_later(benchmark_type)
 
     benchmark_run = BenchmarkRun.find_or_initialize_by(
       initiator: initiator, benchmark_type: benchmark_type
