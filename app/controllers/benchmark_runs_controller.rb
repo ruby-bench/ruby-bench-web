@@ -27,8 +27,6 @@ class BenchmarkRunsController < APIController
 
     benchmark_run.update_attributes(benchmark_run_params)
     benchmark_run.result = params[:benchmark_run][:result]
-
-    # TODO: Some notifications feature to say this failed
     benchmark_run.save!
 
     render nothing: true
