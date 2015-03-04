@@ -24,6 +24,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet', '~> 4.14.0'
   gem 'puma', '~> 2.9.2'
+  gem 'rack-mini-profiler', '~> 0.9.3'
 end
 
 group :development, :test do
