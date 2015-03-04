@@ -1,7 +1,7 @@
 language: ruby
 cache: bundler
 rvm:
-  - "2.2.0"
+  - "2.2.1"
 notifications:
   email: false
 bundler_args: --without development:production --deployment --retry=3 --jobs=3
