@@ -127,9 +127,6 @@ class ReposController < ApplicationController
   def fetch_categories(initiator_type)
     BenchmarkType
       .where(repo: @repo)
-      .joins(:benchmark_runs)
-      .where(benchmark_runs: { initiator_type: initiator_type })
-      .uniq
       .pluck(:category)
       .select { |category| category if !category.match(/memory\Z/) }
       .group_by { |category| category =~ /\A([^_]+)_/; $1 }

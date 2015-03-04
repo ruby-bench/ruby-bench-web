@@ -17,6 +17,9 @@ en:
       Benchmark Types
     show_benchmark_types_form: Show Benchmark Types Form
     hide_benchmark_types_form: Hide
+    no_results: >-
+      "%{category}" does not have any results. Please select another
+      Benchmark Type.
 
     show:
       script_title: *script_title

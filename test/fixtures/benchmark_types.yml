@@ -20,4 +20,4 @@ array_shift:
   category: array_shift
   unit: seconds
   script_url: https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_array_shift.rb
-  repo: rails
+  repo: ruby

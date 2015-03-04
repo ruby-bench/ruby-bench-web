@@ -70,17 +70,20 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert_not page.has_content?("#{benchmark_run_category_humanize} memory Graph")
   end
 
-  test "User should see long running benchmark categories as sorted" do
-    benchmark_run = benchmark_runs(:array_iterations_run2)
-
+  test "User should see benchmark type categories as sorted" do
     visit '/ruby/ruby/commits'
 
     within "form" do
       lis = page.all('li input')
 
-      assert_equal 2, lis.count
-      assert_equal benchmark_runs(:array_count_run).benchmark_type.category, lis.first.value
-      assert_equal benchmark_run.benchmark_type.category, lis.last.value
+      assert_equal(
+        lis.map(&:value),
+        [
+          benchmark_types(:array_count).category,
+          benchmark_types(:array_iterations).category,
+          benchmark_types(:array_shift).category
+        ]
+      )
     end
   end
 
@@ -162,30 +165,18 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     )
   end
 
-  test "User should see releases benchmark categories as sorted" do
-    benchmark_run = benchmark_runs(:array_iterations_run)
+  test "User should see the right message for benchmark types with no
+    benchmark runs".squish do
 
+    category = benchmark_types(:array_shift).category
     visit '/ruby/ruby/releases'
 
     within "form" do
-      lis = page.all('li input')
-
-      assert_equal 2, lis.count
-      assert_equal benchmark_runs(:array_count_run).benchmark_type.category, lis.first.value
-      assert_equal benchmark_run.benchmark_type.category, lis.last.value
+      choose(category)
     end
-  end
 
-  test "User should not see benchmark categories which have no benchmark runs" do
-    benchmark_run = benchmark_runs(:array_shift_run)
-
-    visit '/rails/rails/releases'
-
-    within "form" do
-      lis = page.all('li input')
-      values = lis.map { |l| l.value }
-      assert_not values.include?(benchmark_run.benchmark_type.category)
-    end
+    assert_not page.has_css?(".release-chart .highcharts-container")
+    assert page.has_content?(I18n.t("repos.no_results", category: category))
   end
 
   test "User should be able to hide benchmark types form" do

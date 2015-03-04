@@ -1,10 +1,15 @@
-- if !charts || charts.empty?
+- if !charts
   .alert.alert-warning
     .l-align-center
       %strong= t('repos.show_releases.select_benchmark')
 
   .alert.alert-info
     = render 'description'
+
+- elsif charts.empty?
+  .alert.alert-warning
+    .l-align-center
+      %strong= t('repos.no_results', category: benchmark_type.category)
 
 - else
   %h2.l-align-center
