@@ -98,7 +98,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   end
 
   def post_results(params = {}, attribute_params = {})
-    BenchmarkTypeDigestJob.expects(:perform_later)
+    BenchmarkTypeValidatorJob.expects(:perform_later)
 
     post('/benchmark_runs',
       {

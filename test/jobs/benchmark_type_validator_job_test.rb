@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BenchmarkTypeDigestJobTest < ActiveJob::TestCase
+class BenchmarkTypeValidatorJobTest < ActiveJob::TestCase
   setup do
     @benchmark_type = benchmark_types(:array_count)
     @mock_benchmark_script = "Array.new"
@@ -12,7 +12,13 @@ class BenchmarkTypeDigestJobTest < ActiveJob::TestCase
 
     assert @benchmark_type.digest.blank?
 
-    BenchmarkTypeDigestJob.new.perform(@benchmark_type)
-    assert digest, @benchmark_type.digest
+    BenchmarkTypeValidatorJob.new.perform(@benchmark_type)
+    assert_equal digest, @benchmark_type.digest
+
+    result = @benchmark_type.benchmark_runs.all? do |bm|
+      !bm.validity
+    end
+
+    assert result
   end
 end
