@@ -12,6 +12,6 @@ class BenchmarkRun < ActiveRecord::Base
     where(initiator_id: initiators_ids, initiator_type: initiator_type)
   end
 
-  PAGINATE_COUNT = [20, 50 ,100, 200, 400, 500]
+  PAGINATE_COUNT = [20, 50 ,100, 200, 400, 500, 750, 1000]
   DEFAULT_PAGINATE_COUNT = 200
 end
