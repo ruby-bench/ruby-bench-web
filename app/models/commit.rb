@@ -1,7 +1,7 @@
 class Commit < ActiveRecord::Base
   extend CommitReviewer
 
-  default_scope { order("#{self.table_name}.created_at ASC") }
+  default_scope { order("#{self.table_name}.created_at DESC") }
 
   belongs_to :repo
   has_many :benchmark_runs, as: :initiator, dependent: :destroy

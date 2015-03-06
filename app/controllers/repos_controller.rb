@@ -11,6 +11,8 @@ class ReposController < ApplicationController
       end
 
     if @form_result_type = params[:result_type]
+      commits = @repo.commits.limit(@benchmark_run_display_count)
+
       @charts =
         [@form_result_type, "#{@form_result_type}_memory"].each_with_index.map do |result_type, index|
           instance_variable_name = index == 0 ? :@benchmark_type : :@benchmark_type_memory
@@ -20,7 +22,7 @@ class ReposController < ApplicationController
           )
 
           chart_builder = ChartBuilder.new(
-            fetch_benchmark_runs(@repo.commits, 'Commit', result_type).sort_by do |benchmark_run|
+            fetch_benchmark_runs(commits, 'Commit', result_type).sort_by do |benchmark_run|
               benchmark_run.initiator.created_at
             end
           )
@@ -129,7 +131,6 @@ class ReposController < ApplicationController
       .preload(:initiator)
       .joins(:benchmark_type)
       .where('benchmark_types.category = ?', form_result_type)
-      .limit(@benchmark_run_display_count)
   end
 
   def fetch_categories(initiator_type)
