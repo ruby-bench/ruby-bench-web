@@ -23,7 +23,6 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet', '~> 4.14.0'
-  gem 'puma', '~> 2.9.2'
   gem 'rack-mini-profiler', '~> 0.9.3'
 end
 
@@ -42,9 +41,12 @@ group :test do
   gem 'minitest-stub-const', '~> 0.3'
 end
 
+group :production, :development do
+  gem 'passenger', '~> 5.0.1'
+end
+
 group :production do
   gem 'rails_12factor'
   gem 'newrelic_rpm'
-  gem 'passenger', '5.0.0.beta3'
   gem 'rollbar', '~> 1.3.1'
 end
