@@ -3,6 +3,13 @@ class ReposController < ApplicationController
     @organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
 
+    @benchmark_run_display_count =
+      if BenchmarkRun::PAGINATE_COUNT.include?(params[:display_count].to_i)
+        params[:display_count]
+      else
+        BenchmarkRun::DEFAULT_PAGINATE_COUNT
+      end
+
     if @form_result_type = params[:result_type]
       @charts =
         [@form_result_type, "#{@form_result_type}_memory"].each_with_index.map do |result_type, index|
@@ -122,6 +129,7 @@ class ReposController < ApplicationController
       .preload(:initiator)
       .joins(:benchmark_type)
       .where('benchmark_types.category = ?', form_result_type)
+      .limit(@benchmark_run_display_count)
   end
 
   def fetch_categories(initiator_type)

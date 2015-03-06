@@ -39,6 +39,7 @@ group :test do
   gem 'capybara-webkit', '~> 1.3.1'
   gem 'launchy', '~> 2.4.3'
   gem 'selenium-webdriver', '~> 2.44.0'
+  gem 'minitest-stub-const', '~> 0.3'
 end
 
 group :production do

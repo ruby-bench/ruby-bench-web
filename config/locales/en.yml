@@ -27,6 +27,8 @@ en:
       title: "%{repo_name} Long Running Benchmarks"
       benchmark_types: *benchmark_types
       select_benchmark: *select_benchmark
+      results: results
+      show_last: Show the last
     show_releases:
       title: "%{repo_name} Releases Benchmarks"
       benchmark_types: *benchmark_types

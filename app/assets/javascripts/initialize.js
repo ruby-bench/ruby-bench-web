@@ -2,7 +2,7 @@ $(document).ready(function() {
   var locationPathName = location.pathname != '/' ? location.pathname : '/ruby/ruby/releases';
   $(".top-nav a[href='" + locationPathName + "']").addClass('current');
 
-  $(".result-types-form input[type=radio]").change(function(value) {
+  $(".result-types-form input[type=radio], #benchmark_run_display_count").change(function(value) {
     var $spinner = $(".spinner");
     var xhr;
 
@@ -16,12 +16,21 @@ $(document).ready(function() {
     var organizationName = $resultTypesForm.data('organization-name');
     var repoName = $resultTypesForm.data('repo-name');
     var name = $resultTypesForm.data('name')
-    var resultType = $(this).val();
+    var resultType = $(".result-types-form input[type=radio]:checked").val();
+    var benchmarkRunDisplayCount = $("#benchmark_run_display_count").val();
+
+    if(benchmarkRunDisplayCount != undefined) {
+      displayCount = benchmarkRunDisplayCount;
+      displayUrlParams = "&display_count=" + benchmarkRunDisplayCount;
+    } else {
+      displayCount = undefined;
+      displayUrlParams = '';
+    }
 
     xhr = $.ajax({
       url: "/" + organizationName + "/" + repoName + "/" + name,
       type: 'GET',
-      data: { result_type: resultType },
+      data: { result_type: resultType, display_count: benchmarkRunDisplayCount },
       dataType: 'script',
       beforeSend: function() {
         $spinner.toggleClass('hide');
@@ -29,7 +38,14 @@ $(document).ready(function() {
         $('html,body').animate({scrollTop:0},0);
 
         if (history && history.pushState) {
-          history.pushState(null, '', "/" + organizationName + "/" + repoName + "/" + name + '?result_type=' + resultType);
+          history.pushState(null, '',
+            "/" +
+            organizationName +
+            "/" + repoName +
+            "/" + name +
+            '?result_type=' +
+            resultType + displayUrlParams
+          );
         }
       },
       complete: function() {

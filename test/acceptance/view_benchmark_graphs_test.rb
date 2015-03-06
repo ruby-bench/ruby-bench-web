@@ -55,7 +55,8 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert_equal(
       URI.parse(page.current_url).request_uri,
       "/#{benchmark_run.initiator.repo.organization.name}" \
-      "/#{benchmark_run.initiator.repo.name}/commits?result_type=#{benchmark_run.benchmark_type.category}"
+      "/#{benchmark_run.initiator.repo.name}/commits?result_type=" \
+      "#{benchmark_run.benchmark_type.category}&display_count=#{BenchmarkRun::DEFAULT_PAGINATE_COUNT}"
     )
 
     benchmark_run = benchmark_runs(:array_count_run)
@@ -68,6 +69,24 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_css?(".chart .highcharts-container")
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
     assert_not page.has_content?("#{benchmark_run_category_humanize} memory Graph")
+  end
+
+  test "User should be able to select number of benchmark runs to display
+    for long running benchmark graphs" do
+
+    benchmark_type = benchmark_types(:array_count)
+
+    BenchmarkRun.stub_const(:PAGINATE_COUNT, [1, 3]) do
+      BenchmarkRun.stub_const(:DEFAULT_PAGINATE_COUNT, 1) do
+        visit "/ruby/ruby/commits?result_type=#{benchmark_type.category}"
+
+        assert assert_selector(".highcharts-markers path", count: 1)
+
+        select 3, from: "benchmark_run_display_count"
+
+        assert assert_selector(".highcharts-markers path", count: 3)
+      end
+    end
   end
 
   test "User should see benchmark type categories as sorted" do

@@ -112,6 +112,7 @@ GEM
     mime-types (2.4.3)
     mini_portile (0.6.1)
     minitest (5.5.0)
+    minitest-stub-const (0.3)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     moneta (0.8.0)
@@ -247,6 +248,7 @@ DEPENDENCIES
   haml (~> 4.0.5)
   jquery-rails
   launchy (~> 2.4.3)
+  minitest-stub-const (~> 0.3)
   mocha (~> 1.1.0)
   net-ssh (~> 2.9.1)
   newrelic_rpm
