@@ -21,8 +21,11 @@ class ReposController < ApplicationController
             instance_variable_name, find_repo_benchmark_type_by_category(result_type)
           )
 
+          benchmark_runs = fetch_benchmark_runs(commits, 'Commit', result_type)
+          next if benchmark_runs.empty?
+
           chart_builder = ChartBuilder.new(
-            fetch_benchmark_runs(commits, 'Commit', result_type).sort_by do |benchmark_run|
+            benchmark_runs.sort_by do |benchmark_run|
               benchmark_run.initiator.created_at
             end
           )
