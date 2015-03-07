@@ -1,6 +1,6 @@
 class ChartBuilder
   def initialize(benchmark_runs)
-    @benchmark_runs = benchmark_runs.to_a
+    @benchmark_runs = benchmark_runs
   end
 
   def build_columns
