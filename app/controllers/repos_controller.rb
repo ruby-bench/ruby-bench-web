@@ -3,9 +3,11 @@ class ReposController < ApplicationController
     @organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
 
+    display_count = params[:display_count].to_i
+
     @benchmark_run_display_count =
-      if BenchmarkRun::PAGINATE_COUNT.include?(params[:display_count].to_i)
-        params[:display_count]
+      if BenchmarkRun::PAGINATE_COUNT.include?(display_count)
+        display_count
       else
         BenchmarkRun::DEFAULT_PAGINATE_COUNT
       end
