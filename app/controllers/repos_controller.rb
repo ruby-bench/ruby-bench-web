@@ -13,7 +13,7 @@ class ReposController < ApplicationController
       end
 
     if @form_result_type = params[:result_type]
-      commits = @repo.commits.limit(@benchmark_run_display_count)
+      commits_ids = @repo.commits.limit(@benchmark_run_display_count).pluck(:id)
 
       @charts =
         [@form_result_type, "#{@form_result_type}_memory"].each_with_index.map do |result_type, index|
@@ -23,7 +23,7 @@ class ReposController < ApplicationController
             instance_variable_name, find_repo_benchmark_type_by_category(result_type)
           )
 
-          benchmark_runs = fetch_benchmark_runs(commits, 'Commit', result_type).to_a
+          benchmark_runs = fetch_benchmark_runs(commits_ids, 'Commit', result_type).to_a
           next if benchmark_runs.empty?
 
           chart_builder = ChartBuilder.new(
@@ -67,7 +67,7 @@ class ReposController < ApplicationController
   def show_releases
     @organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
-    releases = @repo.releases
+    releases_ids = @repo.releases.pluck(:id)
 
     if @form_result_type = params[:result_type]
       @charts =
@@ -78,7 +78,7 @@ class ReposController < ApplicationController
             instance_variable_name, find_repo_benchmark_type_by_category(result_type)
           )
 
-          benchmark_runs = fetch_benchmark_runs(@repo.releases, 'Release', result_type).to_a
+          benchmark_runs = fetch_benchmark_runs(releases_ids, 'Release', result_type).to_a
           next if benchmark_runs.empty?
 
           chart_builder = ChartBuilder.new(
@@ -128,10 +128,10 @@ class ReposController < ApplicationController
     @repo.benchmark_types.find_by_category(category)
   end
 
-  def fetch_benchmark_runs(initiators, initiator_type, form_result_type)
+  def fetch_benchmark_runs(initiators_ids, initiator_type, form_result_type)
     BenchmarkRun
-      .initiators(initiators.map(&:id), initiator_type)
-      .preload(:initiator)
+      .initiators(initiators_ids, initiator_type)
+      .includes(:initiator)
       .joins(:benchmark_type)
       .where('benchmark_types.category = ?', form_result_type)
   end
