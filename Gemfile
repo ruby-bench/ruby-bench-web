@@ -42,7 +42,7 @@ group :test do
 end
 
 group :production, :development do
-  gem 'passenger', '~> 5.0.1'
+  gem 'puma', '~> 2.11.1'
 end
 
 group :production do

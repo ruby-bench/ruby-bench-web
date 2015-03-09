@@ -121,13 +121,12 @@ GEM
     newrelic_rpm (3.9.9.275)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
-    passenger (5.0.1)
-      rack
-      rake (>= 0.8.1)
     pg (0.17.1)
     platform-api (0.2.0)
       heroics (~> 0.0.10)
     posix-spawn (0.3.9)
+    puma (2.11.1)
+      rack (>= 1.1, < 2.0)
     pygments.rb (0.6.0)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
@@ -248,9 +247,9 @@ DEPENDENCIES
   mocha (~> 1.1.0)
   net-ssh (~> 2.9.1)
   newrelic_rpm
-  passenger (~> 5.0.1)
   pg
   platform-api (~> 0.2.0)
+  puma (~> 2.11.1)
   pygments.rb (~> 0.6.0)
   rack-mini-profiler (~> 0.9.3)
   rails (= 4.2.0)
