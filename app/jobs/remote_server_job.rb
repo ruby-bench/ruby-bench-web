@@ -1,4 +1,4 @@
-class RemoteServerJob < ApplicationJob
+class RemoteServerJob < ActiveJob::Base
   queue_as :default
 
   # Use keyword arguments once Rails 4.2.1 has been released.
