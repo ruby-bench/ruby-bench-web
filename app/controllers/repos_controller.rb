@@ -137,8 +137,7 @@ class ReposController < ApplicationController
   end
 
   def fetch_categories(initiator_type)
-    BenchmarkType
-      .where(repo: @repo)
+    @repo.benchmark_types
       .pluck(:category)
       .select { |category| category if !category.match(/memory\Z/) }
       .group_by { |category| category =~ /\A([^_]+)_/; $1 }
