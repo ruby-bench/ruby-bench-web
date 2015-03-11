@@ -20,7 +20,7 @@ class ReposController < ApplicationController
           instance_variable_name = index == 0 ? :@benchmark_type : :@benchmark_type_memory
 
           self.instance_variable_set(
-            instance_variable_name, find_repo_benchmark_type_by_category(result_type)
+            instance_variable_name, find_benchmark_type_by_category(result_type)
           )
 
           benchmark_runs = fetch_benchmark_runs(commits_ids, 'Commit', result_type).to_a
@@ -75,7 +75,7 @@ class ReposController < ApplicationController
           instance_variable_name = index == 0 ? :@benchmark_type : :@benchmark_type_memory
 
           self.instance_variable_set(
-            instance_variable_name, find_repo_benchmark_type_by_category(result_type)
+            instance_variable_name, find_benchmark_type_by_category(result_type)
           )
 
           benchmark_runs = fetch_benchmark_runs(releases_ids, 'Release', result_type).to_a
@@ -124,7 +124,7 @@ class ReposController < ApplicationController
     organization.repos.find_by_name(name)
   end
 
-  def find_repo_benchmark_type_by_category(category)
+  def find_benchmark_type_by_category(category)
     @repo.benchmark_types.find_by_category(category)
   end
 
