@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
-source 'https://rails-assets.org'
+source 'https://rails-assets.org' do
+  gem 'rails-assets-highcharts', '~> 4.0.4'
+end
 
 ruby '2.2.1'
 
@@ -14,7 +16,6 @@ gem 'platform-api', '~> 0.2.0'
 gem 'haml', '~> 4.0.5'
 gem 'bootstrap-sass', '~> 3.3.3'
 gem 'pygments.rb', '~> 0.6.0'
-gem 'rails-assets-highcharts', '~> 4.0.4'
 gem 'redis', '~> 3.2.1'
 gem 'redis-rails', '~> 4.0.0'
 
