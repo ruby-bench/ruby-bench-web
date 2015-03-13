@@ -253,7 +253,7 @@ DEPENDENCIES
   pygments.rb (~> 0.6.0)
   rack-mini-profiler (~> 0.9.3)
   rails (= 4.2.0)
-  rails-assets-highcharts (~> 4.0.4)
+  rails-assets-highcharts (~> 4.0.4)!
   rails_12factor
   redis (~> 3.2.1)
   redis-rails (~> 4.0.0)
