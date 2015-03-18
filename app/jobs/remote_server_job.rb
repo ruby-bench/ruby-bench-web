@@ -86,23 +86,6 @@ class RemoteServerJob < ApplicationJob
     )
   end
 
-  def discourse_rails_head_bench(ssh, commit_hash, options)
-    execute_ssh_commands(ssh,
-      [
-        "docker pull rubybench/discourse_rails_head_bench",
-        "docker run --name discourse_redis -d redis:2.8.19",
-        "docker run --name discourse_postgres -d postgres:9.3.5",
-        "docker run --rm --link discourse_postgres:postgres
-          --link discourse_redis:redis -e \"RAILS_COMMIT_HASH=#{commit_hash}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          rubybench/discourse_rails_head_bench".squish,
-        "docker stop discourse_postgres discourse_redis",
-        "docker rm discourse_postgres discourse_redis"
-      ]
-    )
-  end
-
   def ruby_trunk_discourse(ssh, commit_hash, options)
     execute_ssh_commands(ssh,
       [
