@@ -22,14 +22,15 @@ class ReposController < ApplicationController
       end
 
       cached_charts_columns = $redis.get("#{@form_result_type}_#{@benchmark_run_display_count}")
+      repo_commits_count = @repo.commits.count
 
       @charts =
-        if $redis.get('commits_count').to_i == Commit.count && cached_charts_columns
+        if $redis.get('commits_count').to_i == repo_commits_count && cached_charts_columns
           cached_charts_columns = JSON.parse(cached_charts_columns)
           cached_charts_columns.each { |h| h.symbolize_keys! }
           cached_charts_columns
         else
-          $redis.set('commits_count', Commit.count)
+          $redis.set('commits_count', repo_commits_count)
           commits_ids = @repo.commits.limit(@benchmark_run_display_count).pluck(:id)
 
           charts_columns = [@form_result_type, "#{@form_result_type}_memory"].each_with_index.map do |result_type, index|
