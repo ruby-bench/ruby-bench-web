@@ -16,6 +16,7 @@
 
 .sponsor-discourse {
   @include inline-image('sponsors/discourse.png', 75px, 256px);
+  background-color: white;
 }
 
 .sponsor-jolly-good-code {
