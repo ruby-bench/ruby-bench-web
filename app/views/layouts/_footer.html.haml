@@ -1,10 +1,14 @@
 .footer-sponsors.l-align-center
   %ul.list-inline.footer-sponsors-list
     %li.footer-sponsor-list
-      = link_to 'http://www.jollygoodcode.com/', target: '_blank' do
-        %h5.l-align-center
-          %i= t('footer.supported_by')
+      %h5.l-align-center
+        %i= t('footer.supported_by')
 
+      = link_to t('sponsors.ruby_together.link'), target: '_blank' do
+        .sponsor-ruby-together
+          %span.l-text-hidden= t('sponsors.ruby_together.name')
+
+      = link_to 'http://www.jollygoodcode.com/', target: '_blank' do
         .sponsor-jolly-good-code
           %span.l-text-hidden Jolly Good Code
 

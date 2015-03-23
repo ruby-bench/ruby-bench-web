@@ -21,6 +21,13 @@ en:
       desc: Tune and troubleshoot rails apps.
       link: https://rubytune.com/
       class_name: sponsor-ruby-tune
+    ruby_together:
+      name:  Ruby Together
+      desc: >-
+        Ruby Together is dedicated to sustaining and improving the tools and
+        infrastructure of the Ruby programming language.
+      link: https://www.rubytogether.org/
+      class_name: sponsor-ruby-together
 
   submit: Submit
 
