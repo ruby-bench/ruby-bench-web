@@ -1,0 +1,97 @@
+base_image: "rubybench/rubybench_docker"
+
+update_pups: false
+
+params:
+  db_name: rubybench_production
+  db_user: rubybench
+  home: /var/www/ruby-bench-web
+
+templates:
+  - "templates/redis.template.yml"
+  - "templates/postgres.template.yml"
+
+expose:
+  - "80:80"
+
+hooks:
+  after_postgres:
+    - exec:
+        background: true
+        cmd: "sudo -u redis /usr/bin/redis-server /etc/redis/redis.conf --dbfilename test.rdb"
+
+    - exec:
+        cd: $home
+        cmd:
+          - git checkout production
+          - git pull --rebase origin production
+          - sudo -u rubybench bundle install -j4 --deployment --verbose --without test:development --path=/shared/gems
+
+    - replace:
+        filename: /var/www/ruby-bench-web/config/database.yml
+        from: |
+          # production:
+          #   <<: *default
+          #   database: ruby-bench-web_production
+          #   username: ruby-bench-web
+        to: |
+          production:
+            <<: *default
+            database: $db_name
+            username: $db_user
+
+    - exec:
+        cd: $home
+        cmd:
+          - sudo -u rubybench RAILS_ENV=production bundle exec rake db:migrate
+          - sudo -u rubybench RAILS_ENV=production bundle exec rake assets:precompile
+
+    - file:
+       path: /etc/service/unicorn/run
+       chmod: "+x"
+       contents: |
+          #!/bin/bash
+          exec 2>&1
+          # redis
+          # postgres
+          cd $home
+          LD_PRELOAD=/usr/lib/libjemalloc.so.1 HOME=/home/rubybench USER=rubybench exec chpst -u rubybench:www-data -U rubybench:www-data bundle exec unicorn -E production -c config/unicorn.rb
+
+    - replace:
+        filename: /etc/nginx/nginx.conf
+        from: pid /run/nginx.pid;
+        to: daemon off;
+
+    - exec:
+        cmd:
+          - rm /etc/nginx/sites-enabled/default
+
+    - file:
+        path: /etc/nginx/conf.d/rubybench.conf
+        contents: |
+          upstream rubybench {
+            server localhost:3000;
+          }
+          server {
+            listen 80;
+            server_name rubybench.org;
+            keepalive_timeout 65;
+            location / {
+              try_files $uri @rubybench;
+            }
+            location @rubybench {
+              proxy_set_header Host $http_host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto http;
+              proxy_pass http://rubybench;
+            }
+          }
+
+    - file:
+       path: /etc/service/nginx/run
+       chmod: "+x"
+       contents: |
+          #!/bin/sh
+          exec 2>&1
+          exec /usr/sbin/nginx
