@@ -11,8 +11,6 @@ before_script:
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-services:
-  - redis-server
 script: bundle exec rake test
 addons:
   postgresql: "9.3"

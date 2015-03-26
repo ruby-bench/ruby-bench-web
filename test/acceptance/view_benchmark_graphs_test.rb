@@ -3,7 +3,6 @@ require 'acceptance/test_helper'
 class ViewBenchmarkGraphsTest < AcceptanceTest
   setup do
     require_js
-    $redis.flushall
     Net::HTTP.stubs(:get).returns("def abc\n  puts haha\nend")
   end
 

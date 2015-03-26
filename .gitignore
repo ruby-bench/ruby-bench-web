@@ -16,6 +16,3 @@
 /tmp
 
 /test/vcr_cassettes/**/*.yml
-
-# Ignore Redis's snapshot binary file
-dump.rdb
