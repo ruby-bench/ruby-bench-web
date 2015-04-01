@@ -45,11 +45,19 @@ Motherboard | Intel Coporation S1200RP
 
 ## Dependency
 PostgreSQL 9.x in order to enable the hstore extension.
+Redis
 
 ## Setup
 ```bash
 bundle exec rake db:create
 bundle exec rake db:setup
+redis-server
+unicorn -c config/unicorn.rb
+```
+
+## Testing
+```
+redi-server
 bundle exec rake test
 ```
 
