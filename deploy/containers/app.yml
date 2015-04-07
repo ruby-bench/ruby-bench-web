@@ -101,3 +101,17 @@ hooks:
           #!/bin/sh
           exec 2>&1
           exec /usr/sbin/nginx
+
+    - file:
+       path: /etc/runit/3.d/01-nginx
+       chmod: "+x"
+       contents: |
+         #!/bin/bash
+         sv stop nginx
+
+    - file:
+       path: /etc/runit/3.d/02-unicorn
+       chmod: "+x"
+       contents: |
+         #!/bin/bash
+         sv stop unicorn
