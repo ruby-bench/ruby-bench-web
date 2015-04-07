@@ -50,6 +50,7 @@ hooks:
         cmd:
           - sudo -u rubybench RAILS_ENV=production bundle exec rake db:migrate
           - sudo -u rubybench RAILS_ENV=production bundle exec rake assets:precompile
+          - sudo -u rubybench bundle exec sidekiq -d -L $home/log/sidekiq.log -e production
 
     - file:
        path: /etc/service/unicorn/run
