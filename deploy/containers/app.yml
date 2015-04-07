@@ -21,6 +21,9 @@ volumes:
   - volume:
       host: /var/discourse/discourse_docker/shared/rubybench/rubybench/log/nginx
       guest: /shared/log/nginx
+  - volume:
+      host: /var/discourse/discourse_docker/shared/rubybench/rubybench/log/rails
+      guest: /shared/log/rails
 
 hooks:
   after_postgres:
@@ -72,8 +75,8 @@ hooks:
           #!/bin/bash
           exec 2>&1
           cd $home
-          chown -R rubybench $home/log
-          exec chpst -u rubybench bundle exec sidekiq -e production -L $home/log/sidekiq.log
+          chown -R rubybench /shared/log/rails/log
+          exec chpst -u rubybench bundle exec sidekiq -e production -L /shared/log/rails/sidekiq.log
 
     - replace:
         filename: /etc/nginx/nginx.conf
@@ -153,3 +156,20 @@ hooks:
         filename: "/etc/logrotate.d/nginx"
         from: "52"
         to: "14"
+
+    - file:
+       path: /etc/logrotate.d/rails
+       contents: |
+          /shared/log/rails/*.log
+          {
+                  rotate 14
+                  dateext
+                  daily
+                  missingok
+                  notifempty
+                  delaycompress
+                  compress
+                  postrotate
+                  sv 1 unicorn
+                  endscript
+          }

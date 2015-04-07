@@ -8,8 +8,8 @@ worker_processes (ENV["UNICORN_WORKERS"] || 3).to_i
 listen (ENV["UNICORN_PORT"] || 3000).to_i
 
 if ENV["RAILS_ENV"] == "production"
-  stderr_path "#{app_path}/log/unicorn.stderr.log"
-  stdout_path "#{app_path}/log/unicorn.stdout.log"
+  stderr_path "/shared/log/rails/unicorn.stderr.log"
+  stdout_path "/shared/log/rails/unicorn.stdout.log"
   pid "#{app_path}/tmp/pids/unicorn.pid"
 end
 
