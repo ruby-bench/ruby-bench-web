@@ -50,7 +50,6 @@ hooks:
         cmd:
           - sudo -u rubybench RAILS_ENV=production bundle exec rake db:migrate
           - sudo -u rubybench RAILS_ENV=production bundle exec rake assets:precompile
-          - sudo -u rubybench bundle exec sidekiq -d -L $home/log/sidekiq.log -e production
 
     - file:
        path: /etc/service/unicorn/run
@@ -62,6 +61,16 @@ hooks:
           # postgres
           cd $home
           LD_PRELOAD=/usr/lib/libjemalloc.so.1 HOME=/home/rubybench USER=rubybench exec chpst -u rubybench:www-data -U rubybench:www-data bundle exec unicorn -E production -c config/unicorn.rb
+
+    - file:
+        path: /etc/service/sidekiq/run
+        chmod: "+x"
+        contents: |
+          #!/bin/bash
+          exec 2>&1
+          cd $home
+          chown -R rubybench $home/log
+          exec chpst -u rubybench bundle exec sidekiq -e production -L $home/log/sidekiq.log
 
     - replace:
         filename: /etc/nginx/nginx.conf
@@ -115,3 +124,10 @@ hooks:
        contents: |
          #!/bin/bash
          sv stop unicorn
+
+    - file:
+        path: /etc/runit/3.d/03-sidekiq
+        chmod: "+"
+        contents: |
+          #!/bin/bash
+          sv stop sidekiq
