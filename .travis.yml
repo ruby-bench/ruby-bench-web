@@ -14,3 +14,5 @@ before_install:
 script: bundle exec rake test
 addons:
   postgresql: "9.3"
+services:
+  - redis-server
