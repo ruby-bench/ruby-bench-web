@@ -18,12 +18,6 @@ volumes:
   - volume:
       host: /var/discourse/discourse_docker/shared/rubybench
       guest: /shared
-  - volume:
-      host: /var/discourse/discourse_docker/shared/rubybench/rubybench/log/nginx
-      guest: /shared/log/nginx
-  - volume:
-      host: /var/discourse/discourse_docker/shared/rubybench/rubybench/log/rails
-      guest: /shared/log/rails
 
 hooks:
   after_postgres:
