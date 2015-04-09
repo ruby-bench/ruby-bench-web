@@ -17,7 +17,7 @@ expose:
 
 volumes:
   - volume:
-      host: /var/discourse/discourse_docker/shared/rubybench
+      host: /var/docker/shared/rubybench
       guest: /shared
 
 hooks:
