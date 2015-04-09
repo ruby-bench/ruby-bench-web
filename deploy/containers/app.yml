@@ -8,6 +8,7 @@ params:
   home: /var/www/ruby-bench-web
 
 templates:
+  - "containers/templates/secrets.yml"
   - "templates/redis.template.yml"
   - "templates/postgres.template.yml"
 
