@@ -70,7 +70,7 @@ hooks:
           #!/bin/bash
           exec 2>&1
           cd $home
-          chown -R rubybench /shared/log/rails/log
+          chown -R rubybench /shared/log/rails
           exec chpst -u rubybench bundle exec sidekiq -e production -L /shared/log/rails/sidekiq.log
 
     - replace:
