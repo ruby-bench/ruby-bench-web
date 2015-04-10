@@ -19,7 +19,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     release = releases(:ruby_2_2_0)
 
     post_results(
-      ruby_version: release.version,
+      version: release.version,
       repo: @repo.name,
       organization: @repo.organization.name
     )
@@ -31,7 +31,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     @repo = repos(:rails)
 
     post_results(
-      ruby_version: '10.0.0',
+      version: '10.0.0',
       repo: @repo.name,
       organization: @repo.organization.name
     )
@@ -46,7 +46,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     release = releases(:ruby_2_2_0)
 
     post_results(
-      ruby_version: release.version,
+      version: release.version,
       repo: @repo.name,
       organization: 'tgxworld'
     )
@@ -59,7 +59,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     release = releases(:ruby_2_2_0)
 
     post_results(
-      ruby_version: release.version,
+      version: release.version,
       repo: @repo.name,
       organization: @repo.organization.name
     )
@@ -71,7 +71,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
 
     post_results(
       {
-        ruby_version: release.version,
+        version: release.version,
         repo: @repo.name,
         organization: @repo.organization.name
       },

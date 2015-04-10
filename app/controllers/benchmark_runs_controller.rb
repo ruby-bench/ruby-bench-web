@@ -15,8 +15,8 @@ class BenchmarkRunsController < APIController
     end
 
     # FIXME: Probably bad code.
-    if params[:ruby_version]
-      initiator = repo.releases.find_or_create_by!(version: params[:ruby_version])
+    if params[:version]
+      initiator = repo.releases.find_or_create_by!(version: params[:version])
     end
 
     benchmark_type = repo.benchmark_types.find_or_create_by!(benchmark_type_params)
