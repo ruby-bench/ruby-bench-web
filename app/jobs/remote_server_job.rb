@@ -1,6 +1,8 @@
 class RemoteServerJob < ActiveJob::Base
   queue_as :default
 
+  COMMAND_CHAIN = " && "
+
   # Use keyword arguments once Rails 4.2.1 has been released.
   def perform(initiator_key, benchmark, options = {})
     secrets = Rails.application.secrets
@@ -104,13 +106,12 @@ class RemoteServerJob < ActiveJob::Base
   end
 
   def execute_ssh_commands(ssh, commands)
-    commands.each do |command|
-      ssh_exec!(ssh, command)
-    end
+    command = commands.join(COMMAND_CHAIN)
+    ssh_exec!(ssh, command)
   end
 
   def ssh_exec!(ssh, command)
-    ssh.exec!("tsp #{command}") do |channel, stream, data|
+    ssh.exec!("tsp '#{command}'") do |channel, stream, data|
       puts data
     end
   end
