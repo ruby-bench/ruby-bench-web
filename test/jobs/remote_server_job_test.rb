@@ -97,4 +97,20 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
     RemoteServerJob.new.perform('commit_hash', 'ruby_trunk_discourse')
   end
+
+  test "#perform rails_releases" do
+    [
+      "tsp docker pull rubybench/rails_releases",
+      "tsp docker run --rm
+        -e \"RAILS_VERSION=4.0.0\"
+        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        rubybench/rails_releases".squish
+    ].each do |command|
+
+      @ssh.expects(:exec!).with(command)
+    end
+
+    RemoteServerJob.new.perform('4.0.0', 'rails_releases')
+  end
 end

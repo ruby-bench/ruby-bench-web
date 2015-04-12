@@ -103,6 +103,19 @@ class RemoteServerJob < ActiveJob::Base
     )
   end
 
+  def rails_releases(ssh, rails_version, options)
+    execute_ssh_commands(ssh,
+      [
+        "docker pull rubybench/rails_releases",
+        "docker run --rm
+          -e \"RAILS_VERSION=#{rails_version}\"
+          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          rubybench/rails_releases".squish
+      ]
+    )
+  end
+
   def execute_ssh_commands(ssh, commands)
     commands.each do |command|
       ssh_exec!(ssh, command)
