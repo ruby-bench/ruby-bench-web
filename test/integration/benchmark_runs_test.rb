@@ -39,21 +39,6 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     assert_results(Release.last)
   end
 
-  # Remove this once Github hook is actually coming from the original Ruby
-  # repo.
-  test "tgxworld organization is mapped to ruby" do
-    @repo = repos(:ruby)
-    release = releases(:ruby_2_2_0)
-
-    post_results(
-      version: release.version,
-      repo: @repo.name,
-      organization: 'tgxworld'
-    )
-
-    assert_results(release)
-  end
-
   test "repeated benchmark_runs are replaced" do
     @repo = repos(:ruby)
     release = releases(:ruby_2_2_0)
