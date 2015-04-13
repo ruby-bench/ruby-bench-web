@@ -83,7 +83,7 @@ class ReposController < ApplicationController
 
           chart_builder = ChartBuilder.new(
             benchmark_runs.sort_by do |benchmark_run|
-              benchmark_run.initiator.version
+              benchmark_run.initiator.version.split(".").map { |i| i.to_i }
             end
           )
 
