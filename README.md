@@ -57,7 +57,7 @@ unicorn -c config/unicorn.rb
 
 ## Testing
 ```
-redi-server
+redis-server
 bundle exec rake test
 ```
 
