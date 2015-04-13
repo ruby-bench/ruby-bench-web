@@ -48,25 +48,7 @@ var drawReleaseChart = function(chartClass) {
         },
         plotOptions: {
           column: {
-            animation: false,
-            dataLabels: {
-              enabled: true,
-              formatter: function () {
-                if (this.y == this.series.dataMax) {
-                  return "<span style=\"color:red;z-index: 0\">Base</span>"
-                } else {
-                  var label = "";
-
-                  if (this.y == this.series.dataMin) {
-                    label = "<span style=\"color:green\">Best</span><br>";
-                  }
-
-                  var percentage = ((this.y - this.series.dataMax) / this.series.dataMax * 100).toFixed(2);
-                  return label + '<span style="color:black">' + percentage + '% </span>';
-                }
-              },
-              zIndex: 0
-            }
+            animation: false
           }
         },
         legend: {
