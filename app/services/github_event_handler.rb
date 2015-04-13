@@ -23,12 +23,12 @@ class GithubEventHandler
 
     commits.each do |commit|
       if create_commit(commit, repo.id)
-        ActiveSupport::Notifications.instrument(
-          repo.name, { commit_sha1: commit['id'] }
-        )
+        BenchmarkPool.enqueue(repo.name, commit['id'])
       end
     end
   end
+
+  private
 
   def first_or_create_repo(repository)
     organization_name, repo_name = parse_full_name(repository['full_name'])
@@ -55,7 +55,7 @@ class GithubEventHandler
   end
 
   def create_commit(commit, repo_id)
-    if !Commit.merge_or_skip_ci?(commit['message']) && Commit.valid_author?(commit['author']['name'])
+    if valid_commit?(commit)
       Commit.find_or_create_by(sha1: commit['id']) do |c|
         c.url = commit['url']
         c.message = commit['message']
@@ -63,5 +63,9 @@ class GithubEventHandler
         c.created_at = commit['timestamp']
       end
     end
+  end
+
+  def valid_commit?(commit)
+    !Commit.merge_or_skip_ci?(commit['message']) && Commit.valid_author?(commit['author']['name'])
   end
 end
