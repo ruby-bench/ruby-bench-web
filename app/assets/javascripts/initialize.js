@@ -1,4 +1,4 @@
-var init = function() {
+$(document).ready(function() {
   var locationPathName = location.pathname != '/' ? location.pathname : '/ruby/ruby/releases';
   $(".top-nav a[href='" + locationPathName + "']").addClass('current');
 
@@ -38,9 +38,7 @@ var init = function() {
         $('html,body').animate({scrollTop:0},0);
 
         if (history && history.pushState) {
-          history.pushState(
-            { result_type: resultType, display_count: benchmarkRunDisplayCount },
-            '',
+          history.pushState(null, '',
             "/" +
             organizationName +
             "/" + repoName +
@@ -83,35 +81,4 @@ var init = function() {
     drawReleaseChart(".release-chart");
     drawChart(".chart");
   })
-}
-
-var fetchBenchmarks = function() {
-  var $spinner = $(".spinner");
-  if (window.history && window.history.pushState) {
-    $(window).on('popstate', function(event) {
-      var previousState = event.originalEvent.state;
-      var currentPath = location.pathname;
-      xhr = $.ajax({
-        url: currentPath,
-        type: 'GET',
-        data: previousState,
-        dataType: 'script',
-        beforeSend: function() {
-          $spinner.toggleClass('hide');
-          $("#chart-container").empty();
-          $('html,body').animate({scrollTop:0},0);
-        },
-        complete: function() {
-          $spinner.toggleClass('hide');
-          $("#benchmark_run_display_count").val(previousState.display_count);
-          $("input[name=result_type][value="+previousState.result_type+"").prop('checked', true);
-        }
-      });
-    });
-  }
-}
-
-$(document).ready(function() {
-  init();
-  fetchBenchmarks();
-});
+})
