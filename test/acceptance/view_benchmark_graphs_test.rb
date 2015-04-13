@@ -71,8 +71,58 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert_not page.has_content?("#{benchmark_run_category_humanize} memory Graph")
   end
 
+  test "User should be able to view long running benchmark graphs when they go back and forward 
+    in the broswer window" do
+
+    benchmark_run = benchmark_runs(:array_iterations_run2)
+    benchmark_run2 = benchmark_runs(:array_count_run)
+    benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
+    benchmark_run2_category_humanize = benchmark_run2.benchmark_type.category.humanize
+
+    visit '/ruby/ruby/commits'
+
+    assert page.has_content?(
+      I18n.t('repos.show.title', repo_name: benchmark_run.initiator.repo.name.capitalize)
+    )
+
+    assert page.has_content?(I18n.t('repos.show.select_benchmark'))
+
+    within "form" do
+      choose(benchmark_run.benchmark_type.category)
+    end
+
+    assert page.has_content?("#{benchmark_run_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} memory Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} Script")
+
+    within "form" do
+      choose(benchmark_run2.benchmark_type.category)
+    end
+
+    assert page.has_css?(".chart .highcharts-container")
+    assert page.has_content?("#{benchmark_run2_category_humanize} Graph")
+    assert_not page.has_content?("#{benchmark_run2_category_humanize} memory Graph")
+
+    page.evaluate_script('window.history.back()')
+    
+    assert page.has_content?("#{benchmark_run_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} memory Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} Script")
+
+    page.evaluate_script('window.history.forward()')
+   
+    assert page.has_css?(".chart .highcharts-container")
+    assert page.has_content?("#{benchmark_run2_category_humanize} Graph")
+    assert_not page.has_content?("#{benchmark_run2_category_humanize} memory Graph")
+  end
+
   test "User should be able to select number of benchmark runs to display
     for long running benchmark graphs" do
+
+    javascript_driver = Capybara.javascript_driver
+    default_driver = Capybara.current_driver
+    Capybara.javascript_driver = :selenium
+    Capybara.current_driver = :selenium
 
     benchmark_type = benchmark_types(:array_count)
 
@@ -85,6 +135,40 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
         select 3, from: "benchmark_run_display_count"
 
         assert assert_selector(".highcharts-markers path", count: 3)
+      end
+    end
+  end
+
+  test "User should be able to view long running benchmark graphs after they select different number of benchmark 
+  runs, when they go back and forward in the broswer window" do
+
+    javascript_driver = Capybara.javascript_driver
+    default_driver = Capybara.current_driver
+    Capybara.javascript_driver = :selenium
+    Capybara.current_driver = :selenium
+
+    benchmark_type = benchmark_types(:array_count)
+
+    BenchmarkRun.stub_const(:PAGINATE_COUNT, [1, 3]) do
+      BenchmarkRun.stub_const(:DEFAULT_PAGINATE_COUNT, 1) do
+        visit "/ruby/ruby/commits?result_type=#{benchmark_type.category}"
+
+        assert assert_selector(".highcharts-markers path", count: 1)
+
+        select 3, from: "benchmark_run_display_count"
+
+        assert assert_selector(".highcharts-markers path", count: 3)
+
+        select 1, from: "benchmark_run_display_count"
+
+        page.evaluate_script('window.history.back()')
+
+        assert page.has_selector? '#benchmark_run_display_count', text: 3
+
+        page.evaluate_script('window.history.forward()')
+
+        assert assert_selector(".highcharts-markers path", count: 1)
+        assert page.has_selector? '#benchmark_run_display_count', text: 1
       end
     end
   end
@@ -181,6 +265,89 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       URI.parse(page.current_url).request_uri,
       "/#{benchmark_run.initiator.repo.organization.name}" \
       "/#{benchmark_run.initiator.repo.name}/releases?result_type=#{benchmark_run.benchmark_type.category}"
+    )
+  end
+
+  test "User should be able to view releases benchmark graphs when they go back and forward 
+    in the broswer window" do
+
+    benchmark_run = benchmark_runs(:array_iterations_run)
+    benchmark_run2 = benchmark_runs(:array_count_run)
+    benchmark_run2_category_humanize = benchmark_run2.benchmark_type.category.humanize
+    benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
+    
+    visit '/ruby/ruby/releases'
+
+    within "form" do
+      choose(benchmark_run.benchmark_type.category)
+    end
+
+    within ".release-chart .highcharts-container .highcharts-yaxis-title",
+      match: :first do
+
+      assert page.has_content?(benchmark_run.benchmark_type.unit.capitalize)
+    end
+
+    assert page.has_content?("#{benchmark_run_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} Script")
+
+    assert_equal(
+      URI.parse(page.current_url).request_uri,
+      "/#{benchmark_run.initiator.repo.organization.name}" \
+      "/#{benchmark_run.initiator.repo.name}/releases?result_type=#{benchmark_run.benchmark_type.category}"
+    )
+
+    within "form" do
+      choose(benchmark_run2.benchmark_type.category)
+    end
+
+    within ".release-chart .highcharts-container .highcharts-yaxis-title",
+      match: :first do
+
+      assert page.has_content?(benchmark_run2.benchmark_type.unit.capitalize)
+    end
+
+    assert page.has_content?("#{benchmark_run2_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run2_category_humanize} Script")
+
+    assert_equal(
+      URI.parse(page.current_url).request_uri,
+      "/#{benchmark_run2.initiator.repo.organization.name}" \
+      "/#{benchmark_run2.initiator.repo.name}/releases?result_type=#{benchmark_run2.benchmark_type.category}"
+    )
+
+    page.evaluate_script('window.history.back()')
+
+    within ".release-chart .highcharts-container .highcharts-yaxis-title",
+      match: :first do
+
+      assert page.has_content?(benchmark_run.benchmark_type.unit.capitalize)
+    end
+
+    assert page.has_content?("#{benchmark_run_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run_category_humanize} Script")
+
+    assert_equal(
+      URI.parse(page.current_url).request_uri,
+      "/#{benchmark_run.initiator.repo.organization.name}" \
+      "/#{benchmark_run.initiator.repo.name}/releases?result_type=#{benchmark_run.benchmark_type.category}"
+    )
+
+    page.evaluate_script('window.history.forward()')
+
+    within ".release-chart .highcharts-container .highcharts-yaxis-title",
+      match: :first do
+
+      assert page.has_content?(benchmark_run2.benchmark_type.unit.capitalize)
+    end
+
+    assert page.has_content?("#{benchmark_run2_category_humanize} Graph")
+    assert page.has_content?("#{benchmark_run2_category_humanize} Script")
+
+    assert_equal(
+      URI.parse(page.current_url).request_uri,
+      "/#{benchmark_run2.initiator.repo.organization.name}" \
+      "/#{benchmark_run2.initiator.repo.name}/releases?result_type=#{benchmark_run2.benchmark_type.category}"
     )
   end
 
