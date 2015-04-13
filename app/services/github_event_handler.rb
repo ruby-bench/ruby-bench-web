@@ -1,5 +1,3 @@
-require 'net/ssh'
-
 class GithubEventHandler
   PUSH = "push"
   HEADER = 'HTTP_X_GITHUB_EVENT'

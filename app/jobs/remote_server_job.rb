@@ -1,3 +1,5 @@
+require 'net/ssh'
+
 class RemoteServerJob < ActiveJob::Base
   queue_as :default
 
