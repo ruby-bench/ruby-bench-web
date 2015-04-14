@@ -1,3 +1,5 @@
+require 'net/ssh'
+
 class RemoteServerJob < ActiveJob::Base
   queue_as :default
 
@@ -20,12 +22,7 @@ class RemoteServerJob < ActiveJob::Base
   def ruby_trunk(ssh, commit_hash, options)
     options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
 
-    include_patterns =
-      if options[:include_patterns]
-        "-e \"INCLUDE_PATTERNS=#{options[:include_patterns]}\""
-      else
-        ""
-      end
+    include_patterns = build_include_patterns(options[:include_patterns])
 
     execute_ssh_commands(ssh,
       [
@@ -45,12 +42,7 @@ class RemoteServerJob < ActiveJob::Base
   def ruby_releases(ssh, ruby_version, options)
     options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
 
-    include_patterns =
-      if options[:include_patterns]
-        "-e \"INCLUDE_PATTERNS=#{options[:include_patterns]}\""
-      else
-        ""
-      end
+    include_patterns = build_include_patterns(options[:include_patterns])
 
     execute_ssh_commands(ssh,
       [
@@ -126,5 +118,9 @@ class RemoteServerJob < ActiveJob::Base
     ssh.exec!("tsp #{command}") do |channel, stream, data|
       puts data
     end
+  end
+
+  def build_include_patterns(patterns)
+    "-e \"INCLUDE_PATTERNS=#{patterns}\""
   end
 end
