@@ -47,5 +47,4 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'newrelic_rpm'
-  gem 'rollbar', '~> 1.3.1'
 end
