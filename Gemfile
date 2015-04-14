@@ -47,4 +47,5 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'newrelic_rpm'
+  gem 'bugsnag', '~> 2.8.4'
 end
