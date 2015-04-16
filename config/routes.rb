@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  if Rails.env.production?
+    constraints(lambda { |request| request.session['admin'] }) do
+      mount Logster::Web => "/logs"
+    end
+  end
+
   root 'repos#show_releases', organization_name: 'ruby', repo_name: 'ruby'
 
   post 'github_event_handler' => 'event_handler#github_event_handler'
@@ -7,6 +13,7 @@ Rails.application.routes.draw do
   get 'hardware' => 'static_pages#hardware'
   get 'contributing' => 'static_pages#contribute', as: :contribute
   get 'sponsors' => 'static_pages#sponsors',  as: :sponsors
+  get 'admin' => 'admin#toggle_admin'
   get ':name' => 'organizations#show', as: :organization
   get ':organization_name/:repo_name/commits' => 'repos#show', as: :repo
   get ':organization_name/:repo_name/releases' => 'repos#show_releases', as: :releases_repo
