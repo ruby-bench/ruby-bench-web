@@ -22,7 +22,6 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet', '~> 4.14.0'
-  gem 'rack-mini-profiler', '~> 0.9.3'
 end
 
 group :development, :test do
@@ -42,6 +41,7 @@ end
 
 group :production, :development do
   gem 'unicorn', '~> 4.8.3'
+  gem 'rack-mini-profiler', '~> 0.9.3'
 end
 
 group :production do
