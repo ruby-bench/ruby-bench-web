@@ -62,6 +62,7 @@ $(document).ready(function() {
     e.preventDefault();
     $("#benchmark-types-form-container").removeClass().toggleClass('col-xs-0');
     $("#charts-container").removeClass().toggleClass('col-xs-12');
+    $("#chart-container .alert-warning").toggleClass('alert-warning-moved-right');
     $("#benchmark-types-form-container .panel").toggleClass('hide');
     $("#benchmark-types-form-show").toggleClass('hide');
 
@@ -74,6 +75,7 @@ $(document).ready(function() {
     e.preventDefault();
     $("#benchmark-types-form-container").removeClass().toggleClass('col-xs-4');
     $("#charts-container").removeClass().toggleClass('col-xs-8');
+    $("#chart-container .alert-warning").toggleClass('alert-warning-moved-right');
     $("#benchmark-types-form-container .panel").toggleClass('hide');
     $("#benchmark-types-form-show").toggleClass('hide');
 

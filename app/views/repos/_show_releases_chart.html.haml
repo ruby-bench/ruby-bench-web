@@ -1,17 +1,16 @@
-- if !charts
-  .alert.alert-warning
-    .l-align-center
-      %strong= t('repos.show_releases.select_benchmark')
+- if !charts || charts.empty?
+  .chart-warning
+    = render 'hide_form_button'
+    .alert.alert-warning
+      .l-align-center
+        %strong= t('repos.show_releases.select_benchmark')
 
-  .alert.alert-info
-    = render 'description'
-
-- elsif charts.empty?
-  .alert.alert-warning
-    .l-align-center
-      %strong= t('repos.no_results', category: benchmark_type.category)
+  - if !charts
+    .alert.alert-info
+      = render 'description'
 
 - else
+  = render 'hide_form_button'
   %h2.l-align-center
     - benchmark_name = benchmark_type.category.humanize
     = t('repos.show_releases.graph_title', graph_name: benchmark_name)
