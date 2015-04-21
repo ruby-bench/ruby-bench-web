@@ -78,6 +78,7 @@ var drawChart = function(chartClass) {
                   }
 
                   var getCommitMessage = function(category) {
+                    category = category.replace(/(\r\n|\n|\r)/g,"");
                     return /Commit Message: (.{0,30})<br>/.exec(category)[1];
                   }
 
