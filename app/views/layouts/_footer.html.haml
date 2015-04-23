@@ -40,6 +40,10 @@
 
 .l-align-center
   %h5
-    Built and maintained by
-    = succeed "." do
-      = link_to '@tgxworld', 'https://github.com/tgxworld', target: '_blank'
+    Built by
+    = link_to '@tgxworld', 'https://github.com/tgxworld', target: '_blank'
+    and our list of awesome
+    = succeed '.' do
+      = link_to 'contributors', 'https://github.com/ruby-bench/ruby-bench-web/graphs/contributors',
+          target: '_blank'
+
