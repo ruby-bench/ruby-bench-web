@@ -4,6 +4,6 @@ class StaticPagesController < ApplicationController
   end
 
   def sponsors
-    @sponsors = %i(ruby_together jolly_good_code discourse rubytune)
+    @sponsors = %i(ruby_together jolly_good_code discourse rubytune bugsnag)
   end
 end
