@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   post 'github_event_handler' => 'event_handler#github_event_handler'
   resources :benchmark_runs, only: [:create]
+  resources :organizations, only: [:index]
 
   get 'hardware' => 'static_pages#hardware'
   get 'contributing' => 'static_pages#contribute', as: :contribute
