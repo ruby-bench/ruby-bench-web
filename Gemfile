@@ -1,13 +1,11 @@
-source 'https://rubygems.org'
-source 'https://rails-assets.org' do
-  gem 'rails-assets-highcharts', '~> 4.0.4'
-end
+source 'http://rubygems.org'
 
 gem 'rails', '4.2.1'
 gem 'pg'
 gem 'sass-rails', '~> 5.0.1'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
+gem 'highcharts-rails', '~> 4.0.4'
 gem 'net-ssh', '~> 2.9.1'
 gem 'platform-api', '~> 0.2.0'
 gem 'haml', '~> 4.0.5'
