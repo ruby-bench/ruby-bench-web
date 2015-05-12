@@ -1,23 +1,24 @@
 %nav.navbar.navbar-default
   .container
     .navbar-header
-      %button.navbar-toggle.collapsed
+      %button.navbar-toggle.collapsed{:data => {:toggle => 'collapse', :target => '#rbn-navbar'}}
         %span.sr-only Toggle navigation
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
       = link_to '', root_path, class: 'navbar-brand logo', alt: t('top_nav.logo') + ' Logo'
 
-    %ul.nav.navbar-nav.navbar-right
-      %li
-        = link_to t('top_nav.releases'), releases_repo_path(organization_name: 'ruby', repo_name: 'ruby')
-      %li
-        = link_to t('top_nav.benchmarks'), repo_path(organization_name: 'ruby', repo_name: 'ruby')
-      %li
-        = link_to t('top_nav.hardware'), hardware_path
-      %li
-        = link_to t('top_nav.contribute'), contribute_path
-      %li
-        = link_to t('top_nav.sponsors'), sponsors_path
-      %li
-        = link_to t('top_nav.discuss'), AppSettings.forum_url, target: '_blank'
+    .collapse.navbar-collapse{:id => 'rbn-navbar'}
+      %ul.nav.navbar-nav.navbar-right
+        %li
+          = link_to t('top_nav.releases'), releases_repo_path(organization_name: 'ruby', repo_name: 'ruby')
+        %li
+          = link_to t('top_nav.benchmarks'), repo_path(organization_name: 'ruby', repo_name: 'ruby')
+        %li
+          = link_to t('top_nav.hardware'), hardware_path
+        %li
+          = link_to t('top_nav.contribute'), contribute_path
+        %li
+          = link_to t('top_nav.sponsors'), sponsors_path
+        %li
+          = link_to t('top_nav.discuss'), AppSettings.forum_url, target: '_blank'
