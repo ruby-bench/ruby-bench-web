@@ -1,0 +1,31 @@
+.landing {
+  .banner {
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  .heading {
+    font-size: 72px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+  }
+
+  .landing-logo {
+    display: block;
+    margin: 20px auto;
+    width: 164px; 
+  }
+  
+  .blurb {
+    color: $gray-light;
+    font-size: 32px;
+  }
+
+  .btn-cta {
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 20px 0;
+    text-transform: uppercase;
+  }
+}
