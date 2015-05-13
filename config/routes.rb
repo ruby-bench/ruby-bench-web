@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     end
   end
 
-  root 'repos#show_releases', organization_name: 'ruby', repo_name: 'ruby'
+  root 'static_pages#landing'
 
   post 'github_event_handler' => 'event_handler#github_event_handler'
   resources :benchmark_runs, only: [:create]
