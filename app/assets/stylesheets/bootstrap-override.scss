@@ -1,4 +1,15 @@
-$link-color: #EE3F3F;
+// Branding
+$brand-primary: #e34447;
+$link-color: $brand-primary;
 $hr-border: black;
+
+// Typography
 $font-family-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $headings-font-weight: 100;
+
+// Navbar
+$navbar-default-bg: #fff;
+$navbar-default-link-color: $brand-primary;
+$navbar-default-toggle-hover-bg: $brand-primary;
+$navbar-default-toggle-icon-bar-bg: $brand-primary;
+$navbar-default-toggle-border-color: $brand-primary;

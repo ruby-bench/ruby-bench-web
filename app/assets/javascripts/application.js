@@ -13,7 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require highcharts
+//= require bootstrap/transition.js
 //= require bootstrap/modal.js
+//= require bootstrap/collapse.js
 //= require modules/release_chart
 //= require modules/chart
 //= require_tree .
