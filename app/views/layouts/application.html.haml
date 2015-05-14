@@ -2,6 +2,7 @@
 %html{ lang: 'en' }
   %head
     %title RubyBench - Long Running Ruby Benchmark
+    = render 'layouts/typekit'
     = stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Montserrat:400,700'
     = stylesheet_link_tag 'application', media: 'all'
     = render 'layouts/ga' if Rails.env.production?
@@ -15,9 +16,8 @@
         .col-xs-12
           = yield
 
-      %footer
-        .row.footer
-          .col-xs-10.col-xs-offset-1
-            = render 'layouts/footer'
-            = javascript_include_tag 'application'
-            = yield :footer if content_for(:footer)
+    %footer
+      = render 'layouts/footer'
+      = yield :footer if content_for(:footer)
+
+    = javascript_include_tag 'application'
