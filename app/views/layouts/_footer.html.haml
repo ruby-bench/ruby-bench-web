@@ -4,7 +4,7 @@
       .col-xs-10.col-xs-offset-1
         .footer-sponsors
           %ul.row.list-inline
-            %li.col-xs-3
+            %li.col-xs-6.col-sm-3
               %h5.l-align-center
                 %i= t('footer.supported_by')
               .row
@@ -15,21 +15,21 @@
                   = link_to t('sponsors.jolly_good_code.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.jolly_good_code.class_name') do
                     %span.l-text-hidden= t('sponsors.jolly_good_code.name')
 
-            %li.col-xs-3
+            %li.col-xs-6.col-sm-3
               %h5.l-align-center
                 %i= t('footer.domain_and_community')
 
               = link_to t('sponsors.discourse.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.discourse.class_name') do
                 %span.l-text-hidden= t('sponsors.discourse.name')
 
-            %li.col-xs-3
+            %li.col-xs-6.col-sm-3
               %h5.l-align-center
                 %i= t('footer.bare_metal_server')
 
               = link_to t('sponsors.rubytune.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.rubytune.class_name') do
                 %span.l-text-hidden= t('sponsors.ruby_together.name')
 
-            %li.col-xs-3
+            %li.col-xs-6.col-sm-3
               %h5.l-align-center
                 %i= t('footer.error_tracking')
 
