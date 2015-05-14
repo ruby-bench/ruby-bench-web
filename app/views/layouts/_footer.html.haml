@@ -1,49 +1,48 @@
-.footer-sponsors.l-align-center
-  %ul.list-inline.footer-sponsors-list
-    %li.footer-sponsor-list
-      %h5.l-align-center
-        %i= t('footer.supported_by')
+.footer
+  .container
+    .row
+      .col-xs-10.col-xs-offset-1
+        .footer-sponsors
+          %ul.row.list-inline
+            %li.col-xs-3
+              %h5.l-align-center
+                %i= t('footer.supported_by')
+              .row
+                .col-xs-6
+                  = link_to t('sponsors.ruby_together.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.ruby_together.class_name') do
+                    %span.l-text-hidden= t('sponsors.ruby_together.name')
+                .col-xs-6
+                  = link_to t('sponsors.jolly_good_code.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.jolly_good_code.class_name') do
+                    %span.l-text-hidden= t('sponsors.jolly_good_code.name')
 
-      = link_to t('sponsors.ruby_together.link'), target: '_blank' do
-        .sponsor-ruby-together
-          %span.l-text-hidden= t('sponsors.ruby_together.name')
+            %li.col-xs-3
+              %h5.l-align-center
+                %i= t('footer.domain_and_community')
 
-      = link_to t('sponsors.jolly_good_code.link'), target: '_blank' do
-        .sponsor-jolly-good-code
-          %span.l-text-hidden= t('sponsors.jolly_good_code.name')
+              = link_to t('sponsors.discourse.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.discourse.class_name') do
+                %span.l-text-hidden= t('sponsors.discourse.name')
 
-    %li.footer-sponsor-list
-      = link_to t('sponsors.discourse.link'), target: '_blank' do
-        %h5.l-align-center
-          %i= t('footer.domain_and_community')
+            %li.col-xs-3
+              %h5.l-align-center
+                %i= t('footer.bare_metal_server')
 
-        .sponsor-discourse
-          %span.l-text-hidden= t('sponsors.discourse.name')
+              = link_to t('sponsors.rubytune.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.rubytune.class_name') do
+                %span.l-text-hidden= t('sponsors.ruby_together.name')
 
-    %li.footer-sponsor-list
-      = link_to t('sponsors.rubytune.link'), target: '_blank' do
-        %h5.l-align-center
-          %i= t('footer.bare_metal_server')
+            %li.col-xs-3
+              %h5.l-align-center
+                %i= t('footer.error_tracking')
 
-        .sponsor-ruby-tune
-          %span.l-text-hidden= t('sponsors.ruby_together.name')
+              = link_to t('sponsors.bugsnag.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.bugsnag.class_name') do
+                %span.l-text-hidden= t('sponsors.bugsnag.name')
 
-    %li.footer-sponsor-list
-      = link_to t('sponsors.bugsnag.link'), target: '_blank' do
-        %h5.l-align-center
-          %i= t('footer.error_tracking')
+        %hr.footer-hr
 
-        .sponsor-bugsnag
-          %span.l-text-hidden= t('sponsors.bugsnag.name')
-
-%hr.footer-hr
-
-.l-align-center
-  %h5
-    Built by
-    = link_to '@tgxworld', 'https://github.com/tgxworld', target: '_blank'
-    and our list of awesome
-    = succeed '.' do
-      = link_to 'contributors', 'https://github.com/ruby-bench/ruby-bench-web/graphs/contributors',
-          target: '_blank'
-
+        .l-align-center
+          %h5
+            Built by
+            = link_to '@tgxworld', 'https://github.com/tgxworld', target: '_blank'
+            and our list of awesome
+            = succeed '.' do
+              = link_to 'contributors', 'https://github.com/ruby-bench/ruby-bench-web/graphs/contributors',
+                  target: '_blank'

@@ -3,9 +3,9 @@
 }
 
 .logo {
-  @include inline-image('logo.png', 40px, 160px);
-  background-size: 100%;
-  background-repeat: no-repeat;
+  @include background-image('logo.png');
+  height: 40px;
+  width: 160px;
 }
 
 .navbar-header {

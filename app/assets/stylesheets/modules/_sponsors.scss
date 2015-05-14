@@ -1,44 +1,41 @@
-@mixin inline-image($background-image, $image-height, $image-width) {
-  display: inline-block;
-  height: $image-height;
-  width: $image-width;
+@mixin background-image($background-image) {
   background-image: image-url($background-image);
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .sponsor-row {
-  margin-top: 40px;
-  margin-bottom: 40px;
-
+  margin: 40px 0;
   h3 {
     margin-top: 0;
   }
 }
 
-.sponsor-discourse {
-  @include inline-image('sponsors/discourse.png', 75px, 256px);
-  background-color: white;
+.sponsor-logo {
+  display: block;
+  height: 100px;
+  margin: 0 auto;
+  transition: all 0.5s;
+  width: 90%;
 }
 
-.sponsor-jolly-good-code {
-  @include inline-image('sponsors/jolly_good_code.png', 100px, 100px);
+.footer .sponsor-logo {
+  $half-brightness: 0.5;
+  filter: brightness($half-brightness);
+  &:hover {
+    $full-brightness: 1;
+    filter: brightness($full-brightness);
+  }
 }
 
-.sponsor-ruby-tune {
-  @include inline-image('sponsors/ruby_tune.png', 60px, 300px);
-}
+$sponsor-list: discourse jolly-good-code rubytune ruby-together bugsnag;
 
-.sponsor-ruby-together {
-  @include inline-image('sponsors/ruby_together.png', 100px, 148px);
-  background-color: #D1D9E5;
-}
-
-.sponsor-bugsnag {
-  @include inline-image('sponsors/bugsnag.png', 100px, 310px);
-  background-color: white;
-}
-
-.footer-sponsor-list {
-  a:nth-child(n+2) {
-    padding-left: 5px;
+@each $sponsor in $sponsor-list {
+  .sponsor-#{$sponsor} {
+    @include background-image('sponsors/#{$sponsor}.png');
+  }
+  .footer .sponsor-#{$sponsor} {
+    @include background-image('sponsors/#{$sponsor}-bw.png');
   }
 }
