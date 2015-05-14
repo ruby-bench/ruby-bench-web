@@ -16,9 +16,9 @@
         .col-xs-12
           = yield
 
-      %footer
-        .row.footer
-          .col-xs-10.col-xs-offset-1
-            = render 'layouts/footer'
-            = javascript_include_tag 'application'
-            = yield :footer if content_for(:footer)
+    %footer
+      .row.footer
+        .col-xs-12
+          = render 'layouts/footer'
+          = javascript_include_tag 'application'
+          = yield :footer if content_for(:footer)
