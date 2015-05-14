@@ -1,10 +1,10 @@
 .landing
-  .row.banner
+  .row.landing-banner
     .col-md-12
       = image_tag('icon.png', alt: 'RubyBench Logo', class: 'landing-logo')
-      %h1.heading RubyBench
-      %p.blurb Long running Ruby Benchmark
-      %button.btn.btn-lg.btn-primary.btn-cta View Ruby's Performance
+      %h1.landing-heading RubyBench
+      %p.landing-blurb Long Running Benchmarks for Ruby Projects
+      = link_to "View Ruby's Performance", releases_repo_path(organization_name: 'ruby', repo_name: 'ruby'), class: 'btn btn-lg btn-primary landing-btn-cta'
   .row
     .col-md-12
 

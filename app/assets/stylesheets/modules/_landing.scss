@@ -1,5 +1,5 @@
 .landing {
-  .banner {
+  .landing-banner {
     margin: 20px 0;
     text-align: center;
   }
@@ -10,7 +10,7 @@
     width: 164px; 
   }
 
-  .heading {
+  .landing-heading {
     font-size: 72px;
     font-weight: 700;
     letter-spacing: 5px;
@@ -21,7 +21,7 @@
     }
   }
 
-  .blurb {
+  .landing-blurb {
     color: $gray-light;
     font-size: 32px;
     @media (max-width: $screen-xs-max) {
@@ -29,7 +29,7 @@
     }
   }
 
-  .btn-cta {
+  .landing-btn-cta {
     font-weight: 700;
     @media (max-width: $screen-xs-max) {
       font-size: 12px;
