@@ -5,7 +5,12 @@ $hr-border: black;
 
 // Typography
 $font-family-sans-serif: 'freight-sans-pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-$headings-font-weight: 400;
+$font-size-base: 16px;
+$light: 300;
+$book: 400;
+$bold: 700;
+$headings-font-weight: $bold;
+
 
 // Navbar
 $navbar-default-bg: #fff;

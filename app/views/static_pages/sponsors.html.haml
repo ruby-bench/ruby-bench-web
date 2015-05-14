@@ -1,19 +1,20 @@
-.col-xs-8.col-xs-offset-2
-  %h1= t('.title')
+.sponsors
+  .col-md-10.col-md-offset-1
+    %h1= t('.title')
 
-  %hr
+    %hr
 
-  %h3= t('sponsors.thanks')
+    %p= t('sponsors.thanks')
 
-  - @sponsors.each do |sponsor|
-    .row.sponsor-row
-      .col-sm-12
-      = link_to t("sponsors.#{sponsor}.link"), target: '_blank' do
-        .col-xs-5
-          %div{class: t("sponsors.#{sponsor}.class_name") + ' sponsor-logo'}
-            %span.l-text-hidden
-              = t("sponsors.#{sponsor}.name")
+    - @sponsors.each do |sponsor|
+      .row.sponsor-row
+        .col-sm-12
+        = link_to t("sponsors.#{sponsor}.link"), target: '_blank' do
+          .col-xs-5
+            %div{class: t("sponsors.#{sponsor}.class_name") + ' sponsor-logo'}
+              %span.l-text-hidden
+                = t("sponsors.#{sponsor}.name")
 
-        .col-xs-7
-          %h3= t("sponsors.#{sponsor}.name")
-          = t("sponsors.#{sponsor}.desc")
+          .col-xs-7
+            %h3.sponsor-name= t("sponsors.#{sponsor}.name")
+            .sponsor-desc= t("sponsors.#{sponsor}.desc")

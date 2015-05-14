@@ -5,10 +5,20 @@
   background-repeat: no-repeat;
 }
 
-.sponsor-row {
-  margin: 40px 0;
-  h3 {
-    margin-top: 0;
+.sponsors {
+  .sponsor-row {
+    margin: 40px 0;
+    h3 {
+      margin-top: 0;
+    }
+  }
+  .sponsor-name {
+    color: #000;
+    font-weight: $bold;
+  }
+  .sponsor-desc {
+    color: $gray;
+    font-size: 18px;
   }
 }
 
@@ -16,13 +26,13 @@
   display: block;
   height: 100px;
   margin: 0 auto;
-  transition: all 0.5s;
   width: 90%;
 }
 
 .footer .sponsor-logo {
   $half-brightness: 0.5;
   filter: brightness($half-brightness);
+  transition: all 0.5s;
   &:hover {
     $full-brightness: 1;
     filter: brightness($full-brightness);
