@@ -1,0 +1,41 @@
+.landing {
+  .banner {
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  .landing-logo {
+    display: block;
+    margin: 20px auto;
+    width: 164px; 
+  }
+
+  .heading {
+    font-size: 72px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    @media (max-width: $screen-xs-max) {
+      font-size: 36px;
+      letter-spacing: 2px;
+    }
+  }
+
+  .blurb {
+    color: $gray-light;
+    font-size: 32px;
+    @media (max-width: $screen-xs-max) {
+      font-size: 18px;
+    }
+  }
+
+  .btn-cta {
+    font-weight: 700;
+    @media (max-width: $screen-xs-max) {
+      font-size: 12px;
+    }
+    letter-spacing: 1px;
+    margin: 20px 0;
+    text-transform: uppercase;
+  }
+}

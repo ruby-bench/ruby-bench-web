@@ -19,6 +19,10 @@
   }
 }
 
-.navbar-default .navbar-toggle:hover .icon-bar {
+.navbar-toggle:hover .icon-bar {
   background-color: #fff;
+}
+
+.navbar-nav > li > a { 
+  font-weight: 600;
 }
