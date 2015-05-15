@@ -10,14 +10,13 @@
 
   %body
     = render 'layouts/top_nav'
-     
-    .container 
+
+    .container
       .row.body
         .col-xs-12
           = yield
 
     %footer
       = render 'layouts/footer'
+      = javascript_include_tag 'application'
       = yield :footer if content_for(:footer)
-
-    = javascript_include_tag 'application'
