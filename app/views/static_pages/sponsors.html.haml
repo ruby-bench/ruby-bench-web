@@ -10,12 +10,12 @@
       - @sponsors.each do |sponsor|
         .row.sponsor-row
           .col-sm-12
-          = link_to t("sponsors.#{sponsor}.link"), target: '_blank' do
+          = link_to sponsor.link, target: '_blank' do
             .col-xs-5
-              %div{ class: "#{t("sponsors.#{sponsor}.class_name")} sponsor-logo" }
+              %div{ class: "#{sponsor.class_name} sponsor-logo" }
                 %span.l-text-hidden
-                  = t("sponsors.#{sponsor}.name")
+                  = sponsor.name
 
             .col-xs-7
-              %h3.sponsor-name= t("sponsors.#{sponsor}.name")
-              .sponsor-desc= t("sponsors.#{sponsor}.desc")
+              %h3.sponsor-name= sponsor.name
+              .sponsor-desc= sponsor.desc

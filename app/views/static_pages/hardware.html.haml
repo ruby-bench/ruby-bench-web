@@ -6,13 +6,14 @@
       %hr
 
       %blockquote
+        - rubytune = Sponsors.find(:rubytune)
         %p
           Our current bare metal server is sponsored by the team over at
           = succeed '.' do
-            = link_to 'RubyTune.com', 'https://rubytune.com/', target: '_blank'
+            = link_to rubytune.name, rubytune.link, target: '_blank'
 
-          .sponsor-rubytune.sponsor-logo.hardware-sponsor
-            %span.l-text-hidden RubyTune
+          .sponsor-logo.hardware-sponsor{ class: rubytune.class_name }
+            %span.l-text-hidden rubytune.name
 
       %p
         All benchmarks are run on a bare metal server in order to achieve

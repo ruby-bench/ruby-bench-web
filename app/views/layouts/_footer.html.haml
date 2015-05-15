@@ -9,32 +9,38 @@
                 %i= t('footer.supported_by')
               .row
                 .col-xs-6
-                  = link_to t('sponsors.ruby_together.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.ruby_together.class_name') do
-                    %span.l-text-hidden= t('sponsors.ruby_together.name')
+                  - ruby_together = Sponsors.find(:ruby_together)
+                  = link_to ruby_together.link, target: '_blank', class: "sponsor-logo #{ruby_together.class_name}" do
+                    %span.l-text-hidden= ruby_together.name
+
                 .col-xs-6
-                  = link_to t('sponsors.jolly_good_code.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.jolly_good_code.class_name') do
-                    %span.l-text-hidden= t('sponsors.jolly_good_code.name')
+                  - jolly_good_code = Sponsors.find(:jolly_good_code)
+                  = link_to jolly_good_code.link, target: '_blank', class: "sponsor-logo #{jolly_good_code.class_name}" do
+                    %span.l-text-hidden= jolly_good_code.name
 
             %li.col-xs-6.col-sm-3
               %h5.l-align-center
                 %i= t('footer.domain_and_community')
 
-              = link_to t('sponsors.discourse.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.discourse.class_name') do
-                %span.l-text-hidden= t('sponsors.discourse.name')
+              - discourse = Sponsors.find(:discourse)
+              = link_to discourse.link, target: '_blank', class: "sponsor-logo #{discourse.class_name}" do
+                %span.l-text-hidden= discourse.name
 
             %li.col-xs-6.col-sm-3
               %h5.l-align-center
                 %i= t('footer.bare_metal_server')
 
-              = link_to t('sponsors.rubytune.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.rubytune.class_name') do
-                %span.l-text-hidden= t('sponsors.ruby_together.name')
+              - rubytune = Sponsors.find(:rubytune)
+              = link_to rubytune.link, target: '_blank', class: "sponsor-logo #{rubytune.class_name}" do
+                %span.l-text-hidden= rubytune.name
 
             %li.col-xs-6.col-sm-3
               %h5.l-align-center
                 %i= t('footer.error_tracking')
 
-              = link_to t('sponsors.bugsnag.link'), target: '_blank', class: 'sponsor-logo ' + t('sponsors.bugsnag.class_name') do
-                %span.l-text-hidden= t('sponsors.bugsnag.name')
+              - bugsnag = Sponsors.find(:bugsnag)
+              = link_to bugsnag.link, target: '_blank', class: "sponsor-logo #{bugsnag.class_name}" do
+                %span.l-text-hidden= bugsnag.name
 
         %hr.footer-hr
 
@@ -43,11 +49,11 @@
             = succeed '.' do
               Built by
               = link_to '@tgxworld', 'https://github.com/tgxworld', target: '_blank'
-            
+
             = succeed '.' do
               Designed by
               = link_to '@yangshun', 'https://github.com/yangshun', target: '_blank'
-            
+
             = succeed '!' do
               A big thanks to our awesome
               = link_to 'contributors', 'https://github.com/ruby-bench/ruby-bench-web/graphs/contributors', target: '_blank'
