@@ -79,17 +79,25 @@ en:
       blurb: Where to start contributing?
       component_title: "The RubyBench project consists of the following components:"
       ruby_bench_web:
-        text: 'ruby-bench-web: Web Application to Display and Store Results'
+        name: RubyBench Web
+        repo_name: 'ruby-bench-web'
         url: https://github.com/ruby-bench/ruby-bench-web
+        desc: 'Web application to display and store results.'
       ruby_bench_docker:
-        text: 'ruby-bench-docker: Docker Scripts to Run Benchmarks'
+        name: RubyBench Docker
+        repo_name: 'ruby-bench-docker'
         url: https://github.com/ruby-bench/ruby-bench-docker
+        desc: 'Docker scripts to run benchmarks.'
       ruby_bench_suite:
-        text: 'ruby-bench-suite: Benchmark scripts'
+        name: RubyBench Suite
+        repo_name: 'ruby-bench-suite'
         url: https://github.com/ruby-bench/ruby-bench-suite
+        desc: 'Benchmark scripts.'
       ruby_bench_server:
-        text: 'ruby-bench-server: Script to set up new bare metal servers'
+        name: RubyBench Server
+        repo_name: 'ruby-bench-server'
         url: https://github.com/ruby-bench/ruby-bench-server
+        desc: 'Script to set up new bare metal servers.'
     sponsors:
       title: Sponsors
 

@@ -2,6 +2,7 @@
 @import "bootstrap-override";
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "mixins";
 @import "base";
 @import "modules/*";
 @import "pygments"
