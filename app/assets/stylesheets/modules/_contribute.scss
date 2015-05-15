@@ -1,0 +1,34 @@
+.contribute {
+  $repo-list: web docker suite server;
+
+  @each $repo in $repo-list {
+    .repo-ruby-bench-#{$repo} {
+      @include image-as-background();
+      background-image: image-url('repos/ruby-bench-#{$repo}-logo.png');
+    }
+  }
+  
+  .contribute-repo-logo {
+    @include image-as-background();
+    display: block;
+    height: 100px;
+    margin: 10px auto;
+    width: 90%;
+  }
+
+  .contribute-repo-link {
+    color: #000;
+    &:hover {
+      color: $brand-primary;
+      text-decoration: none;
+    }
+  }
+
+  .contribute-item {
+    text-align: center;
+  }
+
+  .contribute-section {
+    margin-bottom: 50px;
+  }
+}

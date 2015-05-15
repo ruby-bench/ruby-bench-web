@@ -1,22 +1,32 @@
-.col-xs-8.col-xs-offset-2
-  %h1= t('.title')
+.contribute
+  .row
+    .col-md-10.col-md-offset-1
+      %h1= t('.title')
 
-  %hr
+      %hr
+      
+      %h4= t('.blurb')
 
-  %h3= t('.blurb')
+      .row.contribute-section
+        .col-md-12
+          .row
+            .col-md-12
+              %p
+                = t('.component_title')
 
-  %p
-    = t('.component_title')
+          .row.contribute-row
+            - %w{ruby_bench_web ruby_bench_docker ruby_bench_suite ruby_bench_server}.each do |repo|
+              .col-sm-3.contribute-item
+                %div{ class: "contribute-repo-logo repo-#{t(".#{repo}.repo_name")}" }
+                = link_to t(".#{repo}.url"), target: '_blank', class: 'contribute-repo-link' do
+                  %h3
+                    = t(".#{repo}.name")
+                %p
+                  = t(".#{repo}.desc")
 
-    %ul
-      - %w{ruby_bench_web ruby_bench_docker ruby_bench_suite ruby_bench_server}.each do |repo|
-        %li
-          = link_to t(".#{repo}.text"), t(".#{repo}.url")
+      .contribute-section
+        %h3 Feature requests/discussion
 
-  %hr
-
-  %h3 Feature requests/discussion
-
-  %p
-    All discussion of features and directions for RubyBench will be done at
-    = link_to AppSettings.forum_url, AppSettings.forum_url
+        %p
+          All discussion of features and directions for RubyBench will be done at
+          = link_to AppSettings.forum_url, AppSettings.forum_url

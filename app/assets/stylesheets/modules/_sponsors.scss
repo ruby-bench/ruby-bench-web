@@ -1,10 +1,3 @@
-@mixin background-image($background-image) {
-  background-image: image-url($background-image);
-  background-position: center center;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
 .sponsors {
   .sponsor-row {
     margin: 40px 0;
@@ -23,6 +16,7 @@
 }
 
 .sponsor-logo {
+  @include image-as-background();
   display: block;
   height: 100px;
   margin: 0 auto;
@@ -43,9 +37,9 @@ $sponsor-list: discourse jolly-good-code rubytune ruby-together bugsnag;
 
 @each $sponsor in $sponsor-list {
   .sponsor-#{$sponsor} {
-    @include background-image('sponsors/#{$sponsor}.png');
+    background-image: image-url('sponsors/#{$sponsor}.png');
   }
   .footer .sponsor-#{$sponsor} {
-    @include background-image('sponsors/#{$sponsor}-bw.png');
+    background-image: image-url('sponsors/#{$sponsor}-bw.png');
   }
 }

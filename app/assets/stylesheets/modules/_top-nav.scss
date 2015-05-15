@@ -3,7 +3,8 @@
 }
 
 .logo {
-  @include background-image('logo.png');
+  @include image-as-background();
+  background-image: image-url('logo.png');
   height: 40px;
   width: 160px;
 }

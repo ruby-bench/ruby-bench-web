@@ -1,0 +1,6 @@
+@mixin image-as-background () {
+  // Requires user to set background-image property explicitly!
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
