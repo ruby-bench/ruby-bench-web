@@ -2,7 +2,7 @@
   border: none;
 }
 
-.logo {
+.navbar-logo {
   @include image-as-background();
   background-image: image-url('logo.png');
   height: 40px;
@@ -24,6 +24,6 @@
   background-color: #fff;
 }
 
-.navbar-nav > li > a { 
+.navbar-nav > li > a {
   font-weight: 600;
 }
