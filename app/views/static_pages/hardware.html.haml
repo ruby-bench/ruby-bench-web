@@ -1,58 +1,62 @@
-.col-xs-8.col-xs-offset-2
-  %h1= t('top-nav.hardware')
+.hardware
+  .row
+    .col-md-10.col-md-offset-1
+      %h1= t('top-nav.hardware')
 
-  %hr
+      %hr
 
-  %blockquote
-    %p
-      Our current bare metal server is sponsored by the team over at
-      = succeed '.' do
-        = link_to 'RubyTune.com', 'https://rubytune.com/', target: '_blank'
+      %blockquote
+        %p
+          Our current bare metal server is sponsored by the team over at
+          = succeed '.' do
+            = link_to 'RubyTune.com', 'https://rubytune.com/', target: '_blank'
 
-      .sponsor-ruby-tune
-        %span.l-text-hidden RubyTune
+          .sponsor-ruby-tune
+            %span.l-text-hidden RubyTune
 
-  %p
-    All benchmarks are run on a bare metal server in order to achieve
-    consistent and repeatable results. We
-    %strong will not
-    publish CPU results gathered on virtual hosts where we can not control
-    our CPU allocation. The only results published are run on
-    production level bare metal servers.
+      %p
+        All benchmarks are run on a bare metal server in order to achieve
+        consistent and repeatable results. We
+        %strong will not
+        publish CPU results gathered on virtual hosts where we can not control
+        our CPU allocation. The only results published are run on
+        production level bare metal servers.
 
-  %p
-    The bare metal server is purchased from
-    = link_to 'Hetzner Online',
-      'http://www.hetzner.de/en/hosting/produkte_rootserver/px60ssd',
-      target: '_blank'
-    and has the following configurations:
+      %p
+        The bare metal server is purchased from
+        = link_to 'Hetzner Online',
+          'http://www.hetzner.de/en/hosting/produkte_rootserver/px60ssd',
+          target: '_blank'
+        and has the following configurations:
 
-    %table.table.table-striped
-      %thead
-        %tr
-          %th System Type
-          %th Component
+      .row
+        .col-md-8.col-md-offset-2
+          %table.table.table-striped
+            %thead
+              %tr
+                %th System Type
+                %th Component
 
-      %tbody
-        %tr
-          %th Operating System
-          %td Ubuntu-1404-trusty-64-minimal
+            %tbody
+              %tr
+                %td Operating System
+                %td Ubuntu-1404-trusty-64-minimal
 
-        %tr
-          %th RAM
-          %td
-            4 x 8GB Micron ECC
-            %br
-            Part Number: 18KSF1G72AZ-1G6E1
+              %tr
+                %td RAM
+                %td
+                  4 x 8GB Micron ECC
+                  %br
+                  Part Number: 18KSF1G72AZ-1G6E1
 
-        %tr
-          %th Processor
-          %td 3.6GHz Intel® Xeon® E3-1270 v3 Quad-Core Haswell incl. Hyper-Threading Technology
+              %tr
+                %td Processor
+                %td 3.6GHz Intel® Xeon® E3-1270 v3 Quad-Core Haswell incl. Hyper-Threading Technology
 
-        %tr
-          %th Hard Drive
-          %td Samsung SSD 845DC EVO - 240 GB - 2,5" SATA III
+              %tr
+                %td Hard Drive
+                %td Samsung SSD 845DC EVO - 240 GB - 2,5" SATA III
 
-        %tr
-          %th Motherboard
-          %td Intel Coporation S1200RP
+              %tr
+                %td Motherboard
+                %td Intel Coporation S1200RP
