@@ -1,12 +1,13 @@
-.contribute {
-  $repo-list: web docker suite server;
+$repo-list: web docker suite server;
 
-  @each $repo in $repo-list {
-    .repo-ruby-bench-#{$repo} {
-      @include image-as-background();
-      background-image: image-url('repos/ruby-bench-#{$repo}-logo.png');
-    }
+@each $repo in $repo-list {
+  .repo-ruby-bench-#{$repo} {
+    @include image-as-background();
+    background-image: image-url('repos/ruby-bench-#{$repo}-logo.png');
   }
+}
+
+.contribute {
   
   .contribute-repo-logo {
     @include image-as-background();

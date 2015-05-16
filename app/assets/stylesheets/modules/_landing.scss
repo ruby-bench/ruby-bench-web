@@ -38,4 +38,25 @@
     margin: 20px 0;
     text-transform: uppercase;
   }
+
+  .landing-section {
+    margin: 50px auto;
+  }
+
+  .landing-graphic {
+    width: 100%;
+  }
+
+  .landing-graphic-medium {
+    display: block;
+    margin: 0 auto;
+    width: 70%;
+  }
+
+  .contribute-repo-logo {
+    @include image-as-background();
+    display: block;
+    height: 100px;
+    margin: 10px auto;
+  }
 }
