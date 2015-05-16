@@ -1,0 +1,26 @@
+@media only screen and (max-width: 40em) {
+  #benchmark-types-form-show {
+    margin-bottom: 0.5em;
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 40.063em) {
+  .chart-warning {
+    display: table;
+    margin-bottom: 1em;
+    width: 100%;
+
+    #benchmark-types-form-show {
+      margin-right: 0.5em;
+      padding: 10px;
+    }
+
+    .alert-warning {
+      display: table-cell;
+      padding: 10px;
+      width: 100%;
+    }
+  }
+}
+
