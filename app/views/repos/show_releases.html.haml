@@ -3,16 +3,16 @@
 
   %hr
 
-  #benchmark-types-form-container.col-xs-4
+  #benchmark-types-form-container.col-xs-3
     = render 'form',
         form_path: releases_repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
         name: 'releases'
 
-  #charts-container.col-xs-8
+  #charts-container.col-xs-9
     = render 'hide_form_button'
     = render 'layouts/spinner'
 
-    #chart-container
+    #chart-container.chart-container
       = render 'show_releases_chart', charts: @charts,
           benchmark_type: @benchmark_type,
           benchmark_type_memory: @benchmark_type_memory

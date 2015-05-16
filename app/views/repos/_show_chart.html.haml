@@ -1,10 +1,7 @@
 - if !charts
-  .alert.alert-warning
-    .l-align-center
-      %strong= t('repos.show_releases.select_benchmark')
-
-  .alert.alert-info
-    = render 'description'
+  = image_tag 'icon.png', alt: 'RubyBench Logo', class: 'benchmark-placeholder'
+  .l-align-center
+    %h4= t('repos.show_releases.select_benchmark')
 
 - elsif charts.empty?
   .alert.alert-warning
