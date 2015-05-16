@@ -1,88 +1,73 @@
 .landing
   .row.landing-banner
+    .col-md-12.landing-banner-background
     .col-md-12
-      = image_tag 'icon.png', alt: 'RubyBench Logo', class: 'landing-logo'
+      = image_tag('icon.png', alt: 'RubyBench Logo', class: 'landing-logo')
       %h1.landing-heading RubyBench
       %p.landing-blurb Long Running Benchmarks for Ruby Projects
-
-      = link_to "View Ruby's Performance →",
-          releases_repo_path(organization_name: 'ruby', repo_name: 'ruby'),
-          class: 'btn btn-lg btn-primary landing-btn-cta'
-  .row
-    .col-md-10.col-md-offset-1
-      .row.landing-section
-        .col-md-6
-          %h2 What is RubyBench?
-          %p
-            RubyBench is a long running Ruby benchmark. Currently,
-            = link_to 'Ruby benchmark scripts',
-                'https://github.com/ruby-bench/ruby-bench-suite/tree/master/ruby/benchmarks',
-                target: '_blank'
-            and
-            = link_to 'Discourse benchmark scripts',
-                'https://github.com/discourse/discourse/blob/master/script/bench.rb',
-                target: '_blank'
-            have been implemented and are run for every commit and release. If you've
-            noticed a regression, feel free to use RubyBench when opening a new issue.
-          %p
-            = link_to "Try out RubyBench! →",
-                releases_repo_path(organization_name: 'ruby', repo_name: 'ruby'),
-                class: 'btn btn-primary'
-
-        .col-md-6
-          = image_tag 'landing/landing-charts.png', alt: 'What is RubyBench',
-              class: 'landing-graphic'
-
-      .row.landing-section
-        .col-md-6.col-md-push-6
-          %h2 What's the Plan?
-          %p
-            RubyBench is currently still in its early stages but has already
-            proven to be useful in
-            = succeed '.' do
-              = link_to 'identifying performance regressions',
-                  'http://community.rubybench.org/t/ruby-bench-already-helped-catch-a-regression-in-mri',
+      = link_to "View Ruby's Performance →", releases_repo_path(organization_name: 'ruby', repo_name: 'ruby'), class: 'btn btn-lg btn-primary landing-btn-cta'
+  .container
+    .row
+      .col-md-10.col-md-offset-1
+        .row.landing-section
+          .col-md-6
+            %h2 What is RubyBench?
+            %p 
+              RubyBench is a long running Ruby benchmark. Currently,
+              = link_to 'Ruby benchmark scripts',
+                  'https://github.com/ruby-bench/ruby-bench-suite/tree/master/ruby/benchmarks',
                   target: '_blank'
-            We do believe that there are more improvements to be made such as
-            providing the percentage difference between commits and releases.
-            In the near future, RubyBench will also monitor and track popular Ruby
-            libraries such as Rails.
-        .col-md-6.col-md-pull-6
-          = image_tag 'landing/landing-plan.png', alt: 'RubyBench Plan',
-              class: 'landing-graphic-medium'
+              and
+              = link_to 'Discourse benchmark scripts',
+                  'https://github.com/discourse/discourse/blob/master/script/bench.rb',
+                  target: '_blank'
+              have been implemented and are run for every commit and release. If you've
+              noticed a regression, feel free to use RubyBench when opening a new issue.
+            %p
+              = link_to "Try out RubyBench! →", releases_repo_path(organization_name: 'ruby', repo_name: 'ruby'), class: 'btn btn-primary'
+          .col-md-6
+            = image_tag('landing/landing-charts.png', alt: 'What is RubyBench', class: 'landing-graphic')
 
-      .row.landing-section
-        .col-md-6
-          %h2 Hardware
-          %p
-            All benchmarks are run on production level bare metal server in order
-            to ensure consistent and repeatable results. More information about
-            our bare metal server can be found on our hardware page.
-          %p
-            = link_to "View Hardware →", hardware_path, class: 'btn btn-primary'
-        .col-md-6
-          = image_tag 'landing/landing-hardware.png', alt: 'RubyBench Hardware',
-              class: 'landing-graphic-medium'
+        .row.landing-section
+          .col-md-6.col-md-push-6
+            %h2 What's the Plan?
+            %p 
+              RubyBench is currently still in its early stages but has already proven to be useful in
+              = succeed '.' do
+                = link_to 'identifying performance regressions',
+                    'http://community.rubybench.org/t/ruby-bench-already-helped-catch-a-regression-in-mri',
+                    target: '_blank'
+              We do believe that there are more improvements to be made such as
+              providing the percentage difference between commits and releases.
+              In the near future, RubyBench will also monitor and track popular Ruby
+              libraries such as Rails.
+          .col-md-6.col-md-pull-6
+            = image_tag('landing/landing-plan.png', alt: 'RubyBench Plan', class: 'landing-graphic-medium')
 
-      .row.landing-section
-        .col-md-6.col-md-push-6
-          %h2 Contribute!
-          %p
-            Help us make RubyBench and Ruby better by contributing to any parts
-            of the project:
-          %ul
-            %li Web front end
-            %li Benchmark runner
-            %li Benchmark suite
-            %li Benchmark server setup script
-          %p
-            = link_to "Find Out More →", contribute_path, class: 'btn btn-primary'
+        .row.landing-section
+          .col-md-6
+            %h2 Hardware
+            %p All benchmarks are run on production level bare metal server in order to ensure consistent and repeatable results. More information about our bare metal server can be found on our hardware page.
+            %p 
+              = link_to "View Hardware →", hardware_path, class: 'btn btn-primary'
+          .col-md-6
+            = image_tag('landing/landing-hardware.png', alt: 'RubyBench Hardware', class: 'landing-graphic-medium')
 
-        .col-md-6.col-md-pull-6
-          .row
-            .col-md-6.col-md-offset-3
-              .row
-                - %w{web docker suite server}.each do |repo|
-                  %div{ class: "landing-contribute-repo-logo repo-ruby-bench-#{repo} col-sm-6 col-xs-3" }
+        .row.landing-section
+          .col-md-6.col-md-push-6
+            %h2 Contribute!
+            %p Help us make RubyBench and Ruby better by contributing to any parts of the project:
+            %ul
+              %li Web front end
+              %li Benchmark runner
+              %li Benchmark suite
+              %li Benchmark server setup script
+            %p 
+              = link_to "Find Out More →", contribute_path, class: 'btn btn-primary'
 
-
+          .col-md-6.col-md-pull-6
+            .row
+              .col-md-6.col-md-offset-3
+                .row
+                  - %w{web docker suite server}.each do |repo|
+                    %div{ class: "landing-contribute-repo-logo repo-ruby-bench-#{repo} col-sm-6 col-xs-3" }

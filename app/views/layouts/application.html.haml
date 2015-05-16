@@ -10,11 +10,7 @@
 
   %body
     = render 'layouts/top_nav'
-
-    .container
-      .row.body
-        .col-xs-12
-          = yield
+    = yield
 
     %footer
       = render 'layouts/footer'

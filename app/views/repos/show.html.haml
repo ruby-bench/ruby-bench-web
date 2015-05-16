@@ -1,25 +1,26 @@
-= render 'title', title: t('.title', repo_name: @repo.name.capitalize)
+.container
+  = render 'title', title: t('.title', repo_name: @repo.name.capitalize)
 
-%hr
+  %hr
 
-#benchmark-types-form-container.col-xs-4
-  = render 'form',
-      form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
-      name: 'commits'
+  #benchmark-types-form-container.col-xs-4
+    = render 'form',
+        form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
+        name: 'commits'
 
-#charts-container.col-xs-8
-  %p
-    %b
-      = succeed t('.results') do
-        = t('.show_last')
-        = select :benchmark_run, :display_count, BenchmarkRun::PAGINATE_COUNT,
-            selected: @benchmark_run_display_count
+  #charts-container.col-xs-8
+    %p
+      %b
+        = succeed t('.results') do
+          = t('.show_last')
+          = select :benchmark_run, :display_count, BenchmarkRun::PAGINATE_COUNT,
+              selected: @benchmark_run_display_count
 
-  = render 'hide_form_button'
-  = render 'layouts/spinner'
+    = render 'hide_form_button'
+    = render 'layouts/spinner'
 
-  #chart-container
-    = render 'show_chart', charts: @charts, benchmark_type: @benchmark_type,
-        benchmark_type_memory: @benchmark_type_memory
+    #chart-container
+      = render 'show_chart', charts: @charts, benchmark_type: @benchmark_type,
+          benchmark_type_memory: @benchmark_type_memory
 
-= render 'chart_modal'
+  = render 'chart_modal'
