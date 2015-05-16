@@ -17,6 +17,7 @@ gem 'pygments.rb', '~> 0.6.0'
 gem 'redis', '~> 3.2.1'
 gem 'redis-rails', '~> 4.0.0'
 gem 'sidekiq', '~> 3.3.3'
+gem 'jquery-ui-rails', '~> 5.0.5'
 
 group :development do
   gem 'spring'

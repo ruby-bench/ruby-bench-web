@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui/widget
 //= require highcharts
 //= require bootstrap/transition.js
 //= require bootstrap/modal.js

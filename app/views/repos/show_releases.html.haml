@@ -1,17 +1,18 @@
-= render 'title', title: t('.title', repo_name: @repo.name.capitalize)
+.container
+  = render 'title', title: t('.title', repo_name: @repo.name.capitalize)
 
-%hr
+  %hr
 
-#benchmark-types-form-container.col-xs-4
-  = render 'form',
-      form_path: releases_repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
-      name: 'releases'
+  #benchmark-types-form-container.col-xs-4
+    = render 'form',
+        form_path: releases_repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
+        name: 'releases'
 
-#charts-container.col-xs-8
-  = render 'hide_form_button'
-  = render 'layouts/spinner'
+  #charts-container.col-xs-8
+    = render 'hide_form_button'
+    = render 'layouts/spinner'
 
-  #chart-container
-    = render 'show_releases_chart', charts: @charts,
-        benchmark_type: @benchmark_type,
-        benchmark_type_memory: @benchmark_type_memory
+    #chart-container
+      = render 'show_releases_chart', charts: @charts,
+          benchmark_type: @benchmark_type,
+          benchmark_type_memory: @benchmark_type_memory
