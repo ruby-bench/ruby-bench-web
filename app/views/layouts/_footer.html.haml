@@ -2,45 +2,19 @@
   .container
     .row
       .col-xs-10.col-xs-offset-1
-        .footer-sponsors
-          %ul.row.list-inline
-            %li.col-xs-6.col-sm-3
-              %h5.l-align-center
-                %i= t('footer.supported_by')
-              .row
-                .col-xs-6
-                  - ruby_together = Sponsors.find(:ruby_together)
-                  = link_to ruby_together.link, target: '_blank', class: "sponsor-logo #{ruby_together.class_name}" do
-                    %span.l-text-hidden= ruby_together.name
-
-                .col-xs-6
-                  - jolly_good_code = Sponsors.find(:jolly_good_code)
-                  = link_to jolly_good_code.link, target: '_blank', class: "sponsor-logo #{jolly_good_code.class_name}" do
-                    %span.l-text-hidden= jolly_good_code.name
-
-            %li.col-xs-6.col-sm-3
-              %h5.l-align-center
-                %i= t('footer.domain_and_community')
-
-              - discourse = Sponsors.find(:discourse)
-              = link_to discourse.link, target: '_blank', class: "sponsor-logo #{discourse.class_name}" do
-                %span.l-text-hidden= discourse.name
-
-            %li.col-xs-6.col-sm-3
-              %h5.l-align-center
-                %i= t('footer.bare_metal_server')
-
-              - rubytune = Sponsors.find(:rubytune)
-              = link_to rubytune.link, target: '_blank', class: "sponsor-logo #{rubytune.class_name}" do
-                %span.l-text-hidden= rubytune.name
-
-            %li.col-xs-6.col-sm-3
-              %h5.l-align-center
-                %i= t('footer.error_tracking')
-
-              - bugsnag = Sponsors.find(:bugsnag)
-              = link_to bugsnag.link, target: '_blank', class: "sponsor-logo #{bugsnag.class_name}" do
-                %span.l-text-hidden= bugsnag.name
+        %ul.footer-nav-links
+          %li
+            = link_to t('top_nav.releases'), releases_repo_path(organization_name: 'ruby', repo_name: 'ruby')
+          %li
+            = link_to t('top_nav.benchmarks'), repo_path(organization_name: 'ruby', repo_name: 'ruby')
+          %li
+            = link_to t('top_nav.hardware'), hardware_path
+          %li
+            = link_to t('top_nav.contribute'), contribute_path
+          %li
+            = link_to t('top_nav.sponsors'), sponsors_path
+          %li
+            = link_to t('top_nav.discuss'), AppSettings.forum_url, target: '_blank'
 
         %hr.footer-hr
 
