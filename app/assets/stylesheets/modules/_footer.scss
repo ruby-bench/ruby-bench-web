@@ -1,19 +1,29 @@
 .footer {
+  $footer-gray: #6c767e;
+
   background-color: #141c22;
   color: #fff;
-  padding-top: 2em;
-}
-
-.footer-hr {
-  border-color: #fff;
-}
-
-.footer-sponsor-list {
-  a {
-    color: white;
-    text-decoration: none;
+  padding: 2em 0;
+  .footer-hr {
+    border-color: $footer-gray;
   }
-
-  margin-right: 1.5em;
-  vertical-align: text-top;
+  .footer-nav-links {
+    text-align: center;
+    li {
+      display: inline-block;
+      font-weight: $bold;
+      list-style: none;
+      a {
+        color: #fff;
+        padding: 0 10px;
+        &:hover {
+          color: $footer-gray;
+          text-decoration: none;
+        }
+      }
+      &:not(:last-child):after {
+        content: '\00b7';
+      }
+    }
+  }  
 }
