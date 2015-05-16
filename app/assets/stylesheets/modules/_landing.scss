@@ -53,6 +53,10 @@
     width: 70%;
   }
 
+  .landing-banner-background {
+    position: absolute;
+  }
+
   .landing-contribute-repo-logo {
     @include image-as-background();
     display: block;
