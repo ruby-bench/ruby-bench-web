@@ -8,6 +8,7 @@ var drawReleaseChart = function(chartClass) {
           type: 'column',
           zoomType: 'x'
         },
+        colors: ['#e34447'],
         subtitle: {
           text: document.ontouchstart === undefined ? "<%= I18n.t('highcharts.subtitle.desktop') %>" : "<%= I18n.t('highcharts.subtitle.mobile') %>"
         },
