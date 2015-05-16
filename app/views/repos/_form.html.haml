@@ -1,25 +1,22 @@
 .panel.panel-primary
   .panel-heading.clearfix
-    = t('repos.benchmark_types')
-
     .l-right
       = link_to '#', id: 'benchmark-types-form-hide', class: 'btn btn-default' do
-        %span.glyphicon.glyphicon-menu-left{ aria: 'hidden' }
         %span= t('repos.hide_benchmark_types_form')
+        %span{ aria: 'hidden' }
+          %strong ×
+
+    %h5= t('repos.benchmark_types')
 
   .panel-body
+
     = form_tag form_path, role: 'form', method: :get, class: 'result-types-form', data: { organization_name: @organization.name, repo_name: @repo.name, name: name } do
       .form-group
-        %ul.list-unstyled.list-inline
+        %select.form-control
+          %option{ value: "", selected: @form_result_type.blank?, disabled: true } Select a type
           - @result_types.each do |category_name, categories|
-            = field_set_tag category_name.try(:titleize)
-
-            - categories.each do |result_type|
-              %li.l-padding-sides-1
-                - id = "result_type_#{result_type}"
-
-                = label_tag(id, class: 'list-label') do
-                  = radio_button_tag("result_type", result_type,
-                    (@form_result_type == result_type), id: id)
-
-                  %span= result_type
+            %optgroup{ label: category_name.try(:titleize) }
+              - categories.each do |result_type|
+                - value = "#{result_type}"
+                %option{ value: value, selected: (@form_result_type == result_type) }
+                  #{result_type}

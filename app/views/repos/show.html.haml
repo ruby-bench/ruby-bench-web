@@ -3,20 +3,21 @@
 
   %hr
 
-  #benchmark-types-form-container.col-xs-4
+  #benchmark-types-form-container.col-xs-3
     = render 'form',
         form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
         name: 'commits'
 
-  #charts-container.col-xs-8
+  #charts-container.col-xs-9
+    = render 'hide_form_button'
+    
     %p
-      %b
-        = succeed t('.results') do
+      %strong
+        = succeed ' ' + t('.results') do
           = t('.show_last')
           = select :benchmark_run, :display_count, BenchmarkRun::PAGINATE_COUNT,
               selected: @benchmark_run_display_count
 
-    = render 'hide_form_button'
     = render 'layouts/spinner'
 
     #chart-container
