@@ -29,4 +29,4 @@
       = t('repos.show_releases.script_title', graph_name: benchmark_name)
 
     = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
-        lexer: :ruby, options: { linenos: 'inline' }).html_safe
+        lexer: :ruby, options: { linenos: 'inline' }, css: { style: 'monokai'}).html_safe
