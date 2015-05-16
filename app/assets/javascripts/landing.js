@@ -70,7 +70,7 @@ $(function () {
           },
           enableMouseTracking: false,
           lineWidth: 5,
-          marked: {
+          marker: {
             enabled: false
           }
         }
