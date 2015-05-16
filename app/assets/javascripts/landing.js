@@ -34,6 +34,12 @@ $(function () {
         backgroundColor: TRANSPARENT_COLOR,
         showAxes: false
       },
+      exporting: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
+      },
       colors: [GRAY_COLOR],
       yAxis: {
         gridLineWidth: 0,
@@ -79,8 +85,5 @@ $(function () {
         data: generateData()
       }]
     });
-
-    $bannerChart.find('text').remove();
-    $bannerChart.find('.highcharts-button').remove();
   }
 });
