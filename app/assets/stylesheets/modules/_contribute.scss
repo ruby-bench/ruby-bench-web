@@ -8,7 +8,6 @@ $repo-list: web docker suite server;
 }
 
 .contribute {
-  
   .contribute-repo-logo {
     @include image-as-background();
     display: block;

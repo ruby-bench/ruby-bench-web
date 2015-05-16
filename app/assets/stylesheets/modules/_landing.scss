@@ -3,11 +3,11 @@
     margin: 20px 0;
     text-align: center;
   }
-  
+
   .landing-logo {
     display: block;
     margin: 20px auto;
-    width: 164px; 
+    width: 164px;
   }
 
   .landing-heading {
@@ -53,7 +53,7 @@
     width: 70%;
   }
 
-  .contribute-repo-logo {
+  .landing-contribute-repo-logo {
     @include image-as-background();
     display: block;
     height: 100px;
