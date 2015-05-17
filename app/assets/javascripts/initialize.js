@@ -19,7 +19,7 @@ $(document).ready(function() {
     var repoName = $resultTypesForm.data('repo-name');
     var name = $resultTypesForm.data('name');
 
-    var resultType = $('.result-types-form select').val();
+    var resultType = $('.result-types-form select').val() || "";
     var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
 
     if (benchmarkRunDisplayCount !== undefined) {

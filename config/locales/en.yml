@@ -12,7 +12,7 @@ en:
 
   repos:
     select_benchmark: &select_benchmark
-      Please select a benchmark.
+      Please select a benchmark
     script_title: &script_title
       "%{graph_name} Script"
     graph_title: &graph_title

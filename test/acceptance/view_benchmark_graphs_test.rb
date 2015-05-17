@@ -19,7 +19,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       I18n.t('repos.show.title', repo_name: benchmark_run.initiator.repo.name.capitalize)
     )
 
-    assert page.has_content?(I18n.t('repos.show.select_benchmark'))
+    assert_text :all, I18n.t('repos.show.select_benchmark')
 
     within "form" do
       select(benchmark_run.benchmark_type.category)
@@ -116,7 +116,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       I18n.t('repos.show_releases.title', repo_name: benchmark_run.initiator.repo.name.capitalize)
     )
 
-    assert page.has_content?(I18n.t('repos.show_releases.select_benchmark'))
+    assert_text :all, I18n.t('repos.show.select_benchmark')
 
     within "form" do
       select(benchmark_run.benchmark_type.category)
@@ -162,7 +162,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       I18n.t('repos.show_releases.title', repo_name: benchmark_run.initiator.repo.name.capitalize)
     )
 
-    assert page.has_content?(I18n.t('repos.show_releases.select_benchmark'))
+    assert_text :all, I18n.t('repos.show.select_benchmark')
 
     within "form" do
       select(benchmark_run.benchmark_type.category)

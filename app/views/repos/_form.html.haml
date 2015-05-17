@@ -3,7 +3,9 @@
     .input-group
       .input-group-addon= t('repos.benchmark_types')
       %select.form-control
-        %option{ value: "", selected: @form_result_type.blank?, disabled: true } Select a type
+        %option{ value: "", selected: @form_result_type.blank? || @form, disabled: true }
+          = t('repos.select_benchmark')
+
         - @result_types.each do |category_name, categories|
           %optgroup{ label: category_name.try(:titleize) }
             - categories.each do |result_type|
