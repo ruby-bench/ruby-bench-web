@@ -2,7 +2,7 @@
   .row.landing-banner
     .hidden-xs.col-md-12.landing-banner-background
     .col-md-12
-      = image_tag('icon.png', alt: 'RubyBench Logo', class: 'landing-logo')
+      = image_tag 'icon.png', alt: 'RubyBench Logo', class: 'landing-logo'
       %h1.landing-heading RubyBench
       %p.landing-blurb Long Running Benchmarks for Ruby Projects
       = link_to "View Ruby's Performance →", releases_repo_path(organization_name: 'ruby', repo_name: 'ruby'), class: 'btn btn-lg btn-primary landing-btn-cta'
@@ -49,7 +49,7 @@
 
         .row.landing-section
           .col-md-6.col-md-push-6
-            = image_tag('landing/landing-hardware.png', alt: 'RubyBench Hardware', class: 'landing-graphic-medium')
+            = image_tag 'landing/landing-hardware.png', alt: 'RubyBench Hardware', class: 'landing-graphic-medium'
 
           .col-md-6.col-md-pull-6
             %h2 Hardware
