@@ -1,22 +1,21 @@
-.panel.panel-primary
-  .panel-heading.clearfix
-    .l-right
-      = link_to '#', id: 'benchmark-types-form-hide', class: 'btn btn-default' do
-        %span= t('repos.hide_benchmark_types_form')
-        %span{ aria: 'hidden' }
-          %strong ×
+= form_tag form_path, role: 'form', method: :get, class: 'result-types-form form-inline', data: { organization_name: @organization.name, repo_name: @repo.name, name: name } do
+  .form-group
+    .input-group
+      .input-group-addon= t('repos.benchmark_types')
+      %select.form-control
+        %option{ value: "", selected: @form_result_type.blank?, disabled: true } Select a type
+        - @result_types.each do |category_name, categories|
+          %optgroup{ label: category_name.try(:titleize) }
+            - categories.each do |result_type|
+              - value = "#{result_type}"
+              %option{ value: value, selected: (@form_result_type == result_type) }
+                #{result_type}
 
-    %h5= t('repos.benchmark_types')
+    - if name == 'commits'
+      .input-group
+        .input-group-addon= t('repos.show.show_last')
 
-  .panel-body
+        = select :benchmark_run, :display_count, BenchmarkRun::PAGINATE_COUNT,
+            { selected: @benchmark_run_display_count }, { class: 'form-control' }
 
-    = form_tag form_path, role: 'form', method: :get, class: 'result-types-form', data: { organization_name: @organization.name, repo_name: @repo.name, name: name } do
-      .form-group
-        %select.form-control
-          %option{ value: "", selected: @form_result_type.blank?, disabled: true } Select a type
-          - @result_types.each do |category_name, categories|
-            %optgroup{ label: category_name.try(:titleize) }
-              - categories.each do |result_type|
-                - value = "#{result_type}"
-                %option{ value: value, selected: (@form_result_type == result_type) }
-                  #{result_type}
+        .input-group-addon= t('.repos.show.results')

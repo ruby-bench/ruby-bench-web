@@ -22,7 +22,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_content?(I18n.t('repos.show.select_benchmark'))
 
     within "form" do
-      choose(benchmark_run.benchmark_type.category)
+      select(benchmark_run.benchmark_type.category)
     end
 
     within ".chart .highcharts-container .highcharts-yaxis-title",
@@ -63,7 +63,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
 
     within "form" do
-      choose(benchmark_run.benchmark_type.category)
+      select(benchmark_run.benchmark_type.category)
     end
 
     assert page.has_css?(".chart .highcharts-container")
@@ -93,11 +93,12 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     visit '/ruby/ruby/commits'
 
     within "form" do
-      lis = page.all('li input')
+      list = page.first('.input-group').all('option')
 
       assert_equal(
-        lis.map(&:value),
+        list.map(&:value),
         [
+          "",
           benchmark_types(:array_count).category,
           benchmark_types(:array_iterations).category,
           benchmark_types(:array_shift).category
@@ -118,7 +119,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_content?(I18n.t('repos.show_releases.select_benchmark'))
 
     within "form" do
-      choose(benchmark_run.benchmark_type.category)
+      select(benchmark_run.benchmark_type.category)
     end
 
     within ".release-chart .highcharts-container .highcharts-yaxis-title",
@@ -164,7 +165,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert page.has_content?(I18n.t('repos.show_releases.select_benchmark'))
 
     within "form" do
-      choose(benchmark_run.benchmark_type.category)
+      select(benchmark_run.benchmark_type.category)
     end
 
     assert page.has_css?(".release-chart .highcharts-container")
@@ -191,27 +192,10 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     visit '/ruby/ruby/releases'
 
     within "form" do
-      choose(category)
+      select(category)
     end
 
     assert_not page.has_css?(".release-chart .highcharts-container")
     assert page.has_content?(I18n.t("repos.no_results", category: category))
-  end
-
-  test "User should be able to hide benchmark types form" do
-    ['/ruby/ruby/releases', '/ruby/ruby/commits'].each do |path|
-      visit path
-      click_link "benchmark-types-form-hide"
-
-      within "#benchmark-types-form-container" do
-        assert page.has_css?('.panel.panel-primary.hide', visible: false)
-      end
-
-      click_link  "benchmark-types-form-show"
-
-      within "#benchmark-types-form-container" do
-        assert page.has_css?('.panel.panel-primary', visible: true)
-      end
-    end
   end
 end

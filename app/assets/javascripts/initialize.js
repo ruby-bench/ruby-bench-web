@@ -6,7 +6,7 @@ $(document).ready(function() {
 
   var $resultTypesForm = $('.result-types-form');
 
-  $('.result-types-form select, #benchmark_run_display_count').change(function (event) {
+  $('.result-types-form select').change(function (event) {
     var $spinner = $('.spinner');
     var xhr;
 
@@ -18,7 +18,7 @@ $(document).ready(function() {
     var organizationName = $resultTypesForm.data('organization-name');
     var repoName = $resultTypesForm.data('repo-name');
     var name = $resultTypesForm.data('name');
-    
+
     var resultType = $('.result-types-form select').val();
     var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
 
@@ -33,9 +33,9 @@ $(document).ready(function() {
     xhr = $.ajax({
       url: ['', organizationName, repoName, name].join('/'),
       type: 'GET',
-      data: { 
-        result_type: resultType, 
-        display_count: benchmarkRunDisplayCount 
+      data: {
+        result_type: resultType,
+        display_count: benchmarkRunDisplayCount
       },
       dataType: 'script',
       beforeSend: function () {
@@ -59,29 +59,4 @@ $(document).ready(function() {
 
   drawReleaseChart('.release-chart');
   drawChart('.chart');
-
-  // Toggles benchmark types panel.
-  $('#benchmark-types-form-hide').click(function (e) {
-    e.preventDefault();
-    $('#benchmark-types-form-container').removeClass().toggleClass('col-xs-0');
-    $('#charts-container').removeClass().toggleClass('col-xs-12');
-    $('#benchmark-types-form-container .panel').toggleClass('hide');
-    $('#benchmark-types-form-show').toggleClass('hide');
-
-    // FIXME: Figure out a way to determine which chart we have to draw
-    drawReleaseChart('.release-chart');
-    drawChart('.chart');
-  });
-
-  $('#benchmark-types-form-show').click(function (e) {
-    e.preventDefault();
-    $('#benchmark-types-form-container').removeClass().toggleClass('col-xs-3');
-    $('#charts-container').removeClass().toggleClass('col-xs-9');
-    $('#benchmark-types-form-container .panel').toggleClass('hide');
-    $('#benchmark-types-form-show').toggleClass('hide');
-
-    // FIXME: Figure out a way to determine which chart we have to draw
-    drawReleaseChart(".release-chart");
-    drawChart(".chart");
-  });
 });

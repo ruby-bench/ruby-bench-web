@@ -28,7 +28,7 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
       visit '/ruby/ruby/commits'
 
       within "form" do
-        choose(benchmark_run.benchmark_type.category)
+        select(benchmark_run.benchmark_type.category)
       end
 
       assert page.has_content?(I18n.t("highcharts.subtitle.commit_url"))
