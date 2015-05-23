@@ -1,5 +1,4 @@
-$(document).ready(function() {
-
+$(document).on('ready page:load', function() {
   if (location.pathname) {
     $(".navbar-nav a[href='" + location.pathname + "']").addClass('current');
   }
