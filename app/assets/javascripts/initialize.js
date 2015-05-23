@@ -4,10 +4,10 @@ $(document).on('ready page:load', function() {
   }
 
   var $resultTypesForm = $('.result-types-form');
+  var xhr;
 
   $('.result-types-form select').change(function (event) {
     var $spinner = $('.spinner');
-    var xhr;
 
     // http://stackoverflow.com/questions/4551175/how-to-cancel-abort-jquery-ajax-request
     if (xhr && xhr.readyState !== 4) {
