@@ -99,7 +99,11 @@ class RemoteServerJob < ActiveJob::Base
     execute_ssh_commands(ssh,
       [
         "docker pull rubybench/rails_releases",
+        "docker run --name postgres -d postgres:9.3.5",
+        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
         "docker run --rm
+          --link postgres:postgres
+          --link mysql:mysql
           -e \"RAILS_VERSION=#{rails_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
