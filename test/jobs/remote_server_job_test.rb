@@ -109,7 +109,9 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"RAILS_VERSION=4.0.0\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-        rubybench/rails_releases".squish
+        rubybench/rails_releases".squish,
+      "tsp docker stop postgres mysql",
+      "tsp docker rm postgres mysql"
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)

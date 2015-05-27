@@ -107,7 +107,9 @@ class RemoteServerJob < ActiveJob::Base
           -e \"RAILS_VERSION=#{rails_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          rubybench/rails_releases".squish
+          rubybench/rails_releases".squish,
+        "docker stop postgres mysql",
+        "docker rm postgres mysql"
       ]
     )
   end
