@@ -45,11 +45,12 @@ end
 group :production, :development do
   gem 'unicorn', '~> 4.8.3'
   gem 'rack-mini-profiler', '~> 0.9.3'
+  gem 'logster', '~> 0.8.0'
+  gem 'sinatra', '~> 1.4.6'
 end
 
 group :production do
   gem 'rails_12factor'
   gem 'newrelic_rpm'
   gem 'bugsnag', '~> 2.8.4'
-  gem 'logster', '~> 0.8.0'
 end
