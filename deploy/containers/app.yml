@@ -152,6 +152,11 @@ hooks:
         from: "52"
         to: "14"
 
+    - replace:
+        filename: "/etc/nginx/nginx.conf"
+        from: "worker_processes 4"
+        to: "worker_processes auto"
+
     - file:
        path: /etc/logrotate.d/rails
        contents: |
