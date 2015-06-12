@@ -1,9 +1,11 @@
-require 'sidekiq/web'
-
 Rails.application.routes.draw do
-  constraints(lambda { |request| request.session['admin'] }) do
-    mount Logster::Web => "/logs"
-    mount Sidekiq::Web => "/sidekiq"
+  if !Rails.env.test?
+    require 'sidekiq/web'
+
+    constraints(lambda { |request| request.session['admin'] }) do
+      mount Logster::Web => "/logs"
+      mount Sidekiq::Web => "/sidekiq"
+    end
   end
 
   root 'static_pages#landing'
