@@ -16,7 +16,8 @@
 
   %body
     = render 'layouts/top_nav'
-    = yield
+    .site-content
+      = yield
 
     %footer
       = render 'layouts/footer'
