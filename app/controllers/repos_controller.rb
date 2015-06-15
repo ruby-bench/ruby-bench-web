@@ -132,10 +132,10 @@ class ReposController < ApplicationController
 
   def fetch_benchmark_runs(initiator_type, form_result_type, limit=nil)
     BenchmarkRun
-      .where(initiator_type: initiator_type)
-      .includes(:initiator)
       .joins(:benchmark_type)
       .where('benchmark_types.category = ?', form_result_type)
+      .includes(:initiator)
+      .where(initiator_type: initiator_type)
       .limit(limit)
   end
 
