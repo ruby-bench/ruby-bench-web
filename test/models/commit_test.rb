@@ -20,4 +20,9 @@ class CommitTest < ActiveSupport::TestCase
       assert_equal false, Commit.valid_author?(author_name)
     end
   end
+
+  test '#version' do
+    commit = commits(:ruby_commit)
+    assert_includes commit.version, "123456"
+  end
 end

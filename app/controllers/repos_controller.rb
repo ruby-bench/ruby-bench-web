@@ -83,9 +83,15 @@ class ReposController < ApplicationController
           benchmark_runs = fetch_benchmark_runs('Release', result_type).to_a
           next if benchmark_runs.empty?
 
+          if latest_benchmark_run = instance_variable_get(instance_variable_name)
+            .benchmark_runs.where(initiator_type: 'Commit').limit(1).first
+
+            benchmark_runs << latest_benchmark_run
+          end
+
           chart_builder = ChartBuilder.new(
             benchmark_runs.sort_by do |benchmark_run|
-              benchmark_run.initiator.version.split(".").map { |i| i.to_i }
+              benchmark_run.initiator.version
             end
           )
 

@@ -11,4 +11,8 @@ class Commit < ActiveRecord::Base
   validates :url, presence: true
   validates :repo_id, presence: true
   validates :message, presence: true
+
+  def version
+    "latest commit: #{self.sha1[0..5]}"
+  end
 end
