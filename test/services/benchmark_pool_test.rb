@@ -8,7 +8,7 @@ class BenchmarkPoolTest < ActiveSupport::TestCase
       BenchmarkPool.enqueue('ruby', 'abc')
     end
 
-    assert_enqueued_jobs 1
+    assert_enqueued_jobs 2
   end
 
   test "#enque for rails" do

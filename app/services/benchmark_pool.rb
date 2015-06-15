@@ -3,7 +3,7 @@ module BenchmarkPool
     case repo_name
     when 'ruby'
       RemoteServerJob.perform_later(commit_sha, 'ruby_trunk')
-      # RemoteServerJob.perform_later(commit_sha, 'ruby_trunk_discourse')
+      RemoteServerJob.perform_later(commit_sha, 'ruby_trunk_discourse')
     when 'rails'
       # ...
     else
