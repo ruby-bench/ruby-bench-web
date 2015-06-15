@@ -51,7 +51,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
 
     assert_results(release)
     initial_count = release.benchmark_runs.count
-    initial_benchmark_run = release.benchmark_runs.last
+    initial_benchmark_run = release.benchmark_runs.first
     expected_result = { 'fast' => 'fast', 'slow' => 'slow' }
 
     post_results(
@@ -66,7 +66,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     )
 
     assert_results(release)
-    final_benchmark_run = BenchmarkRun.last
+    final_benchmark_run = BenchmarkRun.first
     assert_equal expected_result, final_benchmark_run.result
     assert_equal initial_benchmark_run.id, final_benchmark_run.id
     assert_equal initial_count, release.benchmark_runs.count
@@ -75,7 +75,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   private
 
   def assert_results(commit_or_release)
-    benchmark_run = BenchmarkRun.last
+    benchmark_run = BenchmarkRun.first
     assert_equal 'allocated_objects', benchmark_run.benchmark_type.category
     assert_equal commit_or_release, benchmark_run.initiator
     assert_equal @repo, benchmark_run.initiator.repo
