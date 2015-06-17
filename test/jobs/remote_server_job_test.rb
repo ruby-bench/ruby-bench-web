@@ -109,6 +109,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"RAILS_VERSION=4.0.0\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        -e \"INCLUDE_PATTERNS=bm_activerecord_scope\"
         rubybench/rails_releases".squish,
       "tsp docker stop postgres mysql",
       "tsp docker rm postgres mysql"
@@ -117,6 +118,11 @@ class RemoteServerJobTest < ActiveJob::TestCase
       @ssh.expects(:exec!).with(command)
     end
 
-    RemoteServerJob.new.perform('4.0.0', 'rails_releases')
+    RemoteServerJob.new.perform(
+      '4.0.0', 'rails_releases',
+      {
+        include_patterns: 'bm_activerecord_scope'
+      }
+    )
   end
 end

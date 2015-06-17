@@ -22,8 +22,6 @@ class RemoteServerJob < ActiveJob::Base
   def ruby_trunk(ssh, commit_hash, options)
     options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
 
-    include_patterns = build_include_patterns(options[:include_patterns])
-
     execute_ssh_commands(ssh,
       [
         "docker pull rubybench/ruby_trunk",
@@ -33,7 +31,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          #{include_patterns}
+          #{build_include_patterns(options[:include_patterns])}
           rubybench/ruby_trunk".squish
       ]
     )
@@ -41,8 +39,6 @@ class RemoteServerJob < ActiveJob::Base
 
   def ruby_releases(ssh, ruby_version, options)
     options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
-
-    include_patterns = build_include_patterns(options[:include_patterns])
 
     execute_ssh_commands(ssh,
       [
@@ -53,7 +49,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"RUBY_VERSION=#{ruby_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          #{include_patterns}
+          #{build_include_patterns(options[:include_patterns])}
           rubybench/ruby_releases".squish
       ]
     )
@@ -107,6 +103,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"RAILS_VERSION=#{rails_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          #{build_include_patterns(options[:include_patterns])}
           rubybench/rails_releases".squish,
         "docker stop postgres mysql",
         "docker rm postgres mysql"
