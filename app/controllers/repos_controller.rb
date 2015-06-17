@@ -80,8 +80,10 @@ class ReposController < ApplicationController
             instance_variable_name, find_benchmark_type_by_category(result_type)
           )
 
-          benchmark_runs = fetch_benchmark_runs('Release', result_type).to_a
+          benchmark_runs = fetch_benchmark_runs('Release', result_type)
           next if benchmark_runs.empty?
+
+          benchmark_runs = BenchmarkRun.sort_by_initiator_version(benchmark_runs)
 
           if latest_benchmark_run = instance_variable_get(instance_variable_name)
             .latest_benchmark_run('Commit')
@@ -89,13 +91,7 @@ class ReposController < ApplicationController
             benchmark_runs << latest_benchmark_run
           end
 
-          chart_builder = ChartBuilder.new(
-            benchmark_runs.sort_by do |benchmark_run|
-              benchmark_run.initiator.version
-            end
-          )
-
-          chart_builder.build_columns do |benchmark_run|
+          ChartBuilder.new(benchmark_runs).build_columns do |benchmark_run|
             environment = YAML.load(benchmark_run.environment)
 
             if environment.is_a?(Hash)

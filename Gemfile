@@ -19,6 +19,7 @@ gem 'redis-rails', '~> 4.0.0'
 gem 'sidekiq', '~> 3.3.3'
 gem 'jquery-ui-rails', '~> 5.0.5'
 gem 'turbolinks', '~> 2.5.3'
+gem 'version_sorter', '~> 2.0.0'
 
 group :development do
   gem 'spring'
@@ -40,6 +41,7 @@ group :test do
   gem 'launchy', '~> 2.4.3'
   gem 'selenium-webdriver', '~> 2.45.0'
   gem 'minitest-stub-const', '~> 0.3'
+  gem 'factory_girl_rails', '~> 4.5.0'
 end
 
 group :production, :development do
