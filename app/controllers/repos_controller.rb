@@ -84,7 +84,7 @@ class ReposController < ApplicationController
           next if benchmark_runs.empty?
 
           if latest_benchmark_run = instance_variable_get(instance_variable_name)
-            .benchmark_runs.where(initiator_type: 'Commit').limit(1).first
+            .latest_benchmark_run('Commit')
 
             benchmark_runs << latest_benchmark_run
           end

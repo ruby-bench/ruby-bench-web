@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class BenchmarkTypeTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "#latest_benchmark_run" do
+    skip('Once I find the time to transition to FactoryGirl')
+  end
 end
