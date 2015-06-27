@@ -3,7 +3,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-highcharts', '~> 4.0.4'
 end
 
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.3'
 gem 'pg'
 gem 'sass-rails', '~> 5.0.1'
 gem 'uglifier', '>= 1.3.0'
