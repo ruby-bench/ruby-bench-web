@@ -24,7 +24,7 @@ https://github.com/ruby-bench/ruby-bench-docker.
 Our current bare metal server is sponsored by the team over at
 [RubyTune.com](https://rubytune.com/).
 
-All benchmarks are run on a Softlayer bare metal server in order to achieve
+All benchmarks are run on a bare metal server in order to achieve
 consistent and repeatable results. We **will not** publish CPU results gathered
 on virtual hosts where we can not control our CPU allocation. The only results
 published are run on production level bare metal servers.
@@ -45,6 +45,7 @@ Motherboard | Intel Coporation S1200RP
 
 ## Dependency
 PostgreSQL 9.x in order to enable the hstore extension.
+
 Redis
 
 ## Setup
