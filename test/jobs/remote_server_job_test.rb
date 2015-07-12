@@ -125,4 +125,33 @@ class RemoteServerJobTest < ActiveJob::TestCase
       }
     )
   end
+
+  test "#perform rails_trunk" do
+    [
+      "tsp docker pull rubybench/rails_trunk",
+      "tsp docker run --name postgres -d postgres:9.3.5",
+      "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+      "tsp docker run --rm
+        --link postgres:postgres
+        --link mysql:mysql
+        -e \"RAILS_COMMIT_HASH=1234\"
+        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        -e \"INCLUDE_PATTERNS=bm_activerecord_scope\"
+        rubybench/rails_trunk".squish,
+      "tsp docker stop postgres mysql",
+      "tsp docker rm postgres mysql"
+    ].each do |command|
+
+      @ssh.expects(:exec!).with(command)
+    end
+
+    RemoteServerJob.new.perform(
+      '1234', 'rails_trunk',
+      {
+        include_patterns: 'bm_activerecord_scope'
+      }
+    )
+  end
+
 end

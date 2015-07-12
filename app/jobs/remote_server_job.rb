@@ -111,6 +111,26 @@ class RemoteServerJob < ActiveJob::Base
     )
   end
 
+  def rails_trunk(ssh, commit_hash, options)
+    execute_ssh_commands(ssh,
+      [
+        "docker pull rubybench/rails_trunk",
+        "docker run --name postgres -d postgres:9.3.5",
+        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+        "docker run --rm
+          --link postgres:postgres
+          --link mysql:mysql
+          -e \"RAILS_COMMIT_HASH=#{commit_hash}\"
+          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          #{build_include_patterns(options[:include_patterns])}
+          rubybench/rails_trunk".squish,
+        "docker stop postgres mysql",
+        "docker rm postgres mysql"
+      ]
+    )
+  end
+
   def execute_ssh_commands(ssh, commands)
     commands.each do |command|
       ssh_exec!(ssh, command)
