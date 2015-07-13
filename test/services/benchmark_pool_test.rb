@@ -12,6 +12,10 @@ class BenchmarkPoolTest < ActiveSupport::TestCase
   end
 
   test "#enque for rails" do
-    # ...
+    assert_enqueued_with(job: RemoteServerJob) do
+      BenchmarkPool.enqueue('rails', 'abc')
+    end
+
+    assert_enqueued_jobs 1
   end
 end
