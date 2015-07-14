@@ -36,8 +36,11 @@ class GithubEventHandler
 
     # Remove this once Github hook is actually coming from the original Ruby
     # repo.
-    if organization_name == 'tgxworld'
+    case [organization_name, repo_name]
+    when ['tgxworld', 'ruby']
       organization_name = 'ruby'
+    when ['tgxworld', 'rails']
+      organization_name = 'rails'
     end
 
     organization = Organization.find_or_create_by(

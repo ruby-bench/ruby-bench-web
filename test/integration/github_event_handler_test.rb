@@ -138,7 +138,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
           {
             'id' => '12345',
             'message' => 'Fix something',
-            'url' => 'http://github.com/ruby/commit/12345',
+            'url' => 'http://github.com/ruby/ruby/commit/12345',
             'timestamp' => '2014-11-20T15:45:15-08:00',
             'author' => {
               'name' => 'Alan'
@@ -158,7 +158,40 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     assert_equal 'ruby', organization.name
     assert_equal 'ruby', repo.name
     assert_equal organization, repo.organization
-    assert_equal 'http://github.com/ruby/commit/12345', commit.url
+    assert_equal 'http://github.com/ruby/ruby/commit/12345', commit.url
+    assert_equal repo, commit.repo
+  end
+
+  # Remove this once Github hook is actually coming from the original Ruby
+  # repo.
+  test "tgxworld organization is mapped as rails" do
+    post_to_handler({
+      'commits' =>
+        [
+          {
+            'id' => '12345',
+            'message' => 'Fix something',
+            'url' => 'http://github.com/rails/rails/commit/12345',
+            'timestamp' => '2014-11-20T15:45:15-08:00',
+            'author' => {
+              'name' => 'Alan'
+            }
+          }
+        ],
+        'repository' => {
+          'full_name' => 'tgxworld/rails',
+          html_url: 'https://github.com/tgxworld/rails'
+        }
+    })
+
+    organization = Organization.first
+    repo = Repo.first
+    commit = Commit.first
+
+    assert_equal 'rails', organization.name
+    assert_equal 'rails', repo.name
+    assert_equal organization, repo.organization
+    assert_equal 'http://github.com/rails/rails/commit/12345', commit.url
     assert_equal repo, commit.repo
   end
 
