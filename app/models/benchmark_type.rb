@@ -11,4 +11,10 @@ class BenchmarkType < ActiveRecord::Base
   def latest_benchmark_run(initiator_type)
     self.benchmark_runs.where(initiator_type: initiator_type).first
   end
+
+  def github_url
+    uri = URI.parse(self.script_url)
+    uri.path =~ /\A(\/[^\/]*\/[^\/]*\/)(.*)\z/
+    "https://github.com#{$1}blob/#{$2}"
+  end
 end

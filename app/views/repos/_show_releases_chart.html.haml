@@ -22,9 +22,4 @@
       unit: benchmark_type_memory.unit.capitalize,
       columns: charts.last[:columns] } }
 
-  - if script_url = benchmark_type.script_url
-    %h2.l-align-center
-      = t('repos.show_releases.script_title', graph_name: benchmark_name)
-
-    = Pygments.highlight("#{Net::HTTP.get(URI.parse(script_url))}",
-        lexer: :ruby, options: { linenos: 'inline' }, css: { style: 'monokai'}).html_safe
+  = render 'script', benchmark_type: benchmark_type, benchmark_name: benchmark_name
