@@ -1,7 +1,8 @@
 class BenchmarkRunsController < APIController
   def create
-    repo = Organization.find_by_name(params[:organization])
-      .repos.find_by_name(params[:repo])
+    repo = Repo.joins(:organization)
+      .where(name: params[:repo], organizations: { name: params[:organization] })
+      .first
 
     # FIXME: Probably bad code.
     if params[:commit_hash]
