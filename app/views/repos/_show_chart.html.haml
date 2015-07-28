@@ -1,3 +1,5 @@
+- tick_interval = (@benchmark_run_display_count / 4) - 1
+
 - if !charts || !benchmark_type
   = image_tag 'icon.png', alt: 'RubyBench Logo', class: 'benchmark-placeholder'
 
@@ -12,7 +14,7 @@
   %h2.l-align-center
     = t('repos.show.graph_title', graph_name: benchmark_name)
 
-  .chart{ data: { tick_interval: JSON.parse(charts.first[:columns]).first['data'].count / 4,
+  .chart{ data: { tick_interval: tick_interval,
     unit: benchmark_type.unit.capitalize,
     columns: charts.first[:columns],
     categories: charts.first[:categories],
@@ -23,7 +25,7 @@
     %h2.l-align-center
       = t('repos.show.graph_title', graph_name: "#{benchmark_name} memory")
 
-    .chart{ data: { tick_interval: JSON.parse(charts.last[:columns]).first['data'].count / 4,
+    .chart{ data: { tick_interval: tick_interval,
       unit: benchmark_type_memory.unit.capitalize,
       columns: charts.last[:columns],
       categories: charts.last[:categories],
