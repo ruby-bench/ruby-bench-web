@@ -21,44 +21,64 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
       Capybara.javascript_driver = :selenium
       Capybara.current_driver = :selenium
 
-      benchmark_run = benchmark_runs(:array_count_run4)
-      benchmark_run2 = benchmark_runs(:array_count_run)
-      benchmark_run3 = benchmark_runs(:array_count_run3)
+      time_now = Time.zone.now
+      benchmark_type = create(:benchmark_type)
+      @repo = benchmark_type.repo
+      @org = @repo.organization
 
-      visit '/ruby/ruby/commits'
+      benchmark_run = create(
+        :commit_benchmark_run,
+        created_at: time_now - 1.day,
+        benchmark_type: benchmark_type
+      )
+
+      benchmark_run2 = create(
+        :commit_benchmark_run,
+        created_at: time_now,
+        benchmark_type: benchmark_type
+      )
+
+      benchmark_run3 = create(
+        :commit_benchmark_run,
+        created_at: time_now + 1.day,
+        benchmark_type: benchmark_type
+      )
+
+      visit repo_path(organization_name: @org.name, repo_name: @repo.name)
 
       within "form" do
-        select(benchmark_run.benchmark_type.category)
+        select(benchmark_type.category)
       end
 
       assert page.has_content?(I18n.t("highcharts.subtitle.commit_url"))
 
-      benchmark_run3_line =
-        "#{benchmark_run3.initiator.sha1}
-        #{benchmark_run3.initiator.message} -
-        #{benchmark_run3.result["some_time"]}
-        #{benchmark_run3.benchmark_type.unit.capitalize}".squish
+      benchmark_run_line =
+        "#{benchmark_run.initiator.sha1}
+        #{benchmark_run.initiator.message} -
+        #{benchmark_run.result["sometime"]}
+        #{benchmark_run.benchmark_type.unit.capitalize}".squish
 
       benchmark_run2_line =
         "#{benchmark_run2.initiator.sha1}
         #{benchmark_run2.initiator.message} -
-        #{benchmark_run2.result["some_time"]}
+        #{benchmark_run2.result["sometime"]}
         #{benchmark_run2.benchmark_type.unit.capitalize}".squish
 
-      benchmark_run_line =
-        "#{benchmark_run.initiator.sha1}
-        #{benchmark_run.initiator.message} -
-        #{benchmark_run.result["some_time"]}
-        #{benchmark_run.benchmark_type.unit.capitalize}".squish
+      benchmark_run3_line =
+        "#{benchmark_run3.initiator.sha1}
+        #{benchmark_run3.initiator.message} -
+        #{benchmark_run3.result["sometime"]}
+        #{benchmark_run3.benchmark_type.unit.capitalize}".squish
 
       markers = page.all(".highcharts-markers.highcharts-tracker path")
+      # Markers are found from right to left on the graph
       markers[0].click
       commit = benchmark_run3.initiator
 
       within_chart_modal_title do
         assert page.has_content?("Commit: #{commit.sha1}")
         assert page.has_content?("Commit Message: #{commit.message}")
-        assert page.has_content?(benchmark_run.environment)
+        assert page.has_content?(benchmark_run3.environment)
       end
 
       within_chart_modal_body do
@@ -66,9 +86,9 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
         assert page.has_content?(benchmark_run2_line)
         assert_not page.has_content?(benchmark_run_line)
 
+
         assert page.has_selector?(
-          "a[href='https://github.com/ruby/ruby/compare/"\
-          "#{benchmark_run2.initiator.sha1}...#{benchmark_run3.initiator.sha1}']"
+          github_compare_link(benchmark_run2.initiator, benchmark_run3.initiator)
         )
       end
 
@@ -87,8 +107,7 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
         assert page.has_content?(benchmark_run_line)
 
         assert page.has_selector?(
-          "a[href='https://github.com/ruby/ruby/compare/"\
-          "#{benchmark_run.initiator.sha1}...#{benchmark_run2.initiator.sha1}']"
+          github_compare_link(benchmark_run.initiator, benchmark_run2.initiator)
         )
       end
 
@@ -98,7 +117,7 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
       within_chart_modal_title do
         assert page.has_content?("Commit: #{commit.sha1}")
         assert page.has_content?("Commit Message: #{commit.message}")
-        assert page.has_content?(benchmark_run.environment)
+        assert page.has_content?(benchmark_run2.environment)
       end
 
       within_chart_modal_body do
@@ -107,13 +126,11 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
         assert page.has_content?(benchmark_run_line)
 
         assert page.has_selector?(
-          "a[href='https://github.com/ruby/ruby/compare/"\
-          "#{benchmark_run2.initiator.sha1}...#{benchmark_run3.initiator.sha1}']"
+          github_compare_link(benchmark_run2.initiator, benchmark_run3.initiator)
         )
 
         assert page.has_selector?(
-          "a[href='https://github.com/ruby/ruby/compare/"\
-          "#{benchmark_run.initiator.sha1}...#{benchmark_run2.initiator.sha1}']"
+          github_compare_link(benchmark_run.initiator, benchmark_run2.initiator)
         )
       end
     ensure
@@ -132,5 +149,10 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
     within "#chart-modal .modal-body" do
       yield
     end
+  end
+
+  def github_compare_link(commit1, commit2)
+    "a[href='https://github.com/#{@org.name}/#{@repo.name}/compare/"\
+    "#{commit1.sha1}...#{commit2.sha1}']"
   end
 end

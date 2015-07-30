@@ -1,17 +1,9 @@
 require 'test_helper'
 
 class GithubEventHandlerTest < ActionDispatch::IntegrationTest
-  setup do
-    # FIXME: Called to remove fixtures. Should probably update the test for
-    # better assertions.
-    Repo.destroy_all
-    Commit.destroy_all
-    Organization.destroy_all
-  end
-
   test "#handle for single commits pushed" do
-    # FIXME: I can't figure out how I can test ActiveSupport::Notifications.instrument
-    # was called. We need to test for it.
+    BenchmarkPool.expects(:enqueue).with('ruby', '12345')
+
     post_to_handler({
       'head_commit' => {
         'id' => '12345',
@@ -40,8 +32,8 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
   end
 
   test "#handle for multiple commits pushed" do
-    # FIXME: I can't figure out how I can test ActiveSupport::Notifications.instrument
-    # was called. We need to test for it.
+    BenchmarkPool.expects(:enqueue).with('ruby', '12345')
+    BenchmarkPool.expects(:enqueue).with('ruby', '12346')
 
     post_to_handler({
       'commits' =>

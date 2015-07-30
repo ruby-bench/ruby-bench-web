@@ -1,9 +1,0 @@
-rails:
-  name: rails
-  url: https://github.com/rails/rails
-  organization: rails
-
-ruby:
-  name: ruby
-  url: https://github.com/ruby/ruby
-  organization: ruby

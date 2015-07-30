@@ -22,7 +22,7 @@ class CommitTest < ActiveSupport::TestCase
   end
 
   test '#version' do
-    commit = commits(:ruby_commit)
-    assert_includes commit.version, "123456"
+    commit = create(:commit, sha1: '1234567')
+    assert_includes commit.version, '12345'
   end
 end
