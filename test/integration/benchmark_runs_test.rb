@@ -2,8 +2,8 @@ require 'test_helper'
 
 class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   def test_create_commit_benchmark_run
-    @repo = repos(:rails)
-    commit = commits(:rails_commit)
+    @repo = create(:repo)
+    commit = create(:commit, repo: @repo)
 
     post_results(
       commit_hash: commit.sha1,
@@ -15,8 +15,8 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   end
 
   test "create release benchmark_run" do
-    @repo = repos(:ruby)
-    release = releases(:ruby_2_2_0)
+    @repo = create(:repo)
+    release = create(:release, repo: @repo)
 
     post_results(
       version: release.version,
@@ -28,7 +28,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   end
 
   test "create release benchmark_run when there is no past release" do
-    @repo = repos(:rails)
+    @repo = create(:repo)
 
     post_results(
       version: '10.0.0',
@@ -40,8 +40,8 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   end
 
   test "repeated benchmark_runs are replaced" do
-    @repo = repos(:ruby)
-    release = releases(:ruby_2_2_0)
+    @repo = create(:repo)
+    release = create(:release, repo: @repo)
 
     post_results(
       version: release.version,

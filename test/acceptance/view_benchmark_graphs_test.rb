@@ -11,42 +11,57 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
   end
 
   test "User should be able to view long running benchmark graphs" do
-    benchmark_run = benchmark_runs(:array_iterations_run2)
+    repo = create(:repo)
+    org = repo.organization
+    benchmark_type = create(:benchmark_type, repo: repo)
+    commit = create(:commit, repo: repo)
+    benchmark_run = create(
+      :commit_benchmark_run, benchmark_type: benchmark_type, initiator: commit
+    )
 
-    visit '/ruby/ruby/commits'
+    memory_benchmark_type = create(
+      :benchmark_type, category: "#{benchmark_type.category}_memory",
+      repo: repo, unit: 'kbs'
+    )
+
+    create(:commit_benchmark_run,
+      initiator: commit, benchmark_type: memory_benchmark_type
+    )
+
+    visit repo_path(organization_name: org.name, repo_name: repo.name)
 
     assert page.has_content?(
-      I18n.t('repos.show.title', repo_name: benchmark_run.initiator.repo.name.capitalize)
+      I18n.t('repos.show.title', repo_name: repo.name.capitalize)
     )
 
     assert_text :all, I18n.t('repos.show.select_benchmark')
 
     within "form" do
-      select(benchmark_run.benchmark_type.category)
+      select(benchmark_type.category)
     end
 
     within ".chart .highcharts-container .highcharts-yaxis-title",
       match: :first do
 
-      assert page.has_content?(benchmark_run.benchmark_type.unit.capitalize)
+      assert page.has_content?(benchmark_type.unit.capitalize)
     end
 
     assert(
       all(".chart .highcharts-container .highcharts-yaxis-title")
         .last
         .has_content?(
-          benchmark_runs(:array_iterations_memory_run2).benchmark_type.unit.capitalize
+          memory_benchmark_type.unit.capitalize
         )
     )
 
     assert page.has_content?("def abc")
 
     within ".highcharts-xaxis-labels", match: :first do
-      assert_equal benchmark_run.initiator.created_at.strftime("%Y-%m-%d"),
+      assert_equal commit.created_at.strftime("%Y-%m-%d"),
         find('text').text
     end
 
-    benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
+    benchmark_run_category_humanize = benchmark_type.category.humanize
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
     assert page.has_content?("#{benchmark_run_category_humanize} memory Graph")
@@ -54,16 +69,25 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
     assert_equal(
       URI.parse(page.current_url).request_uri,
-      "/#{benchmark_run.initiator.repo.organization.name}" \
-      "/#{benchmark_run.initiator.repo.name}/commits?result_type=" \
-      "#{benchmark_run.benchmark_type.category}&display_count=#{BenchmarkRun::DEFAULT_PAGINATE_COUNT}"
+      "/#{org.name}" \
+      "/#{repo.name}/commits?result_type=" \
+      "#{benchmark_type.category}&display_count=#{BenchmarkRun::DEFAULT_PAGINATE_COUNT}"
     )
+  end
 
-    benchmark_run = benchmark_runs(:array_count_run)
-    benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
+  test "User should be able to see long running benchmark graph even without
+    memory benchmarks".squish do
+
+    benchmark_run = create(:commit_benchmark_run)
+    benchmark_type = benchmark_run.benchmark_type
+    repo = benchmark_type.repo
+    org = repo.organization
+    benchmark_run_category_humanize = benchmark_type.category.humanize
+
+    visit repo_path(organization_name: org.name, repo_name: repo.name)
 
     within "form" do
-      select(benchmark_run.benchmark_type.category)
+      select(benchmark_type.category)
     end
 
     assert page.has_css?(".chart .highcharts-container")
@@ -74,11 +98,16 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
   test "User should be able to select number of benchmark runs to display
     for long running benchmark graphs" do
 
-    benchmark_type = benchmark_types(:array_count)
+    benchmark_type = create(:benchmark_type)
+    repo = benchmark_type.repo
+    org = repo.organization
+    3.times do
+      create(:commit_benchmark_run, benchmark_type: benchmark_type)
+    end
 
     BenchmarkRun.stub_const(:PAGINATE_COUNT, [1, 3]) do
       BenchmarkRun.stub_const(:DEFAULT_PAGINATE_COUNT, 1) do
-        visit "/ruby/ruby/commits?result_type=#{benchmark_type.category}"
+        visit repo_path(organization_name: org.name, repo_name: repo.name, result_type: benchmark_type.category)
 
         assert assert_selector(".highcharts-markers path", count: 1)
 
@@ -90,55 +119,64 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
   end
 
   test "User should see benchmark type categories as sorted" do
-    visit '/ruby/ruby/commits'
+    repo = create(:repo)
+    org = repo.organization
+    bm_type = create(:benchmark_type, repo: repo, category: 'd')
+    bm_type2 = create(:benchmark_type, repo: repo, category: 'b')
+    bm_type3 = create(:benchmark_type, repo: repo, category: 'c')
+
+    visit repo_path(organization_name: org.name, repo_name: repo.name)
 
     within "form" do
       list = page.first('.input-group').all('option')
 
-      assert_equal(
-        list.map(&:value),
-        [
-          "",
-          benchmark_types(:array_count).category,
-          benchmark_types(:array_iterations).category,
-          benchmark_types(:array_shift).category
-        ]
-      )
+      assert_equal(list.map(&:value), ["", 'b', 'c', 'd'])
     end
   end
 
   test "User should be able to view releases benchmark graphs" do
-    benchmark_run = benchmark_runs(:array_iterations_run)
+    repo = create(:repo)
+    org = repo.organization
+    benchmark_type = create(:benchmark_type, repo: repo)
+    relases = create(:release, repo: repo)
+    bm_run = create(:release_benchmark_run, benchmark_type: benchmark_type, initiator: relases)
 
-    visit '/ruby/ruby/releases'
+    memory_benchmark_type = create(
+      :benchmark_type, category: "#{benchmark_type.category}_memory",
+      repo: repo, unit: 'kbs'
+    )
+
+    create(:release_benchmark_run,
+      initiator: relases, benchmark_type: memory_benchmark_type
+    )
+
+    visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
 
     assert page.has_content?(
-      I18n.t('repos.show_releases.title', repo_name: benchmark_run.initiator.repo.name.capitalize)
+      I18n.t('repos.show_releases.title', repo_name: repo.name.capitalize)
     )
 
     assert_text :all, I18n.t('repos.show.select_benchmark')
 
     within "form" do
-      select(benchmark_run.benchmark_type.category)
+      select(benchmark_type.category)
     end
 
     within ".release-chart .highcharts-container .highcharts-yaxis-title",
       match: :first do
 
-      assert page.has_content?(benchmark_run.benchmark_type.unit.capitalize)
+      assert page.has_content?(benchmark_type.unit.capitalize)
     end
 
     assert(
       all(".release-chart .highcharts-container .highcharts-yaxis-title")
         .last
-        .has_content?(
-          benchmark_runs(:array_iterations_memory_run).benchmark_type.unit.capitalize
-        )
+        .has_content?(memory_benchmark_type.unit.capitalize)
     )
 
     assert page.has_content?("def abc")
 
-    benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
+    benchmark_run_category_humanize = benchmark_type.category.humanize
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
     assert page.has_content?("#{benchmark_run_category_humanize} memory Graph")
@@ -146,33 +184,37 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
     assert_equal(
       URI.parse(page.current_url).request_uri,
-      "/#{benchmark_run.initiator.repo.organization.name}" \
-      "/#{benchmark_run.initiator.repo.name}/releases?result_type=#{benchmark_run.benchmark_type.category}"
+      "/#{org.name}" \
+      "/#{repo.name}/releases?result_type=#{benchmark_type.category}"
     )
   end
 
   test "User should not be able to view releases memory benchmark graph if it
     does not exist".squish do
 
-    benchmark_run = benchmark_runs(:array_count_run)
+    repo = create(:repo)
+    org = repo.organization
+    benchmark_type = create(:benchmark_type, repo: repo)
+    release = create(:release, repo: repo)
+    benchmark_run = create(:release_benchmark_run, benchmark_type: benchmark_type)
 
-    visit '/ruby/ruby/releases'
+    visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
 
     assert page.has_content?(
-      I18n.t('repos.show_releases.title', repo_name: benchmark_run.initiator.repo.name.capitalize)
+      I18n.t('repos.show_releases.title', repo_name: repo.name.capitalize)
     )
 
     assert_text :all, I18n.t('repos.show.select_benchmark')
 
     within "form" do
-      select(benchmark_run.benchmark_type.category)
+      select(benchmark_type.category)
     end
 
     assert page.has_css?(".release-chart .highcharts-container")
     assert_not page.has_css?(".release-chart.memory .highcharts-container")
     assert page.has_content?("def abc")
 
-    benchmark_run_category_humanize = benchmark_run.benchmark_type.category.humanize
+    benchmark_run_category_humanize = benchmark_type.category.humanize
 
     assert page.has_content?("#{benchmark_run_category_humanize} Graph")
     assert_not page.has_content?("#{benchmark_run_category_humanize} memory Graph")
@@ -180,16 +222,19 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
     assert_equal(
       URI.parse(page.current_url).request_uri,
-      "/#{benchmark_run.initiator.repo.organization.name}" \
-      "/#{benchmark_run.initiator.repo.name}/releases?result_type=#{benchmark_run.benchmark_type.category}"
+      "/#{org.name}" \
+      "/#{repo.name}/releases?result_type=#{benchmark_type.category}"
     )
   end
 
   test "User should see the right message for benchmark types with no
     benchmark runs".squish do
 
-    category = benchmark_types(:array_shift).category
-    visit '/ruby/ruby/releases'
+    repo = create(:repo)
+    org = repo.organization
+    category = create(:benchmark_type, repo: repo).category
+
+    visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
 
     within "form" do
       select(category)

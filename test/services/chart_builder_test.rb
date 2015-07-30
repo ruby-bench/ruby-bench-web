@@ -2,12 +2,9 @@ require 'test_helper'
 
 class ChartBuilderTest < ActiveSupport::TestCase
   test "#build_columns" do
-    benchmark_run = benchmark_runs(:array_count_run)
-    other_benchmark_run = benchmark_runs(:array_iterations_run2)
-
-    chart_builder = ChartBuilder.new(
-      [benchmark_run, other_benchmark_run],
-    )
+    benchmark_run = create(:commit_benchmark_run, result: { 'some_time' => 5, 'some_other_time' => 5 })
+    other_benchmark_run = create(:commit_benchmark_run, result: { 'some_time' => 5, 'some_other_time' => 5 })
+    chart_builder = ChartBuilder.new([benchmark_run, other_benchmark_run])
 
     chart_columns = chart_builder.build_columns do |benchmark_run|
       "Commit: #{benchmark_run.initiator.sha1}"
