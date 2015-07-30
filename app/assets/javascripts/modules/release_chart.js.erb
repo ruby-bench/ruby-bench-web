@@ -1,4 +1,18 @@
 var drawReleaseChart = function(chartClass) {
+
+  var charts = $(chartClass);
+  if(charts.length === 1 && charts.data().columns.length === 2) {
+    var chart = $(chartClass);
+    var secondChart = chart.clone();
+
+    chart.data().columns = [chart.data().columns[0]];
+    secondChart.data().columns = [secondChart.data().columns[1]];
+    secondChart.data().columns[0].visible = true;
+    secondChart.data().unit = secondChart.data().columns[0].name.split('_').join(' ');
+
+    chart.parent().children(':eq(1)').after(secondChart);
+  }
+
   $(chartClass).each(function() {
     $this = $(this);
 
