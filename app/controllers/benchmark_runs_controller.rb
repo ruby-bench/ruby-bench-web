@@ -37,15 +37,11 @@ class BenchmarkRunsController < APIController
   private
 
   def benchmark_run_params
-    params.require(:benchmark_run).permit(
-      :environment
-    )
+    params.require(:benchmark_run).permit(:environment)
   end
 
   def benchmark_type_params
-    params.require(:benchmark_type).permit(
-      :category, :unit, :script_url
-    )
+    params.require(:benchmark_type).permit(:category, :script_url)
   end
 
   def benchmark_result_type_params

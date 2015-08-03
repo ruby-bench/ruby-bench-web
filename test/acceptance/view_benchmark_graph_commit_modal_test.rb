@@ -60,19 +60,19 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
         "#{benchmark_run.initiator.sha1}
         #{benchmark_run.initiator.message} -
         #{benchmark_run.result["sometime"]}
-        #{benchmark_run.benchmark_type.unit.capitalize}".squish
+        #{benchmark_run.benchmark_result_type.unit}".squish
 
       benchmark_run2_line =
         "#{benchmark_run2.initiator.sha1}
         #{benchmark_run2.initiator.message} -
         #{benchmark_run2.result["sometime"]}
-        #{benchmark_run2.benchmark_type.unit.capitalize}".squish
+        #{benchmark_run2.benchmark_result_type.unit}".squish
 
       benchmark_run3_line =
         "#{benchmark_run3.initiator.sha1}
         #{benchmark_run3.initiator.message} -
         #{benchmark_run3.result["sometime"]}
-        #{benchmark_run3.benchmark_type.unit.capitalize}".squish
+        #{benchmark_run3.benchmark_result_type.unit}".squish
 
       markers = page.all(".highcharts-markers.highcharts-tracker path")
       # Markers are found from right to left on the graph

@@ -91,7 +91,6 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
         },
         benchmark_type: {
           category: 'allocated_objects',
-          unit: 'seconds',
           script_url: 'http://something.com'
         },
         benchmark_run: {

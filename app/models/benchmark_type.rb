@@ -5,7 +5,6 @@ class BenchmarkType < ActiveRecord::Base
   belongs_to :repo
 
   validates :category, presence: true, uniqueness: { scope: [:repo_id, :script_url] }
-  validates :unit, presence: true
   validates :script_url, presence: true
 
   def github_url

@@ -18,6 +18,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     benchmark_run = create(
       :commit_benchmark_run, benchmark_type: benchmark_type, initiator: commit
     )
+    benchmark_result_type = benchmark_run.benchmark_result_type
     memory_benchmark_result_type = create(
       :benchmark_result_type, name: 'Memory', unit: 'Kilobytes'
     )
@@ -42,15 +43,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     within ".chart .highcharts-container .highcharts-yaxis-title",
       match: :first do
 
-      assert page.has_content?(benchmark_type.unit.capitalize)
+      assert page.has_content?(benchmark_result_type.unit)
     end
 
     assert(
       all(".chart .highcharts-container .highcharts-yaxis-title")
         .last
-        .has_content?(
-          memory_benchmark_result_type.unit.capitalize
-        )
+        .has_content?(memory_benchmark_result_type.unit)
     )
 
     within ".highcharts-xaxis-labels", match: :first do
@@ -135,6 +134,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     benchmark_type = create(:benchmark_type, repo: repo)
     release = create(:release, repo: repo)
     bm_run = create(:release_benchmark_run, benchmark_type: benchmark_type, initiator: release)
+    benchmark_result_type = bm_run.benchmark_result_type
     memory_benchmark_result_type = create(:benchmark_result_type, name: 'Memory', unit: 'rss')
 
     create(:release_benchmark_run,
@@ -157,7 +157,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     within ".release-chart .highcharts-container .highcharts-yaxis-title",
       match: :first do
 
-      assert page.has_content?(benchmark_type.unit.capitalize)
+      assert page.has_content?(benchmark_result_type.unit)
     end
 
     assert(
