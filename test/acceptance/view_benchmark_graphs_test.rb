@@ -18,14 +18,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     benchmark_run = create(
       :commit_benchmark_run, benchmark_type: benchmark_type, initiator: commit
     )
-
-    memory_benchmark_type = create(
-      :benchmark_type, category: "#{benchmark_type.category}_memory",
-      repo: repo, unit: 'kbs'
+    memory_benchmark_result_type = create(
+      :benchmark_result_type, name: 'Memory', unit: 'Kilobytes'
     )
 
     create(:commit_benchmark_run,
-      initiator: commit, benchmark_type: memory_benchmark_type
+      initiator: commit, benchmark_type: benchmark_type,
+      benchmark_result_type: memory_benchmark_result_type
     )
 
     visit repo_path(organization_name: org.name, repo_name: repo.name)
@@ -50,22 +49,14 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       all(".chart .highcharts-container .highcharts-yaxis-title")
         .last
         .has_content?(
-          memory_benchmark_type.unit.capitalize
+          memory_benchmark_result_type.unit.capitalize
         )
     )
-
-    assert page.has_content?("def abc")
 
     within ".highcharts-xaxis-labels", match: :first do
       assert_equal commit.created_at.strftime("%Y-%m-%d"),
         find('text').text
     end
-
-    benchmark_run_category_humanize = benchmark_type.category.humanize
-
-    assert page.has_content?("#{benchmark_run_category_humanize} Graph")
-    assert page.has_content?("#{benchmark_run_category_humanize} memory Graph")
-    assert page.has_content?("#{benchmark_run_category_humanize} Script")
 
     assert_equal(
       URI.parse(page.current_url).request_uri,
@@ -101,8 +92,12 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     benchmark_type = create(:benchmark_type)
     repo = benchmark_type.repo
     org = repo.organization
+    benchmark_result_type = create(:benchmark_result_type)
     3.times do
-      create(:commit_benchmark_run, benchmark_type: benchmark_type)
+      create(
+        :commit_benchmark_run, benchmark_type: benchmark_type,
+        benchmark_result_type: benchmark_result_type
+      )
     end
 
     BenchmarkRun.stub_const(:PAGINATE_COUNT, [1, 3]) do
@@ -138,16 +133,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     repo = create(:repo)
     org = repo.organization
     benchmark_type = create(:benchmark_type, repo: repo)
-    relases = create(:release, repo: repo)
-    bm_run = create(:release_benchmark_run, benchmark_type: benchmark_type, initiator: relases)
-
-    memory_benchmark_type = create(
-      :benchmark_type, category: "#{benchmark_type.category}_memory",
-      repo: repo, unit: 'kbs'
-    )
+    release = create(:release, repo: repo)
+    bm_run = create(:release_benchmark_run, benchmark_type: benchmark_type, initiator: release)
+    memory_benchmark_result_type = create(:benchmark_result_type, name: 'Memory', unit: 'rss')
 
     create(:release_benchmark_run,
-      initiator: relases, benchmark_type: memory_benchmark_type
+      initiator: release, benchmark_type: benchmark_type,
+      benchmark_result_type: memory_benchmark_result_type
     )
 
     visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
@@ -171,16 +163,8 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     assert(
       all(".release-chart .highcharts-container .highcharts-yaxis-title")
         .last
-        .has_content?(memory_benchmark_type.unit.capitalize)
+        .has_content?(memory_benchmark_result_type.unit)
     )
-
-    assert page.has_content?("def abc")
-
-    benchmark_run_category_humanize = benchmark_type.category.humanize
-
-    assert page.has_content?("#{benchmark_run_category_humanize} Graph")
-    assert page.has_content?("#{benchmark_run_category_humanize} memory Graph")
-    assert page.has_content?("#{benchmark_run_category_humanize} Script")
 
     assert_equal(
       URI.parse(page.current_url).request_uri,

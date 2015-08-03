@@ -85,6 +85,10 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   def post_results(params = {}, attribute_params = {})
     post('/benchmark_runs',
       {
+        benchmark_result_type: {
+          name: 'Execution time',
+          unit: 'Seconds'
+        },
         benchmark_type: {
           category: 'allocated_objects',
           unit: 'seconds',

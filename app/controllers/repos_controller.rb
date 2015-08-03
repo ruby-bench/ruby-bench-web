@@ -94,7 +94,7 @@ class ReposController < ApplicationController
         if latest_benchmark_run = @benchmark_type
           .benchmark_runs.latest_commit_benchmark_run(benchmark_result_type)
 
-          benchmark_runs << latest_benchmark_run
+          benchmark_runs << latest_benchmark_run.first
         end
 
         columns = ChartBuilder.new(benchmark_runs).build_columns do |benchmark_run|
