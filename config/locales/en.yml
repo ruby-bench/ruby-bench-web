@@ -15,7 +15,7 @@ en:
       Please select a benchmark
     script_title: "%{graph_name} Script"
     graph_title: &graph_title
-      "%{graph_name} Graph"
+      "%{graph_name} Graph (%{type})"
     benchmark_types: &benchmark_types
       Benchmark Types
     show_benchmark_types_form: Show Benchmark Types Form

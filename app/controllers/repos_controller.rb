@@ -13,49 +13,48 @@ class ReposController < ApplicationController
       end
 
     if @form_result_type = params[:result_type]
-      @charts =
-        [@form_result_type, "#{@form_result_type}_memory"].each_with_index.map do |result_type, index|
-          instance_variable_name = index == 0 ? :@benchmark_type : :@benchmark_type_memory
+      @benchmark_type = find_benchmark_type_by_category(@form_result_type)
 
-          self.instance_variable_set(
-            instance_variable_name, find_benchmark_type_by_category(result_type)
-          )
+      benchmark_result_type_ids = @benchmark_type
+        .benchmark_runs
+        .pluck(:benchmark_result_type_id)
+        .uniq
+        .sort
 
-          benchmark_runs = fetch_benchmark_runs(
-            'Commit',
-            result_type,
-            @benchmark_run_display_count
-          ).to_a
+      @charts = benchmark_result_type_ids.map do |benchmark_result_type_id|
+        benchmark_result_type = BenchmarkResultType.find(benchmark_result_type_id)
 
-          next if benchmark_runs.empty?
+        benchmark_runs = fetch_benchmark_runs(
+          'Commit', @form_result_type, benchmark_result_type, @benchmark_run_display_count
+        ).to_a
 
-          chart_builder = ChartBuilder.new(
-            benchmark_runs.sort_by do |benchmark_run|
-              benchmark_run.initiator.created_at
-            end
-          )
+        next if benchmark_runs.empty?
 
-          chart_builder.build_columns do |benchmark_run|
-            environment = YAML.load(benchmark_run.environment)
+        chart_builder = ChartBuilder.new(benchmark_runs)
 
-            if environment.is_a?(Hash)
-              temp = ""
+        columns = chart_builder.build_columns do |benchmark_run|
+          environment = YAML.load(benchmark_run.environment)
 
-              environment.each do |key, value|
-                temp << "#{key}: #{value}<br>"
-              end
+          if environment.is_a?(Hash)
+            temp = ""
 
-              environment = temp
+            environment.each do |key, value|
+              temp << "#{key}: #{value}<br>"
             end
 
-            commit = benchmark_run.initiator
-
-            "Commit: #{commit.sha1[0..6]}<br>" \
-            "Commit Date: #{commit.created_at}<br>" \
-            "Commit Message: #{commit.message.truncate(30)}<br>" \
-            "#{environment}"
+            environment = temp
           end
-        end.compact
+
+          commit = benchmark_run.initiator
+
+          "Commit: #{commit.sha1[0..6]}<br>" \
+          "Commit Date: #{commit.created_at}<br>" \
+          "Commit Message: #{commit.message.truncate(30)}<br>" \
+          "#{environment}"
+        end
+
+        [columns, benchmark_result_type]
+      end.compact
     end
 
     respond_to do |format|
@@ -72,41 +71,48 @@ class ReposController < ApplicationController
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
 
     if @form_result_type = params[:result_type]
-      @charts =
-        [@form_result_type, "#{@form_result_type}_memory"].each_with_index.map do |result_type, index|
-          instance_variable_name = index == 0 ? :@benchmark_type : :@benchmark_type_memory
+      @benchmark_type = find_benchmark_type_by_category(@form_result_type)
 
-          self.instance_variable_set(
-            instance_variable_name, find_benchmark_type_by_category(result_type)
-          )
+      benchmark_result_type_ids = @benchmark_type
+        .benchmark_runs
+        .pluck(:benchmark_result_type_id)
+        .uniq
+        .sort
 
-          benchmark_runs = fetch_benchmark_runs('Release', result_type)
-          next if benchmark_runs.empty?
+      @charts = benchmark_result_type_ids.map do |benchmark_result_type_id|
+        benchmark_result_type = BenchmarkResultType.find(benchmark_result_type_id)
 
-          benchmark_runs = BenchmarkRun.sort_by_initiator_version(benchmark_runs)
+        benchmark_runs = fetch_benchmark_runs(
+          'Release', @form_result_type, benchmark_result_type
+        ).to_a
 
-          if latest_benchmark_run = instance_variable_get(instance_variable_name)
-            .latest_benchmark_run('Commit')
+        next if benchmark_runs.empty?
+        benchmark_runs = BenchmarkRun.sort_by_initiator_version(benchmark_runs)
 
-            benchmark_runs << latest_benchmark_run
-          end
+        if latest_benchmark_run = @benchmark_type
+          .benchmark_runs.latest_commit_benchmark_run(benchmark_result_type)
 
-          ChartBuilder.new(benchmark_runs).build_columns do |benchmark_run|
-            environment = YAML.load(benchmark_run.environment)
+          benchmark_runs << latest_benchmark_run
+        end
 
-            if environment.is_a?(Hash)
-              temp = ""
+        columns = ChartBuilder.new(benchmark_runs).build_columns do |benchmark_run|
+          environment = YAML.load(benchmark_run.environment)
 
-              environment.each do |key, value|
-                temp << "#{key}: #{value}<br>"
-              end
+          if environment.is_a?(Hash)
+            temp = ""
 
-              environment = temp
+            environment.each do |key, value|
+              temp << "#{key}: #{value}<br>"
             end
 
-            "Version: #{benchmark_run.initiator.version}<br> #{environment}"
+            environment = temp
           end
-        end.compact
+
+          "Version: #{benchmark_run.initiator.version}<br> #{environment}"
+        end
+
+        [columns, benchmark_result_type]
+      end.compact
     end
 
     respond_to do |format|
@@ -132,10 +138,11 @@ class ReposController < ApplicationController
     @repo.benchmark_types.find_by_category(category)
   end
 
-  def fetch_benchmark_runs(initiator_type, form_result_type, limit=nil)
+  def fetch_benchmark_runs(initiator_type, form_result_type, benchmark_result_type, limit=nil)
     BenchmarkRun
       .joins(:benchmark_type)
       .where('benchmark_types.category = ?', form_result_type)
+      .where(benchmark_result_type: benchmark_result_type)
       .includes(:initiator)
       .where(initiator_type: initiator_type)
       .limit(limit)

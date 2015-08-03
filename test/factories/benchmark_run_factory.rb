@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :benchmark_run do
     association :benchmark_type
+    association :benchmark_result_type
     result { { 'sometime' => 5 } }
     environment "some environment"
 
