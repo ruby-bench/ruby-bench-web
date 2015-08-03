@@ -26,11 +26,13 @@ class ReposController < ApplicationController
 
         benchmark_runs = fetch_benchmark_runs(
           'Commit', @form_result_type, benchmark_result_type, @benchmark_run_display_count
-        ).to_a
+        )
 
         next if benchmark_runs.empty?
 
-        chart_builder = ChartBuilder.new(benchmark_runs)
+        chart_builder = ChartBuilder.new(benchmark_runs.sort_by do |benchmark_run|
+          benchmark_run.initiator.created_at
+        end)
 
         columns = chart_builder.build_columns do |benchmark_run|
           environment = YAML.load(benchmark_run.environment)
