@@ -6,12 +6,9 @@
         %option{ value: "", selected: @form_result_type.blank? || @form, disabled: true }
           = t('repos.select_benchmark')
 
-        - @result_types.each do |category_name, categories|
-          %optgroup{ label: category_name.try(:titleize) }
-            - categories.each do |result_type|
-              - value = "#{result_type}"
-              %option{ value: value, selected: (@form_result_type == result_type) }
-                #{result_type}
+        - @result_types.each do |category_name|
+          %option{ value: category_name, selected: (@form_result_type == category_name) }
+            = category_name
 
     - if name == 'commits'
       .input-group

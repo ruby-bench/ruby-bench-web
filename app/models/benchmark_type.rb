@@ -5,12 +5,7 @@ class BenchmarkType < ActiveRecord::Base
   belongs_to :repo
 
   validates :category, presence: true, uniqueness: { scope: [:repo_id, :script_url] }
-  validates :unit, presence: true
   validates :script_url, presence: true
-
-  def latest_benchmark_run(initiator_type)
-    self.benchmark_runs.where(initiator_type: initiator_type).first
-  end
 
   def github_url
     uri = URI.parse(self.script_url)

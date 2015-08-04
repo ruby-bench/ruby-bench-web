@@ -16,8 +16,13 @@ class BenchmarkRunsController < APIController
 
     benchmark_type = repo.benchmark_types.find_or_create_by!(benchmark_type_params)
 
+    benchmark_result_type = BenchmarkResultType.find_or_create_by!(
+      benchmark_result_type_params
+    )
+
     benchmark_run = BenchmarkRun.find_or_initialize_by(
-      initiator: initiator, benchmark_type: benchmark_type
+      initiator: initiator, benchmark_type: benchmark_type,
+      benchmark_result_type: benchmark_result_type
     )
 
     benchmark_run.update_attributes(benchmark_run_params)
@@ -32,14 +37,14 @@ class BenchmarkRunsController < APIController
   private
 
   def benchmark_run_params
-    params.require(:benchmark_run).permit(
-      :environment
-    )
+    params.require(:benchmark_run).permit(:environment)
   end
 
   def benchmark_type_params
-    params.require(:benchmark_type).permit(
-      :category, :unit, :script_url
-    )
+    params.require(:benchmark_type).permit(:category, :script_url)
+  end
+
+  def benchmark_result_type_params
+    params.require(:benchmark_result_type).permit(:name, :unit)
   end
 end

@@ -1,14 +1,21 @@
 class BenchmarkRun < ActiveRecord::Base
   belongs_to :initiator, polymorphic: true
   belongs_to :benchmark_type
+  belongs_to :benchmark_result_type
 
   validates :result, presence: true
   validates :environment, presence: true
   validates :initiator_id, presence: true
   validates :initiator_type, presence: true
   validates :benchmark_type_id, presence: true
+  validates :benchmark_result_type_id, presence: true
 
   default_scope { order("#{self.table_name}.created_at DESC")}
+
+  scope :latest_commit_benchmark_run, ->(benchmark_result_type) {
+    where(initiator_type: 'Commit', benchmark_result_type: benchmark_result_type)
+    .first
+  }
 
   PAGINATE_COUNT = [20, 50 ,100, 200, 400, 500, 750, 1000, 2000]
   DEFAULT_PAGINATE_COUNT = 200

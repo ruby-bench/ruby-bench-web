@@ -23,25 +23,29 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
 
       time_now = Time.zone.now
       benchmark_type = create(:benchmark_type)
+      benchmark_result_type = create(:benchmark_result_type)
       @repo = benchmark_type.repo
       @org = @repo.organization
 
       benchmark_run = create(
         :commit_benchmark_run,
         created_at: time_now - 1.day,
-        benchmark_type: benchmark_type
+        benchmark_type: benchmark_type,
+        benchmark_result_type: benchmark_result_type
       )
 
       benchmark_run2 = create(
         :commit_benchmark_run,
         created_at: time_now,
-        benchmark_type: benchmark_type
+        benchmark_type: benchmark_type,
+        benchmark_result_type: benchmark_result_type
       )
 
       benchmark_run3 = create(
         :commit_benchmark_run,
         created_at: time_now + 1.day,
-        benchmark_type: benchmark_type
+        benchmark_type: benchmark_type,
+        benchmark_result_type: benchmark_result_type
       )
 
       visit repo_path(organization_name: @org.name, repo_name: @repo.name)
@@ -56,19 +60,19 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
         "#{benchmark_run.initiator.sha1}
         #{benchmark_run.initiator.message} -
         #{benchmark_run.result["sometime"]}
-        #{benchmark_run.benchmark_type.unit.capitalize}".squish
+        #{benchmark_run.benchmark_result_type.unit}".squish
 
       benchmark_run2_line =
         "#{benchmark_run2.initiator.sha1}
         #{benchmark_run2.initiator.message} -
         #{benchmark_run2.result["sometime"]}
-        #{benchmark_run2.benchmark_type.unit.capitalize}".squish
+        #{benchmark_run2.benchmark_result_type.unit}".squish
 
       benchmark_run3_line =
         "#{benchmark_run3.initiator.sha1}
         #{benchmark_run3.initiator.message} -
         #{benchmark_run3.result["sometime"]}
-        #{benchmark_run3.benchmark_type.unit.capitalize}".squish
+        #{benchmark_run3.benchmark_result_type.unit}".squish
 
       markers = page.all(".highcharts-markers.highcharts-tracker path")
       # Markers are found from right to left on the graph

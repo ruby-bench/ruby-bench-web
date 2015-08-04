@@ -1,5 +1,3 @@
-- tick_interval = (@benchmark_run_display_count / 4) - 1
-
 - if !charts || !benchmark_type
   = image_tag 'icon.png', alt: 'RubyBench Logo', class: 'benchmark-placeholder'
 
@@ -10,25 +8,17 @@
 
 - else
   - benchmark_name = benchmark_type.category.humanize
+  - tick_interval = (@benchmark_run_display_count / 4) - 1
 
-  %h2.l-align-center
-    = t('repos.show.graph_title', graph_name: benchmark_name)
-
-  .chart{ data: { tick_interval: tick_interval,
-    unit: benchmark_type.unit.capitalize,
-    columns: charts.first[:columns],
-    categories: charts.first[:categories],
-    organization: @organization.name,
-    repo: @repo.name } }
-
-  - if charts.count > 1
+  - charts.each do |chart, benchmark_result_type|
     %h2.l-align-center
-      = t('repos.show.graph_title', graph_name: "#{benchmark_name} memory")
+      = t('repos.show.graph_title', graph_name: benchmark_name,
+          type: benchmark_result_type.name)
 
     .chart{ data: { tick_interval: tick_interval,
-      unit: benchmark_type_memory.unit.capitalize,
-      columns: charts.last[:columns],
-      categories: charts.last[:categories],
+      unit: benchmark_result_type.unit,
+      columns: chart[:columns],
+      categories: chart[:categories],
       organization: @organization.name,
       repo: @repo.name } }
 

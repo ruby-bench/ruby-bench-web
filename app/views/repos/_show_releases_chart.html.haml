@@ -7,19 +7,15 @@
       %strong= t('repos.no_results', category: benchmark_type.category)
 
 - else
-  %h2.l-align-center
-    - benchmark_name = benchmark_type.category.humanize
-    = t('repos.show_releases.graph_title', graph_name: benchmark_name)
+  - benchmark_name = benchmark_type.category.humanize
 
-  .release-chart{ data: { categories: charts.first[:categories],
-    unit: benchmark_type.unit.capitalize, columns: charts.first[:columns] } }
-
-  - if charts.count > 1
+  - charts.each do |chart, benchmark_result_type|
     %h2.l-align-center
-      = t('repos.show_releases.graph_title', graph_name: "#{benchmark_name} memory")
+      = t('repos.show_releases.graph_title', graph_name: benchmark_name,
+          type: benchmark_result_type.name)
 
-    .release-chart{ data: { categories: charts.last[:categories],
-      unit: benchmark_type_memory.unit.capitalize,
-      columns: charts.last[:columns] } }
+    .release-chart{ data: { categories: chart[:categories],
+      unit: benchmark_result_type.unit, columns: chart[:columns] } }
 
-  = render 'script', benchmark_type: benchmark_type, benchmark_name: benchmark_name
+  = render 'script', benchmark_type: benchmark_type,
+      benchmark_name: benchmark_name
