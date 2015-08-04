@@ -12,11 +12,6 @@ class BenchmarkRun < ActiveRecord::Base
 
   default_scope { order("#{self.table_name}.created_at DESC")}
 
-  scope :latest_commit_benchmark_run, ->(benchmark_result_type) {
-    where(initiator_type: 'Commit', benchmark_result_type: benchmark_result_type)
-    .first
-  }
-
   PAGINATE_COUNT = [20, 50 ,100, 200, 400, 500, 750, 1000, 2000]
   DEFAULT_PAGINATE_COUNT = 200
 
@@ -29,5 +24,13 @@ class BenchmarkRun < ActiveRecord::Base
         Gem::Version.new(999)
       end
     end
+  end
+
+  def self.latest_commit_benchmark_run(benchmark_type, benchmark_result_type)
+    where(
+      initiator_type: 'Commit',
+      benchmark_result_type: benchmark_result_type,
+      benchmark_type: benchmark_type
+    ).first
   end
 end

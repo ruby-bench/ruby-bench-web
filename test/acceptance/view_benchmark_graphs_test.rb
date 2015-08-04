@@ -180,7 +180,16 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     org = repo.organization
     benchmark_type = create(:benchmark_type, repo: repo)
     release = create(:release, repo: repo)
-    benchmark_run = create(:release_benchmark_run, benchmark_type: benchmark_type)
+    benchmark_run = create(:release_benchmark_run,
+      benchmark_type: benchmark_type,
+      initiator: release
+    )
+
+    create(:release_benchmark_run,
+      benchmark_type: benchmark_type,
+      initiator: release,
+      created_at: Time.zone.now - 1.day
+    )
 
     visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
 

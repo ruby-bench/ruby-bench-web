@@ -19,13 +19,21 @@ class BenchmarkRunTest < ActiveSupport::TestCase
 
   test "scope_latest_commit_benchmark_run" do
     benchmark_result_type = create(:benchmark_result_type)
-    benchmark_run = create(:commit_benchmark_run, benchmark_result_type: benchmark_result_type)
+    benchmark_type = create(:benchmark_type)
+    benchmark_run = create(:commit_benchmark_run,
+      benchmark_result_type: benchmark_result_type,
+      benchmark_type: benchmark_type
+    )
 
     benchmark_run2 = create(:commit_benchmark_run,
       benchmark_result_type: benchmark_result_type,
+      benchmark_type: benchmark_type,
       created_at: Time.zone.now - 1.day
     )
 
-    assert_equal benchmark_run, BenchmarkRun.all.latest_commit_benchmark_run(benchmark_result_type)
+    assert_equal(
+      benchmark_run,
+      BenchmarkRun.latest_commit_benchmark_run(benchmark_type, benchmark_result_type)
+    )
   end
 end

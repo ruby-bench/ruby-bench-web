@@ -91,8 +91,8 @@ class ReposController < ApplicationController
         next if benchmark_runs.empty?
         benchmark_runs = BenchmarkRun.sort_by_initiator_version(benchmark_runs)
 
-        if latest_benchmark_run = @benchmark_type
-          .benchmark_runs.latest_commit_benchmark_run(benchmark_result_type)
+        if latest_benchmark_run = BenchmarkRun.latest_commit_benchmark_run(
+          @benchmark_type, benchmark_result_type)
 
           benchmark_runs << latest_benchmark_run
         end
