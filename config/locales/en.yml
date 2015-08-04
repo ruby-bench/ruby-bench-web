@@ -10,6 +10,12 @@ en:
 
   submit: Submit
 
+  organizations:
+    index:
+      title: Benchmarks
+      commits_benchmark: Commits Benchmarks
+      releases_benchmark: Releases Benchmarks
+
   repos:
     select_benchmark: &select_benchmark
       Please select a benchmark
@@ -39,6 +45,8 @@ en:
       graph_title: *graph_title
 
   static_pages:
+    landing:
+      call_to_action: "View All Tracked Repositories →"
     contribute:
       title: Contributing
       blurb: Where to start contributing?
@@ -68,11 +76,10 @@ en:
 
   top_nav:
     logo: RubyBench
-    benchmarks: Per-Commit Benchmarks
+    benchmarks: Benchmarks
     hardware: Hardware
     contribute: Contribute
     discuss: Discuss
-    releases: Releases Benchmarks
     sponsors: Sponsors
 
   highcharts:

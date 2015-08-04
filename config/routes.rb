@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get 'contributing' => 'static_pages#contribute', as: :contribute
   get 'sponsors' => 'static_pages#sponsors',  as: :sponsors
   get 'admin' => 'admin#toggle_admin'
-  get ':name' => 'organizations#show', as: :organization
+  get 'benchmarks' => 'organizations#index'
   get ':organization_name/:repo_name/commits' => 'repos#show', as: :repo
   get ':organization_name/:repo_name/releases' => 'repos#show_releases', as: :releases_repo
   # The priority is based upon order of creation: first created -> highest priority.

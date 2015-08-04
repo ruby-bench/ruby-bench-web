@@ -1,13 +1,24 @@
-%h1 Organizations
+.container
+  %h1.text-center= t('.title')
 
-%table.table.table-striped
-  %tr
-    %th= Organization.human_attribute_name(:name)
-    %th= Organization.human_attribute_name(:url).upcase
+  %table.table.table-striped
+    %thead
+      %th= Organization.human_attribute_name(:name)
+      %th= Organization.human_attribute_name(:repo).pluralize
 
-  - @organizations.each do |organization|
-    %tr
-      %td
-        = link_to organization.name.capitalize, organization_path(organization.name)
+    %tbody
+      - @organizations.each do |organization|
+        %tr
+          %td
+            = organization.name.capitalize
 
-      %td= link_to organization.url, organization.url, target: '_blank'
+          %td
+            - organization.repos.each do |repo|
+              %ul.list-inline
+                %li
+                  = link_to "#{repo.name.capitalize} #{t('.releases_benchmark')}",
+                      releases_repo_path(organization_name: organization.name, repo_name: repo.name)
+
+                %li
+                  = link_to "#{repo.name.capitalize} #{t('.commits_benchmark')}",
+                      repo_path(organization_name: organization.name, repo_name: repo.name)

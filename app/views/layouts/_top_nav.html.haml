@@ -11,9 +11,7 @@
     .collapse.navbar-collapse{:id => 'rbn-navbar'}
       %ul.nav.navbar-nav.navbar-right
         %li
-          = link_to t('top_nav.releases'), releases_repo_path(organization_name: 'ruby', repo_name: 'ruby')
-        %li
-          = link_to t('top_nav.benchmarks'), repo_path(organization_name: 'ruby', repo_name: 'ruby')
+          = link_to t('top_nav.benchmarks'), benchmarks_path
         %li
           = link_to t('top_nav.hardware'), hardware_path
         %li

@@ -5,7 +5,8 @@
       = image_tag 'icon.png', alt: 'RubyBench Logo', class: 'landing-logo'
       %h1.landing-heading RubyBench
       %p.landing-blurb Long Running Benchmarks for Ruby Projects
-      = link_to "View Ruby's Performance →", releases_repo_path(organization_name: 'ruby', repo_name: 'ruby'), class: 'btn btn-lg btn-primary landing-btn-cta'
+      = link_to t('.call_to_action'), benchmarks_path,
+          class: 'btn btn-lg btn-primary landing-btn-cta'
 
   .container
     .row
