@@ -39,10 +39,6 @@ en:
       graph_title: *graph_title
 
   static_pages:
-    homepage:
-      blurb: >-
-        Long Running Benchmarks for Ruby Projects
-      repositories: Projects Being Tracked
     contribute:
       title: Contributing
       blurb: Where to start contributing?
