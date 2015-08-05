@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150803180315) do
+ActiveRecord::Schema.define(version: 20150805014644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 20150803180315) do
     t.integer  "repo_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "digest"
   end
 
   add_index "benchmark_types", ["repo_id", "category", "script_url"], name: "index_benchmark_types_on_repo_id_and_category_and_script_url", unique: true, using: :btree
