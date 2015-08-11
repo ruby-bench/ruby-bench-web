@@ -76,7 +76,10 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
 
   def assert_results(commit_or_release)
     benchmark_run = BenchmarkRun.first
-    assert_equal 'allocated_objects', benchmark_run.benchmark_type.category
+    benchmark_type = benchmark_run.benchmark_type
+    assert_equal 'allocated_objects', benchmark_type.category
+    assert_equal 'http://something.com', benchmark_type.script_url
+    assert_equal 'thisisadigest', benchmark_type.digest
     assert_equal commit_or_release, benchmark_run.initiator
     assert_equal @repo, benchmark_run.initiator.repo
     assert_equal @repo.organization, benchmark_run.initiator.repo.organization
@@ -91,7 +94,8 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
         },
         benchmark_type: {
           category: 'allocated_objects',
-          script_url: 'http://something.com'
+          script_url: 'http://something.com',
+          digest: 'thisisadigest'
         },
         benchmark_run: {
           result: { fast: 'slow' },
