@@ -4,6 +4,8 @@ class BenchmarkType < ActiveRecord::Base
   has_many :benchmark_runs, dependent: :destroy
   belongs_to :repo
 
+  after_update :check_benchmark_runs_validity
+
   validates :category, presence: true, uniqueness: { scope: [:repo_id, :script_url] }
   validates :script_url, presence: true
 
@@ -11,5 +13,13 @@ class BenchmarkType < ActiveRecord::Base
     uri = URI.parse(self.script_url)
     uri.path =~ /\A(\/[^\/]*\/[^\/]*\/)(.*)\z/
     "https://github.com#{$1}blob/#{$2}"
+  end
+
+  private
+
+  def check_benchmark_runs_validity
+    if self.digest_was && self.digest_changed?
+      self.benchmark_runs.update_all(validity: false)
+    end
   end
 end

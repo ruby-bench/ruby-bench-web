@@ -72,11 +72,37 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     assert_equal initial_count, release.benchmark_runs.count
   end
 
+  test "old benchmark_runs are invalidated" do
+    @repo = create(:repo)
+    release = create(:release, repo: @repo)
+    bm_type = create(:benchmark_type, repo: @repo)
+
+    bm_run = create(:release_benchmark_run,
+      benchmark_type: bm_type, validity: true, initiator: release
+    )
+
+    post_results({
+      version: release.version,
+      repo: @repo.name,
+      organization: @repo.organization.name,
+      benchmark_type: {
+        category: bm_type.category,
+        script_url: bm_type.script_url,
+        digest: 'digestchanged'
+      }
+    })
+
+    assert_not bm_run.reload.validity
+  end
+
   private
 
   def assert_results(commit_or_release)
     benchmark_run = BenchmarkRun.first
-    assert_equal 'allocated_objects', benchmark_run.benchmark_type.category
+    benchmark_type = benchmark_run.benchmark_type
+    assert_equal 'allocated_objects', benchmark_type.category
+    assert_equal 'http://something.com', benchmark_type.script_url
+    assert_equal 'thisisadigest', benchmark_type.digest
     assert_equal commit_or_release, benchmark_run.initiator
     assert_equal @repo, benchmark_run.initiator.repo
     assert_equal @repo.organization, benchmark_run.initiator.repo.organization
@@ -91,7 +117,8 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
         },
         benchmark_type: {
           category: 'allocated_objects',
-          script_url: 'http://something.com'
+          script_url: 'http://something.com',
+          digest: 'thisisadigest'
         },
         benchmark_run: {
           result: { fast: 'slow' },
