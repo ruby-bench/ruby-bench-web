@@ -4,15 +4,12 @@ class BenchmarkRunsController < APIController
       .where(name: params[:repo], organizations: { name: params[:organization] })
       .first
 
-    # FIXME: Probably bad code.
-    if params[:commit_hash]
-      initiator = repo.commits.find_by_sha1(params[:commit_hash])
-    end
-
-    # FIXME: Probably bad code.
-    if params[:version]
-      initiator = repo.releases.find_or_create_by!(version: params[:version])
-    end
+    initiator =
+      if params[:commit_hash]
+        initiator = repo.commits.find_by_sha1(params[:commit_hash])
+      elsif params[:version]
+        initiator = repo.releases.find_or_create_by!(version: params[:version])
+      end
 
     benchmark_type = repo.benchmark_types.find_or_create_by!(
       category: benchmark_type_params[:category],
