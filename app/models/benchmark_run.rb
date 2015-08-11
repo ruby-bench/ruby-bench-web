@@ -9,6 +9,7 @@ class BenchmarkRun < ActiveRecord::Base
   validates :initiator_type, presence: true
   validates :benchmark_type_id, presence: true
   validates :benchmark_result_type_id, presence: true
+  validates :validity, presence: true
 
   default_scope { order("#{self.table_name}.created_at DESC")}
 
