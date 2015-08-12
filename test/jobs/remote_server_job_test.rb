@@ -154,4 +154,26 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
   end
 
+  test "#perform bundler_releases" do
+    [
+      "tsp docker pull rubybench/bundler_releases",
+      "tsp docker run --rm
+        -e \"BUNDLER_VERSION=1.10.6\"
+        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        -e \"INCLUDE_PATTERNS=bm_something\"
+        rubybench/bundler_releases".squish
+    ].each do |command|
+
+      @ssh.expects(:exec!).with(command)
+    end
+
+    RemoteServerJob.new.perform(
+      '1.10.6', 'bundler_releases',
+      {
+        include_patterns: 'bm_something'
+      }
+    )
+  end
+
 end

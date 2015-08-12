@@ -131,6 +131,20 @@ class RemoteServerJob < ActiveJob::Base
     )
   end
 
+  def bundler_releases(ssh, bundler_version, options)
+    execute_ssh_commands(ssh,
+      [
+        "docker pull rubybench/bundler_releases",
+        "docker run --rm
+          -e \"BUNDLER_VERSION=#{bundler_version}\"
+          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          #{build_include_patterns(options[:include_patterns])}
+          rubybench/bundler_releases".squish
+      ]
+    )
+  end
+
   def execute_ssh_commands(ssh, commands)
     commands.each do |command|
       ssh_exec!(ssh, command)
