@@ -15,3 +15,5 @@ RUN useradd rubybench -s /bin/bash -m -U &&\
 RUN mkdir -p /shared/gems && chown -R rubybench /shared/gems && \
       cd /var/www/ruby-bench-web &&\
       sudo -u rubybench bundle install --deployment --without test:development --path=/shared/gems
+
+WORKDIR /var/www/ruby-bench-web
