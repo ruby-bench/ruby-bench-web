@@ -17,7 +17,7 @@ class BenchmarkRunTest < ActiveSupport::TestCase
     )
   end
 
-  test "scope_latest_commit_benchmark_run" do
+  test ".latest_commit_benchmark_run" do
     benchmark_result_type = create(:benchmark_result_type)
     benchmark_type = create(:benchmark_type)
     benchmark_run = create(:commit_benchmark_run,
