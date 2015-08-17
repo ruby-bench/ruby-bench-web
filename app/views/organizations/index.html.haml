@@ -16,9 +16,11 @@
             - organization.repos.each do |repo|
               %ul.list-inline
                 %li
-                  = link_to "#{repo.name.capitalize} #{t('.releases_benchmark')}",
-                      releases_repo_path(organization_name: organization.name, repo_name: repo.name)
+                  - if !repo.releases.empty?
+                    = link_to "#{repo.name.capitalize} #{t('.releases_benchmark')}",
+                        releases_repo_path(organization_name: organization.name, repo_name: repo.name)
 
                 %li
-                  = link_to "#{repo.name.capitalize} #{t('.commits_benchmark')}",
-                      repo_path(organization_name: organization.name, repo_name: repo.name)
+                  - if !repo.commits.empty?
+                    = link_to "#{repo.name.capitalize} #{t('.commits_benchmark')}",
+                        repo_path(organization_name: organization.name, repo_name: repo.name)
