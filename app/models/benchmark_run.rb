@@ -11,6 +11,8 @@ class BenchmarkRun < ActiveRecord::Base
   validates :benchmark_result_type_id, presence: true
   validates :validity, presence: true
 
+  default_scope { order("#{self.table_name}.created_at DESC")}
+
   PAGINATE_COUNT = [20, 50 ,100, 200, 400, 500, 750, 1000, 2000]
   DEFAULT_PAGINATE_COUNT = 200
 
