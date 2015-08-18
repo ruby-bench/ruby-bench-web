@@ -61,7 +61,7 @@ hooks:
           # redis
           # postgres
           cd $home
-          LD_PRELOAD=/usr/lib/libjemalloc.so.1 HOME=/home/rubybench USER=rubybench exec chpst -u rubybench:www-data -U rubybench:www-data bundle exec unicorn -E production -c config/unicorn.rb
+          LD_PRELOAD=/usr/lib/libjemalloc.so.1 HOME=/home/rubybench USER=rubybench exec chpst -u rubybench:www-data -U rubybench:www-data bundle exec unicorn_rails -E production -c config/unicorn.rb
 
     - file:
         path: /etc/service/sidekiq/run
