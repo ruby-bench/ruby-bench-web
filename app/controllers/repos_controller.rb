@@ -30,7 +30,9 @@ class ReposController < ApplicationController
 
         next if benchmark_runs.empty?
 
-        chart_builder = ChartBuilder.new(benchmark_runs.reverse)
+        chart_builder = ChartBuilder.new(benchmark_runs.sort_by do |benchmark_run|
+          benchmark_run.initiator.created_at
+        end)
 
         columns = chart_builder.build_columns do |benchmark_run|
           environment = YAML.load(benchmark_run.environment)
