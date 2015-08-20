@@ -12,8 +12,8 @@ class ReposController < ApplicationController
         BenchmarkRun::DEFAULT_PAGINATE_COUNT
       end
 
-    if @form_result_type = params[:result_type]
-      @benchmark_type = find_benchmark_type_by_category(@form_result_type)
+    if (@form_result_type = params[:result_type]) &&
+       (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
       benchmark_result_type_ids = @benchmark_type
         .benchmark_runs
@@ -72,8 +72,8 @@ class ReposController < ApplicationController
     @organization = find_organization_by_name(params[:organization_name])
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
 
-    if @form_result_type = params[:result_type]
-      @benchmark_type = find_benchmark_type_by_category(@form_result_type)
+    if (@form_result_type = params[:result_type]) &&
+       (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
       benchmark_result_type_ids = @benchmark_type
         .benchmark_runs
