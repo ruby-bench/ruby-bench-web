@@ -15,11 +15,7 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
-      benchmark_result_type_ids = @benchmark_type
-        .benchmark_runs
-        .pluck(:benchmark_result_type_id)
-        .uniq
-        .sort
+      benchmark_result_type_ids = fetch_benchmark_result_type_ids
 
       @charts = benchmark_result_type_ids.map do |benchmark_result_type_id|
         benchmark_result_type = BenchmarkResultType.find(benchmark_result_type_id)
@@ -75,11 +71,7 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
-      benchmark_result_type_ids = @benchmark_type
-        .benchmark_runs
-        .pluck(:benchmark_result_type_id)
-        .uniq
-        .sort
+      benchmark_result_type_ids = fetch_benchmark_result_type_ids
 
       @charts = benchmark_result_type_ids.map do |benchmark_result_type_id|
         benchmark_result_type = BenchmarkResultType.find(benchmark_result_type_id)
@@ -155,5 +147,13 @@ class ReposController < ApplicationController
 
   def fetch_categories
     @repo.benchmark_types.pluck(:category)
+  end
+
+  def fetch_benchmark_result_type_ids
+    @benchmark_type
+      .benchmark_runs
+      .pluck(:benchmark_result_type_id)
+      .uniq
+      .sort
   end
 end
