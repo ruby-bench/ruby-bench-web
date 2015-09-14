@@ -20,8 +20,8 @@ class ReposController < ApplicationController
       @charts = benchmark_result_type_ids.map do |benchmark_result_type_id|
         benchmark_result_type = BenchmarkResultType.find(benchmark_result_type_id)
 
-        benchmark_runs = fetch_benchmark_runs(
-          'Commit', @form_result_type, benchmark_result_type, @benchmark_run_display_count
+        benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
+          @form_result_type, benchmark_result_type, @benchmark_run_display_count
         )
 
         next if benchmark_runs.empty?
@@ -76,9 +76,9 @@ class ReposController < ApplicationController
       @charts = benchmark_result_type_ids.map do |benchmark_result_type_id|
         benchmark_result_type = BenchmarkResultType.find(benchmark_result_type_id)
 
-        benchmark_runs = fetch_benchmark_runs(
-          'Release', @form_result_type, benchmark_result_type
-        ).to_a
+        benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
+          @form_result_type, benchmark_result_type
+        )
 
         next if benchmark_runs.empty?
         benchmark_runs = BenchmarkRun.sort_by_initiator_version(benchmark_runs)
@@ -130,19 +130,6 @@ class ReposController < ApplicationController
 
   def find_benchmark_type_by_category(category)
     @repo.benchmark_types.find_by_category(category)
-  end
-
-  def fetch_benchmark_runs(initiator_type, form_result_type, benchmark_result_type, limit=nil)
-    BenchmarkRun
-      .joins(:benchmark_type)
-      .includes(:initiator)
-      .where('benchmark_types.category = ?', form_result_type)
-      .where(
-        benchmark_result_type: benchmark_result_type,
-        initiator_type: initiator_type,
-        validity: true
-      )
-      .limit(limit)
   end
 
   def fetch_categories
