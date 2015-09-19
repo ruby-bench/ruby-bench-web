@@ -164,7 +164,7 @@ GEM
     mime-types (2.6.2)
     mini_portile (0.6.2)
     minitest (5.8.0)
-    minitest-stub-const (0.4)
+    minitest-stub-const (0.5)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     moneta (0.8.0)
