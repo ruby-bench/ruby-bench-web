@@ -69,7 +69,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           rubybench/ruby_releases_discourse".squish,
         "docker stop discourse_postgres discourse_redis",
-        "docker rm discourse_postgres discourse_redis"
+        "docker rm -v discourse_postgres discourse_redis"
       ]
     )
   end
@@ -86,7 +86,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           rubybench/ruby_trunk_discourse".squish,
         "docker stop discourse_postgres discourse_redis",
-        "docker rm discourse_postgres discourse_redis"
+        "docker rm -v discourse_postgres discourse_redis"
       ]
     )
   end
@@ -106,7 +106,7 @@ class RemoteServerJob < ActiveJob::Base
           #{build_include_patterns(options[:include_patterns])}
           rubybench/rails_releases".squish,
         "docker stop postgres mysql",
-        "docker rm postgres mysql"
+        "docker rm -v postgres mysql"
       ]
     )
   end
@@ -126,7 +126,7 @@ class RemoteServerJob < ActiveJob::Base
           #{build_include_patterns(options[:include_patterns])}
           rubybench/rails_trunk".squish,
         "docker stop postgres mysql",
-        "docker rm postgres mysql"
+        "docker rm -v postgres mysql"
       ]
     )
   end

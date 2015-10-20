@@ -69,7 +69,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         rubybench/ruby_releases_discourse".squish,
       "tsp docker stop discourse_postgres discourse_redis",
-      "tsp docker rm discourse_postgres discourse_redis"
+      "tsp docker rm -v discourse_postgres discourse_redis"
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
@@ -89,7 +89,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         rubybench/ruby_trunk_discourse".squish,
       "tsp docker stop discourse_postgres discourse_redis",
-      "tsp docker rm discourse_postgres discourse_redis"
+      "tsp docker rm -v discourse_postgres discourse_redis"
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
@@ -112,7 +112,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"INCLUDE_PATTERNS=bm_activerecord_scope\"
         rubybench/rails_releases".squish,
       "tsp docker stop postgres mysql",
-      "tsp docker rm postgres mysql"
+      "tsp docker rm -v postgres mysql"
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
@@ -140,7 +140,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"INCLUDE_PATTERNS=bm_activerecord_scope\"
         rubybench/rails_trunk".squish,
       "tsp docker stop postgres mysql",
-      "tsp docker rm postgres mysql"
+      "tsp docker rm -v postgres mysql"
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
