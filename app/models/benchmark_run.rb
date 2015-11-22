@@ -40,18 +40,6 @@ class BenchmarkRun < ActiveRecord::Base
     )
   }
 
-  scope :latest_commit_benchmark_run, -> (benchmark_type, benchmark_result_type) {
-    unscope(:order)
-    .joins("INNER JOIN commits ON commits.id = benchmark_runs.initiator_id")
-    .where(
-      initiator_type: 'Commit',
-      benchmark_result_type: benchmark_result_type,
-      benchmark_type: benchmark_type
-    )
-    .order("commits.created_at DESC")
-    .first
-  }
-
   PAGINATE_COUNT = [20, 50 ,100, 200, 400, 500, 750, 1000, 2000]
   DEFAULT_PAGINATE_COUNT = 200
 
@@ -64,5 +52,17 @@ class BenchmarkRun < ActiveRecord::Base
         Gem::Version.new(999)
       end
     end
+  end
+
+  def self.latest_commit_benchmark_run(benchmark_type, benchmark_result_type)
+    self.unscope(:order)
+      .joins("INNER JOIN commits ON commits.id = benchmark_runs.initiator_id")
+      .where(
+        initiator_type: 'Commit',
+        benchmark_result_type: benchmark_result_type,
+        benchmark_type: benchmark_type
+      )
+      .order("commits.created_at DESC")
+      .first
   end
 end
