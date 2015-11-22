@@ -1,5 +1,7 @@
 language: ruby
-cache: bundler
+cache:
+  directories:
+    - vendor/bundle
 sudo: false
 rvm:
   - "2.2.1"
