@@ -3,7 +3,8 @@ module BenchmarkPool
     case repo_name
     when 'ruby'
       RemoteServerJob.perform_later(commit_sha, 'ruby_trunk')
-      RemoteServerJob.perform_later(commit_sha, 'ruby_trunk_discourse')
+      # FIXME: Benchmark is failling on Ruby 2.3
+      # RemoteServerJob.perform_later(commit_sha, 'ruby_trunk_discourse')
     when 'rails'
       RemoteServerJob.perform_later(commit_sha, 'rails_trunk')
     else
