@@ -2,6 +2,9 @@ base_image: "rubybench/rubybench_docker"
 
 update_pups: false
 
+env:
+  RAILS_ENV: production
+
 params:
   db_name: rubybench_production
   db_user: rubybench
