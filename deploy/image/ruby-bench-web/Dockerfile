@@ -1,19 +1,36 @@
-FROM samsaffron/discourse_base_22:1.0.0
+FROM discourse/base:1.0.16
 MAINTAINER Alan Guo Xiang Tan "https://twitter.com/tgx_world"
 
 RUN sudo apt-get update && sudo apt-get install -y qt5-default libqt5webkit5-dev
 
-RUN useradd rubybench -s /bin/bash -m -U &&\
-    mkdir -p /var/www && cd /var/www &&\
-      git clone https://github.com/ruby-bench/ruby-bench-web.git &&\
-      cd ruby-bench-web &&\
-        git config --global user.name "rubybench" &&\
-        git config --global user.email "https://twitter.com/tgx_world" &&\
-        git remote set-branches --add origin production &&\
+RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv && \
+    git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build && \
+    ./root/.rbenv/plugins/ruby-build/install.sh
+
+ENV PATH /root/.rbenv/bin:$PATH
+
+RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh && \
+    echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+
+RUN /bin/bash -l -c "rbenv install 2.3.0" && \
+    /bin/bash -l -c "rbenv global 2.3.0"
+
+RUN useradd rubybench -s /bin/bash -m -U && \
+    mkdir -p /var/www && cd /var/www && \
+      git clone https://github.com/ruby-bench/ruby-bench-web.git && \
+      cd ruby-bench-web && \
+        git config --global user.name "rubybench" && \
+        git config --global user.email "https://twitter.com/tgx_world" && \
+        git remote set-branches --add origin production && \
         chown -R rubybench:rubybench /var/www/ruby-bench-web
 
 RUN mkdir -p /shared/gems && chown -R rubybench /shared/gems && \
-      cd /var/www/ruby-bench-web &&\
+      cd /var/www/ruby-bench-web && \
       sudo -u rubybench bundle install --deployment --without test:development --path=/shared/gems
+
+RUN cd /root && git clone https://github.com/Neilpang/le.git && \
+    touch /var/spool/cron/crontabs/root && \
+    cd le && ./le.sh install && \
+    ln -s /root/.le /shared/letsencrypt
 
 WORKDIR /var/www/ruby-bench-web

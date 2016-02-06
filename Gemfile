@@ -1,7 +1,4 @@
 source 'https://rubygems.org'
-source 'https://rails-assets.org' do
-  gem 'rails-assets-highcharts', '~> 4.0.4'
-end
 
 gem 'rails', '4.2.3'
 gem 'pg'
@@ -19,6 +16,7 @@ gem 'redis-rails', '~> 4.0.0'
 gem 'sidekiq', '~> 3.3.3'
 gem 'jquery-ui-rails', '~> 5.0.5'
 gem 'turbolinks', '~> 2.5.3'
+gem 'highcharts-rails', '~> 4.1.9'
 
 group :development do
   gem 'spring'
