@@ -153,7 +153,7 @@ hooks:
        contents: |
           #!/bin/bash
           set -e
-          if [ -d "/root/.le/$$ENV_HOSTNAME" ]; then
+          if [ ! -d "/root/.le/$$ENV_HOSTNAME" ]; then
             /root/.le/le.sh issue no $$ENV_HOSTNAME no 4096
             /root/.le/le.sh installcert $$ENV_HOSTNAME /root/.le/$$ENV_HOSTNAME/$$ENV_HOSTNAME.cer /root/.le/$$ENV_HOSTNAME/$$ENV_HOSTNAME.key
           fi
