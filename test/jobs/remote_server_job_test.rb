@@ -103,16 +103,18 @@ class RemoteServerJobTest < ActiveJob::TestCase
       "tsp docker pull rubybench/rails_releases",
       "tsp docker run --name postgres -d postgres:9.3.5",
       "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+      "tsp docker run --name redis -d redis:2.8.19",
       "tsp docker run --rm
         --link postgres:postgres
         --link mysql:mysql
+        --link redis:redis
         -e \"RAILS_VERSION=4.0.0\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         -e \"INCLUDE_PATTERNS=bm_activerecord_scope\"
         rubybench/rails_releases".squish,
-      "tsp docker stop postgres mysql",
-      "tsp docker rm -v postgres mysql"
+      "tsp docker stop postgres mysql redis",
+      "tsp docker rm -v postgres mysql redis",
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
@@ -131,16 +133,18 @@ class RemoteServerJobTest < ActiveJob::TestCase
       "tsp docker pull rubybench/rails_trunk",
       "tsp docker run --name postgres -d postgres:9.3.5",
       "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+      "tsp docker run --name redis -d redis:2.8.19",
       "tsp docker run --rm
         --link postgres:postgres
         --link mysql:mysql
+        --link redis:redis
         -e \"RAILS_COMMIT_HASH=1234\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         -e \"INCLUDE_PATTERNS=bm_activerecord_scope\"
         rubybench/rails_trunk".squish,
-      "tsp docker stop postgres mysql",
-      "tsp docker rm -v postgres mysql"
+      "tsp docker stop postgres mysql redis",
+      "tsp docker rm -v postgres mysql redis"
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)

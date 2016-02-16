@@ -97,16 +97,18 @@ class RemoteServerJob < ActiveJob::Base
         "docker pull rubybench/rails_releases",
         "docker run --name postgres -d postgres:9.3.5",
         "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+        "docker run --name redis -d redis:2.8.19",
         "docker run --rm
           --link postgres:postgres
           --link mysql:mysql
+          --link redis:redis
           -e \"RAILS_VERSION=#{rails_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           #{build_include_patterns(options[:include_patterns])}
           rubybench/rails_releases".squish,
-        "docker stop postgres mysql",
-        "docker rm -v postgres mysql"
+        "docker stop postgres mysql redis",
+        "docker rm -v postgres mysql redis"
       ]
     )
   end
@@ -117,16 +119,18 @@ class RemoteServerJob < ActiveJob::Base
         "docker pull rubybench/rails_trunk",
         "docker run --name postgres -d postgres:9.3.5",
         "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+        "docker run --name redis -d redis:2.8.19",
         "docker run --rm
           --link postgres:postgres
           --link mysql:mysql
+          --link redis:redis
           -e \"RAILS_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           #{build_include_patterns(options[:include_patterns])}
           rubybench/rails_trunk".squish,
-        "docker stop postgres mysql",
-        "docker rm -v postgres mysql"
+        "docker stop postgres mysql redis",
+        "docker rm -v postgres mysql redis"
       ]
     )
   end
