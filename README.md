@@ -48,9 +48,12 @@ Redis
 
 ## Setup
 ```bash
-bundle exec rake db:create
-bundle exec rake db:setup
 redis-server
+bundle exec rake db:setup
+
+# copy database.yml.example to database.yml and make sure you have correct configuration
+cp config/database.yml.example config/database.yml
+
 unicorn -c config/unicorn.rb
 ```
 
