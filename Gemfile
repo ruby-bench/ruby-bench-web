@@ -2,27 +2,27 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.5.1'
 gem 'pg'
-gem 'sass-rails', '~> 5.0.1'
-gem 'uglifier', '>= 1.3.0'
+gem 'sass-rails'
+gem 'uglifier'
 gem 'jquery-rails'
-gem 'net-ssh', '~> 2.9.1'
-gem 'platform-api', '~> 0.2.0'
-gem 'haml', '~> 4.0.5'
-gem 'bootstrap-sass', '~> 3.3.3'
-gem 'autoprefixer-rails', '~> 5.1.11'
-gem 'pygments.rb', '~> 0.6.0'
-gem 'redis', '~> 3.2.1'
-gem 'redis-rails', '~> 4.0.0'
+gem 'net-ssh'
+gem 'platform-api'
+gem 'haml'
+gem 'bootstrap-sass'
+gem 'autoprefixer-rails'
+gem 'pygments.rb'
+gem 'redis'
+gem 'redis-rails'
 gem 'sidekiq'
-gem 'jquery-ui-rails', '~> 5.0.5'
-gem 'turbolinks', '~> 2.5.3'
-gem 'highcharts-rails', '~> 4.1.9'
+gem 'jquery-ui-rails'
+gem 'turbolinks'
+gem 'highcharts-rails'
 
 group :development do
   gem 'spring'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'bullet', '~> 4.14.0'
+  gem 'bullet'
 end
 
 group :development, :test do
@@ -30,27 +30,27 @@ group :development, :test do
 end
 
 group :test do
-  gem 'mocha', '~> 1.1.0'
-  gem 'vcr', '~> 2.9.3'
-  gem 'webmock', '~> 1.20.4'
-  gem 'capybara', '~> 2.4.4'
-  gem 'launchy', '~> 2.4.3'
-  gem 'selenium-webdriver', '~> 2.45.0'
+  gem 'mocha'
+  gem 'vcr'
+  gem 'webmock'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'selenium-webdriver'
   gem 'poltergeist'
-  gem 'minitest-stub-const', '~> 0.3'
-  gem 'factory_girl_rails', '~> 4.5.0'
-  gem 'database_cleaner', '~> 1.4.1'
+  gem 'minitest-stub-const'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
 end
 
 group :production, :development do
-  gem 'unicorn', '~> 4.8.3'
-  gem 'rack-mini-profiler', '~> 0.9.3'
-  gem 'logster', '~> 0.8.0'
-  gem 'sinatra', '~> 1.4.6'
+  gem 'unicorn'
+  gem 'rack-mini-profiler'
+  gem 'logster'
+  gem 'sinatra'
 end
 
 group :production do
   gem 'rails_12factor'
   gem 'newrelic_rpm'
-  gem 'bugsnag', '~> 2.8.4'
+  gem 'bugsnag'
 end

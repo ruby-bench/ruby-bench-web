@@ -38,7 +38,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.4.0)
     arel (6.0.3)
-    autoprefixer-rails (5.1.11)
+    autoprefixer-rails (6.3.3)
       execjs
       json
     better_errors (2.1.1)
@@ -47,17 +47,18 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    bootstrap-sass (3.3.5.1)
-      autoprefixer-rails (>= 5.0.0.1)
-      sass (>= 3.3.0)
-    bugsnag (2.8.13)
+    bootstrap-sass (3.3.6)
+      autoprefixer-rails (>= 5.2.1)
+      sass (>= 3.3.4)
+    bugsnag (3.0.0)
       json (~> 1.7, >= 1.7.7)
     builder (3.2.2)
-    bullet (4.14.10)
+    bullet (5.0.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
     byebug (8.2.2)
-    capybara (2.4.4)
+    capybara (2.6.2)
+      addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
@@ -78,14 +79,14 @@ GEM
     connection_pool (2.2.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    database_cleaner (1.4.1)
+    database_cleaner (1.5.1)
     debug_inspector (0.0.2)
     erubis (2.7.0)
     excon (0.45.4)
     execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.5.0)
+    factory_girl_rails (4.6.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
     ffi (1.9.10)
@@ -93,6 +94,7 @@ GEM
       activesupport (>= 4.1.0)
     haml (4.0.7)
       tilt
+    hashdiff (0.3.0)
     heroics (0.0.14)
       erubis (~> 2.7.0)
       excon
@@ -112,7 +114,7 @@ GEM
     kgio (2.10.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    logster (0.8.3)
+    logster (1.0.1)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -126,14 +128,14 @@ GEM
       metaclass (~> 0.0.1)
     moneta (0.8.0)
     multi_json (1.11.2)
-    net-ssh (2.9.4)
+    net-ssh (3.0.2)
     netrc (0.11.0)
     newrelic_rpm (3.15.0.314)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     pg (0.18.4)
-    platform-api (0.2.0)
-      heroics (~> 0.0.10)
+    platform-api (0.5.0)
+      heroics
     poltergeist (1.9.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -207,7 +209,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    selenium-webdriver (2.45.0)
+    selenium-webdriver (2.52.0)
       childprocess (~> 0.5)
       multi_json (~> 1.0)
       rubyzip (~> 1.0)
@@ -238,15 +240,16 @@ GEM
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    unicorn (4.8.3)
+    unicorn (5.0.1)
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
     uniform_notifier (1.9.0)
-    vcr (2.9.3)
-    webmock (1.20.4)
+    vcr (3.0.1)
+    webmock (1.23.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
+      hashdiff
     websocket (1.2.2)
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
@@ -259,45 +262,45 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  autoprefixer-rails (~> 5.1.11)
+  autoprefixer-rails
   better_errors
   binding_of_caller
-  bootstrap-sass (~> 3.3.3)
-  bugsnag (~> 2.8.4)
-  bullet (~> 4.14.0)
+  bootstrap-sass
+  bugsnag
+  bullet
   byebug
-  capybara (~> 2.4.4)
-  database_cleaner (~> 1.4.1)
-  factory_girl_rails (~> 4.5.0)
-  haml (~> 4.0.5)
-  highcharts-rails (~> 4.1.9)
+  capybara
+  database_cleaner
+  factory_girl_rails
+  haml
+  highcharts-rails
   jquery-rails
-  jquery-ui-rails (~> 5.0.5)
-  launchy (~> 2.4.3)
-  logster (~> 0.8.0)
-  minitest-stub-const (~> 0.3)
-  mocha (~> 1.1.0)
-  net-ssh (~> 2.9.1)
+  jquery-ui-rails
+  launchy
+  logster
+  minitest-stub-const
+  mocha
+  net-ssh
   newrelic_rpm
   pg
-  platform-api (~> 0.2.0)
+  platform-api
   poltergeist
-  pygments.rb (~> 0.6.0)
-  rack-mini-profiler (~> 0.9.3)
+  pygments.rb
+  rack-mini-profiler
   rails (= 4.2.5.1)
   rails_12factor
-  redis (~> 3.2.1)
-  redis-rails (~> 4.0.0)
-  sass-rails (~> 5.0.1)
-  selenium-webdriver (~> 2.45.0)
+  redis
+  redis-rails
+  sass-rails
+  selenium-webdriver
   sidekiq
-  sinatra (~> 1.4.6)
+  sinatra
   spring
-  turbolinks (~> 2.5.3)
-  uglifier (>= 1.3.0)
-  unicorn (~> 4.8.3)
-  vcr (~> 2.9.3)
-  webmock (~> 1.20.4)
+  turbolinks
+  uglifier
+  unicorn
+  vcr
+  webmock
 
 BUNDLED WITH
    1.11.2
