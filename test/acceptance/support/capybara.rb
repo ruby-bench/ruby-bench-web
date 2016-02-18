@@ -1,15 +1,12 @@
 require 'capybara/rails'
+require 'capybara/poltergeist'
 
-Capybara.javascript_driver = :webkit
-
-Capybara::Webkit.configure do |config|
-  config.block_unknown_urls
-end
+Capybara.javascript_driver = :poltergeist
 
 module Capybara
   module JavaScriptDriver
     def require_js
-      Capybara.current_driver = :webkit
+      Capybara.current_driver = :poltergeist
     end
 
     def reset_driver

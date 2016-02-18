@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.3'
+gem 'rails', '4.2.5.1'
 gem 'pg'
 gem 'sass-rails', '~> 5.0.1'
 gem 'uglifier', '>= 1.3.0'
@@ -34,9 +34,9 @@ group :test do
   gem 'vcr', '~> 2.9.3'
   gem 'webmock', '~> 1.20.4'
   gem 'capybara', '~> 2.4.4'
-  gem 'capybara-webkit', '~> 1.6.0'
   gem 'launchy', '~> 2.4.3'
   gem 'selenium-webdriver', '~> 2.45.0'
+  gem 'poltergeist'
   gem 'minitest-stub-const', '~> 0.3'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'database_cleaner', '~> 1.4.1'
