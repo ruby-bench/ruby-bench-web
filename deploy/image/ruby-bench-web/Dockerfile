@@ -28,9 +28,4 @@ RUN mkdir -p /shared/gems && chown -R rubybench /shared/gems && \
       cd /var/www/ruby-bench-web && \
       sudo -u rubybench bundle install --deployment --without test:development --path=/shared/gems
 
-RUN cd /root && git clone https://github.com/Neilpang/le.git && \
-    touch /var/spool/cron/crontabs/root && \
-    cd le && ./le.sh install && \
-    ln -s /root/.le /shared/letsencrypt
-
 WORKDIR /var/www/ruby-bench-web
