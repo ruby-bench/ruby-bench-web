@@ -25,4 +25,29 @@ class CommitTest < ActiveSupport::TestCase
     commit = create(:commit, sha1: '1234567')
     assert_includes commit.version, '12345'
   end
+
+  test "validates valid URL" do
+    valid_url = [
+      'https://github.com/ruby-bench/ruby-bench-web/blob/master/app/models/commit.rb',
+      'http://github.com/ruby-bench/ruby-bench-web/blob/master/app/models/commit.rb'
+    ]
+
+    valid_url.each do |url|
+      commit = build(:commit, url: url)
+      assert commit.valid?
+    end
+  end
+
+  test "validates invalid URL" do
+    invalid_url = [
+      'httpgithub.com/ruby-bench/ruby-bench-web/',
+      'INVLAID URL',
+      'ftp://github.com'
+    ]
+
+    invalid_url.each do |url|
+      commit = build(:commit, url: url)
+      assert commit.invalid?
+    end
+  end
 end
