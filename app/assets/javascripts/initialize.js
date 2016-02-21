@@ -22,10 +22,8 @@ $(document).on('ready page:load', function() {
     var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
 
     if (benchmarkRunDisplayCount !== undefined) {
-      displayCount = benchmarkRunDisplayCount;
       displayUrlParams = '&display_count=' + benchmarkRunDisplayCount;
     } else {
-      displayCount = undefined;
       displayUrlParams = '';
     }
 
