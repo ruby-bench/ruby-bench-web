@@ -1,6 +1,6 @@
 class ReposController < ApplicationController
   def show
-    @organization = find_organization_by_name(params[:organization_name])
+    @organization = find_organization_by_name
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
 
     display_count = params[:display_count].to_i
@@ -65,7 +65,7 @@ class ReposController < ApplicationController
   end
 
   def show_releases
-    @organization = find_organization_by_name(params[:organization_name])
+    @organization = find_organization_by_name
     @repo = find_organization_repos_by_name(@organization, params[:repo_name])
 
     if (@form_result_type = params[:result_type]) &&
@@ -118,7 +118,7 @@ class ReposController < ApplicationController
 
   private
 
-  def find_organization_by_name(name)
+  def find_organization_by_name
     Organization.find_by_name(params[:organization_name]) || not_found
   end
 
