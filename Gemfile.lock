@@ -81,7 +81,7 @@ GEM
     database_cleaner (1.5.1)
     debug_inspector (0.0.2)
     erubis (2.7.0)
-    excon (0.47.0)
+    excon (0.48.0)
     execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -94,8 +94,8 @@ GEM
     haml (4.0.7)
       tilt
     hashdiff (0.3.0)
-    heroics (0.0.14)
-      erubis (~> 2.7.0)
+    heroics (0.0.15)
+      erubis (~> 2.0)
       excon
       moneta
       multi_json (>= 1.9.2)
