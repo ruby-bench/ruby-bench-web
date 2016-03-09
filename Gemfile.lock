@@ -94,7 +94,7 @@ GEM
     haml (4.0.7)
       tilt
     hashdiff (0.3.0)
-    heroics (0.0.15)
+    heroics (0.0.16)
       erubis (~> 2.0)
       excon
       moneta
