@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 20150811041917) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_trgm"
 
   create_table "benchmark_result_types", force: :cascade do |t|
     t.string   "name",       null: false

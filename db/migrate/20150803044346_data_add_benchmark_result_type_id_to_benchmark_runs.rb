@@ -1,6 +1,6 @@
 class DataAddBenchmarkResultTypeIdToBenchmarkRuns < ActiveRecord::Migration
   def up
-    if !Rails.env.test?
+    if Rails.env.production?
       ruby_benchmark_types = Repo
         .joins(:organization)
         .where('repos.name = ? AND organizations.name = ?', 'ruby', 'ruby')
