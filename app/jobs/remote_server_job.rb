@@ -92,6 +92,9 @@ class RemoteServerJob < ActiveJob::Base
   end
 
   def rails_releases(ssh, rails_version, options)
+    custom_env = ''
+    custom_env = '-e "MYSQL2_PREPARED_STATEMENTS=1"' if rails_version >= '4.2.5'
+
     execute_ssh_commands(ssh,
       [
         "docker pull rubybench/rails_releases",
@@ -105,6 +108,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"RAILS_VERSION=#{rails_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          #{custom_env}
           #{build_include_patterns(options[:include_patterns])}
           rubybench/rails_releases".squish,
         "docker stop postgres mysql redis",
@@ -127,6 +131,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"RAILS_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          -e \"MYSQL2_PREPARED_STATEMENTS=1\"
           #{build_include_patterns(options[:include_patterns])}
           rubybench/rails_trunk".squish,
         "docker stop postgres mysql redis",
