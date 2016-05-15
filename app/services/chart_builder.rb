@@ -25,6 +25,7 @@ class ChartBuilder
       visible = false
     end
     @data[:columns] = new_columns.to_json
+    @data[:categories] = @data[:categories].to_json
 
     @data
   end
