@@ -154,7 +154,7 @@ hooks:
          - cd /root/acme.sh && git reset --hard 6cd3a8a5492b6fd3ad7ae411a5a59164cef09093
          - touch /var/spool/cron/crontabs/root
          - install -d -m 0755 -g root -o root $LETSENCRYPT_DIR
-         - cd /root/le && LE_WORKING_DIR="${LETSENCRYPT_DIR}" ./acme.sh install
+         - cd /root/acme.sh && LE_WORKING_DIR="${LETSENCRYPT_DIR}" ./acme.sh install
 
     - file:
        path: /etc/runit/1.d/letsencrypt
