@@ -5,7 +5,7 @@ class Sponsors
     end
 
     def find(identifier)
-      OpenStruct.new(SponsorsData.fetch(identifier))
+      OpenStruct.new(SponsorsData[identifier.to_s])
     end
   end
 end
