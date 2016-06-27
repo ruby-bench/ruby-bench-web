@@ -121,7 +121,7 @@ GEM
     mime-types (3.0)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0221)
-    mini_portile2 (2.0.0)
+    mini_portile2 (2.1.0)
     minitest (5.8.4)
     minitest-stub-const (0.5)
     mocha (1.1.0)
@@ -131,9 +131,11 @@ GEM
     net-ssh (3.1.1)
     netrc (0.11.0)
     newrelic_rpm (3.15.1.316)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     pg (0.18.4)
+    pkg-config (1.1.7)
     platform-api (0.6.0)
       heroics
     poltergeist (1.9.0)
@@ -279,6 +281,7 @@ DEPENDENCIES
   mocha
   net-ssh
   newrelic_rpm
+  nokogiri (>= 1.6.8)
   pg
   platform-api
   poltergeist
