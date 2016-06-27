@@ -54,3 +54,4 @@ group :production do
   gem 'newrelic_rpm'
   gem 'bugsnag'
 end
+gem 'nokogiri', '>= 1.6.8'
