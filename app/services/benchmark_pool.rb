@@ -6,6 +6,8 @@ module BenchmarkPool
       # RemoteServerJob.perform_later(commit_sha, 'ruby_trunk_discourse')
     when 'rails'
       RemoteServerJob.perform_later(commit_sha, 'rails_trunk')
+    when 'sequel'
+      RemoteServerJob.perform_later(commit_sha, 'sequel_trunk')
     else
       raise ArgumentError, "unknown repo: #{repo_name}"
     end

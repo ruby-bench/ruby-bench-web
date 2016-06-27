@@ -177,6 +177,62 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
   end
 
+  test "#perform sequel_releases" do
+    [
+      "tsp docker pull rubybench/sequel_releases",
+      "tsp docker run --name postgres -d postgres:9.3.5",
+      "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+      "tsp docker run --name redis -d redis:2.8.19",
+      "tsp docker run --rm
+        --link postgres:postgres
+        --link mysql:mysql
+        --link redis:redis
+        -e \"SEQUEL_VERSION=4.35.0\"
+        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        -e \"MYSQL2_PREPARED_STATEMENTS=1\"
+        -e \"INCLUDE_PATTERNS=bm_sequel_scope\"
+        rubybench/sequel_releases".squish,
+      "tsp docker stop postgres mysql redis",
+      "tsp docker rm -v postgres mysql redis",
+    ].each do |command|
+
+      @ssh.expects(:exec!).with(command)
+    end
+
+    RemoteServerJob.new.perform(
+      '4.35.0', 'sequel_releases', include_patterns: "bm_sequel_scope"
+    )
+  end
+
+  test "#perform sequel_trunk" do
+    [
+      "tsp docker pull rubybench/sequel_trunk",
+      "tsp docker run --name postgres -d postgres:9.3.5",
+      "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+      "tsp docker run --name redis -d redis:2.8.19",
+      "tsp docker run --rm
+        --link postgres:postgres
+        --link mysql:mysql
+        --link redis:redis
+        -e \"SEQUEL_COMMIT_HASH=1234\"
+        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        -e \"MYSQL2_PREPARED_STATEMENTS=1\"
+        -e \"INCLUDE_PATTERNS=bm_sequel_scope\"
+        rubybench/sequel_trunk".squish,
+      "tsp docker stop postgres mysql redis",
+      "tsp docker rm -v postgres mysql redis"
+    ].each do |command|
+
+      @ssh.expects(:exec!).with(command)
+    end
+
+    RemoteServerJob.new.perform(
+      '1234', 'sequel_trunk', { include_patterns: 'bm_sequel_scope' }
+    )
+  end
+
   test "#perform bundler_releases" do
     [
       "tsp docker pull rubybench/bundler_releases",

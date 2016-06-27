@@ -140,6 +140,54 @@ class RemoteServerJob < ActiveJob::Base
     )
   end
 
+  def sequel_releases(ssh, sequel_version, options)
+    custom_env = '-e "MYSQL2_PREPARED_STATEMENTS=1"'
+
+    execute_ssh_commands(ssh,
+      [
+        "docker pull rubybench/sequel_releases",
+        "docker run --name postgres -d postgres:9.3.5",
+        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+        "docker run --name redis -d redis:2.8.19",
+        "docker run --rm
+          --link postgres:postgres
+          --link mysql:mysql
+          --link redis:redis
+          -e \"SEQUEL_VERSION=#{sequel_version}\"
+          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          #{custom_env}
+          #{build_include_patterns(options[:include_patterns])}
+          rubybench/sequel_releases".squish,
+        "docker stop postgres mysql redis",
+        "docker rm -v postgres mysql redis"
+      ]
+    )
+  end
+
+  def sequel_trunk(ssh, commit_hash, options)
+    execute_ssh_commands(ssh,
+      [
+        "docker pull rubybench/sequel_trunk",
+        "docker run --name postgres -d postgres:9.3.5",
+        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
+        "docker run --name redis -d redis:2.8.19",
+        "docker run --rm
+          --link postgres:postgres
+          --link mysql:mysql
+          --link redis:redis
+          -e \"SEQUEL_COMMIT_HASH=#{commit_hash}\"
+          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
+          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          -e \"MYSQL2_PREPARED_STATEMENTS=1\"
+          #{build_include_patterns(options[:include_patterns])}
+          rubybench/sequel_trunk".squish,
+        "docker stop postgres mysql redis",
+        "docker rm -v postgres mysql redis"
+      ]
+    )
+  end
+
   def bundler_releases(ssh, bundler_version, options)
     execute_ssh_commands(ssh,
       [
