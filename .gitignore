@@ -15,7 +15,7 @@
 /log/*.log
 /tmp
 
-/test/vcr_cassettes/**/*.yml
+#/test/vcr_cassettes/**/*.yml
 *.rdb
 
 # Ignore user specific database config
