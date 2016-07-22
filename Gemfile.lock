@@ -99,7 +99,7 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       netrc
-    highcharts-rails (4.1.9)
+    highcharts-rails (4.2.5)
       railties (>= 3.1)
     i18n (0.7.0)
     jquery-rails (4.1.1)
