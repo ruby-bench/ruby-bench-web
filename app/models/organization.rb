@@ -3,4 +3,8 @@ class Organization < ActiveRecord::Base
 
   validates :name, presence: true
   validates :url, presence: true
+
+  def title
+    name.capitalize
+  end
 end

@@ -41,7 +41,7 @@ class BenchmarkRun < ActiveRecord::Base
   }
 
   PAGINATE_COUNT = [20, 50 ,100, 200, 400, 500, 750, 1000, 2000]
-  DEFAULT_PAGINATE_COUNT = 200
+  DEFAULT_PAGINATE_COUNT = 2000
 
   def self.sort_by_initiator_version(benchmark_runs)
     benchmark_runs.sort_by do |benchmark_run|

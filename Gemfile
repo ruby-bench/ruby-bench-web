@@ -16,12 +16,14 @@ gem 'sidekiq'
 gem 'jquery-ui-rails'
 gem 'turbolinks'
 gem 'highcharts-rails'
+gem 'sidetiq'
 
 group :development do
   gem 'spring'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
+  gem 'puma'
 end
 
 group :development, :test do

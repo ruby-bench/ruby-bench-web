@@ -2,13 +2,13 @@ class ChartBuilder
   def initialize(benchmark_runs)
     @benchmark_runs = benchmark_runs
     @data = {}
-    @data[:categories] = []
     @data[:columns] = {}
   end
 
   def build_columns
     @benchmark_runs.each do |benchmark_run|
       if block_given?
+        @data[:categories] ||= []
         @data[:categories] << yield(benchmark_run)
       end
 
@@ -19,13 +19,16 @@ class ChartBuilder
     end
 
     new_columns = []
-    visible = true
+
     @data[:columns].each do |name, data|
-      new_columns << { name: name, data: data, visible: visible }
-      visible = false
+      new_columns << { name: name, data: data}
     end
+
     @data[:columns] = new_columns.to_json
-    @data[:categories] = @data[:categories].to_json
+
+    if @data[:categories]
+      @data[:categories] = @data[:categories].to_json
+    end
 
     @data
   end

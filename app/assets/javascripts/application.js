@@ -15,11 +15,13 @@
 //= require jquery-ui/widget
 //= require turbolinks
 //= require highcharts
+//= require highcharts/modules/boost
 //= require bootstrap/transition.js
 //= require bootstrap/modal.js
 //= require bootstrap/collapse.js
 //= require modules/release_chart
 //= require modules/chart
+//= require modules/sparkline
 //= require_tree .
 
 Turbolinks.enableProgressBar();

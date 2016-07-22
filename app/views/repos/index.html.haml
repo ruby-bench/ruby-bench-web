@@ -1,0 +1,24 @@
+.container
+  %h2= "#{@repo.title} #{t('.commits_benchmark')}"
+
+  %table.table.table-striped
+    %thead
+      %th= BenchmarkType.human_attribute_name(:category)
+      %th= t('.sparklines')
+    %tbody
+      - @charts.each do |category, outputs|
+        %tr
+          %td
+            %h5= link_to category, repo_path(organization_name: @organization.name,
+              repo_name: @repo.name,
+              result_type: category)
+
+          %td
+            - outputs.each do |result_type, charts|
+              %h5= result_type
+              .sparkline{ data: { columns: charts[:columns] } }
+
+:javascript
+  $(document).on('ready page:load', function() {
+    drawSparkline('.sparkline');
+  });

@@ -10,17 +10,17 @@
       - @organizations.each do |organization|
         %tr
           %td
-            = organization.name.capitalize
+            = organization.title
 
           %td
             - organization.repos.each do |repo|
               %ul.list-inline
                 %li
                   - if !repo.releases.empty?
-                    = link_to "#{repo.name.capitalize} #{t('.releases_benchmark')}",
+                    = link_to "#{repo.title} #{t('.releases_benchmark')}",
                         releases_repo_path(organization_name: organization.name, repo_name: repo.name)
 
                 %li
                   - if !repo.commits.empty?
-                    = link_to "#{repo.name.capitalize} #{t('.commits_benchmark')}",
-                        repo_path(organization_name: organization.name, repo_name: repo.name)
+                    = link_to "#{repo.title} #{t('.commits_benchmark')}",
+                        repos_path(organization_name: organization.name, repo_name: repo.name), data: { no_turbolink: true }

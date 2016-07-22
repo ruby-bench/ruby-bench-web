@@ -31,7 +31,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     visit repo_path(organization_name: org.name, repo_name: repo.name)
 
     assert page.has_content?(
-      I18n.t('repos.show.title', repo_name: repo.name.capitalize)
+      I18n.t('repos.show.title', repo_name: repo.title)
     )
 
     assert_text :all, I18n.t('repos.show.select_benchmark')
@@ -145,7 +145,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
 
     assert page.has_content?(
-      I18n.t('repos.show_releases.title', repo_name: repo.name.capitalize)
+      I18n.t('repos.show_releases.title', repo_name: repo.title)
     )
 
     assert_text :all, I18n.t('repos.show.select_benchmark')
@@ -194,7 +194,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
 
     assert page.has_content?(
-      I18n.t('repos.show_releases.title', repo_name: repo.name.capitalize)
+      I18n.t('repos.show_releases.title', repo_name: repo.title)
     )
 
     assert_text :all, I18n.t('repos.show.select_benchmark')

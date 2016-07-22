@@ -1,12 +1,12 @@
 .container
-  = render 'title', title: t('.title', repo_name: @repo.name.capitalize)
+  = render 'title', title: t('.title', repo_name: @repo.title)
 
   %hr
 
   #benchmark-types-form-container
     .text-center
       = render 'form',
-          form_path: repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
+          form_path: repo_path(organization_name: @organization.name, repo_name: @repo.name),
           name: 'commits'
 
   #charts-container

@@ -2,6 +2,11 @@ class BenchmarkType < ActiveRecord::Base
   default_scope { order("#{self.table_name}.category ASC") }
 
   has_many :benchmark_runs, dependent: :destroy
+
+  has_many :benchmark_result_types, -> {
+    unscope(:order).order("benchmark_result_types.id").uniq
+  }, through: :benchmark_runs
+
   belongs_to :repo
 
   after_update :check_benchmark_runs_validity

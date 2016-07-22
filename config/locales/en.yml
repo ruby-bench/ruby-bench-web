@@ -31,6 +31,10 @@ en:
       Benchmark Type.
     view_github: View on Github
 
+    index:
+      commits_benchmark: Commits Benchmarks
+      sparklines: "Sparklines are refreshed every 30 minutes."
+
     show:
       graph_title: *graph_title
       title: "%{repo_name} Long Running Benchmarks"

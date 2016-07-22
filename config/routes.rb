@@ -1,3 +1,5 @@
+require 'sidetiq/web'
+
 Rails.application.routes.draw do
   if !Rails.env.test?
     require 'sidekiq/web'
@@ -18,6 +20,7 @@ Rails.application.routes.draw do
   get 'sponsors' => 'static_pages#sponsors',  as: :sponsors
   get 'admin' => 'admin#toggle_admin'
   get 'benchmarks' => 'organizations#index'
+  get ':organization_name/:repo_name/commits/overview' => 'repos#index', as: :repos
   get ':organization_name/:repo_name/commits' => 'repos#show', as: :repo
   get ':organization_name/:repo_name/releases' => 'repos#show_releases', as: :releases_repo
   # The priority is based upon order of creation: first created -> highest priority.

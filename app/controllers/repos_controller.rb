@@ -1,8 +1,17 @@
 class ReposController < ApplicationController
-  def show
-    @organization = find_organization_by_name
-    @repo = find_organization_repos_by_name(@organization, params[:repo_name])
+  before_filter :find_organization_by_name
+  before_filter :find_organization_repo_by_name
 
+  def index
+    @charts =
+      if charts = $redis.get("sparklines:#{@repo.id}")
+        JSON.parse(charts).with_indifferent_access
+      else
+        @repo.generate_sparkline_data
+      end
+  end
+
+  def show
     display_count = params[:display_count].to_i
 
     @benchmark_run_display_count =
@@ -15,10 +24,7 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
-      benchmark_result_type_ids = fetch_benchmark_result_type_ids
-
-      @charts = benchmark_result_type_ids.map do |benchmark_result_type_id|
-        benchmark_result_type = BenchmarkResultType.find(benchmark_result_type_id)
+      @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
 
         if (columns = $redis.get(cache_key))
@@ -71,17 +77,10 @@ class ReposController < ApplicationController
   end
 
   def show_releases
-    @organization = find_organization_by_name
-    @repo = find_organization_repos_by_name(@organization, params[:repo_name])
-
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
-      benchmark_result_type_ids = fetch_benchmark_result_type_ids
-
-      @charts = benchmark_result_type_ids.map do |benchmark_result_type_id|
-        benchmark_result_type = BenchmarkResultType.find(benchmark_result_type_id)
-
+      @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
           @form_result_type, benchmark_result_type
         )
@@ -125,11 +124,11 @@ class ReposController < ApplicationController
   private
 
   def find_organization_by_name
-    Organization.find_by_name(params[:organization_name]) || not_found
+    @organization = Organization.find_by_name(params[:organization_name]) || not_found
   end
 
-  def find_organization_repos_by_name(organization, name)
-    organization.repos.find_by_name(name)
+  def find_organization_repo_by_name
+    @repo = @organization.repos.find_by_name(params[:repo_name]) || not_found
   end
 
   def find_benchmark_type_by_category(category)
@@ -138,13 +137,5 @@ class ReposController < ApplicationController
 
   def fetch_categories
     @repo.benchmark_types.pluck(:category)
-  end
-
-  def fetch_benchmark_result_type_ids
-    @benchmark_type
-      .benchmark_runs
-      .pluck(:benchmark_result_type_id)
-      .uniq
-      .sort
   end
 end

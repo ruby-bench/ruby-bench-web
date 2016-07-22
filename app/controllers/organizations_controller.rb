@@ -1,5 +1,5 @@
 class OrganizationsController < ApplicationController
   def index
-    @organizations = Organization.all
+    @organizations = Organization.includes(repos: [:commits, :releases]).all
   end
 end
