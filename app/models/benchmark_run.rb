@@ -65,4 +65,8 @@ class BenchmarkRun < ActiveRecord::Base
       .order("commits.created_at DESC")
       .first
   end
+
+  def self.charts_cache_key(benchmark_type, benchmark_result_type)
+    "charts:#{benchmark_type.id}:#{benchmark_result_type.id}"
+  end
 end

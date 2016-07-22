@@ -19,39 +19,45 @@ class ReposController < ApplicationController
 
       @charts = benchmark_result_type_ids.map do |benchmark_result_type_id|
         benchmark_result_type = BenchmarkResultType.find(benchmark_result_type_id)
+        cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
 
-        benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
-          @form_result_type, benchmark_result_type, @benchmark_run_display_count
-        )
+        if (columns = $redis.get(cache_key))
+          [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
+        else
+          benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
+            @form_result_type, benchmark_result_type, @benchmark_run_display_count
+          )
 
-        next if benchmark_runs.empty?
+          next if benchmark_runs.empty?
 
-        chart_builder = ChartBuilder.new(benchmark_runs.sort_by do |benchmark_run|
-          benchmark_run.initiator.created_at
-        end)
+          chart_builder = ChartBuilder.new(benchmark_runs.sort_by do |benchmark_run|
+            benchmark_run.initiator.created_at
+          end)
 
-        columns = chart_builder.build_columns do |benchmark_run|
-          environment = YAML.load(benchmark_run.environment)
+          columns = chart_builder.build_columns do |benchmark_run|
+            environment = YAML.load(benchmark_run.environment)
 
-          if environment.is_a?(Hash)
-            temp = ""
+            if environment.is_a?(Hash)
+              temp = ""
 
-            environment.each do |key, value|
-              temp << "#{key}: #{value}<br>"
+              environment.each do |key, value|
+                temp << "#{key}: #{value}<br>"
+              end
+
+              environment = temp
             end
 
-            environment = temp
+            commit = benchmark_run.initiator
+
+            "Commit: #{commit.sha1[0..6]}<br>" \
+            "Commit Date: #{commit.created_at}<br>" \
+            "Commit Message: #{commit.message.truncate(30)}<br>" \
+            "#{environment}"
           end
 
-          commit = benchmark_run.initiator
-
-          "Commit: #{commit.sha1[0..6]}<br>" \
-          "Commit Date: #{commit.created_at}<br>" \
-          "Commit Message: #{commit.message.truncate(30)}<br>" \
-          "#{environment}"
+          $redis.set(cache_key, columns.to_json)
+          [columns, benchmark_result_type]
         end
-
-        [columns, benchmark_result_type]
       end.compact
     end
 

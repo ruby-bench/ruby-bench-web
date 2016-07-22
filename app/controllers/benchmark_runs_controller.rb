@@ -31,6 +31,10 @@ class BenchmarkRunsController < APIController
     benchmark_run.result = params[:benchmark_run][:result]
     benchmark_run.save!
 
+    $redis.keys("#{BenchmarkRun.charts_cache_key}:*").each do |key|
+      $redis.del(key)
+    end
+
     render nothing: true
   end
 
