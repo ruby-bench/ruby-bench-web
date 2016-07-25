@@ -1,7 +1,7 @@
 FROM discourse/base:1.3.5
 MAINTAINER Alan Guo Xiang Tan "https://twitter.com/tgx_world"
 
-RUN sudo apt-get update && sudo apt-get install -y qt5-default libqt5webkit5-dev
+RUN sudo apt-get update && sudo apt-get install -y qt5-default libqt5webkit5-dev python-pygments
 
 RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv && \
     git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build && \
