@@ -50,7 +50,7 @@ var drawSparkline = function(chartClass) {
           enabled: false
         },
         tooltip: {
-          backgroundColor: 'transparent',
+          backgroundColor: 'white',
           animation: false,
           borderWidth: 0,
           shadow: false,
