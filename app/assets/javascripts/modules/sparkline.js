@@ -56,6 +56,7 @@ var drawSparkline = function(chartClass) {
           shadow: false,
           hideDelay: 0,
           padding: 0,
+          shared: true,
           headerFormat: '',
           positioner: function (w, h, point) {
             return { x: point.plotX - w / 2, y: point.plotY - h };
