@@ -23,3 +23,8 @@
       repo: @repo.name } }
 
   = render 'script', benchmark_type: benchmark_type, benchmark_name: benchmark_name
+
+:javascript
+  $(function() {
+    drawChart('.chart');
+  });

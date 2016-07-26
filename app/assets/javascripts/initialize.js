@@ -53,7 +53,4 @@ $(document).on('ready page:load', function() {
       }
     });
   });
-
-  drawReleaseChart('.release-chart');
-  drawChart('.chart');
 });
