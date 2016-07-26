@@ -10,10 +10,7 @@ var drawSparkline = function(chartClass) {
           type: 'line',
           margin: [2, 0, 2, 0],
           width: 360,
-          height: 40,
-          style: {
-            overflow: 'visible'
-          }
+          height: 40
         },
         title: {
           text: ""
@@ -50,17 +47,13 @@ var drawSparkline = function(chartClass) {
           enabled: false
         },
         tooltip: {
-          backgroundColor: 'white',
           animation: false,
           borderWidth: 0,
           shadow: false,
           hideDelay: 0,
           padding: 0,
           shared: true,
-          headerFormat: '',
-          positioner: function (w, h, point) {
-            return { x: point.plotX - w / 2, y: point.plotY - h };
-          }
+          headerFormat: ''
         },
         series: $this.data('columns'),
         plotOptions: {
