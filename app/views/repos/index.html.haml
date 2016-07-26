@@ -16,9 +16,24 @@
           %td
             - outputs.each do |result_type, charts|
               %h5= result_type
+
               .sparkline{ data: { columns: charts[:columns] } }
+                .spinner2
+                  .bounce1
+                  .bounce2
+                  .bounce3
 
 :javascript
   $(function() {
     drawSparkline('.sparkline');
+    var called = false;
+
+    $(window).on('scroll', function() {
+      if (called) return;
+      called = true;
+
+      setTimeout(function() {
+        drawSparkline('.sparkline', function() { called = false; });
+      }, 10);
+    });
   });

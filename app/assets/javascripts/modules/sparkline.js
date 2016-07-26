@@ -1,5 +1,14 @@
-var drawSparkline = function(chartClass) {
-  $(chartClass).each(function() {
+var drawn = [];
+
+var drawSparkline = function(chartClass, callback) {
+  $charts = $(chartClass);
+
+  $charts = $charts.filter(function(index, chart) {
+    $chart = $(chart);
+    return $chart.visible(true) && (drawn.indexOf($chart) < 0)
+  });
+
+  $charts.each(function() {
     $this = $(this);
 
     if($this.length) {
@@ -62,6 +71,9 @@ var drawSparkline = function(chartClass) {
           }
         }
       });
+
+      drawn.push($this);
+      if (callback) callback();
     }
   })
 };

@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui/widget
+//= require jquery.visible
 //= require turbolinks
 //= require highcharts
 //= require highcharts/modules/boost
