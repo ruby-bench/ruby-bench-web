@@ -18,7 +18,9 @@ Rails.application.routes.draw do
   get 'hardware' => 'static_pages#hardware'
   get 'contributing' => 'static_pages#contribute', as: :contribute
   get 'sponsors' => 'static_pages#sponsors',  as: :sponsors
-  get 'admin' => 'admin#toggle_admin'
+  get 'admin' => 'admin#index'
+  get 'admin/:organization_name/:repo_name/releases' => 'admin#show_releases', as: :admin_releases_repo
+  get 'admin/:organization_name/:repo_name/releases/next' => 'admin#next', as: :admin_submit
   get 'benchmarks' => 'organizations#index'
   get ':organization_name/:repo_name/commits/overview' => 'repos#index', as: :repos
   get ':organization_name/:repo_name/commits' => 'repos#show', as: :repo

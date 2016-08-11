@@ -1,0 +1,26 @@
+.container
+  %h1.text-center= t('.title')
+
+  %table.table.table-striped
+    %thead
+      %th= Organization.human_attribute_name(:name)
+      %th= Organization.human_attribute_name(:repo).pluralize
+
+    %tbody
+      - @organizations.each do |organization|
+        %tr
+          %td
+            = organization.title
+
+          %td
+            - organization.repos.each do |repo|
+              %ul.list-inline
+                %li
+                  - if !repo.releases.empty?
+                    = link_to "#{repo.title} #{t('.releases_benchmark')}",
+                        admin_releases_repo_path(organization_name: organization.name, repo_name: repo.name)
+
+                %li
+                  - if !repo.commits.empty?
+                    = link_to "#{repo.title} #{t('.commits_benchmark')}",
+                        repos_path(organization_name: organization.name, repo_name: repo.name), data: { no_turbolink: true }

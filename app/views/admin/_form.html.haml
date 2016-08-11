@@ -1,0 +1,19 @@
+= form_tag admin_submit_path, role: 'form', method: :get, class: 'result-types-form form-inline', data: {organization_name: @organization.name, repo_name: @repo.name, name: name, admin: admin} do
+  .form-group
+    .input-group
+      .input-group-addon= t('admin.benchmark_types')
+      %select.form-control{:name => "result_type"}
+        %option{ value: "", selected: @form_result_type.blank? || @form, disabled: true }
+          = t('admin.select_benchmark')
+
+        - @result_types.each do |category_name|
+          %option{ value: category_name, selected: (@form_result_type == category_name) }
+            = category_name
+
+    .input-group
+      .input-group-addon= t('admin.releases_types')
+
+      = select :admin, :releases_type, @releases_types,
+          { selected: @releases_type }, { class: 'form-control' }
+
+    = submit_tag 'Show the Result', class: 'form-control'
