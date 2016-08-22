@@ -120,10 +120,8 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
     bm_type3 = create(:benchmark_type, repo: repo, category: 'c')
 
     visit repo_path(organization_name: org.name, repo_name: repo.name)
-
     within "form" do
-      list = page.first('.input-group').all('option')
-
+      list = page.find('.input-group select.form-control#benchmark-options').all('option')
       assert_equal(list.map(&:value), ["", 'b', 'c', 'd'])
     end
   end
