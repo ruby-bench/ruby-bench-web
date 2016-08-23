@@ -18,3 +18,41 @@
             { selected: @benchmark_run_display_count }, { class: 'form-control' }
 
         .input-group-addon= t('.repos.show.results')
+
+:javascript
+  $(document).on('ready page:load', function() {
+    //Add left and right arrow keys to navigate benchmark types
+    var opts = $('.result-types-form select.form-control option');
+    var selected = $('.result-types-form select.form-control');
+    var optsLength = $('.result-types-form select.form-control option').length;
+    var optionIndex = 0;
+    function incrementOptionIndex(index, n, increment = 1) {
+      //calculated k because of the JavaScript modulo bug
+      k = (((index + increment) % n) + n) % n;
+      if (k == 0) {
+        k = (((k + increment) % n) + n) % n;
+      }
+      index = k;
+      return index;
+    };
+
+    $(window).keydown(function(e) {
+      selected.children().removeAttr('selected');
+      switch(e.which) {
+        case 37:  //left
+          optionIndex = incrementOptionIndex(optionIndex, optsLength, -1);
+          break;
+
+        case 39:  //right
+          optionIndex = incrementOptionIndex(optionIndex, optsLength, 1);
+          break;
+
+        default:
+          return;  //exit this handler for other keys
+      }
+      selected.children().eq(optionIndex).attr('selected', 'selected');
+      selected.val(selected.children().eq(optionIndex).val())
+      selected.change();
+      e.preventDefault();  //prevent the default action (scroll / move caret)
+    });
+  });
