@@ -18,3 +18,24 @@
             { selected: @benchmark_run_display_count }, { class: 'form-control' }
 
         .input-group-addon= t('.repos.show.results')
+
+:javascript
+  $(document).on('ready page:load', function() {
+    //Add left and right arrow keys to navigate benchmark types
+    var opts = $('.result-types-form select.form-control option');
+    var selected = $('.result-types-form select.form-control');
+    var optsLength = $('.result-types-form select.form-control option').length;
+    var optionIndex = 0;
+    function incrementOptionIndex(index, n, increment) {
+      //calculated k because of the JavaScript modulo bug
+      k = (((index + increment) % n) + n) % n;
+      if (k == 0) {
+        k = (((k + increment) % n) + n) % n;
+      }
+      index = k;
+      return index;
+    };
+
+    $(window).keydown(function(e) {
+    });
+  });
