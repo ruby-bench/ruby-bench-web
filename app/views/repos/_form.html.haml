@@ -26,4 +26,16 @@
     var selected = $('.result-types-form select.form-control');
     var optsLength = $('.result-types-form select.form-control option').length;
     var optionIndex = 0;
+    function incrementOptionIndex(index, n, increment = 1) {
+      //calculated k because of the JavaScript modulo bug
+      k = (((index + increment) % n) + n) % n;
+      if (k == 0) {
+        k = (((k + increment) % n) + n) % n;
+      }
+      index = k;
+      return index;
+    };
+
+    $(window).keydown(function(e) {
+    });
   });
