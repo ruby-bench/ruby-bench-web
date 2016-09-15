@@ -6,41 +6,43 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-ruby = Organization.create!(
+ruby = Organization.find_or_create_by(
   name: 'ruby',
   url: 'https://github.com/ruby/'
 )
 
-ruby_repo = Repo.create!(
-  name: 'ruby',
-  url: 'https://github.com/ruby/ruby',
+ruby_repo = Repo.create_with(
   organization_id: ruby.id
+).find_or_create_by(
+  name: 'ruby',
+  url: 'https://github.com/ruby/ruby'
 )
 
-ao_bench = ruby_repo.benchmark_types.create!(
+ao_bench = ruby_repo.benchmark_types.find_or_create_by(
   category: 'ao_bench',
   script_url: 'https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb'
 )
 
-ab_bench = ruby_repo.benchmark_types.create!(
+ab_bench = ruby_repo.benchmark_types.find_or_create_by(
   category: 'ab_bench',
   script_url: 'https://raw.githubusercontent.com/ruby/ruby/trunk/benchmark/bm_app_answer.rb'
 )
 
-ao_benchmark_result_type = BenchmarkResultType.create!(
+ao_benchmark_result_type = BenchmarkResultType.find_or_create_by(
   name: 'Execution time', unit: 'Seconds'
 )
 
-ab_benchmark_result_type = BenchmarkResultType.create!(
+ab_benchmark_result_type = BenchmarkResultType.find_or_create_by(
   name: 'Response time', unit: 'Millieseconds'
 )
 
 10.times do |n|
-  commit = Commit.create!(
+  commit = Commit.create_with(
+    repo_id: ruby_repo.id
+  ).find_or_create_by(
     sha1: Digest::SHA1.hexdigest("#{n}"),
     url: "http://github.com/#{n}",
     message: 'fix something',
-    repo_id: ruby_repo.id
   )
 
   BenchmarkRun.create!(
