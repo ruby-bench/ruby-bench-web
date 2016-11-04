@@ -1,4 +1,4 @@
-class Repo < ActiveRecord::Base
+class Repo < ApplicationRecord
   has_many :commits, dependent: :destroy
   has_many :releases, dependent: :destroy
   has_many :benchmark_types, dependent: :destroy

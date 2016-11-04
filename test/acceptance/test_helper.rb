@@ -6,7 +6,7 @@ class AcceptanceTest < ActionDispatch::IntegrationTest
   include Capybara::DSL
   include Capybara::JavaScriptDriver
 
-  self.use_transactional_fixtures = false
+  self.use_transactional_tests = false
 
   DatabaseCleaner.strategy = :truncation
   setup { DatabaseCleaner.start }

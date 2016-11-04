@@ -23,4 +23,4 @@
                 %li
                   - if !repo.commits.empty?
                     = link_to "#{repo.title} #{t('.commits_benchmark')}",
-                        repos_path(organization_name: organization.name, repo_name: repo.name), data: { no_turbolink: true }
+                        repo_path(organization_name: organization.name, repo_name: repo.name), data: { no_turbolink: true }

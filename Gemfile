@@ -1,15 +1,14 @@
 source 'https://rubygems.org'
 
-gem 'rails', '>= 5.0.0.rc2', '< 5.1'
+gem 'rails', '>= 5.0.0.1'
 gem 'pg'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'jquery-rails'
 gem 'net-ssh'
-gem 'platform-api'
 gem 'haml'
 gem 'bootstrap-sass'
-gem 'pygments.rb'
+gem 'rouge'
 gem 'redis'
 gem 'redis-rails'
 gem 'sidekiq'
@@ -18,6 +17,7 @@ gem 'turbolinks'
 gem 'highcharts-rails'
 gem 'sidetiq'
 gem 'coffee-rails'
+gem 'responders'
 
 group :development do
   gem 'spring'
@@ -35,9 +35,9 @@ group :test do
   gem 'mocha'
   gem 'vcr'
   gem 'webmock'
-  gem 'capybara'
+  gem 'capybara', '2.7'
   gem 'launchy'
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '~> 2.53'
   gem 'poltergeist'
   gem 'minitest-stub-const'
   gem 'factory_girl_rails'
@@ -48,7 +48,7 @@ group :production, :development do
   gem 'unicorn'
   gem 'rack-mini-profiler'
   gem 'logster'
-  gem 'sinatra', github: 'sinatra/sinatra'
+  gem 'sinatra', '2.0.0.beta2'
 end
 
 group :production do

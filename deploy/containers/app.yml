@@ -39,11 +39,6 @@ hooks:
           - git pull --rebase origin production
           - sudo -u rubybench bundle install -j4 --deployment --verbose --without test:development --path=/shared/gems
 
-    - exec:
-        cd: $home
-        cmd:
-          - cp config/database.yml.example config/database.yml
-
     - replace:
         filename: /var/www/ruby-bench-web/config/database.yml
         from: |

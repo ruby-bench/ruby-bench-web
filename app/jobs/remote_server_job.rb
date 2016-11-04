@@ -20,7 +20,11 @@ class RemoteServerJob < ActiveJob::Base
   private
 
   def ruby_trunk(ssh, commit_hash, options)
-    options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
+    options.reverse_merge!({
+      ruby_benchmarks: true,
+      ruby_memory_benchmarks: true,
+      optcarrot_benchmarks: true
+    })
 
     execute_ssh_commands(ssh,
       [
@@ -28,6 +32,7 @@ class RemoteServerJob < ActiveJob::Base
         "docker run --rm
           -e \"RUBY_BENCHMARKS=#{options[:ruby_benchmarks]}\"
           -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
+          -e \"OPTCARROT_BENCHMARK=#{options[:optcarrot_benchmarks]}\"
           -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
@@ -38,7 +43,11 @@ class RemoteServerJob < ActiveJob::Base
   end
 
   def ruby_releases(ssh, ruby_version, options)
-    options.reverse_merge!({ ruby_benchmarks: true, ruby_memory_benchmarks: true })
+    options.reverse_merge!({
+      ruby_benchmarks: true,
+      ruby_memory_benchmarks: true,
+      optcarrot_benchmarks: true
+    })
 
     execute_ssh_commands(ssh,
       [
@@ -47,6 +56,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"RUBY_BENCHMARKS=#{options[:ruby_benchmarks]}\"
           -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
           -e \"RUBY_VERSION=#{ruby_version}\"
+          -e \"OPTCARROT_BENCHMARK=#{options[:optcarrot_benchmarks]}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           #{build_include_patterns(options[:include_patterns])}
