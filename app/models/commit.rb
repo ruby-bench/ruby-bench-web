@@ -1,4 +1,4 @@
-class Commit < ActiveRecord::Base
+class Commit < ApplicationRecord
   extend CommitReviewer
 
   default_scope { order("#{self.table_name}.created_at DESC") }

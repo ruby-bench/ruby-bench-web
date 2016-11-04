@@ -1,4 +1,4 @@
-class BenchmarkType < ActiveRecord::Base
+class BenchmarkType < ApplicationRecord
   default_scope { order("#{self.table_name}.category ASC") }
 
   has_many :benchmark_runs, dependent: :destroy

@@ -1,4 +1,4 @@
-class BenchmarkRun < ActiveRecord::Base
+class BenchmarkRun < ApplicationRecord
   belongs_to :initiator, polymorphic: true
   belongs_to :benchmark_type
   belongs_to :benchmark_result_type

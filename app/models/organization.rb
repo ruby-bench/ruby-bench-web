@@ -1,4 +1,4 @@
-class Organization < ActiveRecord::Base
+class Organization < ApplicationRecord
   has_many :repos, dependent: :destroy
 
   validates :name, presence: true

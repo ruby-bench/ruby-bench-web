@@ -1,4 +1,4 @@
-class Release < ActiveRecord::Base
+class Release < ApplicationRecord
   belongs_to :repo
   has_many :benchmark_runs, as: :initiator, dependent: :destroy
 
