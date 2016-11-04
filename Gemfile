@@ -47,7 +47,7 @@ group :production, :development do
   gem 'unicorn'
   gem 'rack-mini-profiler'
   gem 'logster'
-  gem 'sinatra'
+  gem 'sinatra', github: 'sinatra/sinatra'
 end
 
 group :production do

@@ -1,3 +1,15 @@
+GIT
+  remote: git://github.com/sinatra/sinatra.git
+  revision: af6dad2a6c31e31617712b15f455b2a3d3eb1c06
+  specs:
+    rack-protection (2.0.0.beta2)
+      rack
+    sinatra (2.0.0.beta2)
+      mustermann (= 1.0.0.beta2)
+      rack (~> 2.0)
+      rack-protection (= 2.0.0.beta2)
+      tilt (~> 2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -142,6 +154,7 @@ GEM
       metaclass (~> 0.0.1)
     moneta (0.8.0)
     multi_json (1.12.1)
+    mustermann (1.0.0.beta2)
     net-ssh (3.2.0)
     netrc (0.11.0)
     newrelic_rpm (3.17.0.325)
@@ -163,8 +176,6 @@ GEM
     rack (2.0.1)
     rack-mini-profiler (0.10.1)
       rack (>= 1.2.0)
-    rack-protection (1.5.3)
-      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.0.1)
@@ -236,8 +247,6 @@ GEM
       celluloid (>= 0.17.3)
       ice_cube (~> 0.14.0)
       sidekiq (>= 4.1.0)
-    sinatra (1.0)
-      rack (>= 1.0)
     spring (2.0.0)
       activesupport (>= 4.2)
     sprockets (3.7.0)
@@ -314,7 +323,7 @@ DEPENDENCIES
   selenium-webdriver
   sidekiq
   sidetiq
-  sinatra
+  sinatra!
   spring
   turbolinks
   uglifier
