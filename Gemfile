@@ -17,6 +17,7 @@ gem 'jquery-ui-rails'
 gem 'turbolinks'
 gem 'highcharts-rails'
 gem 'sidetiq'
+gem 'coffee-rails'
 
 group :development do
   gem 'spring'
