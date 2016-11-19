@@ -12,6 +12,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
       "tsp docker run --rm
         -e \"RUBY_BENCHMARKS=true\"
         -e \"RUBY_MEMORY_BENCHMARKS=false\"
+        -e \"OPTCARROT_BENCHMARK=false\"
         -e \"RUBY_COMMIT_HASH=commit_hash\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
@@ -25,7 +26,9 @@ class RemoteServerJobTest < ActiveJob::TestCase
     RemoteServerJob.new.perform(
       'commit_hash', 'ruby_trunk',
       {
-        ruby_benchmarks: true, ruby_memory_benchmarks: false,
+        ruby_benchmarks: true,
+        ruby_memory_benchmarks: false,
+        optcarrot_benchmarks: false,
         include_patterns: 'bm_app_answer,bm_abc'
       }
     )
@@ -38,6 +41,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"RUBY_BENCHMARKS=true\"
         -e \"RUBY_MEMORY_BENCHMARKS=false\"
         -e \"RUBY_VERSION=2.2.0\"
+        -e \"OPTCARROT_BENCHMARK=false\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         -e \"INCLUDE_PATTERNS=bm_app_answer,bm_abc\"
@@ -50,7 +54,9 @@ class RemoteServerJobTest < ActiveJob::TestCase
     RemoteServerJob.new.perform(
       '2.2.0', 'ruby_releases',
       {
-        ruby_benchmarks: true, ruby_memory_benchmarks: false,
+        ruby_benchmarks: true,
+        ruby_memory_benchmarks: false,
+        optcarrot_benchmarks: false,
         include_patterns: 'bm_app_answer,bm_abc'
       }
     )
