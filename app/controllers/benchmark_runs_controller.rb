@@ -27,8 +27,8 @@ class BenchmarkRunsController < APIController
       benchmark_result_type: benchmark_result_type
     )
 
-    benchmark_run.update_attributes(benchmark_run_params)
-    benchmark_run.result = params[:benchmark_run][:result]
+    benchmark_run.update_attributes(benchmark_run_params.to_h)
+    benchmark_run.result = params[:benchmark_run][:result].to_h
     benchmark_run.save!
 
     $redis.keys("#{BenchmarkRun.charts_cache_key(benchmark_type, benchmark_result_type)}:*").each do |key|
