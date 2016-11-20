@@ -1,4 +1,4 @@
-$(document).on('ready page:load', function() {
+$(document).on('ready turbolinks:load', function() {
   if (location.pathname) {
     $(".navbar-nav a[href='" + location.pathname + "']").addClass('current');
   }
