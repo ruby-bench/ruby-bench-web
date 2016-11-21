@@ -110,7 +110,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
 
   def post_results(params = {}, attribute_params = {})
     post('/benchmark_runs',
-      {
+      params: {
         benchmark_result_type: {
           name: 'Execution time',
           unit: 'Seconds'
@@ -125,7 +125,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
           environment: 'ruby-2.1.5'
         }.merge(attribute_params),
       }.merge(params),
-      {
+      headers: {
         'HTTP_AUTHORIZATION' =>
           ActionController::HttpAuthentication::Basic.encode_credentials(
             Rails.application.secrets.api_name,
@@ -135,3 +135,4 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     )
   end
 end
+

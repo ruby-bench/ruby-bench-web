@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2.7'
+gem 'rails', '>= 5.0.0.1'
 gem 'pg'
 gem 'sass-rails'
 gem 'uglifier'
@@ -17,6 +17,8 @@ gem 'jquery-ui-rails'
 gem 'turbolinks'
 gem 'highcharts-rails'
 gem 'sidetiq'
+gem 'coffee-rails'
+gem 'responders'
 
 group :development do
   gem 'spring'
@@ -47,7 +49,7 @@ group :production, :development do
   gem 'unicorn'
   gem 'rack-mini-profiler'
   gem 'logster'
-  gem 'sinatra'
+  gem 'sinatra', github: 'sinatra/sinatra'
 end
 
 group :production do

@@ -24,5 +24,3 @@
 //= require modules/chart
 //= require modules/sparkline
 //= require_tree .
-
-Turbolinks.enableProgressBar();

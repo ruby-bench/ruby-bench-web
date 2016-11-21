@@ -28,14 +28,14 @@ class BenchmarkRunsController < APIController
     )
 
     benchmark_run.update_attributes(benchmark_run_params)
-    benchmark_run.result = params[:benchmark_run][:result]
+    benchmark_run.result = params[:benchmark_run][:result].to_unsafe_h
     benchmark_run.save!
 
     $redis.keys("#{BenchmarkRun.charts_cache_key(benchmark_type, benchmark_result_type)}:*").each do |key|
       $redis.del(key)
     end
 
-    render nothing: true
+    head :ok
   end
 
   private
