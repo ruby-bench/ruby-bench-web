@@ -35,6 +35,10 @@ class BenchmarkRunsController < APIController
       $redis.del(key)
     end
 
+    if params[:commit_hash]
+      BenchmarkRegressionJob.new.perform(benchmark_run.id)
+    end
+
     render nothing: true
   end
 
