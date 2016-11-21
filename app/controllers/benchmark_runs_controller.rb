@@ -35,7 +35,7 @@ class BenchmarkRunsController < APIController
       $redis.del(key)
     end
 
-    render nothing: true
+    head :ok
   end
 
   private
