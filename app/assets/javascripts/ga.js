@@ -1,4 +1,4 @@
-$(document).on('page:change', function() {
+$(document).on('turbolinks:load', function() {
   if(window.ga) {
     ga('send', 'pageview', window.location.href);
   }

@@ -1,6 +1,6 @@
 class ReposController < ApplicationController
-  before_filter :find_organization_by_name
-  before_filter :find_organization_repo_by_name
+  before_action :find_organization_by_name
+  before_action :find_organization_repo_by_name
 
   def index
     @charts =

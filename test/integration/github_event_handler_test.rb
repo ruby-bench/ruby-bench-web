@@ -20,9 +20,9 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
       }
     })
 
-    organization = Organization.first
-    repo = Repo.first
-    commit = Commit.first
+    organization = Organization.last
+    repo = Repo.last
+    commit = Commit.last
 
     assert_equal 'ruby', organization.name
     assert_equal 'ruby', repo.name
@@ -63,9 +63,9 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         }
     })
 
-    organization = Organization.first
-    repo = Repo.first
-    commit = Commit.first
+    organization = Organization.last
+    repo = Repo.last
+    commit = Commit.last
 
     assert_equal 'ruby', organization.name
     assert_equal 'ruby', repo.name
@@ -143,9 +143,9 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         }
     })
 
-    organization = Organization.first
-    repo = Repo.first
-    commit = Commit.first
+    organization = Organization.last
+    repo = Repo.last
+    commit = Commit.last
 
     assert_equal 'ruby', organization.name
     assert_equal 'ruby', repo.name
@@ -176,9 +176,9 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         }
     })
 
-    organization = Organization.first
-    repo = Repo.first
-    commit = Commit.first
+    organization = Organization.last
+    repo = Repo.last
+    commit = Commit.last
 
     assert_equal 'rails', organization.name
     assert_equal 'rails', repo.name
@@ -191,8 +191,8 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
 
   def post_to_handler(parameters)
     post(
-      '/github_event_handler', parameters,
-      {
+      '/github_event_handler', params: parameters,
+      headers: {
         "#{GithubEventHandler::HEADER}" => "#{GithubEventHandler::PUSH}",
         'HTTP_AUTHORIZATION' =>
           ActionController::HttpAuthentication::Basic.encode_credentials(

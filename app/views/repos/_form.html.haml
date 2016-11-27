@@ -20,7 +20,7 @@
         .input-group-addon= t('.repos.show.results')
 
 :javascript
-  $(document).on('ready page:load', function() {
+  $(document).on('ready turbolinks:load', function() {
     //Add left and right arrow keys to navigate benchmark types
     var opts = $('.result-types-form select.form-control option');
     var selected = $('.result-types-form select.form-control');

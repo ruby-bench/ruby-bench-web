@@ -17,3 +17,5 @@
 
 /test/vcr_cassettes/**/*.yml
 *.rdb
+
+.byebug_history
