@@ -53,4 +53,37 @@ $(document).on('ready turbolinks:load', function() {
       }
     });
   });
+
+  // add forward/backward arrow navigation on benchmark page
+
+  var opts = $('.result-types-form select.form-control#benchmark-options option');
+  var selected = $('.result-types-form select.form-control#benchmark-options');
+  var optsLength = $('.result-types-form select.form-control#benchmark-options option').length;
+  var optionIndex = 0;
+  $('.result-types-form .form-group .input-group button#forward-arrow').click(function() {
+    selected.children().removeAttr('selected');
+    if ((optionIndex + 1) % optsLength == 0) {
+      optionIndex = 1;
+    }
+    else {
+      optionIndex = optionIndex + 1;
+    }
+    selected.children().eq(optionIndex).attr('selected', 'selected');
+    selected.val(selected.children().eq(optionIndex).val())
+    selected.change();
+  });
+
+  $('.result-types-form .form-group .input-group button#backward-arrow').click(function() {
+    selected.children().removeAttr('selected');
+    if ((optionIndex - 1) % optsLength <= 0) {
+      optionIndex = 2;
+    }
+    else {
+      optionIndex = optionIndex - 1;
+    }
+    selected.children().eq(optionIndex).attr('selected', 'selected');
+    selected.val(selected.children().eq(optionIndex).val())
+    selected.change();
+  });
+
 });
