@@ -8,7 +8,7 @@ class AcceptanceTest < ActionDispatch::IntegrationTest
 
   self.use_transactional_tests = false
 
-  DatabaseCleaner.strategy = :truncation
+  DatabaseCleaner.strategy = :deletion
   setup { DatabaseCleaner.start }
   teardown  { DatabaseCleaner.clean }
 end
