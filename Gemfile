@@ -42,6 +42,7 @@ group :test do
   gem 'minitest-stub-const'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
+  gem 'capybara-screenshot'
 end
 
 group :production, :development do
