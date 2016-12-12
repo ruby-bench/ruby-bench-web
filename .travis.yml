@@ -4,7 +4,7 @@ cache:
     - vendor/bundle
 sudo: false
 rvm:
-  - "2.2.1"
+  - "2.3.4"
 notifications:
   email: false
 bundler_args: --without development:production --deployment --retry=3 --jobs=3
