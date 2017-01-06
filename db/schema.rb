@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150811041917) do
+ActiveRecord::Schema.define(version: 20161215124119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20150811041917) do
     t.integer  "initiator_id"
     t.integer  "benchmark_type_id",        default: 0,    null: false
     t.integer  "benchmark_result_type_id",                null: false
-    t.boolean  "validity",                 default: true
+    t.boolean  "validity",                 default: true, null: false
     t.index ["benchmark_type_id"], name: "index_benchmark_runs_on_benchmark_type_id", using: :btree
     t.index ["initiator_type", "initiator_id"], name: "index_benchmark_runs_on_initiator_type_and_initiator_id", using: :btree
   end
