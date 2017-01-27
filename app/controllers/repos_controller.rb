@@ -72,6 +72,8 @@ class ReposController < ApplicationController
         @result_types = fetch_categories
       end
 
+      format.json { render :json => generate_json }
+
       format.js
     end
   end
@@ -105,7 +107,8 @@ class ReposController < ApplicationController
             environment = temp
           end
 
-          "Version: #{benchmark_run.initiator.version}<br> #{environment}"
+          "Version: #{benchmark_run.initiator.version}<br>" \
+          "#{environment}"
         end
 
         [columns, benchmark_result_type]
@@ -116,6 +119,8 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
+
+      format.json { render :json => generate_json }
 
       format.js
     end
@@ -137,5 +142,41 @@ class ReposController < ApplicationController
 
   def fetch_categories
     @repo.benchmark_types.pluck(:category)
+  end
+
+  def generate_json
+    @charts.map do |chart|
+      # parse the Version string
+      ruby_versions = JSON.parse(chart[0][:categories]).map do |str|
+        str.split("<br>").reduce(Hash.new) do |memo, mapping|
+          key, value = mapping.split(": ", 2)
+
+          # #{environment} will not split on ': '
+          key, value = ["ruby_version", mapping] unless value
+
+          memo[key] = value
+          memo
+        end
+      end
+
+      # parse the data (sometimes there's two sets of data for one chart)
+      data = JSON.parse(chart[0][:columns]).map { |column| column['data'] }
+
+      # this is for when there are two data sets in one chart (ex. rails commits benchmarks)
+      # then the variations will be `with_prepared_statements` and `without_prepared_statements`
+      variations = JSON.parse(chart[0][:columns]).map { |column| column['name'] }
+
+      initializer = Hash.new
+      initializer[:variations] = variations if variations.length > 1
+
+      # generate the json
+      initializer.merge({
+        benchmark_name: params[:result_type],
+        data: data,
+        ruby_versions: ruby_versions,
+        measurement: chart[1][:name],
+        unit: chart[1][:unit]
+      })
+    end
   end
 end
