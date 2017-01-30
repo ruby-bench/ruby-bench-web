@@ -72,7 +72,7 @@ class ReposController < ApplicationController
         @result_types = fetch_categories
       end
 
-      format.json { render :json => generate_json }
+      format.json { render :json => generate_json(:commits) }
 
       format.js
     end
@@ -120,7 +120,7 @@ class ReposController < ApplicationController
         @result_types = fetch_categories
       end
 
-      format.json { render :json => generate_json }
+      format.json { render :json => generate_json(:releases) }
 
       format.js
     end
@@ -144,39 +144,80 @@ class ReposController < ApplicationController
     @repo.benchmark_types.pluck(:category)
   end
 
-  def generate_json
+  # @param context indicates if we are calling from a 'releases' or 'commits' context
+  def generate_json(context)
+    ruby_versions = construct_ruby_version(context)
+
     @charts.map do |chart|
-      # parse the Version string
-      ruby_versions = JSON.parse(chart[0][:categories]).map do |str|
-        str.split("<br>").reduce(Hash.new) do |memo, mapping|
-          key, value = mapping.split(": ", 2)
-
-          # #{environment} will not split on ': '
-          key, value = ["ruby_version", mapping] unless value
-
-          memo[key] = value
-          memo
-        end
-      end
+      # rename for clarity
+      result_data = chart[0]
+      result_type = chart[1]
 
       # parse the data (sometimes there's two sets of data for one chart)
-      data = JSON.parse(chart[0][:columns]).map { |column| column['data'] }
+      datapoints = JSON.parse(result_data[:columns]).map { |column| column['data'] }
 
       # this is for when there are two data sets in one chart (ex. rails commits benchmarks)
       # then the variations will be `with_prepared_statements` and `without_prepared_statements`
-      variations = JSON.parse(chart[0][:columns]).map { |column| column['name'] }
-
-      initializer = Hash.new
-      initializer[:variations] = variations if variations.length > 1
+      variations = JSON.parse(result_data[:columns]).map { |column| column['name'] }
 
       # generate the json
-      initializer.merge({
+      config = {
         benchmark_name: params[:result_type],
-        data: data,
-        ruby_versions: ruby_versions,
-        measurement: chart[1][:name],
-        unit: chart[1][:unit]
-      })
+        datapoints: datapoints,
+        ruby_versions: ruby_versions[0],
+        measurement: result_type[:name],
+        unit: result_type[:unit]
+      }
+      config[:variations] = variations if variations.length > 1
+      config
+    end
+  end
+
+  # @param context indicates if we are calling from a 'releases' or 'commits' context
+  def construct_ruby_version(context)
+    # similar to the code in `show` and `show_releases` that is used to generate the `@charts`
+    if (@form_result_type = params[:result_type]) &&
+       (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
+
+      @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
+        benchmark_runs = 
+          if context == :commits
+            BenchmarkRun.fetch_commit_benchmark_runs(
+              @form_result_type, benchmark_result_type, @benchmark_run_display_count
+            )
+          elsif context == :releases
+            BenchmarkRun.fetch_release_benchmark_runs(
+              @form_result_type, benchmark_result_type
+            )
+          end
+
+        next if benchmark_runs.empty?
+        benchmark_runs = BenchmarkRun.sort_by_initiator_version(benchmark_runs)
+
+        if latest_benchmark_run = BenchmarkRun.latest_commit_benchmark_run(@benchmark_type, benchmark_result_type)
+          benchmark_runs << latest_benchmark_run
+        end
+
+        columns = benchmark_runs.map do |benchmark_run|
+          environment = YAML.load(benchmark_run.environment)
+
+          # generate the object representing the ruby version
+          config = {ruby_version: environment}
+          if context == :commits
+            commit = benchmark_run.initiator
+            config.merge!(
+              commit: commit.sha1[0..6],
+              commit_date: commit.created_at,
+              commit_message: commit.message.truncate(30)
+            )
+          elsif context == :releases
+            config.merge!(version: benchmark_run.initiator.version)
+          end
+          config
+        end
+
+        columns
+      end.compact
     end
   end
 end
