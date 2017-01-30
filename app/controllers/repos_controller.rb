@@ -26,10 +26,16 @@ class ReposController < ApplicationController
 
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
+        cache_key_ruby_v = "#{cache_key}_ruby_v"
 
         if (columns = $redis.get(cache_key))
+          # read the cached @ruby_versions separately
+          @ruby_versions = JSON.parse($redis.get(cache_key_ruby_v))
           [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
         else
+          # save the ruby versions
+          @ruby_versions = []
+
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
             @form_result_type, benchmark_result_type, @benchmark_run_display_count
           )
@@ -43,25 +49,34 @@ class ReposController < ApplicationController
           columns = chart_builder.build_columns do |benchmark_run|
             environment = YAML.load(benchmark_run.environment)
 
-            if environment.is_a?(Hash)
-              temp = ""
-
-              environment.each do |key, value|
-                temp << "#{key}: #{value}<br>"
-              end
-
-              environment = temp
-            end
-
             commit = benchmark_run.initiator
 
-            "Commit: #{commit.sha1[0..6]}<br>" \
-            "Commit Date: #{commit.created_at}<br>" \
-            "Commit Message: #{commit.message.truncate(30)}<br>" \
+            # generate the ruby_version object
+            config = {
+              commit: commit.sha1[0..6],
+              commit_date: commit.created_at,
+              commit_message: commit.message.truncate(30)
+            }
+            if environment.is_a?(Hash)
+              config.merge!(environment)
+              # solely for the purpose of generating the correct HTML
+              environment = hash_to_html(environment)
+            else
+              config[:environment] = environment
+            end
+
+            @ruby_versions << config
+
+            # generate HTML
+            "Commit: #{config[:commit]}<br>" \
+            "Commit Date: #{config[:commit_date]}<br>" \
+            "Commit Message: #{config[:commit_message]}<br>" \
             "#{environment}"
           end
 
           $redis.set(cache_key, columns.to_json)
+          # cache the `@ruby_versions` as well
+          $redis.set(cache_key_ruby_v, @ruby_versions.to_json)
           [columns, benchmark_result_type]
         end
       end.compact
@@ -71,9 +86,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-
-      format.json { render :json => generate_json }
-
+      format.json { render json: generate_json }
       format.js
     end
   end
@@ -83,6 +96,9 @@ class ReposController < ApplicationController
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
+        # save the ruby versions
+        @ruby_versions = []
+
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
           @form_result_type, benchmark_result_type
         )
@@ -97,17 +113,20 @@ class ReposController < ApplicationController
         columns = ChartBuilder.new(benchmark_runs).build_columns do |benchmark_run|
           environment = YAML.load(benchmark_run.environment)
 
+          # generate the ruby_version object
+          config = {version: benchmark_run.initiator.version}
           if environment.is_a?(Hash)
-            temp = ""
-
-            environment.each do |key, value|
-              temp << "#{key}: #{value}<br>"
-            end
-
-            environment = temp
+            config.merge!(environment)
+            # solely for the purpose of generating the correct HTML
+            environment = hash_to_html(environment)
+          else
+            config[:environment] = environment
           end
 
-          "Version: #{benchmark_run.initiator.version}<br>" \
+          @ruby_versions << config
+
+          # generate HTML
+          "Version: #{config[:version]}<br>" \
           "#{environment}"
         end
 
@@ -119,9 +138,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-
-      format.json { render :json => generate_json }
-
+      format.json { render json: generate_json }
       format.js
     end
   end
@@ -144,39 +161,42 @@ class ReposController < ApplicationController
     @repo.benchmark_types.pluck(:category)
   end
 
+  # Generate the JSON representation of the `@charts`
   def generate_json
     @charts.map do |chart|
-      # parse the Version string
-      ruby_versions = JSON.parse(chart[0][:categories]).map do |str|
-        str.split("<br>").reduce(Hash.new) do |memo, mapping|
-          key, value = mapping.split(": ", 2)
+      # rename for clarity
+      result_data = chart[0]
+      result_type = chart[1]
 
-          # #{environment} will not split on ': '
-          key, value = ["ruby_version", mapping] unless value
-
-          memo[key] = value
-          memo
-        end
+      datapoints = []
+      variations = []
+      # each column contains an array of datapoints
+      JSON.parse(result_data[:columns]).each do |column| 
+        # get one set of datapoints (sometimes there's 2+ sets of data for one chart)
+        datapoints << column['data']
+        # This is for when there are two data sets in one chart (ex. rails commits benchmarks)
+        # Example variations: `with_prepared_statements`, `without_prepared_statements`
+        # `column['name']` is the benchmark name when there is only one set of datapoints
+        variations << column['name']
       end
 
-      # parse the data (sometimes there's two sets of data for one chart)
-      data = JSON.parse(chart[0][:columns]).map { |column| column['data'] }
-
-      # this is for when there are two data sets in one chart (ex. rails commits benchmarks)
-      # then the variations will be `with_prepared_statements` and `without_prepared_statements`
-      variations = JSON.parse(chart[0][:columns]).map { |column| column['name'] }
-
-      initializer = Hash.new
-      initializer[:variations] = variations if variations.length > 1
-
       # generate the json
-      initializer.merge({
+      config = {
         benchmark_name: params[:result_type],
-        data: data,
-        ruby_versions: ruby_versions,
-        measurement: chart[1][:name],
-        unit: chart[1][:unit]
-      })
+        datapoints: datapoints,
+        ruby_versions: @ruby_versions,
+        measurement: result_type[:name],
+        unit: result_type[:unit]
+      }
+      config[:variations] = variations if variations.length > 1
+      config
     end
+  end
+
+  # Generate an HTML string representing the `hash`, with each pair on a new line
+  def hash_to_html(hash)
+    hash.map do |k, v|
+      "#{k}: #{v}" 
+    end.join("<br>")
   end
 end
