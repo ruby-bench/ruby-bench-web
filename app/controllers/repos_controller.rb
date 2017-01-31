@@ -24,17 +24,18 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
+      save_versions = true
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
         version_cache_key = "version_#{cache_key}"
 
         if (columns = $redis.get(cache_key)) && (versions = $redis.get(version_cache_key))
           # read cached @versions
-          @versions = JSON.parse(versions)
+          @versions = JSON.parse(versions) if save_versions
           [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
         else
           # save the versions
-          @versions = []
+          @versions = [] if save_versions
 
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
             @form_result_type, benchmark_result_type, @benchmark_run_display_count
@@ -65,7 +66,7 @@ class ReposController < ApplicationController
               config[:environment] = environment
             end
 
-            @versions << config
+            @versions << config if save_versions
 
             # generate HTML
             "Commit: #{config[:commit]}<br>" \
@@ -79,6 +80,7 @@ class ReposController < ApplicationController
           $redis.set(version_cache_key, @versions.to_json)
           [columns, benchmark_result_type]
         end
+        save_versions = false
       end.compact
     end
 
@@ -86,7 +88,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-      format.json { render json: generate_json }
+      format.json { render json: generate_json(@charts, @versions) }
       format.js
     end
   end
@@ -95,9 +97,10 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
+      save_versions = true
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         # save the versions
-        @versions = []
+        @versions = [] if save_versions
 
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
           @form_result_type, benchmark_result_type
@@ -123,12 +126,13 @@ class ReposController < ApplicationController
             config[:environment] = environment
           end
 
-          @versions << config
+          @versions << config if save_versions
 
           # generate HTML
           "Version: #{config[:version]}<br>" \
           "#{environment}"
         end
+        save_versions = false
 
         [columns, benchmark_result_type]
       end.compact
@@ -138,7 +142,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-      format.json { render json: generate_json }
+      format.json { render json: generate_json(@charts, @versions) }
       format.js
     end
   end
@@ -161,9 +165,9 @@ class ReposController < ApplicationController
     @repo.benchmark_types.pluck(:category)
   end
 
-  # Generate the JSON representation of the `@charts`
-  def generate_json
-    @charts.map do |chart|
+  # Generate the JSON representation of `charts`
+  def generate_json(charts, versions)
+    charts.map do |chart|
       # rename for clarity
       result_data = chart[0]
       result_type = chart[1]
@@ -184,7 +188,7 @@ class ReposController < ApplicationController
       config = {
         benchmark_name: params[:result_type],
         datapoints: datapoints,
-        "#{@repo.name}_versions".to_sym => @versions,
+        "#{@repo.name}_versions".to_sym => versions,
         measurement: result_type[:name],
         unit: result_type[:unit]
       }
