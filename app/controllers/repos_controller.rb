@@ -87,7 +87,7 @@ class ReposController < ApplicationController
         @result_types = fetch_categories
       end
 
-      format.json { render :json => generate_json(:commits) }
+      format.json { render json: generate_json(:commits) }
 
       format.js
     end
@@ -141,7 +141,7 @@ class ReposController < ApplicationController
         @result_types = fetch_categories
       end
 
-      format.json { render :json => generate_json(:releases) }
+      format.json { render json: generate_json(:releases) }
 
       format.js
     end
