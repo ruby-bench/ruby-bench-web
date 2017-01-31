@@ -72,8 +72,8 @@ end
     environment: 'ruby 2.2.0dev',
     initiator_id: release.id,
     initiator_type: 'Release',
-    benchmark_type_id: ab_bench.id,
-    benchmark_result_type_id: ab_benchmark_result_type.id
+    benchmark_type_id: ao_bench.id,
+    benchmark_result_type_id: ao_benchmark_result_type.id
   )
 
   BenchmarkRun.create!(
@@ -81,7 +81,7 @@ end
     environment: 'ruby 2.2.0dev',
     initiator_id: release.id,
     initiator_type: 'Release',
-    benchmark_type_id: ao_bench.id,
-    benchmark_result_type_id: ao_benchmark_result_type.id
+    benchmark_type_id: ab_bench.id,
+    benchmark_result_type_id: ab_benchmark_result_type.id
   )
 end
