@@ -26,11 +26,11 @@ class ReposController < ApplicationController
 
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
-        cache_key_ruby_v = "#{cache_key}_ruby_v"
+        ruby_version_cache_key = "ruby_version_#{cache_key}"
 
-        if (columns = $redis.get(cache_key))
-          # read the cached @ruby_versions separately
-          @ruby_versions = JSON.parse($redis.get(cache_key_ruby_v))
+        if (columns = $redis.get(cache_key)) && (ruby_versions = $redis.get(ruby_version_cache_key))
+          # read cached @ruby_versions
+          @ruby_versions = JSON.parse(ruby_versions)
           [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
         else
           # save the ruby versions
@@ -76,7 +76,7 @@ class ReposController < ApplicationController
 
           $redis.set(cache_key, columns.to_json)
           # cache the `@ruby_versions` as well
-          $redis.set(cache_key_ruby_v, @ruby_versions.to_json)
+          $redis.set(ruby_version_cache_key, @ruby_versions.to_json)
           [columns, benchmark_result_type]
         end
       end.compact
@@ -114,7 +114,7 @@ class ReposController < ApplicationController
           environment = YAML.load(benchmark_run.environment)
 
           # generate the ruby_version object
-          config = {version: benchmark_run.initiator.version}
+          config = { version: benchmark_run.initiator.version }
           if environment.is_a?(Hash)
             config.merge!(environment)
             # solely for the purpose of generating the correct HTML
