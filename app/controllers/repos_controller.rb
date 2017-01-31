@@ -62,7 +62,7 @@ class ReposController < ApplicationController
               # solely for the purpose of generating the correct HTML
               environment = hash_to_html(environment)
             else
-              config.merge!(environment: environment)
+              config[:environment] = environment
             end
 
             @ruby_versions << config
@@ -86,9 +86,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-
-      format.json { render json: generate_json(:commits) }
-
+      format.json { render json: generate_json }
       format.js
     end
   end
@@ -122,7 +120,7 @@ class ReposController < ApplicationController
             # solely for the purpose of generating the correct HTML
             environment = hash_to_html(environment)
           else
-            config.merge!(environment: environment)
+            config[:environment] = environment
           end
 
           @ruby_versions << config
@@ -140,9 +138,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-
-      format.json { render json: generate_json(:releases) }
-
+      format.json { render json: generate_json }
       format.js
     end
   end
@@ -165,8 +161,8 @@ class ReposController < ApplicationController
     @repo.benchmark_types.pluck(:category)
   end
 
-  # @param context indicates if we are calling from a 'releases' or 'commits' context
-  def generate_json(context)
+  # Generate the JSON representation of the `@charts`
+  def generate_json
     @charts.map do |chart|
       # rename for clarity
       result_data = chart[0]
@@ -174,11 +170,13 @@ class ReposController < ApplicationController
 
       datapoints = []
       variations = []
+      # each column contains an array of datapoints
       JSON.parse(result_data[:columns]).each do |column| 
-        # get the data (sometimes there's two sets of data for one chart)
-        datapoints << column['data'] 
-        # this is for when there are two data sets in one chart (ex. rails commits benchmarks)
-        # then the variations will be `with_prepared_statements` and `without_prepared_statements`
+        # get one set of datapoints (sometimes there's 2+ sets of data for one chart)
+        datapoints << column['data']
+        # This is for when there are two data sets in one chart (ex. rails commits benchmarks)
+        # Example variations: `with_prepared_statements`, `without_prepared_statements`
+        # `column['name']` is the benchmark name when there is only one set of datapoints
         variations << column['name']
       end
 
@@ -195,6 +193,7 @@ class ReposController < ApplicationController
     end
   end
 
+  # Generate an HTML string representing the `hash`, with each pair on a new line
   def hash_to_html(hash)
     hash.map do |k, v|
       "#{k}: #{v}" 
