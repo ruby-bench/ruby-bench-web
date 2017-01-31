@@ -24,18 +24,18 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
+      # read versions from cache since it's shared among all `@charts`
+      version_cache_key = "charts:#{@benchmark_type.id}:#{@benchmark_run_display_count}"
+      versions = $redis.get(version_cache_key)
+      @versions = JSON.parse(versions) if versions
+
+      versions_calculate_once = ActiveSupport::OrderedHash.new
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
-        version_cache_key = "version_#{cache_key}"
 
-        if (columns = $redis.get(cache_key)) && (versions = $redis.get(version_cache_key))
-          # read cached @versions
-          @versions = JSON.parse(versions)
+        if (columns = $redis.get(cache_key)) && (versions)
           [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
         else
-          # save the versions
-          @versions = []
-
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
             @form_result_type, benchmark_result_type, @benchmark_run_display_count
           )
@@ -65,7 +65,7 @@ class ReposController < ApplicationController
               config[:environment] = environment
             end
 
-            @versions << config
+            versions_calculate_once[config[:commit]] ||= config
 
             # generate HTML
             "Commit: #{config[:commit]}<br>" \
@@ -73,6 +73,7 @@ class ReposController < ApplicationController
             "Commit Message: #{config[:commit_message]}<br>" \
             "#{environment}"
           end
+          @versions ||= versions_calculate_once.values
 
           $redis.set(cache_key, columns.to_json)
           # cache the `@versions` as well
@@ -86,7 +87,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-      format.json { render json: generate_json }
+      format.json { render json: generate_json(@charts, @versions) }
       format.js
     end
   end
@@ -95,10 +96,8 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
+      versions_calculate_once = ActiveSupport::OrderedHash.new
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
-        # save the versions
-        @versions = []
-
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
           @form_result_type, benchmark_result_type
         )
@@ -123,12 +122,13 @@ class ReposController < ApplicationController
             config[:environment] = environment
           end
 
-          @versions << config
+          versions_calculate_once[config[:version]] ||= config
 
           # generate HTML
           "Version: #{config[:version]}<br>" \
           "#{environment}"
         end
+        @versions ||= versions_calculate_once.values
 
         [columns, benchmark_result_type]
       end.compact
@@ -138,7 +138,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-      format.json { render json: generate_json }
+      format.json { render json: generate_json(@charts, @versions) }
       format.js
     end
   end
@@ -161,9 +161,9 @@ class ReposController < ApplicationController
     @repo.benchmark_types.pluck(:category)
   end
 
-  # Generate the JSON representation of the `@charts`
-  def generate_json
-    @charts.map do |chart|
+  # Generate the JSON representation of `charts`
+  def generate_json(charts, versions)
+    charts.map do |chart|
       # rename for clarity
       result_data = chart[0]
       result_type = chart[1]
@@ -184,7 +184,7 @@ class ReposController < ApplicationController
       config = {
         benchmark_name: params[:result_type],
         datapoints: datapoints,
-        "#{@repo.name}_versions".to_sym => @versions,
+        "#{@repo.name}_versions".to_sym => versions,
         measurement: result_type[:name],
         unit: result_type[:unit]
       }
