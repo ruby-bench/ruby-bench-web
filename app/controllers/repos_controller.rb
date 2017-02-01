@@ -24,19 +24,18 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
-      save_versions = true
+      # read versions from cache since it's shared among all `@charts`
+      version_cache_key = "charts:#{@benchmark_type.id}:#{@benchmark_run_display_count}"
+      versions = $redis.get(version_cache_key)
+      @versions = JSON.parse(versions) if versions
+
+      versions_calculate_once = ActiveSupport::OrderedHash.new
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
-        version_cache_key = "version_#{cache_key}"
 
-        if (columns = $redis.get(cache_key)) && (versions = $redis.get(version_cache_key))
-          # read cached @versions
-          @versions = JSON.parse(versions) if save_versions
+        if (columns = $redis.get(cache_key)) && (versions)
           [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
         else
-          # save the versions
-          @versions = [] if save_versions
-
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
             @form_result_type, benchmark_result_type, @benchmark_run_display_count
           )
@@ -66,7 +65,7 @@ class ReposController < ApplicationController
               config[:environment] = environment
             end
 
-            @versions << config if save_versions
+            versions_calculate_once[config[:commit]] ||= config
 
             # generate HTML
             "Commit: #{config[:commit]}<br>" \
@@ -74,13 +73,13 @@ class ReposController < ApplicationController
             "Commit Message: #{config[:commit_message]}<br>" \
             "#{environment}"
           end
+          @versions ||= versions_calculate_once.values
 
           $redis.set(cache_key, columns.to_json)
           # cache the `@versions` as well
           $redis.set(version_cache_key, @versions.to_json)
           [columns, benchmark_result_type]
         end
-        save_versions = false
       end.compact
     end
 
@@ -123,7 +122,7 @@ class ReposController < ApplicationController
             config[:environment] = environment
           end
 
-          versions_calculate_once[config[:version]] = config unless @versions
+          versions_calculate_once[config[:version]] ||= config
 
           # generate HTML
           "Version: #{config[:version]}<br>" \
