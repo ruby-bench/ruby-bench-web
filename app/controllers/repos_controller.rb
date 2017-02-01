@@ -97,11 +97,8 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
-      save_versions = true
+      versions_calculate_once = ActiveSupport::OrderedHash.new
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
-        # save the versions
-        @versions = [] if save_versions
-
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
           @form_result_type, benchmark_result_type
         )
@@ -126,13 +123,13 @@ class ReposController < ApplicationController
             config[:environment] = environment
           end
 
-          @versions << config if save_versions
+          versions_calculate_once[config[:version]] = config unless @versions
 
           # generate HTML
           "Version: #{config[:version]}<br>" \
           "#{environment}"
         end
-        save_versions = false
+        @versions ||= versions_calculate_once.values
 
         [columns, benchmark_result_type]
       end.compact
