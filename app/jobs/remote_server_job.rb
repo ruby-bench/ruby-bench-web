@@ -23,7 +23,8 @@ class RemoteServerJob < ActiveJob::Base
     options.reverse_merge!({
       ruby_benchmarks: true,
       ruby_memory_benchmarks: true,
-      optcarrot_benchmarks: true
+      optcarrot_benchmarks: true,
+      liquid_benchmarks: true
     })
 
     execute_ssh_commands(ssh,
@@ -33,6 +34,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"RUBY_BENCHMARKS=#{options[:ruby_benchmarks]}\"
           -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
           -e \"OPTCARROT_BENCHMARK=#{options[:optcarrot_benchmarks]}\"
+          -e \"LIQUID_BENCHMARK=#{options[:liquid_benchmarks]}\"
           -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
@@ -46,7 +48,8 @@ class RemoteServerJob < ActiveJob::Base
     options.reverse_merge!({
       ruby_benchmarks: true,
       ruby_memory_benchmarks: true,
-      optcarrot_benchmarks: true
+      optcarrot_benchmarks: true,
+      liquid_benchmarks: true
     })
 
     execute_ssh_commands(ssh,
@@ -57,6 +60,7 @@ class RemoteServerJob < ActiveJob::Base
           -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
           -e \"RUBY_VERSION=#{ruby_version}\"
           -e \"OPTCARROT_BENCHMARK=#{options[:optcarrot_benchmarks]}\"
+          -e \"LIQUID_BENCHMARK=#{options[:liquid_benchmarks]}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           #{build_include_patterns(options[:include_patterns])}
