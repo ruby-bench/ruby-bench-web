@@ -1,15 +1,11 @@
 require 'active_support/concern'
 
 module JSONGenerator
-	extend ActiveSupport::Concern
+  extend ActiveSupport::Concern
 
   # Generate the JSON representation of `charts`
   def generate_json(charts, versions, params = {})
-    charts.map do |chart|
-      # rename for clarity
-      result_data = chart[0]
-      result_type = chart[1]
-
+    charts.map do |result_data, result_type|
       datasets = []
       variations = []
       # each column contains an array of datapoints

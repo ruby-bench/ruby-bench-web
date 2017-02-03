@@ -35,7 +35,7 @@ class ReposController < ApplicationController
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
 
-        if (columns = $redis.get(cache_key)) && (versions)
+        if versions && columns = $redis.get(cache_key)
           [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
         else
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
@@ -60,6 +60,7 @@ class ReposController < ApplicationController
               commit_message: commit.message.truncate(30)
             }
             if environment.is_a?(Hash)
+              # use the key(s) in `environment` instead of setting `config[:environment`]
               config.merge!(environment)
               # solely for the purpose of generating the correct HTML
               environment = hash_to_html(environment)
@@ -117,6 +118,7 @@ class ReposController < ApplicationController
           # generate the version object
           config = { version: benchmark_run.initiator.version }
           if environment.is_a?(Hash)
+            # use the key(s) in `environment` instead of setting `config[:environment`]
             config.merge!(environment)
             # solely for the purpose of generating the correct HTML
             environment = hash_to_html(environment)

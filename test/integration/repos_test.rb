@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ReposTest < ActionDispatch::IntegrationTest
 
-	testcases = JSON.parse(file_fixture("json_generator_tests.json").read, symbolize_names: true)
+  testcases = JSON.parse(file_fixture("json_generator_tests.json").read, symbolize_names: true)
 
   test "organization should a required parameter for show action" do
     organization = create(:organization, name: 'rails')
@@ -39,10 +39,10 @@ class ReposTest < ActionDispatch::IntegrationTest
     )
 
     get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark_type.category}", 
-	    params: { display_count: 2, result_type: benchmark_result_type }
+      params: { display_count: 2, result_type: benchmark_result_type }
 
-	  chart = JSON.parse(response.body, symbolize_names: true)[0]
-	  # must have these 4 keys
+    chart = JSON.parse(response.body, symbolize_names: true)[0]
+    # must have these 4 keys
     assert ([:benchmark_name, :datapoints, :measurement, :unit] - chart.keys).empty?
   end
 end
