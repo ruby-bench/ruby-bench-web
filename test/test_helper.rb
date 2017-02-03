@@ -11,6 +11,6 @@ class ActiveSupport::TestCase
   include FactoryGirl::Syntax::Methods
 
   def self.file_fixture(name)
-  	Rails.root.join('test', 'fixtures', 'files', name)
+    Rails.root.join('test', 'fixtures', 'files', name)
   end
 end
