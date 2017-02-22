@@ -27,7 +27,7 @@ class Repo < ApplicationRecord
 
         chart_builder = ChartBuilder.new(benchmark_runs.sort_by do |benchmark_run|
           benchmark_run.initiator.created_at
-        end)
+        end, benchmark_result_type)
 
         charts[benchmark_type.category] ||= []
         charts[benchmark_type.category] << [benchmark_result_type.name, chart_builder.build_columns]

@@ -5,11 +5,11 @@ module JSONGenerator
 
   # Generate the JSON representation of `charts`
   def generate_json(charts, params = {})
-    charts.map do |chart, result_data, result_type|
+    charts.map do |chart|
       datasets = []
       variations = []
       # each column contains an array of datapoints
-      chart.data[:columns].each do |column|
+      JSON.parse(chart.data[:columns], symbolize_names: true).each do |column|
         # get one set of datapoints (sometimes there's 2+ sets of data for one chart)
         datasets << column[:data]
         # This is for when there are two data sets in one chart (ex. rails commits benchmarks)

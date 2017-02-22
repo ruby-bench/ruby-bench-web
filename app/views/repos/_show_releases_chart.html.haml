@@ -9,13 +9,13 @@
 - else
   - benchmark_name = benchmark_type.category.humanize
 
-  - charts.each do |chart, benchmark_result_type|
+  - charts.each do |chart|
     %h2.l-align-center
       = t('repos.show_releases.graph_title', graph_name: benchmark_name,
-          type: benchmark_result_type.name)
+          type: chart.benchmark_result_type.name)
 
-    .release-chart{ data: { categories: chart[:categories],
-      unit: benchmark_result_type.unit, columns: chart[:columns] } }
+    .release-chart{ data: { categories: chart.data[:categories],
+      unit: chart.benchmark_result_type.unit, columns: chart.data[:columns] } }
 
   = render 'script', benchmark_type: benchmark_type,
       benchmark_name: benchmark_name

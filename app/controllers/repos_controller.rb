@@ -2,6 +2,8 @@ class ReposController < ApplicationController
   before_action :find_organization_by_name
   before_action :find_organization_repo_by_name
 
+  include JSONGenerator
+
   def index
     @charts =
       if charts = $redis.get("sparklines:#{@repo.id}")
@@ -27,8 +29,9 @@ class ReposController < ApplicationController
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
 
-        if (columns = $redis.get(cache_key))
-          [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
+        if (cache_read_json = $redis.get(cache_key))
+          cache_read = JSON.parse(cache_read_json, symbolize_names: true)
+          ChartBuilder.new([], benchmark_result_type).construct_from_cache(cache_read)
         else
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
             @form_result_type, benchmark_result_type, @benchmark_run_display_count
@@ -38,31 +41,36 @@ class ReposController < ApplicationController
 
           chart_builder = ChartBuilder.new(benchmark_runs.sort_by do |benchmark_run|
             benchmark_run.initiator.created_at
-          end)
+          end, benchmark_result_type)
 
-          columns = chart_builder.build_columns do |benchmark_run|
+          chart_builder.build_columns do |benchmark_run|
             environment = YAML.load(benchmark_run.environment)
-
-            if environment.is_a?(Hash)
-              temp = ""
-
-              environment.each do |key, value|
-                temp << "#{key}: #{value}<br>"
-              end
-
-              environment = temp
-            end
-
             commit = benchmark_run.initiator
 
-            "Commit: #{commit.sha1[0..6]}<br>" \
-            "Commit Date: #{commit.created_at}<br>" \
-            "Commit Message: #{commit.message.truncate(30)}<br>" \
-            "#{environment}"
+            version = {
+              commit: commit.sha1[0..6],
+              commit_date: commit.created_at,
+              commit_message: commit.message.truncate(30)
+            }
+            # If there is more information about the environment, we add it to `version` 
+            if environment.is_a?(Hash)
+              # Use the key(s) in `environment` instead of setting `version[:environment]`
+              version.merge!(environment)
+            else
+              # If `environment` is not a Hash, then it is not JSON friendly, so we need to make
+              #   a new key in `version`
+              version[:environment] = environment
+            end
+
+            # this return values gets appended to ChartBuilder#@versions
+            version
           end
 
-          $redis.set(cache_key, columns.to_json)
-          [columns, benchmark_result_type]
+          $redis.set(cache_key, {
+            datasets: JSON.parse(chart_builder.data[:columns]),
+            versions: chart_builder.versions
+          }.to_json)
+          chart_builder
         end
       end.compact
     end
@@ -71,7 +79,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-
+      format.json { render json: generate_json(@charts, params) }
       format.js
     end
   end
@@ -92,23 +100,27 @@ class ReposController < ApplicationController
           benchmark_runs << latest_benchmark_run
         end
 
-        columns = ChartBuilder.new(benchmark_runs).build_columns do |benchmark_run|
+        chart_builder = ChartBuilder.new(benchmark_runs, benchmark_result_type)
+        chart_builder.build_columns do |benchmark_run|
           environment = YAML.load(benchmark_run.environment)
 
+          version = { version: benchmark_run.initiator.version }
+
+          # If there is more information about the environment, we add it to `version` 
           if environment.is_a?(Hash)
-            temp = ""
-
-            environment.each do |key, value|
-              temp << "#{key}: #{value}<br>"
-            end
-
-            environment = temp
+            # Use the key(s) in `environment` instead of setting `version[:environment]`
+            version.merge!(environment)
+          else
+            # If `environment` is not a Hash, then it is not JSON friendly, so we need to make
+            #   a new key in `version`
+            version[:environment] = environment
           end
 
-          "Version: #{benchmark_run.initiator.version}<br> #{environment}"
+          # this return values gets appended to ChartBuilder#@versions
+          version
         end
 
-        [columns, benchmark_result_type]
+        chart_builder
       end.compact
     end
 
@@ -116,7 +128,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-
+      format.json { render json: generate_json(@charts, params) }
       format.js
     end
   end

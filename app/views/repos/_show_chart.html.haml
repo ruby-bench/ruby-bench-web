@@ -10,15 +10,15 @@
   - benchmark_name = benchmark_type.category.humanize
   - tick_interval = (@benchmark_run_display_count / 4) - 1
 
-  - charts.each do |chart, benchmark_result_type|
+  - charts.each do |chart|
     %h2.l-align-center
       = t('repos.show.graph_title', graph_name: benchmark_name,
-          type: benchmark_result_type.name)
+          type: chart.benchmark_result_type.name)
 
     .chart{ data: { tick_interval: tick_interval,
-      unit: benchmark_result_type.unit,
-      columns: chart[:columns],
-      categories: chart[:categories],
+      unit: chart.benchmark_result_type.unit,
+      columns: chart.data[:columns],
+      categories: chart.data[:categories],
       organization: @organization.name,
       repo: @repo.name } }
 
