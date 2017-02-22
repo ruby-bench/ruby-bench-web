@@ -2,6 +2,8 @@ class ReposController < ApplicationController
   before_action :find_organization_by_name
   before_action :find_organization_repo_by_name
 
+  include JSONGenerator
+
   def index
     @charts =
       if charts = $redis.get("sparklines:#{@repo.id}")
@@ -24,10 +26,16 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
+      # read versions from cache since it's shared among all `@charts`
+      version_cache_key = "charts:#{@benchmark_type.id}:#{@benchmark_run_display_count}"
+      versions = $redis.get(version_cache_key)
+      @versions = JSON.parse(versions) if versions
+
+      versions_calculate_once = ActiveSupport::OrderedHash.new
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
 
-        if (columns = $redis.get(cache_key))
+        if versions && columns = $redis.get(cache_key)
           [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
         else
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
@@ -43,25 +51,36 @@ class ReposController < ApplicationController
           columns = chart_builder.build_columns do |benchmark_run|
             environment = YAML.load(benchmark_run.environment)
 
-            if environment.is_a?(Hash)
-              temp = ""
-
-              environment.each do |key, value|
-                temp << "#{key}: #{value}<br>"
-              end
-
-              environment = temp
-            end
-
             commit = benchmark_run.initiator
 
-            "Commit: #{commit.sha1[0..6]}<br>" \
-            "Commit Date: #{commit.created_at}<br>" \
-            "Commit Message: #{commit.message.truncate(30)}<br>" \
+            # generate the version object
+            config = {
+              commit: commit.sha1[0..6],
+              commit_date: commit.created_at,
+              commit_message: commit.message.truncate(30)
+            }
+            if environment.is_a?(Hash)
+              # use the key(s) in `environment` instead of setting `config[:environment`]
+              config.merge!(environment)
+              # solely for the purpose of generating the correct HTML
+              environment = hash_to_html(environment)
+            else
+              config[:environment] = environment
+            end
+
+            versions_calculate_once[config[:commit]] ||= config
+
+            # generate HTML
+            "Commit: #{config[:commit]}<br>" \
+            "Commit Date: #{config[:commit_date]}<br>" \
+            "Commit Message: #{config[:commit_message]}<br>" \
             "#{environment}"
           end
+          @versions ||= versions_calculate_once.values
 
           $redis.set(cache_key, columns.to_json)
+          # cache the `@versions` as well
+          $redis.set(version_cache_key, @versions.to_json)
           [columns, benchmark_result_type]
         end
       end.compact
@@ -71,7 +90,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-
+      format.json { render json: generate_json(@charts, @versions, params) }
       format.js
     end
   end
@@ -80,6 +99,7 @@ class ReposController < ApplicationController
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
+      versions_calculate_once = ActiveSupport::OrderedHash.new
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
           @form_result_type, benchmark_result_type
@@ -95,18 +115,24 @@ class ReposController < ApplicationController
         columns = ChartBuilder.new(benchmark_runs).build_columns do |benchmark_run|
           environment = YAML.load(benchmark_run.environment)
 
+          # generate the version object
+          config = { version: benchmark_run.initiator.version }
           if environment.is_a?(Hash)
-            temp = ""
-
-            environment.each do |key, value|
-              temp << "#{key}: #{value}<br>"
-            end
-
-            environment = temp
+            # use the key(s) in `environment` instead of setting `config[:environment`]
+            config.merge!(environment)
+            # solely for the purpose of generating the correct HTML
+            environment = hash_to_html(environment)
+          else
+            config[:environment] = environment
           end
 
-          "Version: #{benchmark_run.initiator.version}<br> #{environment}"
+          versions_calculate_once[config[:version]] ||= config
+
+          # generate HTML
+          "Version: #{config[:version]}<br>" \
+          "#{environment}"
         end
+        @versions ||= versions_calculate_once.values
 
         [columns, benchmark_result_type]
       end.compact
@@ -116,7 +142,7 @@ class ReposController < ApplicationController
       format.html do
         @result_types = fetch_categories
       end
-
+      format.json { render json: generate_json(@charts, @versions, params) }
       format.js
     end
   end
@@ -137,5 +163,12 @@ class ReposController < ApplicationController
 
   def fetch_categories
     @repo.benchmark_types.pluck(:category)
+  end
+
+  # Generate an HTML string representing the `hash`, with each pair on a new line
+  def hash_to_html(hash)
+    hash.map do |k, v|
+      "#{k}: #{v}" 
+    end.join("<br>")
   end
 end

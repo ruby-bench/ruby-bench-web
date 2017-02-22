@@ -1,0 +1,95 @@
+{
+  "test_one_dataset_in_chart": {
+    "charts": [
+      [  
+        {  
+          "columns":"[{\"name\":\"ao_bench\",\"data\":[0.22,0.22]}]"
+        },
+        {  
+          "name":"Execution time",
+          "unit":"Seconds"
+        }
+      ]
+    ],
+    "versions": [  
+      {  
+        "version":"0",
+        "environment":"ruby 2.2.0dev"
+      },
+      {  
+        "version":"1",
+        "environment":"ruby 2.2.0dev"
+      }
+    ],
+    "expected": [
+      {  
+        "benchmark_name":"ao_bench",
+        "datapoints":[  
+          {  
+            "values":[0.22],
+            "version":{  
+              "version":"0",
+              "environment":"ruby 2.2.0dev"
+            }
+          },
+          {  
+            "values":[0.22],
+            "version":{  
+              "version":"1",
+              "environment":"ruby 2.2.0dev"
+            }
+          }
+        ],
+        "measurement":"Execution time",
+        "unit":"Seconds"
+      }
+    ]
+  },
+  "test_two_datasets_in_chart": {
+    "charts": [  
+      [  
+        {  
+          "columns":"[{\"name\":\"abc\",\"data\":[0.22,0.22]},{\"name\":\"def\",\"data\":[0.44,0.44]}]"
+        },
+        {  
+          "name":"Execution time",
+          "unit":"Seconds"
+        }
+      ]
+    ],
+    "versions": [  
+      {  
+        "version":"0",
+        "environment":"ruby 2.2.0dev"
+      },
+      {  
+        "version":"1",
+        "environment":"ruby 2.2.0dev"
+      }
+    ],
+    "expected": [
+      {  
+        "benchmark_name":"ao_bench",
+        "datapoints":[  
+          {  
+            "values":[0.22, 0.44],
+            "version":{  
+              "version":"0",
+              "environment":"ruby 2.2.0dev"
+            }
+          },
+          {  
+            "values":[0.22, 0.44],
+            "version":{  
+              "version":"1",
+              "environment":"ruby 2.2.0dev"
+            }
+          }
+        ],
+        "measurement":"Execution time",
+        "unit":"Seconds",
+        "variations":["abc","def"]
+      }
+    ]
+  }
+}
