@@ -14,7 +14,7 @@
       = t('repos.show_releases.graph_title', graph_name: benchmark_name,
           type: chart.benchmark_result_type.name)
 
-    .release-chart{ data: { categories: chart.data[:categories],
+    .release-chart{ data: { categories: chart.data[:categories].map { |version| hash_to_html(version) },
       unit: chart.benchmark_result_type.unit, columns: chart.data[:columns] } }
 
   = render 'script', benchmark_type: benchmark_type,

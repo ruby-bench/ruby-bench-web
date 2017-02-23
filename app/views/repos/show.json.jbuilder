@@ -13,5 +13,5 @@ else
     json.measurement chart.benchmark_result_type[:name]
     json.unit chart.benchmark_result_type[:unit]
   end
-  json.versions @charts[0].versions
+  json.versions @charts[0].data[:categories]
 end

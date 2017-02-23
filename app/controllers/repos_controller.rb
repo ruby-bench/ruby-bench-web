@@ -65,7 +65,7 @@ class ReposController < ApplicationController
 
           $redis.set(cache_key, {
             datasets: JSON.parse(chart_builder.data[:columns]),
-            versions: chart_builder.versions
+            versions: chart_builder.data[:categories]
           }.to_json)
           chart_builder
         end

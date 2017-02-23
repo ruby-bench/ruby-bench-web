@@ -11,7 +11,7 @@ class ChartBuilderTest < ActiveSupport::TestCase
     end
 
     assert_equal(
-      ["Commit: #{benchmark_run.initiator.sha1}", "Commit: #{other_benchmark_run.initiator.sha1}"].to_json,
+      [{ commit: benchmark_run.initiator.sha1 }, { commit: other_benchmark_run.initiator.sha1 }],
       chart_data[:categories]
     )
     assert_equal(

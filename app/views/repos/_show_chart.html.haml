@@ -18,7 +18,7 @@
     .chart{ data: { tick_interval: tick_interval,
       unit: chart.benchmark_result_type.unit,
       columns: chart.data[:columns],
-      categories: chart.data[:categories],
+      categories: chart.data[:categories].map { |version| hash_to_html(version) },
       organization: @organization.name,
       repo: @repo.name } }
 
