@@ -9,8 +9,4 @@ Dir["#{Rails.root}/test/support/**/*"].each { |file| require file }
 class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
   include FactoryGirl::Syntax::Methods
-
-  def self.file_fixture(name)
-    Rails.root.join('test', 'fixtures', 'files', name)
-  end
 end

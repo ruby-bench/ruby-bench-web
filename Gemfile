@@ -18,6 +18,7 @@ gem 'highcharts-rails'
 gem 'sidetiq'
 gem 'coffee-rails'
 gem 'responders'
+gem 'jbuilder'
 
 group :development do
   gem 'spring'

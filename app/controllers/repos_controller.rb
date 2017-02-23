@@ -2,8 +2,6 @@ class ReposController < ApplicationController
   before_action :find_organization_by_name
   before_action :find_organization_repo_by_name
 
-  include JSONGenerator
-
   def index
     @charts =
       if charts = $redis.get("sparklines:#{@repo.id}")
@@ -75,13 +73,8 @@ class ReposController < ApplicationController
       end.compact
     end
 
-    respond_to do |format|
-      format.html do
-        @result_types = fetch_categories
-      end
-      format.json { render json: generate_json(@charts, params) }
-      format.js
-    end
+    @result_types = fetch_categories if request.format.html?
+    @benchmark_name = params[:result_type]
   end
 
   def show_releases
@@ -124,13 +117,8 @@ class ReposController < ApplicationController
       end.compact
     end
 
-    respond_to do |format|
-      format.html do
-        @result_types = fetch_categories
-      end
-      format.json { render json: generate_json(@charts, params) }
-      format.js
-    end
+    @result_types = fetch_categories if request.format.html?
+    @benchmark_name = params[:result_type]
   end
 
   private

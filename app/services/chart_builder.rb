@@ -25,9 +25,12 @@ class ChartBuilder
   def build_columns
     @benchmark_runs.each do |benchmark_run|
       if block_given?
-        @versions << yield(benchmark_run)
+        version = yield(benchmark_run)
         @data[:categories] ||= []
-        @data[:categories] << hash_to_html(@versions.last)
+        if version != @versions.last
+          @versions << version
+          @data[:categories] << hash_to_html(version)
+        end
       end
 
       benchmark_run.result.each do |key, value|
