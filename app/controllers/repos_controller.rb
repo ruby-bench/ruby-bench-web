@@ -29,7 +29,7 @@ class ReposController < ApplicationController
 
         if (cache_read_json = $redis.get(cache_key))
           cache_read = JSON.parse(cache_read_json, symbolize_names: true)
-          ChartBuilder.new([], benchmark_result_type).construct_from_cache(cache_read)
+          ChartBuilder.construct_from_cache(cache_read, benchmark_result_type)
         else
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
             @form_result_type, benchmark_result_type, @benchmark_run_display_count
@@ -37,9 +37,8 @@ class ReposController < ApplicationController
 
           next if benchmark_runs.empty?
 
-          chart_builder = ChartBuilder.new(benchmark_runs.sort_by do |benchmark_run|
-            benchmark_run.initiator.created_at
-          end, benchmark_result_type)
+          runs = benchmark_runs.sort_by { |run| run.initiator.created_at }
+          chart_builder = ChartBuilder.new(runs, benchmark_result_type)
 
           chart_builder.build_columns do |benchmark_run|
             environment = YAML.load(benchmark_run.environment)

@@ -1,25 +1,37 @@
 class ChartBuilder
-  attr_reader :data, :versions, :benchmark_result_type
+  
+  # @data[:columns] is JSON that looks like [{ name: "benchmark1", data: [1.1, 1.2] }]
+  # @data[:categories] is JSON that looks like [version_html_string, version_html_string]
+  attr_accessor :data
+  
+  # @versions is a hash that holds all version/environment information for each datapoint, 
+  #   and gets converted to html and stored in @data[:categories]
+  attr_accessor :versions
 
-  def initialize(benchmark_runs = [], benchmark_result_type)
-    @benchmark_result_type = benchmark_result_type
-    @benchmark_runs = benchmark_runs
-    # @versions is a hash that holds all version/environment information for each datapoint, 
-    #   and gets converted to html and stored in @data[:categories]
-    @versions = []
-    # @data[:columns] is JSON that looks like [{ name: "benchmark1", data: [1.1, 1.2] }]
-    # @data[:categories] is JSON that looks like [version_html_string, version_html_string]
-    @data = {}
-    @data[:columns] = {}
-  end
+  # the metric this benchmark measures, which looks like:
+  # {
+  #   name: "Memory used",
+  #   unit: "Bytes"
+  # }
+  attr_reader :benchmark_result_type
 
   # `cache_read` looks like 
   # { datasets: [{ name: "benchmark1", data: [1.1, 1.2] }], versions: [version_hash, version_hash] }
-  def construct_from_cache(cache_read)
-    @versions = cache_read[:versions]
-    @data[:categories] = @versions.map { |version| hash_to_html(version) }.to_json
-    @data[:columns] = cache_read[:datasets].to_json
-    self
+  def self.construct_from_cache(cache_read, benchmark_result_type)
+    chart_builder = ChartBuilder.new([], benchmark_result_type)
+
+    chart_builder.versions = cache_read[:versions]
+    chart_builder.data[:categories] = chart_builder.versions.map { |version| hash_to_html(version) }.to_json
+    chart_builder.data[:columns] = cache_read[:datasets].to_json
+    chart_builder
+  end
+
+  def initialize(benchmark_runs, benchmark_result_type)
+    @benchmark_result_type = benchmark_result_type
+    @benchmark_runs = benchmark_runs
+    @versions = []
+    @data = {}
+    @data[:columns] = {}
   end
 
   def build_columns
@@ -29,7 +41,7 @@ class ChartBuilder
         @data[:categories] ||= []
         if version != @versions.last
           @versions << version
-          @data[:categories] << hash_to_html(version)
+          @data[:categories] << ChartBuilder.hash_to_html(version)
         end
       end
 
@@ -57,7 +69,7 @@ class ChartBuilder
   private
 
   # Generate an HTML string representing the `hash`, with each pair on a new line
-  def hash_to_html(hash)
+  def self.hash_to_html(hash)
     hash.map do |k, v|
       if k == :environment
         v
@@ -68,4 +80,3 @@ class ChartBuilder
     end.join("<br>")
   end
 end
-
