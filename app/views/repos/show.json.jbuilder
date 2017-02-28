@@ -5,7 +5,7 @@ if @charts.empty?
 else
   json.benchmark_name @benchmark_name
   json.charts @charts do |chart|
-    datasets = chart.data[:columns]
+    datasets = chart.columns
     json.datasets datasets do |column|
       json.variation column[:name] if datasets.length >= 2
       json.data column[:data]
@@ -13,5 +13,5 @@ else
     json.measurement chart.benchmark_result_type[:name]
     json.unit chart.benchmark_result_type[:unit]
   end
-  json.versions @charts[0].data[:categories]
+  json.versions @charts[0].categories
 end

@@ -1,3 +1,4 @@
+
 class ReposController < ApplicationController
   before_action :find_organization_by_name
   before_action :find_organization_repo_by_name
@@ -27,8 +28,8 @@ class ReposController < ApplicationController
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
 
-        if (cache_read_json = $redis.get(cache_key))
-          cache_read = JSON.parse(cache_read_json, symbolize_names: true)
+        if (cache_read_msgpack = $redis.get(cache_key))
+          cache_read = MessagePack.unpack(cache_read_msgpack, symbolize_keys: true)
           ChartBuilder.construct_from_cache(cache_read, benchmark_result_type)
         else
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
@@ -45,28 +46,24 @@ class ReposController < ApplicationController
             commit = benchmark_run.initiator
 
             version = {
-              commit: commit.sha1[0..6],
-              commit_date: commit.created_at,
+              commit_sha: commit.sha1[0..6],
+              commit_date: commit.created_at.to_s,
               commit_message: commit.message.truncate(30)
             }
             # If there is more information about the environment, we add it to `version` 
             if environment.is_a?(Hash)
-              # Use the key(s) in `environment` instead of setting `version[:environment]`
               version.merge!(environment)
             else
-              # If `environment` is not a Hash, then it is not JSON friendly, so we need to make
-              #   a new key in `version`
               version[:environment] = environment
             end
 
-            # this return values gets appended to ChartBuilder#@versions
             version
           end
 
           $redis.set(cache_key, {
-            datasets: JSON.parse(chart_builder.data[:columns]),
-            versions: chart_builder.data[:categories]
-          }.to_json)
+            datasets: chart_builder.columns,
+            versions: chart_builder.categories
+          }.to_msgpack)
           chart_builder
         end
       end.compact
@@ -100,19 +97,14 @@ class ReposController < ApplicationController
 
           # If there is more information about the environment, we add it to `version` 
           if environment.is_a?(Hash)
-            # Use the key(s) in `environment` instead of setting `version[:environment]`
             version.merge!(environment)
           else
-            # If `environment` is not a Hash, then it is not JSON friendly, so we need to make
             #   a new key in `version`
             version[:environment] = environment
           end
 
-          # this return values gets appended to ChartBuilder#@versions
           version
         end
-
-        chart_builder
       end.compact
     end
 

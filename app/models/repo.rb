@@ -26,10 +26,10 @@ class Repo < ApplicationRecord
         )
 
         runs = benchmark_runs.sort_by { |run| run.initiator.created_at }
-        chart_builder = ChartBuilder.new(runs, benchmark_result_type)
+        chart_builder = ChartBuilder.new(runs, benchmark_result_type).build_columns
 
         charts[benchmark_type.category] ||= []
-        charts[benchmark_type.category] << [benchmark_result_type.name, chart_builder.build_columns]
+        charts[benchmark_type.category] << [benchmark_result_type.name, { columns: chart_builder.columns.to_json, categories: chart_builder.categories }]
       end
     end
 

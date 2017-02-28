@@ -21,7 +21,7 @@ class ReposTest < ActionDispatch::IntegrationTest
     org = repo.organization
 
     commit = create(:commit, repo: repo)
-    later_commit = create(:commit, repo: repo, created_at: Time.zone.now + 1.day)
+    later_commit = create(:commit, repo: repo, created_at: 1.day.from_now)
 
     benchmark_run = create(:commit_benchmark_run,
       benchmark_result_type: benchmark_result_type,
@@ -58,7 +58,7 @@ class ReposTest < ActionDispatch::IntegrationTest
     org = repo.organization
 
     commit = create(:commit, repo: repo)
-    later_commit = create(:commit, repo: repo, created_at: Time.zone.now + 1.day)
+    later_commit = create(:commit, repo: repo, created_at: 1.day.from_now)
 
     benchmark_run = create(:commit_benchmark_run,
       benchmark_result_type: benchmark_result_type,
