@@ -1,6 +1,6 @@
 class ChartBuilder
   
-  # @columns is JSON that looks like [{ name: "benchmark1", data: [1.1, 1.2] }]
+  # @columns is an array that looks like [{ name: "benchmark1", data: [1.1, 1.2] }]
   # @categories is a an array of version hashes: 
   # [
   #   {

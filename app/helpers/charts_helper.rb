@@ -3,7 +3,7 @@ module ChartsHelper
   #
   # `version` will usually look like:
   # {
-  #   commit: "b6589fc",
+  #   commit_sha: "b6589fc",
   #   commit_date: "2017-02-23T16:20:13.338Z",
   #   commit_message: "fix something",
   #   environment: "ruby 2.2.0dev"

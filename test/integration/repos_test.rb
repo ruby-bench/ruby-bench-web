@@ -95,4 +95,20 @@ class ReposTest < ActionDispatch::IntegrationTest
     assert_includes res[:charts][0].keys, :unit
     assert_equal res[:charts][0][:datasets].length, 1
   end
+
+  test "#JSON generation works when there are no charts" do
+    benchmark_type = create(:benchmark_type)
+    benchmark_result_type = create(:benchmark_result_type)
+    repo = benchmark_type.repo
+    org = repo.organization
+
+    get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark_type.category}",
+      params: { display_count: 2, result_type: benchmark_result_type }
+
+    res = JSON.parse(response.body, symbolize_names: true)
+    
+    assert_empty res[:charts]
+    assert_empty res[:versions]
+    assert_nil res[:benchmark_name]
+  end
 end

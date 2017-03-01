@@ -6,9 +6,12 @@ class ChartBuilderTest < ActiveSupport::TestCase
     other_benchmark_run = create(:commit_benchmark_run, result: { 'some_time' => 5, 'some_other_time' => 5 })
     chart_builder = ChartBuilder.new([benchmark_run, other_benchmark_run], benchmark_run.benchmark_result_type)
 
-    chart_builder.build_columns do |benchmark_run|
+    chart_builder2 = chart_builder.build_columns do |benchmark_run|
       { commit: benchmark_run.initiator.sha1 }
     end
+
+    # check that `build_columns` returns self
+    assert_equal chart_builder, chart_builder2
 
     assert_equal(
       [{ commit: benchmark_run.initiator.sha1 }, { commit: other_benchmark_run.initiator.sha1 }],
@@ -33,6 +36,7 @@ class ChartBuilderTest < ActiveSupport::TestCase
 
     chart_builder = ChartBuilder.construct_from_cache(cache_read, benchmark_result_type)
 
+    assert_instance_of ChartBuilder, chart_builder
     assert_equal chart_builder.categories, cache_read[:versions]
     assert_equal chart_builder.columns, cache_read[:datasets]
     assert_equal chart_builder.benchmark_result_type, benchmark_result_type
@@ -58,29 +62,5 @@ class ChartBuilderTest < ActiveSupport::TestCase
     assert_equal chart_builder.columns, chart_builder2.columns
     assert_equal chart_builder.categories, chart_builder2.categories
     assert_equal chart_builder.benchmark_result_type, chart_builder2.benchmark_result_type
-  end
-
-  test "#build_columns returns self" do
-    benchmark_run = create(:commit_benchmark_run, result: { 'some_time' => 5, 'some_other_time' => 5 })
-    chart_builder = ChartBuilder.new([benchmark_run], benchmark_run.benchmark_result_type)
-
-    chart = chart_builder.build_columns do |benchmark_run|
-      { commit: benchmark_run.initiator.sha1 }
-    end
-
-    assert chart.instance_of?(ChartBuilder)
-  end
-
-  test "#construct_from_cache returns a ChartBuilder object" do
-    cache_read = { 
-      datasets: [{ name: "benchmark1", data: [1.2] }],
-      versions: [{ version: 1 }]
-    }
-
-    benchmark_result_type = { measurement: "Execution time", unit: "Seconds" }
-
-    chart_builder = ChartBuilder.construct_from_cache(cache_read, benchmark_result_type)
-
-    assert chart_builder.instance_of?(ChartBuilder)
   end
 end

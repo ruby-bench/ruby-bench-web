@@ -5,6 +5,5 @@
     = link_to benchmark_type.github_url, class: 'btn btn-primary', target: '_link' do
       = t('repos.view_github')
 
-  - require 'net/http'
   - formatter = Rouge::Formatters::HTMLPygments.new(Rouge::Formatters::HTML.new)
   = sanitize Rouge.highlight("#{Net::HTTP.get(URI.parse(script_url))}", 'ruby', formatter)

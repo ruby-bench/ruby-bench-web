@@ -1,4 +1,3 @@
-
 class ReposController < ApplicationController
   before_action :find_organization_by_name
   before_action :find_organization_repo_by_name
@@ -99,7 +98,6 @@ class ReposController < ApplicationController
           if environment.is_a?(Hash)
             version.merge!(environment)
           else
-            #   a new key in `version`
             version[:environment] = environment
           end
 
