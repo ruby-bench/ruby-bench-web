@@ -14,10 +14,10 @@
               result_type: category)
 
           %td
-            - outputs.each do |result_type, charts|
-              %h5= result_type
+            - outputs.each do |chart|
+              %h5= chart[:benchmark_result_type]
 
-              .sparkline{ data: { columns: charts[:columns] } }
+              .sparkline{ data: { columns: chart[:columns].to_json } }
                 .spinner2
                   .bounce1
                   .bounce2

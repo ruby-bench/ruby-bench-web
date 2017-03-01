@@ -10,8 +10,7 @@ class ChartBuilderTest < ActiveSupport::TestCase
       { commit: benchmark_run.initiator.sha1 }
     end
 
-    # check that `build_columns` returns self
-    assert_equal chart_builder, chart_builder2
+    assert_equal chart_builder.object_id, chart_builder2.object_id
 
     assert_equal(
       [{ commit: benchmark_run.initiator.sha1 }, { commit: other_benchmark_run.initiator.sha1 }],

@@ -5,7 +5,7 @@ class ReposController < ApplicationController
   def index
     @charts =
       if charts = $redis.get("sparklines:#{@repo.id}")
-        JSON.parse(charts).with_indifferent_access
+        MessagePack.unpack(charts, symbolize_keys: true).with_indifferent_access
       else
         @repo.generate_sparkline_data
       end
@@ -69,7 +69,7 @@ class ReposController < ApplicationController
     end
 
     @result_types = fetch_categories if request.format.html?
-    @benchmark_name = params[:result_type]
+    @benchmark_name = params[:result_type].to_s
   end
 
   def show_releases
@@ -107,7 +107,7 @@ class ReposController < ApplicationController
     end
 
     @result_types = fetch_categories if request.format.html?
-    @benchmark_name = params[:result_type]
+    @benchmark_name = params[:result_type].to_s
   end
 
   private

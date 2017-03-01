@@ -19,8 +19,7 @@ module ChartsHelper
       if k == :environment
         v
       else
-        new_key = k.to_s.split('_').map(&:capitalize).join(' ')
-        "#{new_key}: #{v}" 
+        "#{k.to_s.titleize}: #{v}" 
       end
     end.join("<br>")
   end

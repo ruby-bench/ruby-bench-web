@@ -36,7 +36,7 @@ class ReposTest < ActionDispatch::IntegrationTest
     )
 
     get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark_type.category}",
-      params: { display_count: 2, result_type: benchmark_result_type }
+      params: { display_count: 2 }
 
     res = JSON.parse(response.body, symbolize_names: true)
 
@@ -83,7 +83,7 @@ class ReposTest < ActionDispatch::IntegrationTest
     )
 
     get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark_type.category}",
-      params: { display_count: 2, result_type: benchmark_result_type }
+      params: { display_count: 2 }
 
     res = JSON.parse(response.body, symbolize_names: true)
 
@@ -103,7 +103,7 @@ class ReposTest < ActionDispatch::IntegrationTest
     org = repo.organization
 
     get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark_type.category}",
-      params: { display_count: 2, result_type: benchmark_result_type }
+      params: { display_count: 2 }
 
     res = JSON.parse(response.body, symbolize_names: true)
     

@@ -24,7 +24,7 @@ class ChartBuilder
   # `cache_read` looks like 
   # { datasets: [{ name: "benchmark1", data: [1.1, 1.2] }], versions: [version_hash, version_hash] }
   def self.construct_from_cache(cache_read, benchmark_result_type)
-    chart_builder = ChartBuilder.new([], benchmark_result_type)
+    chart_builder = self.new([], benchmark_result_type)
 
     chart_builder.categories = cache_read[:versions]
     chart_builder.columns = cache_read[:datasets]
