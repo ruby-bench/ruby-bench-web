@@ -60,3 +60,4 @@ group :production do
   gem 'bugsnag'
 end
 gem 'nokogiri', '>= 1.6.8'
+gem 'rubyzip', '>= 1.2.1'
