@@ -5,7 +5,7 @@ class ReposController < ApplicationController
   def index
     @charts =
       if charts = $redis.get("sparklines:#{@repo.id}")
-        JSON.parse(charts).with_indifferent_access
+        MessagePack.unpack(charts, symbolize_keys: true).with_indifferent_access
       else
         @repo.generate_sparkline_data
       end
@@ -27,8 +27,9 @@ class ReposController < ApplicationController
       @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
         cache_key = "#{BenchmarkRun.charts_cache_key(@benchmark_type, benchmark_result_type)}:#{@benchmark_run_display_count}"
 
-        if (columns = $redis.get(cache_key))
-          [JSON.parse(columns).symbolize_keys!, benchmark_result_type]
+        if (cache_read_msgpack = $redis.get(cache_key))
+          cache_read = MessagePack.unpack(cache_read_msgpack, symbolize_keys: true)
+          ChartBuilder.construct_from_cache(cache_read, benchmark_result_type)
         else
           benchmark_runs = BenchmarkRun.fetch_commit_benchmark_runs(
             @form_result_type, benchmark_result_type, @benchmark_run_display_count
@@ -36,44 +37,39 @@ class ReposController < ApplicationController
 
           next if benchmark_runs.empty?
 
-          chart_builder = ChartBuilder.new(benchmark_runs.sort_by do |benchmark_run|
-            benchmark_run.initiator.created_at
-          end)
+          runs = benchmark_runs.sort_by { |run| run.initiator.created_at }
+          chart_builder = ChartBuilder.new(runs, benchmark_result_type)
 
-          columns = chart_builder.build_columns do |benchmark_run|
+          chart_builder.build_columns do |benchmark_run|
             environment = YAML.load(benchmark_run.environment)
-
-            if environment.is_a?(Hash)
-              temp = ""
-
-              environment.each do |key, value|
-                temp << "#{key}: #{value}<br>"
-              end
-
-              environment = temp
-            end
-
             commit = benchmark_run.initiator
 
-            "Commit: #{commit.sha1[0..6]}<br>" \
-            "Commit Date: #{commit.created_at}<br>" \
-            "Commit Message: #{commit.message.truncate(30)}<br>" \
-            "#{environment}"
+            version = {
+              commit_sha: commit.sha1[0..6],
+              commit_date: commit.created_at.to_s,
+              commit_message: commit.message.truncate(30)
+            }
+            # If there is more information about the environment, we add it to `version` 
+            if environment.is_a?(Hash)
+              version.merge!(environment)
+            else
+              version[:environment] = environment
+            end
+
+            version
           end
 
-          $redis.set(cache_key, columns.to_json)
-          [columns, benchmark_result_type]
+          $redis.set(cache_key, {
+            datasets: chart_builder.columns,
+            versions: chart_builder.categories
+          }.to_msgpack)
+          chart_builder
         end
       end.compact
     end
 
-    respond_to do |format|
-      format.html do
-        @result_types = fetch_categories
-      end
-
-      format.js
-    end
+    @result_types = fetch_categories if request.format.html?
+    @benchmark_name = params[:result_type].to_s
   end
 
   def show_releases
@@ -92,33 +88,26 @@ class ReposController < ApplicationController
           benchmark_runs << latest_benchmark_run
         end
 
-        columns = ChartBuilder.new(benchmark_runs).build_columns do |benchmark_run|
+        chart_builder = ChartBuilder.new(benchmark_runs, benchmark_result_type)
+        chart_builder.build_columns do |benchmark_run|
           environment = YAML.load(benchmark_run.environment)
 
+          version = { version: benchmark_run.initiator.version }
+
+          # If there is more information about the environment, we add it to `version` 
           if environment.is_a?(Hash)
-            temp = ""
-
-            environment.each do |key, value|
-              temp << "#{key}: #{value}<br>"
-            end
-
-            environment = temp
+            version.merge!(environment)
+          else
+            version[:environment] = environment
           end
 
-          "Version: #{benchmark_run.initiator.version}<br> #{environment}"
+          version
         end
-
-        [columns, benchmark_result_type]
       end.compact
     end
 
-    respond_to do |format|
-      format.html do
-        @result_types = fetch_categories
-      end
-
-      format.js
-    end
+    @result_types = fetch_categories if request.format.html?
+    @benchmark_name = params[:result_type].to_s
   end
 
   private

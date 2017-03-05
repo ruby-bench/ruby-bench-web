@@ -25,16 +25,18 @@ class Repo < ApplicationRecord
           2000
         )
 
-        chart_builder = ChartBuilder.new(benchmark_runs.sort_by do |benchmark_run|
-          benchmark_run.initiator.created_at
-        end)
+        runs = benchmark_runs.sort_by { |run| run.initiator.created_at }
+        chart_builder = ChartBuilder.new(runs, benchmark_result_type).build_columns
 
         charts[benchmark_type.category] ||= []
-        charts[benchmark_type.category] << [benchmark_result_type.name, chart_builder.build_columns]
+        charts[benchmark_type.category] << {
+          benchmark_result_type: benchmark_result_type.name,
+          columns: chart_builder.columns
+        }
       end
     end
 
-    $redis.setex("sparklines:#{self.id}", 1800, charts.to_json)
+    $redis.setex("sparklines:#{self.id}", 1800, charts.to_msgpack)
     charts
   end
 end
