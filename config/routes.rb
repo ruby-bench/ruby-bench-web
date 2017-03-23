@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   get ':organization_name/:repo_name/commits' => 'repos#show', as: :repo
   get ':organization_name/:repo_name/releases' => 'repos#show_releases', as: :releases_repo
 
-  get ':error_code', to: 'errors#show', code: /\d{3}/
+  get ':error_code', to: 'errors#show', error_code: /\d{3}/
    
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
