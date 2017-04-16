@@ -4,6 +4,8 @@ https://rubybench.org
 
 # Introduction
 
+[![Join the chat at https://gitter.im/ruby-bench/ruby-bench-web](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ruby-bench/ruby-bench-web?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 RubyBench was born out from
 [Sam Saffron's call](http://samsaffron.com/archive/2013/12/11/call-to-action-long-running-ruby-benchmark) for a long running Ruby benchmark.
 
