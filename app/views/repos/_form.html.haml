@@ -17,4 +17,13 @@
         = select :benchmark_run, :display_count, BenchmarkRun::PAGINATE_COUNT,
             { selected: @benchmark_run_display_count }, { class: 'form-control' }
 
+<<<<<<< HEAD
         .input-group-addon= t('.repos.commits.results')
+=======
+        .input-group-addon= t('.repos.show.results')
+      .input-group
+        .input-group-addon= t('.repos.show.compare')
+
+        = select :benchmark_run, :compare_with, @result_types,
+            { selected: nil }, { class: 'form-control' }
+>>>>>>> Add compare with select in form
