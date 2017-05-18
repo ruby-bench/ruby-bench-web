@@ -6,13 +6,13 @@
   #benchmark-types-form-container
     .text-center
       = render 'form',
-          form_path: repo_path(organization_name: @organization.name, repo_name: @repo.name),
+          form_path: commits_path(organization_name: @organization.name, repo_name: @repo.name),
           name: 'commits'
 
   #charts-container
     = render 'layouts/spinner'
 
     #chart-container.chart-container
-      = render 'show_chart', charts: @charts, benchmark_type: @benchmark_type
+      = render 'commits_chart', charts: @charts, benchmark_type: @benchmark_type
 
   = render 'chart_modal'

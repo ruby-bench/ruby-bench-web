@@ -6,12 +6,12 @@
   #benchmark-types-form-container
     .text-center
       = render 'form',
-          form_path: releases_repo_path(organization_name: @repo.organization.name, repo_name: @repo.name),
+          form_path: releases_path(organization_name: @repo.organization.name, repo_name: @repo.name),
           name: 'releases'
 
   #charts-container
     = render 'layouts/spinner'
 
     #chart-container.chart-container
-      = render 'show_releases_chart', charts: @charts,
+      = render 'releases_chart', charts: @charts,
           benchmark_type: @benchmark_type

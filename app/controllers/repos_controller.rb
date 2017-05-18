@@ -11,7 +11,7 @@ class ReposController < ApplicationController
       end
   end
 
-  def show
+  def commits
     display_count = params[:display_count].to_i
 
     @benchmark_run_display_count =
@@ -49,7 +49,7 @@ class ReposController < ApplicationController
               commit_date: commit.created_at.to_s,
               commit_message: commit.message.truncate(30)
             }
-            # If there is more information about the environment, we add it to `version` 
+            # If there is more information about the environment, we add it to `version`
             if environment.is_a?(Hash)
               version.merge!(environment)
             else
@@ -72,7 +72,7 @@ class ReposController < ApplicationController
     @benchmark_name = params[:result_type].to_s
   end
 
-  def show_releases
+  def releases
     if (@form_result_type = params[:result_type]) &&
        (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
 
@@ -94,7 +94,7 @@ class ReposController < ApplicationController
 
           version = { version: benchmark_run.initiator.version }
 
-          # If there is more information about the environment, we add it to `version` 
+          # If there is more information about the environment, we add it to `version`
           if environment.is_a?(Hash)
             version.merge!(environment)
           else

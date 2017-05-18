@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   get 'sponsors' => 'static_pages#sponsors',  as: :sponsors
   get 'admin' => 'admin#toggle_admin'
   get 'benchmarks' => 'organizations#index'
-  get ':organization_name/:repo_name/commits/overview' => 'repos#index', as: :repos
-  get ':organization_name/:repo_name/commits' => 'repos#show', as: :repo
-  get ':organization_name/:repo_name/releases' => 'repos#show_releases', as: :releases_repo
+  get ':organization_name/:repo_name/commits/overview' => 'repos#index', as: :overview
+  get ':organization_name/:repo_name/commits' => 'repos#commits', as: :commits
+  get ':organization_name/:repo_name/releases' => 'repos#releases', as: :releases
 end

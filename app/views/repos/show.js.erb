@@ -1,2 +1,0 @@
-$('#chart-container').html("<%= escape_javascript(render(partial: 'repos/show_chart', locals: { charts: @charts, benchmark_type: @benchmark_type, benchmark_type_memory: @benchmark_type_memory })) %>");
-drawChart('.chart');
