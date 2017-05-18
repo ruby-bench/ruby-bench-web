@@ -30,13 +30,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
           benchmark_result_type: memory_benchmark_result_type
         )
 
-        visit repo_path(organization_name: org.name, repo_name: repo.name)
+        visit commits_path(organization_name: org.name, repo_name: repo.name)
 
         assert page.has_content?(
-          I18n.t('repos.show.title', repo_name: repo.title)
+          I18n.t('repos.commits.title', repo_name: repo.title)
         )
 
-        assert_text :all, I18n.t('repos.show.select_benchmark')
+        assert_text :all, I18n.t('repos.commits.select_benchmark')
 
         within "form" do
           select(benchmark_type.category)
@@ -76,7 +76,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       org = repo.organization
       benchmark_run_category_humanize = benchmark_type.category.humanize
 
-      visit repo_path(organization_name: org.name, repo_name: repo.name)
+      visit commits_path(organization_name: org.name, repo_name: repo.name)
 
       within "form" do
         select(benchmark_type.category)
@@ -102,7 +102,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
         )
       end
 
-      visit repo_path(organization_name: org.name, repo_name: repo.name)
+      visit commits_path(organization_name: org.name, repo_name: repo.name)
 
       within "form" do
         select(benchmark_type.category)
@@ -123,7 +123,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       bm_type2 = create(:benchmark_type, repo: repo, category: 'b')
       bm_type3 = create(:benchmark_type, repo: repo, category: 'c')
 
-      visit repo_path(organization_name: org.name, repo_name: repo.name)
+      visit commits_path(organization_name: org.name, repo_name: repo.name)
 
       within "form" do
         list = page.first('.input-group').all('option')
@@ -146,13 +146,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
         benchmark_result_type: memory_benchmark_result_type
       )
 
-      visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
+      visit releases_path(organization_name: org.name, repo_name: repo.name)
 
       assert page.has_content?(
-        I18n.t('repos.show_releases.title', repo_name: repo.title)
+        I18n.t('repos.releases.title', repo_name: repo.title)
       )
 
-      assert_text :all, I18n.t('repos.show.select_benchmark')
+      assert_text :all, I18n.t('repos.commits.select_benchmark')
 
       within "form" do
         select(benchmark_type.category)
@@ -195,17 +195,18 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
         created_at: Time.zone.now - 1.day
       )
 
-      visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
+      visit releases_path(organization_name: org.name, repo_name: repo.name)
 
       assert page.has_content?(
-        I18n.t('repos.show_releases.title', repo_name: repo.title)
+        I18n.t('repos.releases.title', repo_name: repo.title)
       )
 
-      assert_text :all, I18n.t('repos.show.select_benchmark')
+      assert_text :all, I18n.t('repos.commits.select_benchmark')
 
       within "form" do
         select(benchmark_type.category)
       end
+
 
       assert page.has_css?(".release-chart .highcharts-container")
       assert_not page.has_css?(".release-chart.memory .highcharts-container")
@@ -231,7 +232,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       org = repo.organization
       category = create(:benchmark_type, repo: repo).category
 
-      visit releases_repo_path(organization_name: org.name, repo_name: repo.name)
+      visit releases_path(organization_name: org.name, repo_name: repo.name)
 
       within "form" do
         select(category)

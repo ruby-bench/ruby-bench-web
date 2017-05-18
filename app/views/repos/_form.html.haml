@@ -12,9 +12,9 @@
 
     - if name == 'commits'
       .input-group
-        .input-group-addon= t('repos.show.show_last')
+        .input-group-addon= t('repos.commits.show_last')
 
         = select :benchmark_run, :display_count, BenchmarkRun::PAGINATE_COUNT,
             { selected: @benchmark_run_display_count }, { class: 'form-control' }
 
-        .input-group-addon= t('.repos.show.results')
+        .input-group-addon= t('.repos.commits.results')

@@ -11,7 +11,7 @@
 
   - charts.each do |chart|
     %h2.l-align-center
-      = t('repos.show_releases.graph_title', graph_name: benchmark_name,
+      = t('repos.releases.graph_title', graph_name: benchmark_name,
           type: chart.benchmark_result_type.name)
 
     .release-chart{ data: { categories: chart.categories.map { |version| chart_version_to_html(version) },
