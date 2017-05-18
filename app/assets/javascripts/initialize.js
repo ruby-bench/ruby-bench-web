@@ -58,11 +58,12 @@ $(document).on('turbolinks:load', function() {
 
     var resultType = $('.result-types-form select').val() || "";
     var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
+    var compareWithBenchmark = $('#benchmark_run_compare_with').val();
 
     if (benchmarkRunDisplayCount !== undefined) {
-      displayUrlParams = '&display_count=' + benchmarkRunDisplayCount;
+      displayCountUrlParam = '&display_count=' + benchmarkRunDisplayCount;
     } else {
-      displayUrlParams = '';
+      displayCountUrlParam = '';
     }
 
     xhr = $.ajax({
@@ -70,11 +71,12 @@ $(document).on('turbolinks:load', function() {
       type: 'GET',
       data: {
         result_type: resultType,
-        display_count: benchmarkRunDisplayCount
+        display_count: benchmarkRunDisplayCount,
+        compare_with: compareWithBenchmark
       },
       dataType: 'script',
       beforeSend: function () {
-        $spinner.toggleClass('hide');
+        $spinner.removeClass('hide');
         $('#chart-container').empty();
         $('html, body').animate({scrollTop: 0}, 0);
 
@@ -82,12 +84,12 @@ $(document).on('turbolinks:load', function() {
           var newUrl =  '/' + organizationName +
                         '/' + repoName +
                         '/' + name +
-                        '?result_type=' + resultType + displayUrlParams;
+                        '?result_type=' + resultType + displayCountUrlParam + "&compare_with=" + compareWithBenchmark;
           history.pushState(null, '', newUrl);
         }
       },
       complete: function () {
-        $spinner.toggleClass('hide');
+        $spinner.addClass('hide');
       }
     });
   });
