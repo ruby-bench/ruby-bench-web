@@ -46,6 +46,7 @@ class CompareBenchmarks < AcceptanceTest
   end
 
   test "User should be able to compare benchmarks across repos" do
+
     visit repo_path(@rails_org.name, @rails_repo.name)
 
     within "#benchmark_run_benchmark_type" do

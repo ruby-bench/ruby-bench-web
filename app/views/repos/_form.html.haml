@@ -3,36 +3,26 @@
     .input-group
       .input-group-addon= t('repos.benchmark_types')
       %select#benchmark_run_benchmark_type.form-control
-        %option{ value: "", selected: @form_result_type.blank? || @form, disabled: true }
+        %option{ value: "", selected: @benchmark.blank? || @form, disabled: true }
           = t('repos.select_benchmark')
 
-        - @result_types.each do |category_name|
-          %option{ value: category_name, selected: (@form_result_type == category_name) }
-            = category_name
+        - @benchmarks.each do |benchmark|
+          %option{ value: benchmark.category, selected: @benchmark.present? && @benchmark.category == benchmark.category }
+            = benchmark.category
 
     - if name == 'commits'
       .input-group
         .input-group-addon= t('repos.commits.show_last')
 
         = select :benchmark_run, :display_count, BenchmarkRun::PAGINATE_COUNT,
-            { selected: @benchmark_run_display_count }, { class: 'form-control' }
+            { selected: @display_count }, { class: 'form-control' }
 
-<<<<<<< HEAD
         .input-group-addon= t('.repos.commits.results')
-=======
-        .input-group-addon= t('.repos.show.results')
       .input-group
-        .input-group-addon= t('.repos.show.compare')
-
-<<<<<<< HEAD
-        = select :benchmark_run, :compare_with, @result_types,
-            { selected: nil }, { class: 'form-control' }
->>>>>>> Add compare with select in form
-=======
+        .input-group-addon= t('.repos.commits.compare')
         %select{id: "benchmark_run_compare_with", class: "form-control", name: "benchmark_run[compare_with]"}
           %option{ value: "", selected: @comparing_benchmark.nil?, disabled: true }
             = t('repos.select_benchmark')
-          - @result_types.each do |result_type|
-            %option{ value: result_type, selected: @form_result_type == result_type }
-              = result_type
->>>>>>> Add acceptance test
+          - @benchmarks.each do |benchmark|
+            %option{ value: benchmark.category, selected: @comparing_benchmark.present? && @comparing_benchmark.category == benchmark.category }
+              = benchmark.category
