@@ -2,12 +2,7 @@ require 'acceptance/test_helper'
 
 class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
   setup do
-    require_js
     Net::HTTP.stubs(:get).returns("def abc\n  puts haha\nend")
-  end
-
-  teardown do
-    reset_driver
   end
 
   test "User should be able to view and compare adjacent commits when clicking

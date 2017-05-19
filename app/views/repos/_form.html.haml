@@ -2,7 +2,7 @@
   .form-group
     .input-group
       .input-group-addon= t('repos.benchmark_types')
-      %select.form-control
+      %select#benchmark_run_benchmark_type.form-control
         %option{ value: "", selected: @form_result_type.blank? || @form, disabled: true }
           = t('repos.select_benchmark')
 
@@ -24,6 +24,15 @@
       .input-group
         .input-group-addon= t('.repos.show.compare')
 
+<<<<<<< HEAD
         = select :benchmark_run, :compare_with, @result_types,
             { selected: nil }, { class: 'form-control' }
 >>>>>>> Add compare with select in form
+=======
+        %select{id: "benchmark_run_compare_with", class: "form-control", name: "benchmark_run[compare_with]"}
+          %option{ value: "", selected: @comparing_benchmark.nil?, disabled: true }
+            = t('repos.select_benchmark')
+          - @result_types.each do |result_type|
+            %option{ value: result_type, selected: @form_result_type == result_type }
+              = result_type
+>>>>>>> Add acceptance test

@@ -60,6 +60,12 @@ $(document).on('turbolinks:load', function() {
     var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
     var compareWithBenchmark = $('#benchmark_run_compare_with').val();
 
+    if(compareWithBenchmark){
+      displayCompareUrlParam = "&compare_with=" + compareWithBenchmark;
+    }else{
+      displayCompareUrlParam = "";
+    }
+
     if (benchmarkRunDisplayCount !== undefined) {
       displayCountUrlParam = '&display_count=' + benchmarkRunDisplayCount;
     } else {
@@ -84,7 +90,7 @@ $(document).on('turbolinks:load', function() {
           var newUrl =  '/' + organizationName +
                         '/' + repoName +
                         '/' + name +
-                        '?result_type=' + resultType + displayCountUrlParam + "&compare_with=" + compareWithBenchmark;
+                        '?result_type=' + resultType + displayCountUrlParam + displayCompareUrlParam;
           history.pushState(null, '', newUrl);
         }
       },

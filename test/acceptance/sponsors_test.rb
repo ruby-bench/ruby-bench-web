@@ -8,6 +8,7 @@ class SponsorsTest < AcceptanceTest
     assert page.has_content?(I18n.t("static_pages.sponsors.title"))
 
     sponsors_count = all(".row .sponsor-row").count
+    puts page.body
     assert_equal SponsorsData.count, sponsors_count
   end
 
