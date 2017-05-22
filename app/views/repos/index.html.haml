@@ -9,7 +9,7 @@
       - @charts.each do |category, outputs|
         %tr
           %td
-            %h5= link_to category, repo_path(organization_name: @organization.name,
+            %h5= link_to category, commits_path(organization_name: @organization.name,
               repo_name: @repo.name,
               result_type: category)
 

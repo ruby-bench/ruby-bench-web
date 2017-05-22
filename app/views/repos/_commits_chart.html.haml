@@ -12,7 +12,7 @@
 
   - charts.each do |chart|
     %h2.l-align-center
-      = t('repos.show.graph_title', graph_name: benchmark_name,
+      = t('repos.commits.graph_title', graph_name: benchmark_name,
           type: chart.benchmark_result_type.name)
 
     .chart{ data: { tick_interval: tick_interval,
