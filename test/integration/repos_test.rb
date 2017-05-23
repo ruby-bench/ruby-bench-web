@@ -23,13 +23,15 @@ class ReposTest < ActionDispatch::IntegrationTest
     commit = create(:commit, repo: repo)
     later_commit = create(:commit, repo: repo, created_at: 1.day.from_now)
 
-    benchmark_run = create(:commit_benchmark_run,
+    benchmark_run = create(
+      :commit_benchmark_run,
       benchmark_result_type: benchmark_result_type,
       benchmark_type: benchmark_type,
       initiator: commit
     )
 
-    benchmark_run2 = create(:commit_benchmark_run,
+    benchmark_run2 = create(
+      :commit_benchmark_run,
       benchmark_result_type: benchmark_result_type,
       benchmark_type: benchmark_type,
       initiator: later_commit
@@ -60,23 +62,27 @@ class ReposTest < ActionDispatch::IntegrationTest
     commit = create(:commit, repo: repo)
     later_commit = create(:commit, repo: repo, created_at: 1.day.from_now)
 
-    benchmark_run = create(:commit_benchmark_run,
+    benchmark_run = create(
+      :commit_benchmark_run,
       benchmark_result_type: benchmark_result_type,
       benchmark_type: benchmark_type,
       initiator: commit
     )
-    benchmark_run2 = create(:commit_benchmark_run,
+    benchmark_run2 = create(
+      :commit_benchmark_run,
       benchmark_result_type: benchmark_result_type,
       benchmark_type: benchmark_type,
       initiator: later_commit
     )
 
-    benchmark_run3 = create(:commit_benchmark_run,
+    benchmark_run3 = create(
+      :commit_benchmark_run,
       benchmark_result_type: benchmark_result_type2,
       benchmark_type: benchmark_type,
       initiator: commit
     )
-    benchmark_run3 = create(:commit_benchmark_run,
+    benchmark_run3 = create(
+      :commit_benchmark_run,
       benchmark_result_type: benchmark_result_type2,
       benchmark_type: benchmark_type,
       initiator: later_commit
@@ -106,7 +112,7 @@ class ReposTest < ActionDispatch::IntegrationTest
       params: { display_count: 2 }
 
     res = JSON.parse(response.body, symbolize_names: true)
-    
+
     assert_empty res[:charts]
     assert_empty res[:versions]
     assert_nil res[:benchmark_name]

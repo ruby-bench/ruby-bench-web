@@ -6,6 +6,7 @@ class ReposController < ApplicationController
   before_action :set_display_count
   before_action :set_repo_benchmarks
   before_action :set_comparable_benchmarks
+  before_action :set_redis_cache_keys
 
   def index
     @charts =
@@ -67,11 +68,11 @@ class ReposController < ApplicationController
   end
 
   def already_cached?(benchmark_type)
-    $redis.exists("#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}")
+    $redis.exists(@cache_keys[benchmark_type])
   end
 
   def chart_from_cache(benchmark_type)
-    packed_chart = $redis.get("#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}")
+    packed_chart = $redis.get(@cache_keys[benchmark_type])
     unpacked_chart = MessagePack.unpack(packed_chart, symbolize_keys: true)
     ChartBuilder.construct_from_cache(unpacked_chart, benchmark_type)
   end
@@ -122,7 +123,7 @@ class ReposController < ApplicationController
 
   def cache(chart, benchmark_type)
     $redis.set(
-      "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}",
+      @cache_keys[benchmark_type],
       {
         datasets: chart.columns,
         versions: chart.categories
@@ -166,5 +167,20 @@ class ReposController < ApplicationController
       else
         []
       end
+  end
+
+  def set_redis_cache_keys
+    unless @benchmark.blank?
+      @cache_keys = {}
+
+      @benchmark.benchmark_result_types.each do |benchmark_type|
+        @cache_keys[benchmark_type] =
+          if @comparing_benchmark.present?
+            "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}:#{BenchmarkRun.charts_cache_key(@comparing_benchmark, benchmark_type)}"
+          else
+            "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}"
+          end
+      end
+    end
   end
 end
