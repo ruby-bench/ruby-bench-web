@@ -56,7 +56,7 @@ $(document).on('turbolinks:load', function() {
     var repoName = $resultTypesForm.data('repo-name');
     var name = $resultTypesForm.data('name');
 
-    var resultType = $('.result-types-form select').val() || "";
+    var resultType = $('#benchmark_run_benchmark_type').val() || "";
     var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
     var compareWithBenchmark = $('#benchmark_run_compare_with').val();
 

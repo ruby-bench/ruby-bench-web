@@ -7,7 +7,6 @@ class ReposController < ApplicationController
   before_action :set_repo_benchmarks
   before_action :set_comparable_benchmarks
 
-
   def index
     @charts =
       if charts = $redis.get("sparklines:#{@repo.id}")
@@ -26,18 +25,15 @@ class ReposController < ApplicationController
   end
 
   def releases
-    if (@form_result_type = params[:result_type]) &&
-      (@benchmark_type = find_benchmark_type_by_category(@form_result_type))
-
-      @charts = @benchmark_type.benchmark_result_types.map do |benchmark_result_type|
+    unless @benchmark.blank?
+      @charts = @benchmark.benchmark_result_types.map do |benchmark_result_type|
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
-          @form_result_type, benchmark_result_type
+          @benchmark.category, benchmark_result_type
         )
 
         next if benchmark_runs.empty?
         benchmark_runs = BenchmarkRun.sort_by_initiator_version(benchmark_runs)
-
-        if latest_benchmark_run = BenchmarkRun.latest_commit_benchmark_run(@benchmark_type, benchmark_result_type)
+        if latest_benchmark_run = BenchmarkRun.latest_commit_benchmark_run(@benchmark.category, benchmark_result_type)
           benchmark_runs << latest_benchmark_run
         end
 
@@ -85,20 +81,22 @@ class ReposController < ApplicationController
 
     unless benchmark_runs.empty?
       chart = build_chart(benchmark_runs, benchmark_type)
-      cache_chart(chart, benchmark_type)
+      cache(chart, benchmark_type)
 
       chart
+    else
+      nil
     end
   end
 
   def benchmark_runs_for(benchmark_type)
     BenchmarkRun
-    .fetch_commit_benchmark_runs(@benchmark, benchmark_type, @display_count)
+    .fetch_commit_benchmark_runs(@benchmark.category, benchmark_type, @display_count)
     .sort_by { |run| run.initiator.created_at }
   end
 
   def build_chart(benchmark_runs, benchmark_type)
-    chart_builder = ChartBuilder.new(runs, benchmark_type)
+    chart_builder = ChartBuilder.new(benchmark_runs, benchmark_type)
 
     chart_builder.build_columns do |benchmark_run|
       environment = YAML.load(benchmark_run.environment)
@@ -123,10 +121,13 @@ class ReposController < ApplicationController
   end
 
   def cache(chart, benchmark_type)
-    $redis.set(cache_key, {
-      datasets: chart_builder.columns,
-      versions: chart_builder.categories
-    }.to_msgpack)
+    $redis.set(
+      "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}",
+      {
+        datasets: chart.columns,
+        versions: chart.categories
+      }.to_msgpack
+    )
   end
 
   def set_organization
@@ -159,6 +160,11 @@ class ReposController < ApplicationController
   end
 
   def set_comparable_benchmarks
-    @comparable_benchmarks = BenchmarkType.all_except(@benchmark) unless @benchmark.nil?
+    @comparable_benchmarks =
+      if @benchmark.present?
+        BenchmarkType.all_except(@benchmark)
+      else
+        []
+      end
   end
 end

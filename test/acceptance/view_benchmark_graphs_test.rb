@@ -23,13 +23,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
            benchmark_result_type: memory_benchmark_result_type
           )
 
-    visit repo_path(organization_name: org.name, repo_name: repo.name)
+    visit commits_path(organization_name: org.name, repo_name: repo.name)
 
     assert page.has_content?(
-      I18n.t('repos.show.title', repo_name: repo.title)
+      I18n.t('repos.commits.title', repo_name: repo.title)
     )
 
-    assert_text :all, I18n.t('repos.show.select_benchmark')
+    assert_text :all, I18n.t('repos.commits.select_benchmark')
 
     within "#benchmark_run_benchmark_type" do
       select(benchmark_type.category)
@@ -218,11 +218,11 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
   test "User should see the right message for benchmark types with no
           benchmark runs".squish do
 
-      repo = create(:repo)
+    repo = create(:repo)
     org = repo.organization
     category = create(:benchmark_type, repo: repo).category
 
-    visit releases_path(organization_name: org.name, repo_name: repo.name)
+    visit releases_path(organization_name: org.name, repo_name: repo.name, result_type: category)
 
     within "#benchmark_run_benchmark_type" do
       select(category)

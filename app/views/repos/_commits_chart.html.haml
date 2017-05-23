@@ -1,14 +1,14 @@
-- if !charts || !benchmark_type
+- if !charts || !benchmark
   = image_tag 'icon.png', alt: 'RubyBench Logo', class: 'benchmark-placeholder'
 
 - elsif charts.empty?
   .alert.alert-warning
     .l-align-center
-      %strong= t('repos.no_results', category: benchmark_type.category)
+      %strong= t('repos.no_results', category: benchmark.category)
 
 - else
-  - benchmark_name = benchmark_type.category.humanize
-  - tick_interval = (@benchmark_run_display_count / 4) - 1
+  - benchmark_name = benchmark.category.humanize
+  - tick_interval = (@display_count / 4) - 1
 
   - charts.each do |chart|
     %h2.l-align-center
@@ -22,7 +22,7 @@
       organization: @organization.name,
       repo: @repo.name } }
 
-  = render 'script', benchmark_type: benchmark_type, benchmark_name: benchmark_name
+  = render 'script', benchmark: benchmark, benchmark_name: benchmark_name
 
 :javascript
   $(function() {

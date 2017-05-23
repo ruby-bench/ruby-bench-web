@@ -23,6 +23,6 @@
         %select{id: "benchmark_run_compare_with", class: "form-control", name: "benchmark_run[compare_with]"}
           %option{ value: "", selected: @comparing_benchmark.nil?, disabled: true }
             = t('repos.select_benchmark')
-          - @benchmarks.each do |benchmark|
+          - @comparable_benchmarks.each do |benchmark|
             %option{ value: benchmark.category, selected: @comparing_benchmark.present? && @comparing_benchmark.category == benchmark.category }
               = benchmark.category

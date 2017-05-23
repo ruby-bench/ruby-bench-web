@@ -1,8 +1,8 @@
-- if script_url = benchmark_type.script_url
+- if script_url = benchmark.script_url
   %h2.l-align-center
     = t('repos.script_title', graph_name: benchmark_name)
 
-    = link_to benchmark_type.github_url, class: 'btn btn-primary', target: '_link' do
+    = link_to benchmark.github_url, class: 'btn btn-primary', target: '_link' do
       = t('repos.view_github')
 
   - formatter = Rouge::Formatters::HTMLPygments.new(Rouge::Formatters::HTML.new)

@@ -4,10 +4,10 @@
 - elsif charts.empty?
   .alert.alert-warning
     .l-align-center
-      %strong= t('repos.no_results', category: benchmark_type.category)
+      %strong= t('repos.no_results', category: benchmark.category)
 
 - else
-  - benchmark_name = benchmark_type.category.humanize
+  - benchmark_name = benchmark.category.humanize
 
   - charts.each do |chart|
     %h2.l-align-center
@@ -17,7 +17,7 @@
     .release-chart{ data: { categories: chart.categories.map { |version| chart_version_to_html(version) },
       unit: chart.benchmark_result_type.unit, columns: chart.columns.to_json } }
 
-  = render 'script', benchmark_type: benchmark_type,
+  = render 'script', benchmark: benchmark,
       benchmark_name: benchmark_name
 
 :javascript

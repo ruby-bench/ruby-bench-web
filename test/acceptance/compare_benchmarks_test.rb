@@ -3,6 +3,8 @@ require 'acceptance/test_helper'
 class CompareBenchmarks < AcceptanceTest
 
   setup do
+    Net::HTTP.stubs(:get).returns("def abc\n  puts haha\nend")
+
     @rails_repo = create(:repo)
     @rails_org = @rails_repo.organization
     @active_record_scope_all = create(:benchmark_type, repo: @rails_repo)
@@ -28,14 +30,14 @@ class CompareBenchmarks < AcceptanceTest
       benchmark_result_type: @memory_benchmark
     )
 
-    @sequel_commit = create(:commit, repo: @sequel_repo)
-    @rails_ips_run = create(
+    @sequel_commit = create(:commit, repo: @sequel_repo, created_at: 5.days.ago)
+    @sequel_ips_run = create(
       :commit_benchmark_run,
       benchmark_type: @sequel_scope_all,
       initiator: @sequel_commit,
       benchmark_result_type: @ips_benchmark
     )
-    @rails_memory_run = create(
+    @sequel_memory_run = create(
       :commit_benchmark_run,
       benchmark_type: @sequel_scope_all,
       initiator: @sequel_commit,
@@ -46,8 +48,7 @@ class CompareBenchmarks < AcceptanceTest
   end
 
   test "User should be able to compare benchmarks across repos" do
-
-    visit repo_path(@rails_org.name, @rails_repo.name)
+    visit commits_path(@rails_org.name, @rails_repo.name, result_type: @active_record_scope_all.category)
 
     within "#benchmark_run_benchmark_type" do
       select(@active_record_scope_all.category)
@@ -59,8 +60,10 @@ class CompareBenchmarks < AcceptanceTest
 
     all(".highcharts-xaxis-labels").each do |xaxis|
       within(xaxis) do
-        all("text").map{ |x| x.text }.each do |label|
-          @commit_dates.must_include(label)
+        labels = all("text").map{ |x| x.text }
+
+        @commit_dates.each do |commit_date|
+          assert_includes(labels, commit_date)
         end
       end
     end
