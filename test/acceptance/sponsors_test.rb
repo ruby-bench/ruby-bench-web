@@ -6,9 +6,7 @@ class SponsorsTest < AcceptanceTest
     click_link "Sponsors", match: :first
 
     assert page.has_content?(I18n.t("static_pages.sponsors.title"))
-
-    sponsors_count = all(".row .sponsor-row").count
-    assert_equal SponsorsData.count, sponsors_count
+    assert page.has_css?(".row .sponsor-row", count: SponsorsData.count)
   end
 
   test "should have all sponsor names" do

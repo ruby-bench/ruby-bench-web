@@ -96,8 +96,20 @@ class ReposController < ApplicationController
     .sort_by { |run| run.initiator.created_at }
   end
 
+  def comparing_runs_for(benchmark_type)
+    BenchmarkRun
+    .fetch_commit_benchmark_runs(@comparing_benchmark.category, benchmark_type, @display_count)
+    .sort_by { |run| run.initiator.created_at }
+  end
+
   def build_chart(benchmark_runs, benchmark_type)
-    chart_builder = ChartBuilder.new(benchmark_runs, benchmark_type)
+    comparing_runs = comparing_runs_for(benchmark_type) if @comparing_benchmark.present?
+
+    chart_builder = ChartBuilder.new(
+      benchmark_runs,
+      benchmark_type,
+      comparing_runs: comparing_runs
+    )
 
     chart_builder.build_columns do |benchmark_run|
       environment = YAML.load(benchmark_run.environment)

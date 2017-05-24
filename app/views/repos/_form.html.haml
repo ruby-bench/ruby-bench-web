@@ -20,9 +20,9 @@
         .input-group-addon= t('.repos.commits.results')
       .input-group
         .input-group-addon= t('.repos.commits.compare')
-        %select{id: "benchmark_run_compare_with", class: "form-control", name: "benchmark_run[compare_with]"}
+        %select{id: "benchmark_run_compare_with", class: "form-control", name: "benchmark_run[compare_with]", disabled: @benchmark.blank? }
           %option{ value: "", selected: @comparing_benchmark.nil?, disabled: true }
-            = t('repos.select_benchmark')
+            = @benchmark.blank? ? "" : t('repos.select_benchmark')
           - @comparable_benchmarks.each do |benchmark|
             %option{ value: benchmark.category, selected: @comparing_benchmark.present? && @comparing_benchmark.category == benchmark.category }
               = benchmark.category
