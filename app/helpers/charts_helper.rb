@@ -19,7 +19,7 @@ module ChartsHelper
       if k == :environment
         v
       else
-        "#{k.to_s.titleize}: #{v}" 
+        "#{k.to_s.titleize}: #{v}"
       end
     end.join("<br>")
   end

@@ -1,7 +1,7 @@
 class ChartBuilder
-  
+
   # @columns is an array that looks like [{ name: "benchmark1", data: [1.1, 1.2] }]
-  # @categories is a an array of version hashes: 
+  # @categories is an array of version hashes:
   # [
   #   {
   #     version: "0",
@@ -21,7 +21,7 @@ class ChartBuilder
   # }
   attr_reader :benchmark_result_type
 
-  # `cache_read` looks like 
+  # `cache_read` looks like
   # { datasets: [{ name: "benchmark1", data: [1.1, 1.2] }], versions: [version_hash, version_hash] }
   def self.construct_from_cache(cache_read, benchmark_result_type)
     chart_builder = self.new([], benchmark_result_type)
@@ -31,33 +31,71 @@ class ChartBuilder
     chart_builder
   end
 
-  def initialize(benchmark_runs, benchmark_result_type)
+  def initialize(benchmark_runs, benchmark_result_type, comparing_runs: nil)
     @benchmark_result_type = benchmark_result_type
     @benchmark_runs = benchmark_runs
     @columns = {}
+    @comparing_runs = comparing_runs
   end
 
   def build_columns
-    @benchmark_runs.each do |benchmark_run|
-      if block_given?
-        version = yield(benchmark_run)
-        @categories ||= []
-        @categories << version if version != @categories.last
+    if @comparing_runs.present?
+      (@benchmark_runs + @comparing_runs)
+      .sort_by{ |benchmark_run| benchmark_run.initiator.created_at }
+      .each do |benchmark_run|
+        version = nil
+        if block_given?
+          version = yield(benchmark_run)
+          @categories ||= []
+          @categories << version if version != @categories.last
+        end
+
+        benchmark_run.result.each do |key, value|
+          @columns["#{key}_#{benchmark_run.benchmark_type.category}"] ||= []
+          @columns["#{key}_#{benchmark_run.benchmark_type.category}"] << [version, value.to_f]
+        end
       end
 
-      benchmark_run.result.each do |key, value|
-        @columns[key] ||= []
-        @columns[key] << value.to_f
+      new_columns = []
+
+      @columns.each do |name, data|
+        new_columns << { name: name, data: data.map { |point| [chart_version_to_html(point[0]), point[1]] } }
       end
+
+      @columns = new_columns
+      self
+    else
+      @benchmark_runs.each do |benchmark_run|
+        if block_given?
+          version = yield(benchmark_run)
+          @categories ||= []
+          @categories << version if version != @categories.last
+        end
+
+        benchmark_run.result.each do |key, value|
+          @columns[key] ||= []
+          @columns[key] << value.to_f
+        end
+      end
+
+      new_columns = []
+
+      @columns.each do |name, data|
+        new_columns << { name: name, data: data}
+      end
+
+      @columns = new_columns
+      self
     end
+  end
 
-    new_columns = []
-
-    @columns.each do |name, data|
-      new_columns << { name: name, data: data}
-    end
-
-    @columns = new_columns
-    self
+  def chart_version_to_html(version)
+    version.map do |k, v|
+      if k == :environment
+        v
+      else
+        "#{k.to_s.titleize}: #{v}"
+      end
+    end.join("<br>")
   end
 end
