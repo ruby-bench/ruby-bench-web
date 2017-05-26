@@ -58,8 +58,29 @@ unicorn -c config/unicorn.rb
 ```
 
 ## Testing
+
+#### Install [PhantomJS](http://phantomjs.org/)
+
+Note: you can use directory other than `$HOME`
+
+```
+wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $HOME/phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
+
+tar -xvf $HOME/phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $HOME/phantomjs
+
+export PATH=$HOME/phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH
+
+
+# Check version installed
+
+phantomjs -v
+```
+#### Start redis server if you haven't already
 ```
 redis-server
+```
+#### Run tests
+```
 bundle exec rake test
 ```
 
