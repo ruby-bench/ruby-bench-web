@@ -52,11 +52,13 @@ $(document).on('turbolinks:load', function() {
       xhr.abort();
     }
 
+    var admin = $resultTypesForm.data('admin');
     var organizationName = $resultTypesForm.data('organization-name');
     var repoName = $resultTypesForm.data('repo-name');
     var name = $resultTypesForm.data('name');
 
     var resultType = $('.result-types-form select').val() || "";
+    var releasesType = $('#admin_releases_type').val();
     var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
 
     if (benchmarkRunDisplayCount !== undefined) {
@@ -65,11 +67,29 @@ $(document).on('turbolinks:load', function() {
       displayUrlParams = '';
     }
 
+    if (releasesType !== undefined) {
+      releasesTypeParams = '&releases_type=' + releasesType;
+    } else {
+      releasesTypeParams = '';
+    }
+
+    var url = ['',organizationName, repoName, name].join('/');
+    var base_url = location.pathname;
+    var newUrl = '/' + organizationName +
+                 '/' + repoName +
+                 '/' + name +
+                 '?result_type=' + resultType + releasesTypeParams + displayUrlParams;
+
+    if (base_url.includes("/admin")) {
+      newUrl = '/' + admin + newUrl;
+      url = ['', admin, organizationName, repoName, name].join('/');
+    }
     xhr = $.ajax({
-      url: ['', organizationName, repoName, name].join('/'),
+      url: url,
       type: 'GET',
       data: {
         result_type: resultType,
+        releases_type: releasesType,
         display_count: benchmarkRunDisplayCount
       },
       dataType: 'script',
@@ -79,10 +99,6 @@ $(document).on('turbolinks:load', function() {
         $('html, body').animate({scrollTop: 0}, 0);
 
         if (history && history.pushState) {
-          var newUrl =  '/' + organizationName +
-                        '/' + repoName +
-                        '/' + name +
-                        '?result_type=' + resultType + displayUrlParams;
           history.pushState(null, '', newUrl);
         }
       },

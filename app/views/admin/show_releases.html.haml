@@ -1,0 +1,11 @@
+.container
+  = render 'title', title: t('.title', repo_name: @repo.title)
+
+  %hr
+
+  #benchmark-types-form-container
+    .text-center
+      = render 'form',
+          form_path: admin_submit_path(organization_name: @repo.organization.name, repo_name: @repo.name),
+          name: 'releases',
+          admin: 'admin'

@@ -48,6 +48,26 @@ en:
       select_benchmark: *select_benchmark
       graph_title: *graph_title
 
+  admin:
+    select_benchmark: &select_benchmark
+      Please select a benchmark
+    benchmark_types: &benchmark_types
+      Benchmark Types
+    select_releases: &select_releases
+      Please select a release
+    releases_types: &releases_types
+      Releases Types
+
+    index:
+      title: Benchmarks
+      commits_benchmark: Commits Benchmarks
+      releases_benchmark: Releases Benchmarks
+
+    show_releases:
+      title: "%{repo_name} Releases Benchmarks"
+      benchmark_types: *benchmark_types
+      select_benchmark: *select_benchmark
+
   static_pages:
     landing:
       call_to_action: "View All Tracked Repositories →"
