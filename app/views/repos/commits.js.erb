@@ -1,2 +1,13 @@
+$('#benchmark-types-form-container .text-center').html(
+  "<%= escape_javascript(
+    render('form',
+           form_path: commits_path(organization_name: @organization.name, repo_name: @repo.name),
+           name: 'commits'
+          )
+  ) %>"
+)
+
 $('#chart-container').html("<%= escape_javascript(render(partial: 'repos/commits_chart', locals: { charts: @charts, benchmark: @benchmark })) %>");
+
+$('.result-types-form select').change(onSelectChange);
 drawChart('.chart');
