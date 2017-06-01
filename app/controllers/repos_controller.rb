@@ -1,4 +1,9 @@
 class ReposController < ApplicationController
+
+  if Rails.env.development?
+    require "net/http"
+  end
+
   before_action :set_organization
   before_action :set_repo
   before_action :set_benchmark

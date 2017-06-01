@@ -6,5 +6,4 @@
       = t('repos.view_github')
 
   - formatter = Rouge::Formatters::HTMLPygments.new(Rouge::Formatters::HTML.new)
-  - require 'net/http' unless defined?(Net::HTTP)
   = sanitize Rouge.highlight("#{Net::HTTP.get(URI.parse(script_url))}", 'ruby', formatter)
