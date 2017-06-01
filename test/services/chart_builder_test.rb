@@ -42,7 +42,7 @@ class ChartBuilderTest < ActiveSupport::TestCase
     sequel_run1 = create(:benchmark_run, benchmark_type: sequel_benchmark, initiator: sequel_commit1, benchmark_result_type: benchmark_type, result: { 'some_time' => 5 })
     sequel_run2 = create(:benchmark_run, benchmark_type: sequel_benchmark, initiator: sequel_commit2, benchmark_result_type: benchmark_type, result: { 'some_time' => 5 })
 
-    chart_builder = ChartBuilder.new([rails_run], benchmark_type, comparing_runs: [sequel_run1, sequel_run2])
+    chart_builder = ChartBuilder.new([rails_run], benchmark_type, [sequel_run1, sequel_run2])
 
     chart_builder.build_columns do |benchmark_run|
       { commit: benchmark_run.initiator.sha1 }

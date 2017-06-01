@@ -113,7 +113,7 @@ class ReposController < ApplicationController
     chart_builder = ChartBuilder.new(
       benchmark_runs,
       benchmark_type,
-      comparing_runs: comparing_runs
+      comparing_runs
     )
 
     chart_builder.build_columns do |benchmark_run|

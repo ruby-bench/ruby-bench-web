@@ -31,7 +31,7 @@ class ChartBuilder
     chart_builder
   end
 
-  def initialize(benchmark_runs, benchmark_result_type, comparing_runs: nil)
+  def initialize(benchmark_runs, benchmark_result_type, comparing_runs = nil)
     @benchmark_result_type = benchmark_result_type
     @benchmark_runs = benchmark_runs
     @columns = {}
