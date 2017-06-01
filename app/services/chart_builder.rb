@@ -31,7 +31,7 @@ class ChartBuilder
     chart_builder
   end
 
-  def initialize(benchmark_runs, benchmark_result_type, comparing_runs = nil)
+  def initialize(benchmark_runs, benchmark_result_type, comparing_runs = [])
     @benchmark_result_type = benchmark_result_type
     @benchmark_runs = benchmark_runs
     @columns = {}
@@ -59,7 +59,7 @@ class ChartBuilder
       new_columns = []
 
       @columns.each do |name, data|
-        new_columns << { name: name, data: data.map { |point| [chart_version_to_html(point[0]), point[1]] } }
+        new_columns << { name: name, data: data }
       end
 
       @columns = new_columns
@@ -87,15 +87,5 @@ class ChartBuilder
       @columns = new_columns
       self
     end
-  end
-
-  def chart_version_to_html(version)
-    version.map do |k, v|
-      if k == :environment
-        v
-      else
-        "#{k.to_s.titleize}: #{v}"
-      end
-    end.join("<br>")
   end
 end

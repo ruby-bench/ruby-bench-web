@@ -62,13 +62,13 @@ class ChartBuilderTest < ActiveSupport::TestCase
         {
           name: "some_time_#{sequel_run1.benchmark_type.category}",
           data: [
-            [chart_builder.chart_version_to_html({ commit: sequel_run1.initiator.sha1 }), 5.0],
-            [chart_builder.chart_version_to_html({ commit: sequel_run2.initiator.sha1 }), 5.0]
+            [{ commit: sequel_run1.initiator.sha1 }, 5.0],
+            [{ commit: sequel_run2.initiator.sha1 }, 5.0]
           ]
         },
         {
           name: "some_time_#{rails_run.benchmark_type.category}",
-          data: [[chart_builder.chart_version_to_html({ commit: rails_run.initiator.sha1 }), 5.0]]
+          data: [[{ commit: rails_run.initiator.sha1 }, 5.0]]
         }
       ],
       chart_builder.columns
