@@ -48,7 +48,12 @@ class CompareBenchmarks < AcceptanceTest
   end
 
   test "User should be able to compare benchmarks across repos" do
-    visit commits_path(@rails_org.name, @rails_repo.name, result_type: @active_record_scope_all.category, compare_with: @sequel_scope_all.category)
+    visit commits_path(
+      @rails_org.name,
+      @rails_repo.name,
+      result_type: @active_record_scope_all.category,
+      compare_with: @sequel_scope_all.category
+    )
 
     within "#benchmark_run_benchmark_type" do
       select(@active_record_scope_all.category)

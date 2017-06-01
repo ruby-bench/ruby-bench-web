@@ -1,8 +1,5 @@
 class ReposController < ApplicationController
-
-  if Rails.env.development?
-    require "net/http"
-  end
+  require "net/http" if Rails.env.development?
 
   before_action :set_organization
   before_action :set_repo
@@ -97,14 +94,14 @@ class ReposController < ApplicationController
 
   def benchmark_runs_for(benchmark_type)
     BenchmarkRun
-    .fetch_commit_benchmark_runs(@benchmark.category, benchmark_type, @display_count)
-    .sort_by { |run| run.initiator.created_at }
+      .fetch_commit_benchmark_runs(@benchmark.category, benchmark_type, @display_count)
+      .sort_by { |run| run.initiator.created_at }
   end
 
   def comparing_runs_for(benchmark_type)
     BenchmarkRun
-    .fetch_commit_benchmark_runs(@comparing_benchmark.category, benchmark_type, @display_count)
-    .sort_by { |run| run.initiator.created_at }
+      .fetch_commit_benchmark_runs(@comparing_benchmark.category, benchmark_type, @display_count)
+      .sort_by { |run| run.initiator.created_at }
   end
 
   def build_chart(benchmark_runs, benchmark_type)
