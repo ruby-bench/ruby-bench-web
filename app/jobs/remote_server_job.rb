@@ -17,7 +17,7 @@ class RemoteServerJob < ActiveJob::Base
   BUNDLER_RELEASE = "#{SCRIPTS_PATH}/bundler/releases.sh"
 
   # Use keyword arguments once Rails 4.2.1 has been released.
-  def perform(initiator_key, benchmark, options = {})
+  def perform(initiator_key, benchmark_group, options = {})
     secrets = Rails.application.secrets
 
     Net::SSH.start(
@@ -26,7 +26,7 @@ class RemoteServerJob < ActiveJob::Base
       password: secrets.bare_metal_server_password
     ) do |ssh|
 
-      send(benchmark, ssh, initiator_key, options)
+      send(benchmark_group, ssh, initiator_key, options)
     end
   end
 
@@ -41,17 +41,10 @@ class RemoteServerJob < ActiveJob::Base
     api_password = Rails.application.secrets.api_password
     patterns = options[:include_patterns]
 
-    ssh_exec!(ssh,
-                 "#{RUBY_TRUNK} \
-                 #{ruby} \
-                 #{memory} \
-                 #{optcarrot} \
-                 #{liquid} \
-                 #{commit_hash} \
-                 #{api_name} \
-                 #{api_password} \
-                 #{patterns}"
-                )
+    ssh_exec!(
+      ssh,
+      "#{RUBY_TRUNK} #{ruby} #{memory} #{optcarrot} #{liquid} #{commit_hash} #{api_name} #{api_password} #{patterns}"
+    )
   end
 
   def ruby_releases(ssh, version, options)
@@ -63,17 +56,10 @@ class RemoteServerJob < ActiveJob::Base
     api_password = Rails.application.secrets.api_password
     patterns = options[:include_patterns]
 
-    ssh_exec!(ssh,
-                 "#{RUBY_RELEASE} \
-                 #{ruby} \
-                 #{memory} \
-                 #{optcarrot} \
-                 #{liquid} \
-                 #{version} \
-                 #{api_name} \
-                 #{api_password} \
-                 #{patterns}"
-                )
+    ssh_exec!(
+      ssh,
+      "#{RUBY_RELEASE} #{ruby} #{memory} #{optcarrot} #{liquid} #{version} #{api_name} #{api_password} #{patterns}"
+    )
   end
 
   def ruby_releases_discourse(ssh, ruby_version, options)
