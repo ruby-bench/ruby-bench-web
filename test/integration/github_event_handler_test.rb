@@ -192,6 +192,17 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     assert_equal repo, commit.repo
   end
 
+  test "shouldn't handle push event when occurs branch other than main" do
+    post_to_handler({
+      'ref' => 'refs/heads/my-super-awesome-feature',
+      'repository' => {
+        'repository' => 'doesn\'t-matter',
+      }
+    })
+
+    assert_equal 0, Repo.count
+  end
+
   private
 
   def post_to_handler(parameters)
