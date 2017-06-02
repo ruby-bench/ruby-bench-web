@@ -3,6 +3,19 @@ require 'net/ssh'
 class RemoteServerJob < ActiveJob::Base
   queue_as :default
 
+  SCRIPTS_PATH = "./ruby-bench-docker/scripts"
+
+  RUBY_TRUNK = "#{SCRIPTS_PATH}/ruby/trunk.sh"
+  RUBY_RELEASE = "#{SCRIPTS_PATH}/ruby/releases.sh"
+
+  RAILS_MASTER = "#{SCRIPTS_PATH}/rails/master.sh"
+  RAILS_RELEASE = "#{SCRIPTS_PATH}/rails/releases.sh"
+
+  SEQUEL_MASTER = "#{SCRIPTS_PATH}/sequel/master.sh"
+  SEQUEL_RELEASE = "#{SCRIPTS_PATH}/sequel/releases.sh"
+
+  BUNDLER_RELEASE = "#{SCRIPTS_PATH}/bundler/releases.sh"
+
   # Use keyword arguments once Rails 4.2.1 has been released.
   def perform(initiator_key, benchmark, options = {})
     secrets = Rails.application.secrets
@@ -20,53 +33,47 @@ class RemoteServerJob < ActiveJob::Base
   private
 
   def ruby_trunk(ssh, commit_hash, options)
-    options.reverse_merge!({
-      ruby_benchmarks: true,
-      ruby_memory_benchmarks: true,
-      optcarrot_benchmarks: true,
-      liquid_benchmarks: true
-    })
+    ruby = true
+    memory = true
+    optcarrot = true
+    liquid = true
+    api_name = Rails.application.secrets.api_name
+    api_password = Rails.application.secrets.api_password
+    patterns = options[:include_patterns]
 
-    execute_ssh_commands(ssh,
-      [
-        "docker pull rubybench/ruby_trunk",
-        "docker run --rm
-          -e \"RUBY_BENCHMARKS=#{options[:ruby_benchmarks]}\"
-          -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
-          -e \"OPTCARROT_BENCHMARK=#{options[:optcarrot_benchmarks]}\"
-          -e \"LIQUID_BENCHMARK=#{options[:liquid_benchmarks]}\"
-          -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          #{build_include_patterns(options[:include_patterns])}
-          rubybench/ruby_trunk".squish
-      ]
-    )
+    ssh_exec!(ssh,
+                 "#{RUBY_TRUNK} \
+                 #{ruby} \
+                 #{memory} \
+                 #{optcarrot} \
+                 #{liquid} \
+                 #{commit_hash} \
+                 #{api_name} \
+                 #{api_password} \
+                 #{patterns}"
+                )
   end
 
-  def ruby_releases(ssh, ruby_version, options)
-    options.reverse_merge!({
-      ruby_benchmarks: true,
-      ruby_memory_benchmarks: true,
-      optcarrot_benchmarks: true,
-      liquid_benchmarks: true
-    })
+  def ruby_releases(ssh, version, options)
+    ruby = true
+    memory = true
+    optcarrot = true
+    liquid = true
+    api_name = Rails.application.secrets.api_name
+    api_password = Rails.application.secrets.api_password
+    patterns = options[:include_patterns]
 
-    execute_ssh_commands(ssh,
-      [
-        "docker pull rubybench/ruby_releases",
-        "docker run --rm
-          -e \"RUBY_BENCHMARKS=#{options[:ruby_benchmarks]}\"
-          -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
-          -e \"RUBY_VERSION=#{ruby_version}\"
-          -e \"OPTCARROT_BENCHMARK=#{options[:optcarrot_benchmarks]}\"
-          -e \"LIQUID_BENCHMARK=#{options[:liquid_benchmarks]}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          #{build_include_patterns(options[:include_patterns])}
-          rubybench/ruby_releases".squish
-      ]
-    )
+    ssh_exec!(ssh,
+                 "#{RUBY_RELEASE} \
+                 #{ruby} \
+                 #{memory} \
+                 #{optcarrot} \
+                 #{liquid} \
+                 #{version} \
+                 #{api_name} \
+                 #{api_password} \
+                 #{patterns}"
+                )
   end
 
   def ruby_releases_discourse(ssh, ruby_version, options)
@@ -105,115 +112,45 @@ class RemoteServerJob < ActiveJob::Base
     )
   end
 
-  def rails_releases(ssh, rails_version, options)
-    custom_env = ''
-    custom_env = '-e "MYSQL2_PREPARED_STATEMENTS=1"' if rails_version >= '4.2.5'
+  def rails_releases(ssh, version, options)
+    api_name = Rails.application.secrets.api_name
+    api_password = Rails.application.secrets.api_password
+    prepared_statements = if version >= '4.2.5' then 1 else 0 end
+    patterns = options[:include_patterns]
 
-    execute_ssh_commands(ssh,
-      [
-        "docker pull rubybench/rails_releases",
-        "docker run --name postgres -d postgres:9.3.5",
-        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-        "docker run --name redis -d redis:2.8.19",
-        "docker run --rm
-          --link postgres:postgres
-          --link mysql:mysql
-          --link redis:redis
-          -e \"RAILS_VERSION=#{rails_version}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          #{custom_env}
-          #{build_include_patterns(options[:include_patterns])}
-          rubybench/rails_releases".squish,
-        "docker stop postgres mysql redis",
-        "docker rm -v postgres mysql redis"
-      ]
-    )
+    ssh_exec!(ssh, "#{RAILS_RELEASE} #{version} #{api_name} #{api_password} #{prepared_statements} #{patterns}")
   end
 
   def rails_trunk(ssh, commit_hash, options)
-    execute_ssh_commands(ssh,
-      [
-        "docker pull rubybench/rails_trunk",
-        "docker run --name postgres -d postgres:9.3.5",
-        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-        "docker run --name redis -d redis:2.8.19",
-        "docker run --rm
-          --link postgres:postgres
-          --link mysql:mysql
-          --link redis:redis
-          -e \"RAILS_COMMIT_HASH=#{commit_hash}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          -e \"MYSQL2_PREPARED_STATEMENTS=1\"
-          #{build_include_patterns(options[:include_patterns])}
-          rubybench/rails_trunk".squish,
-        "docker stop postgres mysql redis",
-        "docker rm -v postgres mysql redis"
-      ]
-    )
+    api_name = Rails.application.secrets.api_name
+    api_password = Rails.application.secrets.api_password
+    patterns = options[:include_patterns]
+
+    ssh_exec!(ssh, "#{RAILS_MASTER} #{commit_hash} #{api_name} #{api_password} #{patterns}")
   end
 
-  def sequel_releases(ssh, sequel_version, options)
-    custom_env = '-e "MYSQL2_PREPARED_STATEMENTS=1"'
+  def sequel_releases(ssh, version, options)
+    api_name = Rails.application.secrets.api_name
+    api_password = Rails.application.secrets.api_password
+    patterns = options[:include_patterns]
 
-    execute_ssh_commands(ssh,
-      [
-        "docker pull rubybench/sequel_releases",
-        "docker run --name postgres -d postgres:9.3.5",
-        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-        "docker run --name redis -d redis:2.8.19",
-        "docker run --rm
-          --link postgres:postgres
-          --link mysql:mysql
-          --link redis:redis
-          -e \"SEQUEL_VERSION=#{sequel_version}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          #{custom_env}
-          #{build_include_patterns(options[:include_patterns])}
-          rubybench/sequel_releases".squish,
-        "docker stop postgres mysql redis",
-        "docker rm -v postgres mysql redis"
-      ]
-    )
+    ssh_exec!(ssh, "#{SEQUEL_RELEASE} #{version} #{api_name} #{api_password}")
   end
 
   def sequel_trunk(ssh, commit_hash, options)
-    execute_ssh_commands(ssh,
-      [
-        "docker pull rubybench/sequel_trunk",
-        "docker run --name postgres -d postgres:9.3.5",
-        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-        "docker run --name redis -d redis:2.8.19",
-        "docker run --rm
-          --link postgres:postgres
-          --link mysql:mysql
-          --link redis:redis
-          -e \"SEQUEL_COMMIT_HASH=#{commit_hash}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          -e \"MYSQL2_PREPARED_STATEMENTS=1\"
-          #{build_include_patterns(options[:include_patterns])}
-          rubybench/sequel_trunk".squish,
-        "docker stop postgres mysql redis",
-        "docker rm -v postgres mysql redis"
-      ]
-    )
+    api_name = Rails.application.secrets.api_name
+    api_password = Rails.application.secrets.api_password
+    patterns = options[:include_patterns]
+
+    ssh_exec!(ssh, "#{SEQUEL_MASTER} #{commit_hash} #{api_name} #{api_password} #{patterns}")
   end
 
-  def bundler_releases(ssh, bundler_version, options)
-    execute_ssh_commands(ssh,
-      [
-        "docker pull rubybench/bundler_releases",
-        "docker run --rm
-          -e \"BUNDLER_VERSION=#{bundler_version}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
-          #{build_include_patterns(options[:include_patterns])}
-          rubybench/bundler_releases".squish
-      ]
-    )
+  def bundler_releases(ssh, version, options)
+    api_name = Rails.application.secrets.api_name
+    api_password = Rails.application.secrets.api_password
+    patterns = options[:include_patterns]
+
+    ssh_exec!(ssh, "#{BUNDLER_RELEASE} #{version} #{api_name} #{api_password} #{patterns}")
   end
 
   def execute_ssh_commands(ssh, commands)
