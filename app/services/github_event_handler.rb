@@ -41,8 +41,6 @@ class GithubEventHandler
       organization_name = 'ruby'
     when ['tgxworld', 'rails']
       organization_name = 'rails'
-    when ['tgxworld', 'sequel']
-      organization_name = 'jeremyevans'
     when ['tgxworld', 'bundler']
       organization_name = 'bundler'
     end
