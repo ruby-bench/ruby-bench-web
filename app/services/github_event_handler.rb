@@ -1,6 +1,10 @@
 class GithubEventHandler
-  PUSH = "push"
+  PUSH = 'push'
   HEADER = 'HTTP_X_GITHUB_EVENT'
+  MAIN_BRANCHES = [
+    'master',
+    'trunk'
+  ]
 
   def initialize(request, payload)
     @request = request
@@ -8,13 +12,18 @@ class GithubEventHandler
   end
 
   def handle
-    case @request.env[HEADER]
-    when PUSH
-      process_push
-    end
+    process_push if push_to_main_branch?
   end
 
   private
+
+  def push_to_main_branch?
+    @request.env[HEADER] == PUSH && MAIN_BRANCHES.include?(branch_from_payload)
+  end
+
+  def branch_from_payload
+    @payload['ref'].split('/')[2]
+  end
 
   # Grabs the commits hash and starts job to run benchmarks on remote server.
   def process_push
@@ -27,8 +36,6 @@ class GithubEventHandler
       end
     end
   end
-
-  private
 
   def first_or_create_repo(repository)
     organization_name, repo_name = parse_full_name(repository['full_name'])

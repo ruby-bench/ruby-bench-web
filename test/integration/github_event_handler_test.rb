@@ -5,6 +5,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     BenchmarkPool.expects(:enqueue).with('ruby', '12345')
 
     post_to_handler({
+      'ref' => 'refs/heads/master',
       'head_commit' => {
         'id' => '12345',
         'message' => 'Fix something',
@@ -36,6 +37,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     BenchmarkPool.expects(:enqueue).with('ruby', '12346')
 
     post_to_handler({
+      'ref' => 'refs/heads/master',
       'commits' =>
         [
           {
@@ -81,6 +83,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     initial = Commit.count
 
     post_to_handler({
+      'ref' => 'refs/heads/master',
       'commits' =>
         [
           {
@@ -125,6 +128,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
   # repo.
   test "tgxworld organization is mapped as ruby" do
     post_to_handler({
+      'ref' => 'refs/heads/master',
       'commits' =>
         [
           {
@@ -158,6 +162,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
   # repo.
   test "tgxworld organization is mapped as rails" do
     post_to_handler({
+      'ref' => 'refs/heads/master',
       'commits' =>
         [
           {
@@ -187,37 +192,15 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     assert_equal repo, commit.repo
   end
 
-  # Remove this once Github hook is actually coming from the original Sequel
-  # repo.
-  test "tgxworld organization is mapped as sequel" do
+  test "shouldn't handle push event when occurs branch other than main" do
     post_to_handler({
-      'commits' =>
-        [
-          {
-            'id' => '12345',
-            'message' => 'Fix something',
-            'url' => 'http://github.com/jeremyevans/sequel/commit/12345',
-            'timestamp' => '2014-11-20T15:45:15-08:00',
-            'author' => {
-              'name' => 'Alan'
-            }
-          }
-        ],
-        'repository' => {
-          'full_name' => 'tgxworld/sequel',
-          html_url: 'https://github.com/tgxworld/sequel'
-        }
+      'ref' => 'refs/heads/my-super-awesome-feature',
+      'repository' => {
+        'repository' => 'doesn\'t-matter',
+      }
     })
 
-    organization = Organization.first
-    repo = Repo.first
-    commit = Commit.first
-
-    assert_equal 'jeremyevans', organization.name
-    assert_equal 'sequel', repo.name
-    assert_equal organization, repo.organization
-    assert_equal 'http://github.com/jeremyevans/sequel/commit/12345', commit.url
-    assert_equal repo, commit.repo
+    assert_equal 0, Repo.count
   end
 
   private
