@@ -76,7 +76,7 @@ var drawChart = function(chartClass) {
               events: {
                 click: function() {
                   var getCommitHash = function(category) {
-                    return /^Commit: (.{7})/.exec(category)[1];
+                    return /^Commit Sha: (.{7})/.exec(category)[1];
                   }
 
                   var getCommitMessage = function(category) {
