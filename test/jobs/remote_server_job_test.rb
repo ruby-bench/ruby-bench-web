@@ -98,7 +98,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform sequel_releases" do
     @ssh.expects(:exec!).with(
-      "tsp #{@sequel_release_script} #{@version} #{@api_name} #{@api_password}"
+      "tsp #{@sequel_release_script} #{@version} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(

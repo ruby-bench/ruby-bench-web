@@ -108,7 +108,7 @@ class RemoteServerJob < ActiveJob::Base
   def sequel_releases(ssh, version, options)
     patterns = options[:include_patterns]
 
-    ssh_exec!(ssh, "#{SEQUEL_RELEASE} #{version} #{api_name} #{api_password}")
+    ssh_exec!(ssh, "#{SEQUEL_RELEASE} #{version} #{api_name} #{api_password} #{patterns}")
   end
 
   def sequel_trunk(ssh, commit_hash, options)
