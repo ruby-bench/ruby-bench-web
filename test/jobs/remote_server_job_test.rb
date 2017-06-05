@@ -10,7 +10,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform ruby_trunk" do
     @ssh.expects(:exec!).with(
-      "tsp #{@ruby_trunk_script} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::RUBY_TRUNK} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
@@ -23,7 +23,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform ruby_releases" do
     @ssh.expects(:exec!).with(
-      "tsp #{@ruby_release_script} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@version} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::RUBY_RELEASE} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@version} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
@@ -43,8 +43,8 @@ class RemoteServerJobTest < ActiveJob::TestCase
         --link discourse_postgres:postgres
         --link discourse_redis:redis
         -e \"RUBY_VERSION=2.2.0\"
-        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        -e \"API_NAME=#{@api_name}\"
+        -e \"API_PASSWORD=#{@api_password}\"
         rubybench/ruby_releases_discourse".squish,
       "tsp docker stop discourse_postgres discourse_redis",
       "tsp docker rm -v discourse_postgres discourse_redis"
@@ -63,8 +63,8 @@ class RemoteServerJobTest < ActiveJob::TestCase
       "tsp docker run --name discourse_postgres -d postgres:9.3.5",
       "tsp docker run --rm --link discourse_postgres:postgres
         --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=commit_hash\"
-        -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-        -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+        -e \"API_NAME=#{@api_name}\"
+        -e \"API_PASSWORD=#{@api_password}\"
         rubybench/ruby_trunk_discourse".squish,
       "tsp docker stop discourse_postgres discourse_redis",
       "tsp docker rm -v discourse_postgres discourse_redis"
@@ -78,7 +78,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform rails_releases" do
     @ssh.expects(:exec!).with(
-      "tsp #{@rails_release_script} #{@version} #{@api_name} #{@api_password} 0 #{@patterns}"
+      "tsp #{RemoteServerJob::RAILS_RELEASE} #{@version} #{@api_name} #{@api_password} 0 #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
@@ -88,7 +88,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform rails_trunk" do
     @ssh.expects(:exec!).with(
-      "tsp #{@rails_master_script} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::RAILS_MASTER} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
@@ -98,7 +98,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform sequel_releases" do
     @ssh.expects(:exec!).with(
-      "tsp #{@sequel_release_script} #{@version} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::SEQUEL_RELEASE} #{@version} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
@@ -108,7 +108,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform sequel_trunk" do
     @ssh.expects(:exec!).with(
-      "tsp #{@sequel_master_script} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::SEQUEL_MASTER} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
@@ -118,7 +118,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
   test "#perform bundler_releases" do
     @ssh.expects(:exec!).with(
-      "tsp #{@bundler_release_script} #{@version} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::BUNDLER_RELEASE} #{@version} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
@@ -137,8 +137,6 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
     ruby
     rails
-    bundler
-    sequel
   end
 
   def ruby
@@ -146,22 +144,9 @@ class RemoteServerJobTest < ActiveJob::TestCase
     @memory = true
     @optcarrot = true
     @liquid = true
-    @ruby_trunk_script = RemoteServerJob::RUBY_TRUNK
-    @ruby_release_script = RemoteServerJob::RUBY_RELEASE
   end
 
   def rails
-    @rails_master_script = RemoteServerJob::RAILS_MASTER
-    @rails_release_script = RemoteServerJob::RAILS_RELEASE
     @prepared_statements = 1
-  end
-
-  def bundler
-    @bundler_release_script = RemoteServerJob::BUNDLER_RELEASE
-  end
-
-  def sequel
-    @sequel_master_script = RemoteServerJob::SEQUEL_MASTER
-    @sequel_release_script = RemoteServerJob::SEQUEL_RELEASE
   end
 end
