@@ -18,12 +18,10 @@ class RemoteServerJob < ActiveJob::Base
 
   # Use keyword arguments once Rails 4.2.1 has been released.
   def perform(initiator_key, benchmark_group, options = {})
-    secrets = Rails.application.secrets
-
     Net::SSH.start(
-      secrets.bare_metal_server_ip,
-      secrets.bare_metal_server_user,
-      password: secrets.bare_metal_server_password
+      bare_metal_server_ip,
+      bare_metal_server_user,
+      password: bare_metal_server_password
     ) do |ssh|
 
       send(benchmark_group, ssh, initiator_key, options)
@@ -37,8 +35,6 @@ class RemoteServerJob < ActiveJob::Base
     memory = true
     optcarrot = true
     liquid = true
-    api_name = Rails.application.secrets.api_name
-    api_password = Rails.application.secrets.api_password
     patterns = options[:include_patterns]
 
     ssh_exec!(
@@ -52,8 +48,6 @@ class RemoteServerJob < ActiveJob::Base
     memory = true
     optcarrot = true
     liquid = true
-    api_name = Rails.application.secrets.api_name
-    api_password = Rails.application.secrets.api_password
     patterns = options[:include_patterns]
 
     ssh_exec!(
@@ -72,8 +66,8 @@ class RemoteServerJob < ActiveJob::Base
           --link discourse_postgres:postgres
           --link discourse_redis:redis
           -e \"RUBY_VERSION=#{ruby_version}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          -e \"API_NAME=#{api_name}\"
+          -e \"API_PASSWORD=#{api_password}\"
           rubybench/ruby_releases_discourse".squish,
         "docker stop discourse_postgres discourse_redis",
         "docker rm -v discourse_postgres discourse_redis"
@@ -89,8 +83,8 @@ class RemoteServerJob < ActiveJob::Base
         "docker run --name discourse_postgres -d postgres:9.3.5",
         "docker run --rm --link discourse_postgres:postgres
           --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
-          -e \"API_NAME=#{Rails.application.secrets.api_name}\"
-          -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
+          -e \"API_NAME=#{api_name}\"
+          -e \"API_PASSWORD=#{api_password}\"
           rubybench/ruby_trunk_discourse".squish,
         "docker stop discourse_postgres discourse_redis",
         "docker rm -v discourse_postgres discourse_redis"
@@ -99,8 +93,6 @@ class RemoteServerJob < ActiveJob::Base
   end
 
   def rails_releases(ssh, version, options)
-    api_name = Rails.application.secrets.api_name
-    api_password = Rails.application.secrets.api_password
     prepared_statements = if version >= '4.2.5' then 1 else 0 end
     patterns = options[:include_patterns]
 
@@ -108,32 +100,24 @@ class RemoteServerJob < ActiveJob::Base
   end
 
   def rails_trunk(ssh, commit_hash, options)
-    api_name = Rails.application.secrets.api_name
-    api_password = Rails.application.secrets.api_password
     patterns = options[:include_patterns]
 
     ssh_exec!(ssh, "#{RAILS_MASTER} #{commit_hash} #{api_name} #{api_password} #{patterns}")
   end
 
   def sequel_releases(ssh, version, options)
-    api_name = Rails.application.secrets.api_name
-    api_password = Rails.application.secrets.api_password
     patterns = options[:include_patterns]
 
     ssh_exec!(ssh, "#{SEQUEL_RELEASE} #{version} #{api_name} #{api_password}")
   end
 
   def sequel_trunk(ssh, commit_hash, options)
-    api_name = Rails.application.secrets.api_name
-    api_password = Rails.application.secrets.api_password
     patterns = options[:include_patterns]
 
     ssh_exec!(ssh, "#{SEQUEL_MASTER} #{commit_hash} #{api_name} #{api_password} #{patterns}")
   end
 
   def bundler_releases(ssh, version, options)
-    api_name = Rails.application.secrets.api_name
-    api_password = Rails.application.secrets.api_password
     patterns = options[:include_patterns]
 
     ssh_exec!(ssh, "#{BUNDLER_RELEASE} #{version} #{api_name} #{api_password} #{patterns}")
@@ -153,5 +137,25 @@ class RemoteServerJob < ActiveJob::Base
 
   def build_include_patterns(patterns)
     "-e \"INCLUDE_PATTERNS=#{patterns}\""
+  end
+
+  def bare_metal_server_ip
+    Rails.application.secrets.bare_metal_server_ip
+  end
+
+  def bare_metal_server_user
+    Rails.application.secrets.bare_metal_server_user
+  end
+
+  def bare_metal_server_password
+    Rails.application.secrets.bare_metal_server_password
+  end
+
+  def api_name
+    Rails.application.secrets.api_name
+  end
+
+  def api_password
+    Rails.application.secrets.api_password
   end
 end
