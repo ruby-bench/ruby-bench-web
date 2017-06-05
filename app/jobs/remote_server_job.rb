@@ -20,16 +20,14 @@ class RemoteServerJob < ActiveJob::Base
   private
 
   def ruby_trunk(ssh, commit_hash, options)
-    options.reverse_merge!({
-      ruby_benchmarks: true,
+    options.reverse_merge!(ruby_benchmarks: true,
       ruby_memory_benchmarks: true,
       optcarrot_benchmarks: true,
-      liquid_benchmarks: true
-    })
+      liquid_benchmarks: true)
 
     execute_ssh_commands(ssh,
       [
-        "docker pull rubybench/ruby_trunk",
+        'docker pull rubybench/ruby_trunk',
         "docker run --rm
           -e \"RUBY_BENCHMARKS=#{options[:ruby_benchmarks]}\"
           -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
@@ -45,16 +43,14 @@ class RemoteServerJob < ActiveJob::Base
   end
 
   def ruby_releases(ssh, ruby_version, options)
-    options.reverse_merge!({
-      ruby_benchmarks: true,
+    options.reverse_merge!(ruby_benchmarks: true,
       ruby_memory_benchmarks: true,
       optcarrot_benchmarks: true,
-      liquid_benchmarks: true
-    })
+      liquid_benchmarks: true)
 
     execute_ssh_commands(ssh,
       [
-        "docker pull rubybench/ruby_releases",
+        'docker pull rubybench/ruby_releases',
         "docker run --rm
           -e \"RUBY_BENCHMARKS=#{options[:ruby_benchmarks]}\"
           -e \"RUBY_MEMORY_BENCHMARKS=#{options[:ruby_memory_benchmarks]}\"
@@ -72,9 +68,9 @@ class RemoteServerJob < ActiveJob::Base
   def ruby_releases_discourse(ssh, ruby_version, options)
     execute_ssh_commands(ssh,
       [
-        "docker pull rubybench/ruby_releases_discourse",
-        "docker run --name discourse_redis -d redis:2.8.19",
-        "docker run --name discourse_postgres -d postgres:9.3.5",
+        'docker pull rubybench/ruby_releases_discourse',
+        'docker run --name discourse_redis -d redis:2.8.19',
+        'docker run --name discourse_postgres -d postgres:9.3.5',
         "docker run --rm
           --link discourse_postgres:postgres
           --link discourse_redis:redis
@@ -82,8 +78,8 @@ class RemoteServerJob < ActiveJob::Base
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           rubybench/ruby_releases_discourse".squish,
-        "docker stop discourse_postgres discourse_redis",
-        "docker rm -v discourse_postgres discourse_redis"
+        'docker stop discourse_postgres discourse_redis',
+        'docker rm -v discourse_postgres discourse_redis'
       ]
     )
   end
@@ -91,16 +87,16 @@ class RemoteServerJob < ActiveJob::Base
   def ruby_trunk_discourse(ssh, commit_hash, options)
     execute_ssh_commands(ssh,
       [
-        "docker pull rubybench/ruby_trunk_discourse",
-        "docker run --name discourse_redis -d redis:2.8.19",
-        "docker run --name discourse_postgres -d postgres:9.3.5",
+        'docker pull rubybench/ruby_trunk_discourse',
+        'docker run --name discourse_redis -d redis:2.8.19',
+        'docker run --name discourse_postgres -d postgres:9.3.5',
         "docker run --rm --link discourse_postgres:postgres
           --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"
           -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
           rubybench/ruby_trunk_discourse".squish,
-        "docker stop discourse_postgres discourse_redis",
-        "docker rm -v discourse_postgres discourse_redis"
+        'docker stop discourse_postgres discourse_redis',
+        'docker rm -v discourse_postgres discourse_redis'
       ]
     )
   end
@@ -111,10 +107,10 @@ class RemoteServerJob < ActiveJob::Base
 
     execute_ssh_commands(ssh,
       [
-        "docker pull rubybench/rails_releases",
-        "docker run --name postgres -d postgres:9.3.5",
-        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-        "docker run --name redis -d redis:2.8.19",
+        'docker pull rubybench/rails_releases',
+        'docker run --name postgres -d postgres:9.3.5',
+        'docker run --name mysql -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.6.24',
+        'docker run --name redis -d redis:2.8.19',
         "docker run --rm
           --link postgres:postgres
           --link mysql:mysql
@@ -125,8 +121,8 @@ class RemoteServerJob < ActiveJob::Base
           #{custom_env}
           #{build_include_patterns(options[:include_patterns])}
           rubybench/rails_releases".squish,
-        "docker stop postgres mysql redis",
-        "docker rm -v postgres mysql redis"
+        'docker stop postgres mysql redis',
+        'docker rm -v postgres mysql redis'
       ]
     )
   end
@@ -134,10 +130,10 @@ class RemoteServerJob < ActiveJob::Base
   def rails_trunk(ssh, commit_hash, options)
     execute_ssh_commands(ssh,
       [
-        "docker pull rubybench/rails_trunk",
-        "docker run --name postgres -d postgres:9.3.5",
-        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-        "docker run --name redis -d redis:2.8.19",
+        'docker pull rubybench/rails_trunk',
+        'docker run --name postgres -d postgres:9.3.5',
+        'docker run --name mysql -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.6.24',
+        'docker run --name redis -d redis:2.8.19',
         "docker run --rm
           --link postgres:postgres
           --link mysql:mysql
@@ -148,8 +144,8 @@ class RemoteServerJob < ActiveJob::Base
           -e \"MYSQL2_PREPARED_STATEMENTS=1\"
           #{build_include_patterns(options[:include_patterns])}
           rubybench/rails_trunk".squish,
-        "docker stop postgres mysql redis",
-        "docker rm -v postgres mysql redis"
+        'docker stop postgres mysql redis',
+        'docker rm -v postgres mysql redis'
       ]
     )
   end
@@ -159,10 +155,10 @@ class RemoteServerJob < ActiveJob::Base
 
     execute_ssh_commands(ssh,
       [
-        "docker pull rubybench/sequel_releases",
-        "docker run --name postgres -d postgres:9.3.5",
-        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-        "docker run --name redis -d redis:2.8.19",
+        'docker pull rubybench/sequel_releases',
+        'docker run --name postgres -d postgres:9.3.5',
+        'docker run --name mysql -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.6.24',
+        'docker run --name redis -d redis:2.8.19',
         "docker run --rm
           --link postgres:postgres
           --link mysql:mysql
@@ -173,8 +169,8 @@ class RemoteServerJob < ActiveJob::Base
           #{custom_env}
           #{build_include_patterns(options[:include_patterns])}
           rubybench/sequel_releases".squish,
-        "docker stop postgres mysql redis",
-        "docker rm -v postgres mysql redis"
+        'docker stop postgres mysql redis',
+        'docker rm -v postgres mysql redis'
       ]
     )
   end
@@ -182,10 +178,10 @@ class RemoteServerJob < ActiveJob::Base
   def sequel_trunk(ssh, commit_hash, options)
     execute_ssh_commands(ssh,
       [
-        "docker pull rubybench/sequel_trunk",
-        "docker run --name postgres -d postgres:9.3.5",
-        "docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-        "docker run --name redis -d redis:2.8.19",
+        'docker pull rubybench/sequel_trunk',
+        'docker run --name postgres -d postgres:9.3.5',
+        'docker run --name mysql -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.6.24',
+        'docker run --name redis -d redis:2.8.19',
         "docker run --rm
           --link postgres:postgres
           --link mysql:mysql
@@ -196,8 +192,8 @@ class RemoteServerJob < ActiveJob::Base
           -e \"MYSQL2_PREPARED_STATEMENTS=1\"
           #{build_include_patterns(options[:include_patterns])}
           rubybench/sequel_trunk".squish,
-        "docker stop postgres mysql redis",
-        "docker rm -v postgres mysql redis"
+        'docker stop postgres mysql redis',
+        'docker rm -v postgres mysql redis'
       ]
     )
   end
@@ -205,7 +201,7 @@ class RemoteServerJob < ActiveJob::Base
   def bundler_releases(ssh, bundler_version, options)
     execute_ssh_commands(ssh,
       [
-        "docker pull rubybench/bundler_releases",
+        'docker pull rubybench/bundler_releases',
         "docker run --rm
           -e \"BUNDLER_VERSION=#{bundler_version}\"
           -e \"API_NAME=#{Rails.application.secrets.api_name}\"

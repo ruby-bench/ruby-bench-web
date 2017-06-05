@@ -12,8 +12,8 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
   end
 
   DatabaseCleaner.cleaning do
-    test "User should be able to view long running benchmark graphs" do
-        repo = create(:repo)
+    test 'User should be able to view long running benchmark graphs' do
+      repo = create(:repo)
         org = repo.organization
         benchmark_type = create(:benchmark_type, repo: repo)
         commit = create(:commit, repo: repo)
@@ -38,24 +38,24 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
         assert_text :all, I18n.t('repos.commits.select_benchmark')
 
-        within "form" do
+        within 'form' do
           select(benchmark_type.category)
         end
 
-        within ".chart .highcharts-container .highcharts-yaxis-title",
+        within '.chart .highcharts-container .highcharts-yaxis-title',
           match: :first do
 
           assert page.has_content?(benchmark_result_type.unit)
         end
 
         assert(
-          all(".chart .highcharts-container .highcharts-yaxis-title")
+          all('.chart .highcharts-container .highcharts-yaxis-title')
             .last
             .has_content?(memory_benchmark_result_type.unit)
         )
 
-        within ".highcharts-xaxis-labels", match: :first do
-          assert_equal commit.created_at.strftime("%Y-%m-%d"),
+        within '.highcharts-xaxis-labels', match: :first do
+          assert_equal commit.created_at.strftime('%Y-%m-%d'),
             find('text').text
         end
 
@@ -78,11 +78,11 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
       visit commits_path(organization_name: org.name, repo_name: repo.name)
 
-      within "form" do
+      within 'form' do
         select(benchmark_type.category)
       end
 
-      assert page.has_css?(".chart .highcharts-container")
+      assert page.has_css?('.chart .highcharts-container')
       assert page.has_content?("#{benchmark_run_category_humanize} Graph")
       assert_not page.has_content?("#{benchmark_run_category_humanize} memory Graph")
     end
@@ -104,19 +104,19 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
       visit commits_path(organization_name: org.name, repo_name: repo.name)
 
-      within "form" do
+      within 'form' do
         select(benchmark_type.category)
       end
 
-      assert assert_selector(".highcharts-markers path", count: 30)
+      assert assert_selector('.highcharts-markers path', count: 30)
 
-      select 20, from: "benchmark_run_display_count"
+      select 20, from: 'benchmark_run_display_count'
 
-      assert assert_selector(".highcharts-markers path", count: 20)
+      assert assert_selector('.highcharts-markers path', count: 20)
 
     end
 
-    test "User should see benchmark type categories as sorted" do
+    test 'User should see benchmark type categories as sorted' do
       repo = create(:repo)
       org = repo.organization
       bm_type = create(:benchmark_type, repo: repo, category: 'd')
@@ -125,14 +125,14 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
       visit commits_path(organization_name: org.name, repo_name: repo.name)
 
-      within "form" do
+      within 'form' do
         list = page.first('.input-group').all('option')
 
-        assert_equal(list.map(&:value), ["", 'b', 'c', 'd'])
+        assert_equal(list.map(&:value), ['', 'b', 'c', 'd'])
       end
     end
 
-    test "User should be able to view releases benchmark graphs" do
+    test 'User should be able to view releases benchmark graphs' do
       repo = create(:repo)
       org = repo.organization
       benchmark_type = create(:benchmark_type, repo: repo)
@@ -154,18 +154,18 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
       assert_text :all, I18n.t('repos.commits.select_benchmark')
 
-      within "form" do
+      within 'form' do
         select(benchmark_type.category)
       end
 
-      within ".release-chart .highcharts-container .highcharts-yaxis-title",
+      within '.release-chart .highcharts-container .highcharts-yaxis-title',
         match: :first do
 
         assert page.has_content?(benchmark_result_type.unit)
       end
 
       assert(
-        all(".release-chart .highcharts-container .highcharts-yaxis-title")
+        all('.release-chart .highcharts-container .highcharts-yaxis-title')
           .last
           .has_content?(memory_benchmark_result_type.unit)
       )
@@ -203,14 +203,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
       assert_text :all, I18n.t('repos.commits.select_benchmark')
 
-      within "form" do
+      within 'form' do
         select(benchmark_type.category)
       end
 
-
-      assert page.has_css?(".release-chart .highcharts-container")
-      assert_not page.has_css?(".release-chart.memory .highcharts-container")
-      assert page.has_content?("def abc")
+      assert page.has_css?('.release-chart .highcharts-container')
+      assert_not page.has_css?('.release-chart.memory .highcharts-container')
+      assert page.has_content?('def abc')
 
       benchmark_run_category_humanize = benchmark_type.category.humanize
 
@@ -234,12 +233,12 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
       visit releases_path(organization_name: org.name, repo_name: repo.name)
 
-      within "form" do
+      within 'form' do
         select(category)
       end
 
-      assert_not page.has_css?(".release-chart .highcharts-container")
-      assert page.has_content?(I18n.t("repos.no_results", category: category))
+      assert_not page.has_css?('.release-chart .highcharts-container')
+      assert page.has_content?(I18n.t('repos.no_results', category: category))
     end
   end
 end

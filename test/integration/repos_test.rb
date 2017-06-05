@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ReposTest < ActionDispatch::IntegrationTest
-  test "organization should a required parameter for show action" do
+  test 'organization should a required parameter for show action' do
     organization = create(:organization, name: 'rails')
     create(:repo, name: 'rails', organization: organization)
 
@@ -13,7 +13,7 @@ class ReposTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "JSON generation works when there is one chart" do
+  test 'JSON generation works when there is one chart' do
     benchmark_type = create(:benchmark_type)
     benchmark_result_type = create(:benchmark_result_type)
 
@@ -49,7 +49,7 @@ class ReposTest < ActionDispatch::IntegrationTest
     assert_equal res[:charts][0][:datasets].length, 1
   end
 
-  test "JSON generation works when there are two charts" do
+  test 'JSON generation works when there are two charts' do
     benchmark_type = create(:benchmark_type)
     benchmark_result_type = create(:benchmark_result_type)
     benchmark_result_type2 = create(:benchmark_result_type)
@@ -96,7 +96,7 @@ class ReposTest < ActionDispatch::IntegrationTest
     assert_equal res[:charts][0][:datasets].length, 1
   end
 
-  test "#JSON generation works when there are no charts" do
+  test '#JSON generation works when there are no charts' do
     benchmark_type = create(:benchmark_type)
     benchmark_result_type = create(:benchmark_result_type)
     repo = benchmark_type.repo
@@ -106,7 +106,7 @@ class ReposTest < ActionDispatch::IntegrationTest
       params: { display_count: 2 }
 
     res = JSON.parse(response.body, symbolize_names: true)
-    
+
     assert_empty res[:charts]
     assert_empty res[:versions]
     assert_nil res[:benchmark_name]

@@ -51,11 +51,11 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
 
       visit repo_path(organization_name: @org.name, repo_name: @repo.name)
 
-      within "form" do
+      within 'form' do
         select(benchmark_type.category)
       end
 
-      assert page.has_content?(I18n.t("highcharts.subtitle.commit_url"))
+      assert page.has_content?(I18n.t('highcharts.subtitle.commit_url'))
 
       benchmark_run_line =
         "#{benchmark_run.initiator.sha1}
@@ -75,7 +75,7 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
         #{benchmark_run3.result["sometime"]}
         #{benchmark_run3.benchmark_result_type.unit}".squish
 
-      markers = page.all(".highcharts-markers.highcharts-tracker path")
+      markers = page.all('.highcharts-markers.highcharts-tracker path')
       # Markers are found from right to left on the graph
       markers[0].click
       commit = benchmark_run3.initiator
@@ -90,7 +90,6 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
         assert page.has_content?(benchmark_run3_line)
         assert page.has_content?(benchmark_run2_line)
         assert_not page.has_content?(benchmark_run_line)
-
 
         assert page.has_selector?(
           github_compare_link(benchmark_run2.initiator, benchmark_run3.initiator)
@@ -145,13 +144,13 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
   end
 
   def within_chart_modal_title
-    within "#chart-modal .modal-title" do
+    within '#chart-modal .modal-title' do
       yield
     end
   end
 
   def within_chart_modal_body
-    within "#chart-modal .modal-body" do
+    within '#chart-modal .modal-body' do
       yield
     end
   end
