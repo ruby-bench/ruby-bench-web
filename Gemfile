@@ -20,7 +20,6 @@ gem 'coffee-rails'
 gem 'responders'
 gem 'jbuilder'
 gem 'msgpack'
-gem 'rubocop', require: false
 
 group :development do
   gem 'spring'
@@ -32,6 +31,7 @@ end
 
 group :development, :test do
   gem 'byebug'
+  gem 'rubocop', require: false
 end
 
 group :test do
