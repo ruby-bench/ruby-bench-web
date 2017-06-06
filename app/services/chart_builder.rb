@@ -38,53 +38,38 @@ class ChartBuilder
   end
 
   def build_columns
+    columns = {}
+
     if @comparing_runs.present?
-      (@benchmark_runs + @comparing_runs)
-      .sort_by { |benchmark_run| benchmark_run.initiator.created_at }
-      .each do |benchmark_run|
-        version = nil
-        if block_given?
-          version = yield(benchmark_run)
-          @categories ||= []
-          @categories << version if version != @categories.last
-        end
-
-        benchmark_run.result.each do |key, value|
-          @columns["#{key}_#{benchmark_run.benchmark_type.category}"] ||= []
-          @columns["#{key}_#{benchmark_run.benchmark_type.category}"] << [version, value.to_f]
-        end
-      end
-
-      new_columns = []
-
-      @columns.each do |name, data|
-        new_columns << { name: name, data: data }
-      end
-
-      @columns = new_columns
-      self
+      runs = (@benchmark_runs + @comparing_runs)
+      .sort_by { |run| run.initiator.created_at }
     else
-      @benchmark_runs.each do |benchmark_run|
-        if block_given?
-          version = yield(benchmark_run)
-          @categories ||= []
-          @categories << version if version != @categories.last
-        end
-
-        benchmark_run.result.each do |key, value|
-          @columns[key] ||= []
-          @columns[key] << value.to_f
-        end
-      end
-
-      new_columns = []
-
-      @columns.each do |name, data|
-        new_columns << { name: name, data: data }
-      end
-
-      @columns = new_columns
-      self
+      runs = @benchmark_runs
     end
+
+    runs.each do |run|
+      version = nil
+      if block_given?
+        version = yield(run)
+        @categories ||= []
+        @categories << version if version != @categories.last
+      end
+
+      run.result.each do |key, value|
+        if @comparing_runs.present?
+          columns["#{key}_#{run.benchmark_type.category}"] ||= []
+          columns["#{key}_#{run.benchmark_type.category}"] << [version, value.to_f]
+        else
+          columns[key] ||= []
+          columns[key] << value.to_f
+        end
+      end
+    end
+
+    @columns = columns.map do |name, data|
+      { name: name, data: data }
+    end
+
+    self
   end
 end
