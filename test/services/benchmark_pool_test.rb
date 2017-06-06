@@ -3,7 +3,7 @@ require 'test_helper'
 class BenchmarkPoolTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  test "#enqueue for ruby" do
+  test '#enqueue for ruby' do
     assert_enqueued_with(job: RemoteServerJob) do
       BenchmarkPool.enqueue('ruby', 'abc')
     end
@@ -11,7 +11,7 @@ class BenchmarkPoolTest < ActiveSupport::TestCase
     assert_enqueued_jobs 1
   end
 
-  test "#enqueue for rails" do
+  test '#enqueue for rails' do
     assert_enqueued_with(job: RemoteServerJob) do
       BenchmarkPool.enqueue('rails', 'abc')
     end
@@ -19,7 +19,7 @@ class BenchmarkPoolTest < ActiveSupport::TestCase
     assert_enqueued_jobs 1
   end
 
-  test "#enqueue for sequel" do
+  test '#enqueue for sequel' do
     assert_enqueued_with(job: RemoteServerJob) do
       BenchmarkPool.enqueue('sequel', 'abc')
     end

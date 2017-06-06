@@ -20,6 +20,7 @@ gem 'coffee-rails'
 gem 'responders'
 gem 'jbuilder'
 gem 'msgpack'
+gem 'rubocop', require: false
 
 group :development do
   gem 'spring'

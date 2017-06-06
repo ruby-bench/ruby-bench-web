@@ -1,7 +1,6 @@
 class ChartBuilder
-  
   # @columns is an array that looks like [{ name: "benchmark1", data: [1.1, 1.2] }]
-  # @categories is a an array of version hashes: 
+  # @categories is a an array of version hashes:
   # [
   #   {
   #     version: "0",
@@ -21,7 +20,7 @@ class ChartBuilder
   # }
   attr_reader :benchmark_result_type
 
-  # `cache_read` looks like 
+  # `cache_read` looks like
   # { datasets: [{ name: "benchmark1", data: [1.1, 1.2] }], versions: [version_hash, version_hash] }
   def self.construct_from_cache(cache_read, benchmark_result_type)
     chart_builder = self.new([], benchmark_result_type)
@@ -54,7 +53,7 @@ class ChartBuilder
     new_columns = []
 
     @columns.each do |name, data|
-      new_columns << { name: name, data: data}
+      new_columns << { name: name, data: data }
     end
 
     @columns = new_columns

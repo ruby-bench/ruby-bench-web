@@ -14,7 +14,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     assert_results(commit)
   end
 
-  test "create release benchmark_run" do
+  test 'create release benchmark_run' do
     @repo = create(:repo)
     release = create(:release, repo: @repo)
 
@@ -27,7 +27,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     assert_results(release)
   end
 
-  test "create release benchmark_run when there is no past release" do
+  test 'create release benchmark_run when there is no past release' do
     @repo = create(:repo)
 
     post_results(
@@ -39,7 +39,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     assert_results(Release.last)
   end
 
-  test "repeated benchmark_runs are replaced" do
+  test 'repeated benchmark_runs are replaced' do
     @repo = create(:repo)
     release = create(:release, repo: @repo)
 
@@ -60,9 +60,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
         repo: @repo.name,
         organization: @repo.organization.name
       },
-      {
-        result: expected_result
-      }
+              result: expected_result
     )
 
     assert_results(release)
@@ -72,7 +70,7 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     assert_equal initial_count, release.benchmark_runs.count
   end
 
-  test "old benchmark_runs are invalidated" do
+  test 'old benchmark_runs are invalidated' do
     @repo = create(:repo)
     release = create(:release, repo: @repo)
     bm_type = create(:benchmark_type, repo: @repo)
@@ -81,16 +79,14 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
       benchmark_type: bm_type, validity: true, initiator: release
     )
 
-    post_results({
-      version: release.version,
+    post_results(version: release.version,
       repo: @repo.name,
       organization: @repo.organization.name,
       benchmark_type: {
         category: bm_type.category,
         script_url: bm_type.script_url,
         digest: 'digestchanged'
-      }
-    })
+      })
 
     assert_not bm_run.reload.validity
   end
@@ -135,4 +131,3 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
     )
   end
 end
-

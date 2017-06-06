@@ -12,12 +12,12 @@ class BenchmarkRun < ApplicationRecord
   validates :validity, presence: true
 
   # FIXME: Remove this and order by Commit#created_at
-  default_scope { order("#{self.table_name}.created_at DESC")}
+  default_scope { order("#{self.table_name}.created_at DESC") }
 
   scope :fetch_commit_benchmark_runs, ->(form_result_type, benchmark_result_type, limit) {
     unscope(:order)
     .joins(:benchmark_type)
-    .joins("INNER JOIN commits ON commits.id = benchmark_runs.initiator_id")
+    .joins('INNER JOIN commits ON commits.id = benchmark_runs.initiator_id')
     .includes(:initiator)
     .where(
       benchmark_types: { category: form_result_type },
@@ -25,7 +25,7 @@ class BenchmarkRun < ApplicationRecord
       initiator_type: 'Commit',
       validity: true
     )
-    .order("commits.created_at DESC")
+    .order('commits.created_at DESC')
     .limit(limit)
   }
 
@@ -40,7 +40,7 @@ class BenchmarkRun < ApplicationRecord
     )
   }
 
-  PAGINATE_COUNT = [20, 50 ,100, 200, 400, 500, 750, 1000, 2000]
+  PAGINATE_COUNT = [20, 50 , 100, 200, 400, 500, 750, 1000, 2000]
   DEFAULT_PAGINATE_COUNT = 2000
 
   def self.sort_by_initiator_version(benchmark_runs)
@@ -56,13 +56,13 @@ class BenchmarkRun < ApplicationRecord
 
   def self.latest_commit_benchmark_run(benchmark_type, benchmark_result_type)
     self.unscope(:order)
-      .joins("INNER JOIN commits ON commits.id = benchmark_runs.initiator_id")
+      .joins('INNER JOIN commits ON commits.id = benchmark_runs.initiator_id')
       .where(
         initiator_type: 'Commit',
         benchmark_result_type: benchmark_result_type,
         benchmark_type: benchmark_type
       )
-      .order("commits.created_at DESC")
+      .order('commits.created_at DESC')
       .first
   end
 

@@ -5,8 +5,8 @@ Rails.application.routes.draw do
     require 'sidekiq/web'
 
     constraints(lambda { |request| request.session['admin'] }) do
-      mount Logster::Web => "/logs"
-      mount Sidekiq::Web => "/sidekiq"
+      mount Logster::Web => '/logs'
+      mount Sidekiq::Web => '/sidekiq'
     end
   end
 

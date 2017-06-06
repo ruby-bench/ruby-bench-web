@@ -6,7 +6,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
     Net::SSH.stubs(:start).yields(@ssh)
   end
 
-  test "#perform ruby_trunk" do
+  test '#perform ruby_trunk' do
     [
       'tsp docker pull rubybench/ruby_trunk',
       "tsp docker run --rm
@@ -26,17 +26,15 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
     RemoteServerJob.new.perform(
       'commit_hash', 'ruby_trunk',
-      {
-        ruby_benchmarks: true,
+              ruby_benchmarks: true,
         ruby_memory_benchmarks: false,
         optcarrot_benchmarks: false,
         liquid_benchmarks: false,
         include_patterns: 'bm_app_answer,bm_abc'
-      }
     )
   end
 
-  test "#perform ruby_releases" do
+  test '#perform ruby_releases' do
     [
       'tsp docker pull rubybench/ruby_releases',
       "tsp docker run --rm
@@ -56,21 +54,19 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
     RemoteServerJob.new.perform(
       '2.2.0', 'ruby_releases',
-      {
-        ruby_benchmarks: true,
+              ruby_benchmarks: true,
         ruby_memory_benchmarks: false,
         optcarrot_benchmarks: false,
         liquid_benchmarks: false,
         include_patterns: 'bm_app_answer,bm_abc'
-      }
     )
   end
 
-  test "#perform ruby_releases_discourse" do
+  test '#perform ruby_releases_discourse' do
     [
-      "tsp docker pull rubybench/ruby_releases_discourse",
-      "tsp docker run --name discourse_redis -d redis:2.8.19",
-      "tsp docker run --name discourse_postgres -d postgres:9.3.5",
+      'tsp docker pull rubybench/ruby_releases_discourse',
+      'tsp docker run --name discourse_redis -d redis:2.8.19',
+      'tsp docker run --name discourse_postgres -d postgres:9.3.5',
       "tsp docker run --rm
         --link discourse_postgres:postgres
         --link discourse_redis:redis
@@ -78,8 +74,8 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         rubybench/ruby_releases_discourse".squish,
-      "tsp docker stop discourse_postgres discourse_redis",
-      "tsp docker rm -v discourse_postgres discourse_redis"
+      'tsp docker stop discourse_postgres discourse_redis',
+      'tsp docker rm -v discourse_postgres discourse_redis'
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
@@ -88,18 +84,18 @@ class RemoteServerJobTest < ActiveJob::TestCase
     RemoteServerJob.new.perform('2.2.0', 'ruby_releases_discourse')
   end
 
-  test "#perform ruby_trunk_discourse" do
+  test '#perform ruby_trunk_discourse' do
     [
-      "tsp docker pull rubybench/ruby_trunk_discourse",
-      "tsp docker run --name discourse_redis -d redis:2.8.19",
-      "tsp docker run --name discourse_postgres -d postgres:9.3.5",
+      'tsp docker pull rubybench/ruby_trunk_discourse',
+      'tsp docker run --name discourse_redis -d redis:2.8.19',
+      'tsp docker run --name discourse_postgres -d postgres:9.3.5',
       "tsp docker run --rm --link discourse_postgres:postgres
         --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=commit_hash\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         rubybench/ruby_trunk_discourse".squish,
-      "tsp docker stop discourse_postgres discourse_redis",
-      "tsp docker rm -v discourse_postgres discourse_redis"
+      'tsp docker stop discourse_postgres discourse_redis',
+      'tsp docker rm -v discourse_postgres discourse_redis'
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
@@ -108,12 +104,12 @@ class RemoteServerJobTest < ActiveJob::TestCase
     RemoteServerJob.new.perform('commit_hash', 'ruby_trunk_discourse')
   end
 
-  test "#perform rails_releases" do
+  test '#perform rails_releases' do
     [
-      "tsp docker pull rubybench/rails_releases",
-      "tsp docker run --name postgres -d postgres:9.3.5",
-      "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-      "tsp docker run --name redis -d redis:2.8.19",
+      'tsp docker pull rubybench/rails_releases',
+      'tsp docker run --name postgres -d postgres:9.3.5',
+      'tsp docker run --name mysql -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.6.24',
+      'tsp docker run --name redis -d redis:2.8.19',
       "tsp docker run --rm
         --link postgres:postgres
         --link mysql:mysql
@@ -124,22 +120,22 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"MYSQL2_PREPARED_STATEMENTS=1\"
         -e \"INCLUDE_PATTERNS=bm_activerecord_scope\"
         rubybench/rails_releases".squish,
-      "tsp docker stop postgres mysql redis",
-      "tsp docker rm -v postgres mysql redis",
+      'tsp docker stop postgres mysql redis',
+      'tsp docker rm -v postgres mysql redis',
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
     end
 
     RemoteServerJob.new.perform(
-      '4.2.6', 'rails_releases', include_patterns: "bm_activerecord_scope"
+      '4.2.6', 'rails_releases', include_patterns: 'bm_activerecord_scope'
     )
 
     [
-      "tsp docker pull rubybench/rails_releases",
-      "tsp docker run --name postgres -d postgres:9.3.5",
-      "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-      "tsp docker run --name redis -d redis:2.8.19",
+      'tsp docker pull rubybench/rails_releases',
+      'tsp docker run --name postgres -d postgres:9.3.5',
+      'tsp docker run --name mysql -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.6.24',
+      'tsp docker run --name redis -d redis:2.8.19',
       "tsp docker run --rm
         --link postgres:postgres
         --link mysql:mysql
@@ -149,8 +145,8 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"API_PASSWORD=#{Rails.application.secrets.api_password}\"
         -e \"INCLUDE_PATTERNS=\"
         rubybench/rails_releases".squish,
-      "tsp docker stop postgres mysql redis",
-      "tsp docker rm -v postgres mysql redis",
+      'tsp docker stop postgres mysql redis',
+      'tsp docker rm -v postgres mysql redis',
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
@@ -159,12 +155,12 @@ class RemoteServerJobTest < ActiveJob::TestCase
     RemoteServerJob.new.perform('4.0.0', 'rails_releases')
   end
 
-  test "#perform rails_trunk" do
+  test '#perform rails_trunk' do
     [
-      "tsp docker pull rubybench/rails_trunk",
-      "tsp docker run --name postgres -d postgres:9.3.5",
-      "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-      "tsp docker run --name redis -d redis:2.8.19",
+      'tsp docker pull rubybench/rails_trunk',
+      'tsp docker run --name postgres -d postgres:9.3.5',
+      'tsp docker run --name mysql -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.6.24',
+      'tsp docker run --name redis -d redis:2.8.19',
       "tsp docker run --rm
         --link postgres:postgres
         --link mysql:mysql
@@ -175,24 +171,24 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"MYSQL2_PREPARED_STATEMENTS=1\"
         -e \"INCLUDE_PATTERNS=bm_activerecord_scope\"
         rubybench/rails_trunk".squish,
-      "tsp docker stop postgres mysql redis",
-      "tsp docker rm -v postgres mysql redis"
+      'tsp docker stop postgres mysql redis',
+      'tsp docker rm -v postgres mysql redis'
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
     end
 
     RemoteServerJob.new.perform(
-      '1234', 'rails_trunk', { include_patterns: 'bm_activerecord_scope' }
+      '1234', 'rails_trunk', include_patterns: 'bm_activerecord_scope'
     )
   end
 
-  test "#perform sequel_releases" do
+  test '#perform sequel_releases' do
     [
-      "tsp docker pull rubybench/sequel_releases",
-      "tsp docker run --name postgres -d postgres:9.3.5",
-      "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-      "tsp docker run --name redis -d redis:2.8.19",
+      'tsp docker pull rubybench/sequel_releases',
+      'tsp docker run --name postgres -d postgres:9.3.5',
+      'tsp docker run --name mysql -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.6.24',
+      'tsp docker run --name redis -d redis:2.8.19',
       "tsp docker run --rm
         --link postgres:postgres
         --link mysql:mysql
@@ -203,24 +199,24 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"MYSQL2_PREPARED_STATEMENTS=1\"
         -e \"INCLUDE_PATTERNS=bm_sequel_scope\"
         rubybench/sequel_releases".squish,
-      "tsp docker stop postgres mysql redis",
-      "tsp docker rm -v postgres mysql redis",
+      'tsp docker stop postgres mysql redis',
+      'tsp docker rm -v postgres mysql redis',
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
     end
 
     RemoteServerJob.new.perform(
-      '4.35.0', 'sequel_releases', include_patterns: "bm_sequel_scope"
+      '4.35.0', 'sequel_releases', include_patterns: 'bm_sequel_scope'
     )
   end
 
-  test "#perform sequel_trunk" do
+  test '#perform sequel_trunk' do
     [
-      "tsp docker pull rubybench/sequel_trunk",
-      "tsp docker run --name postgres -d postgres:9.3.5",
-      "tsp docker run --name mysql -e \"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -d mysql:5.6.24",
-      "tsp docker run --name redis -d redis:2.8.19",
+      'tsp docker pull rubybench/sequel_trunk',
+      'tsp docker run --name postgres -d postgres:9.3.5',
+      'tsp docker run --name mysql -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.6.24',
+      'tsp docker run --name redis -d redis:2.8.19',
       "tsp docker run --rm
         --link postgres:postgres
         --link mysql:mysql
@@ -231,21 +227,21 @@ class RemoteServerJobTest < ActiveJob::TestCase
         -e \"MYSQL2_PREPARED_STATEMENTS=1\"
         -e \"INCLUDE_PATTERNS=bm_sequel_scope\"
         rubybench/sequel_trunk".squish,
-      "tsp docker stop postgres mysql redis",
-      "tsp docker rm -v postgres mysql redis"
+      'tsp docker stop postgres mysql redis',
+      'tsp docker rm -v postgres mysql redis'
     ].each do |command|
 
       @ssh.expects(:exec!).with(command)
     end
 
     RemoteServerJob.new.perform(
-      '1234', 'sequel_trunk', { include_patterns: 'bm_sequel_scope' }
+      '1234', 'sequel_trunk', include_patterns: 'bm_sequel_scope'
     )
   end
 
-  test "#perform bundler_releases" do
+  test '#perform bundler_releases' do
     [
-      "tsp docker pull rubybench/bundler_releases",
+      'tsp docker pull rubybench/bundler_releases',
       "tsp docker run --rm
         -e \"BUNDLER_VERSION=1.10.6\"
         -e \"API_NAME=#{Rails.application.secrets.api_name}\"
@@ -259,10 +255,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
 
     RemoteServerJob.new.perform(
       '1.10.6', 'bundler_releases',
-      {
-        include_patterns: 'bm_something'
-      }
+              include_patterns: 'bm_something'
     )
   end
-
 end

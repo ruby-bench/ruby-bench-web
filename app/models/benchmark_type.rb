@@ -4,7 +4,7 @@ class BenchmarkType < ApplicationRecord
   has_many :benchmark_runs, dependent: :destroy
 
   has_many :benchmark_result_types, -> {
-    unscope(:order).order("benchmark_result_types.id").distinct
+    unscope(:order).order('benchmark_result_types.id').distinct
   }, through: :benchmark_runs
 
   belongs_to :repo
