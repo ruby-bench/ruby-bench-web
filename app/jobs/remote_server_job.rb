@@ -3,7 +3,7 @@ require 'net/ssh'
 class RemoteServerJob < ActiveJob::Base
   queue_as :default
 
-  SCRIPTS_PATH = "./ruby-bench-docker/scripts"
+  SCRIPTS_PATH = './ruby-bench-docker/scripts'
 
   RUBY_TRUNK = "#{SCRIPTS_PATH}/ruby/trunk.sh"
   RUBY_RELEASE = "#{SCRIPTS_PATH}/ruby/releases.sh"

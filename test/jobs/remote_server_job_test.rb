@@ -8,29 +8,23 @@ class RemoteServerJobTest < ActiveJob::TestCase
     set_script_arguments
   end
 
-  test "#perform ruby_trunk" do
+  test '#perform ruby_trunk' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::RUBY_TRUNK} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
-      @commit_hash, 'ruby_trunk',
-      {
-        include_patterns: @patterns
-      }
+      @commit_hash, 'ruby_trunk', include_patterns: @patterns
     )
   end
 
-  test "#perform ruby_releases" do
+  test '#perform ruby_releases' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::RUBY_RELEASE} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@version} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
-      @version, 'ruby_releases',
-      {
-        include_patterns: @patterns
-      }
+      @version, 'ruby_releases', include_patterns: @patterns
     )
   end
 
@@ -76,7 +70,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
     RemoteServerJob.new.perform('commit_hash', 'ruby_trunk_discourse')
   end
 
-  test "#perform rails_releases" do
+  test '#perform rails_releases' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::RAILS_RELEASE} #{@version} #{@api_name} #{@api_password} 0 #{@patterns}"
     )
@@ -86,7 +80,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
   end
 
-  test "#perform rails_trunk" do
+  test '#perform rails_trunk' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::RAILS_MASTER} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
@@ -96,7 +90,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
   end
 
-  test "#perform sequel_releases" do
+  test '#perform sequel_releases' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::SEQUEL_RELEASE} #{@version} #{@api_name} #{@api_password} #{@patterns}"
     )
@@ -106,7 +100,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
   end
 
-  test "#perform sequel_trunk" do
+  test '#perform sequel_trunk' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::SEQUEL_MASTER} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
@@ -116,7 +110,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
   end
 
-  test "#perform bundler_releases" do
+  test '#perform bundler_releases' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::BUNDLER_RELEASE} #{@version} #{@api_name} #{@api_password} #{@patterns}"
     )
