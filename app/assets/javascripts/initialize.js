@@ -16,9 +16,9 @@ var onSelectChange = function (event) {
   var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
   var compareWithBenchmark = $('#benchmark_run_compare_with').val();
 
-  if(compareWithBenchmark){
+  if(compareWithBenchmark) {
     displayCompareUrlParam = "&compare_with=" + compareWithBenchmark;
-  }else{
+  } else {
     displayCompareUrlParam = "";
   }
 
@@ -83,11 +83,11 @@ $(document).on('turbolinks:load', function() {
     switch(e.which) {
       case 37:  //left
         optionIndex = incrementOptionIndex(optionIndex, optsLength, -1);
-      break;
+        break;
 
       case 39:  //right
         optionIndex = incrementOptionIndex(optionIndex, optsLength, 1);
-      break;
+        break;
 
       default:
         return;  //exit this handler for other keys
