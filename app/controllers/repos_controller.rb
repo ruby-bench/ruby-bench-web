@@ -164,9 +164,17 @@ class ReposController < ApplicationController
   def set_display_count
     @display_count =
       if BenchmarkRun::PAGINATE_COUNT.include?(params[:display_count].to_i)
-        params[:display_count].to_i
+        if @comparing_benchmark.present? && params[:display_count].to_i > 500
+          500
+        else
+          params[:display_count].to_i
+        end
       else
-        BenchmarkRun::DEFAULT_PAGINATE_COUNT
+        if @comparing_benchmark.present?
+          500
+        else
+          BenchmarkRun::DEFAULT_PAGINATE_COUNT
+        end
       end
   end
 
