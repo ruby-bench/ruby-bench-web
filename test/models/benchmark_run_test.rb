@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class BenchmarkRunTest < ActiveSupport::TestCase
-  test ".sort_by_initiator_version" do
+  test '.sort_by_initiator_version' do
     releases = [
       create(:release, version: 'githubruby', benchmark_runs: [create(:release_benchmark_run)]),
       create(:release, version: '1.2.1', benchmark_runs: [create(:release_benchmark_run)]),
@@ -17,12 +17,11 @@ class BenchmarkRunTest < ActiveSupport::TestCase
     )
   end
 
-  test ".latest_commit_benchmark_run" do
+  test '.latest_commit_benchmark_run' do
     benchmark_result_type = create(:benchmark_result_type)
     benchmark_type = create(:benchmark_type)
     commit = create(:commit)
     later_commit = create(:commit, created_at: Time.zone.now + 1.day)
-
 
     benchmark_run = create(:commit_benchmark_run,
       benchmark_result_type: benchmark_result_type,

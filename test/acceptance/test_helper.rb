@@ -1,6 +1,6 @@
-require "./test/test_helper"
+require './test/test_helper'
 
-Dir["./test/acceptance/support/**/*"].each { |file| require file }
+Dir['./test/acceptance/support/**/*'].each { |file| require file }
 
 class AcceptanceTest < ActionDispatch::IntegrationTest
   include Capybara::DSL

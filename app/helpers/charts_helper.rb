@@ -22,7 +22,7 @@ module ChartsHelper
       else
         "#{k.to_s.titleize}: #{v}"
       end
-    end.join("<br>")
+    end.join('<br>')
   end
 
   def versions_to_html(columns)

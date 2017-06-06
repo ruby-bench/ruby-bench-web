@@ -1,7 +1,6 @@
 class ChartBuilder
-
   # @columns is an array that looks like [{ name: "benchmark1", data: [1.1, 1.2] }]
-  # @categories is an array of version hashes:
+  # @categories is a an array of version hashes:
   # [
   #   {
   #     version: "0",
@@ -41,7 +40,7 @@ class ChartBuilder
   def build_columns
     if @comparing_runs.present?
       (@benchmark_runs + @comparing_runs)
-      .sort_by{ |benchmark_run| benchmark_run.initiator.created_at }
+      .sort_by { |benchmark_run| benchmark_run.initiator.created_at }
       .each do |benchmark_run|
         version = nil
         if block_given?
@@ -81,7 +80,7 @@ class ChartBuilder
       new_columns = []
 
       @columns.each do |name, data|
-        new_columns << { name: name, data: data}
+        new_columns << { name: name, data: data }
       end
 
       @columns = new_columns

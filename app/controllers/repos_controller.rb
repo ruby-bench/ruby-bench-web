@@ -1,5 +1,5 @@
 class ReposController < ApplicationController
-  require "net/http" if Rails.env.development?
+  require 'net/http' if Rails.env.development?
 
   before_action :set_organization
   before_action :set_repo

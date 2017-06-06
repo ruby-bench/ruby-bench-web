@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ChartBuilderTest < ActiveSupport::TestCase
-  test "#build_columns" do
+  test '#build_columns' do
     benchmark_run = create(:commit_benchmark_run, result: { 'some_time' => 5, 'some_other_time' => 5 })
     other_benchmark_run = create(:commit_benchmark_run, result: { 'some_time' => 5, 'some_other_time' => 5 })
     chart_builder = ChartBuilder.new([benchmark_run, other_benchmark_run], benchmark_run.benchmark_result_type)
@@ -18,14 +18,14 @@ class ChartBuilderTest < ActiveSupport::TestCase
     )
     assert_equal(
       [
-        { name: "some_time", data: [benchmark_run.result['some_time'].to_f, other_benchmark_run.result['some_time'].to_f] },
-        { name: "some_other_time", data: [benchmark_run.result['some_other_time'].to_f, other_benchmark_run.result['some_other_time'].to_f] }
+        { name: 'some_time', data: [benchmark_run.result['some_time'].to_f, other_benchmark_run.result['some_time'].to_f] },
+        { name: 'some_other_time', data: [benchmark_run.result['some_other_time'].to_f, other_benchmark_run.result['some_other_time'].to_f] }
       ],
       chart_builder.columns
     )
   end
 
-  test "#build_columns with comparing_runs" do
+  test '#build_columns with comparing_runs' do
     rails_repo = create(:repo)
     sequel_repo = create(:repo)
 
@@ -75,13 +75,13 @@ class ChartBuilderTest < ActiveSupport::TestCase
     )
   end
 
-  test "#construct_from_cache" do
+  test '#construct_from_cache' do
     cache_read = {
-      datasets: [{ name: "benchmark1", data: [1.1, 1.2] }],
-      versions: [{ version: 1, environment: "ruby2.2" }, { version: 2, environment: "ruby2.3" }]
+      datasets: [{ name: 'benchmark1', data: [1.1, 1.2] }],
+      versions: [{ version: 1, environment: 'ruby2.2' }, { version: 2, environment: 'ruby2.3' }]
     }
 
-    benchmark_result_type = { measurement: "Execution time", unit: "Seconds" }
+    benchmark_result_type = { measurement: 'Execution time', unit: 'Seconds' }
 
     chart_builder = ChartBuilder.construct_from_cache(cache_read, benchmark_result_type)
 
@@ -91,7 +91,7 @@ class ChartBuilderTest < ActiveSupport::TestCase
     assert_equal chart_builder.benchmark_result_type, benchmark_result_type
   end
 
-  test "#build_columns and construct_from_cache give the same result" do
+  test '#build_columns and construct_from_cache give the same result' do
     benchmark_run = create(:commit_benchmark_run, result: { 'some_time' => 5, 'some_other_time' => 5 })
     other_benchmark_run = create(:commit_benchmark_run, result: { 'some_time' => 5, 'some_other_time' => 5 })
     chart_builder = ChartBuilder.new([benchmark_run, other_benchmark_run], benchmark_run.benchmark_result_type)

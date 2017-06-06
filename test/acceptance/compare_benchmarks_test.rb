@@ -1,7 +1,6 @@
 require 'acceptance/test_helper'
 
 class CompareBenchmarks < AcceptanceTest
-
   setup do
     Net::HTTP.stubs(:get).returns("def abc\n  puts haha\nend")
 
@@ -44,10 +43,10 @@ class CompareBenchmarks < AcceptanceTest
       benchmark_result_type: @memory_benchmark
     )
 
-    @commit_dates = [@rails_commit.created_at, @sequel_commit.created_at].map{ |date| date.strftime("%Y-%m-%d") }
+    @commit_dates = [@rails_commit.created_at, @sequel_commit.created_at].map { |date| date.strftime('%Y-%m-%d') }
   end
 
-  test "User should be able to compare benchmarks across repos" do
+  test 'User should be able to compare benchmarks across repos' do
     visit commits_path(
       @rails_org.name,
       @rails_repo.name,
@@ -55,17 +54,17 @@ class CompareBenchmarks < AcceptanceTest
       compare_with: @sequel_scope_all.category
     )
 
-    within "#benchmark_run_benchmark_type" do
+    within '#benchmark_run_benchmark_type' do
       select(@active_record_scope_all.category)
     end
 
-    within "#benchmark_run_compare_with" do
+    within '#benchmark_run_compare_with' do
       select(@sequel_scope_all.category)
     end
 
-    all(".highcharts-xaxis-labels").each do |xaxis|
+    all('.highcharts-xaxis-labels').each do |xaxis|
       within(xaxis) do
-        labels = all("text").map{ |x| x.text }
+        labels = all('text').map { |x| x.text }
 
         @commit_dates.each do |commit_date|
           assert_includes(labels, commit_date)

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class BenchmarkTypeTest < ActiveSupport::TestCase
-  test "#github_url" do
+  test '#github_url' do
     benchmark_type = create(:benchmark_type)
     assert_equal(
       benchmark_type.github_url,
@@ -9,7 +9,7 @@ class BenchmarkTypeTest < ActiveSupport::TestCase
     )
   end
 
-  test "updating digest should render benchmark_runs invalid" do
+  test 'updating digest should render benchmark_runs invalid' do
     benchmark_type = create(:benchmark_type, digest: 'abcde')
     bm_run = create(:commit_benchmark_run, benchmark_type: benchmark_type)
 

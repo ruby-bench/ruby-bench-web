@@ -1,11 +1,10 @@
 require 'test_helper'
 
 class GithubEventHandlerTest < ActionDispatch::IntegrationTest
-  test "#handle for single commits pushed" do
+  test '#handle for single commits pushed' do
     BenchmarkPool.expects(:enqueue).with('ruby', '12345')
 
-    post_to_handler({
-      'ref' => 'refs/heads/master',
+    post_to_handler('ref' => 'refs/heads/master',
       'head_commit' => {
         'id' => '12345',
         'message' => 'Fix something',
@@ -18,8 +17,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
       'repository' => {
         'full_name' => 'ruby/ruby',
         html_url: 'https://github.com/ruby/ruby'
-      }
-    })
+      })
 
     organization = Organization.last
     repo = Repo.last
@@ -32,12 +30,11 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     assert_equal repo, commit.repo
   end
 
-  test "#handle for multiple commits pushed" do
+  test '#handle for multiple commits pushed' do
     BenchmarkPool.expects(:enqueue).with('ruby', '12345')
     BenchmarkPool.expects(:enqueue).with('ruby', '12346')
 
-    post_to_handler({
-      'ref' => 'refs/heads/master',
+    post_to_handler('ref' => 'refs/heads/master',
       'commits' =>
         [
           {
@@ -62,8 +59,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         'repository' => {
           'full_name' => 'ruby/ruby',
           html_url: 'https://github.com/ruby/ruby'
-        }
-    })
+        })
 
     organization = Organization.last
     repo = Repo.last
@@ -79,11 +75,10 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "Commits are not created for merge and ci skip commits" do
+  test 'Commits are not created for merge and ci skip commits' do
     initial = Commit.count
 
-    post_to_handler({
-      'ref' => 'refs/heads/master',
+    post_to_handler('ref' => 'refs/heads/master',
       'commits' =>
         [
           {
@@ -117,18 +112,15 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         'repository' => {
           'full_name' => 'ruby/ruby',
           html_url: 'https://github.com/ruby/ruby'
-        }
-    })
+        })
 
     assert_equal initial, Commit.count
   end
 
-
   # Remove this once Github hook is actually coming from the original Ruby
   # repo.
-  test "tgxworld organization is mapped as ruby" do
-    post_to_handler({
-      'ref' => 'refs/heads/master',
+  test 'tgxworld organization is mapped as ruby' do
+    post_to_handler('ref' => 'refs/heads/master',
       'commits' =>
         [
           {
@@ -144,8 +136,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         'repository' => {
           'full_name' => 'tgxworld/ruby',
           html_url: 'https://github.com/tgxworld/ruby'
-        }
-    })
+        })
 
     organization = Organization.last
     repo = Repo.last
@@ -160,9 +151,8 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
 
   # Remove this once Github hook is actually coming from the original Rails
   # repo.
-  test "tgxworld organization is mapped as rails" do
-    post_to_handler({
-      'ref' => 'refs/heads/master',
+  test 'tgxworld organization is mapped as rails' do
+    post_to_handler('ref' => 'refs/heads/master',
       'commits' =>
         [
           {
@@ -178,8 +168,7 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
         'repository' => {
           'full_name' => 'tgxworld/rails',
           html_url: 'https://github.com/tgxworld/rails'
-        }
-    })
+        })
 
     organization = Organization.last
     repo = Repo.last
@@ -193,12 +182,10 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
   end
 
   test "shouldn't handle push event when occurs branch other than main" do
-    post_to_handler({
-      'ref' => 'refs/heads/my-super-awesome-feature',
+    post_to_handler('ref' => 'refs/heads/my-super-awesome-feature',
       'repository' => {
         'repository' => 'doesn\'t-matter',
-      }
-    })
+      })
 
     assert_equal 0, Repo.count
   end

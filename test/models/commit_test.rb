@@ -1,19 +1,19 @@
 require 'test_helper'
 
 class CommitTest < ActiveSupport::TestCase
-  test ".merge_or_skip_ci? for merge commits" do
+  test '.merge_or_skip_ci? for merge commits' do
     assert_equal true, Commit.merge_or_skip_ci?(CommitReviewer::MERGE_COMMIT_MESSAGE)
     assert_equal false, Commit.merge_or_skip_ci?('haha')
   end
 
-  test ".merge_or_skip_ci? for ci skip commits" do
+  test '.merge_or_skip_ci? for ci skip commits' do
     assert_equal true, Commit.merge_or_skip_ci?(CommitReviewer::CI_SKIP_COMMIT_MESSAGE)
     assert_equal true, Commit.merge_or_skip_ci?(CommitReviewer::SKIP_CI_COMMIT_MESSAGE)
     assert_equal true, Commit.merge_or_skip_ci?(CommitReviewer::SKIP_CI_COMMIT_MESSAGE.upcase)
     assert_equal true, Commit.merge_or_skip_ci?(CommitReviewer::SKIP_CI_COMMIT_MESSAGE.upcase)
   end
 
-  test ".valid_author?" do
+  test '.valid_author?' do
     assert_equal true, Commit.valid_author?('Alan')
 
     CommitReviewer::INVALID_AUTHORS.each do |author_name|
@@ -26,7 +26,7 @@ class CommitTest < ActiveSupport::TestCase
     assert_includes commit.version, '12345'
   end
 
-  test "validates valid URL" do
+  test 'validates valid URL' do
     valid_url = [
       'https://github.com/ruby-bench/ruby-bench-web/blob/master/app/models/commit.rb',
       'http://github.com/ruby-bench/ruby-bench-web/blob/master/app/models/commit.rb'
@@ -38,7 +38,7 @@ class CommitTest < ActiveSupport::TestCase
     end
   end
 
-  test "validates invalid URL" do
+  test 'validates invalid URL' do
     invalid_url = [
       'httpgithub.com/ruby-bench/ruby-bench-web/',
       'INVLAID URL',
