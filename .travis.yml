@@ -24,6 +24,10 @@ before_install:
 script:
   - bundle exec rubocop
   - bundle exec rake test
+after_success:
+  - if [ "$TRAVIS_BRANCH" = "production" ]; then
+      ssh $DEPLOY_SERVER ./deploy
+    fi
 addons:
   postgresql: "9.3"
 services:
