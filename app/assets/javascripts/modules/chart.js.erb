@@ -71,6 +71,7 @@ var drawChart = function(chartClass) {
         series: $this.data('columns'),
         plotOptions: {
           series: {
+            turboThreshold: 5000,
             animation: false,
             point: {
               events: {

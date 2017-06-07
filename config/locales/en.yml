@@ -43,6 +43,7 @@ en:
       results: results
       show_last: Show the last
     releases:
+      compare: Compare with
       title: "%{repo_name} Releases Benchmarks"
       benchmark_types: *benchmark_types
       select_benchmark: *select_benchmark
@@ -85,6 +86,7 @@ en:
     contribute: Contribute
     discuss: Discuss
     sponsors: Sponsors
+    releases: Releases
 
   highcharts:
     subtitle:

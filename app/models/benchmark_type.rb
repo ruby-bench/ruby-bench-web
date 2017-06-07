@@ -1,5 +1,6 @@
 class BenchmarkType < ApplicationRecord
   default_scope { order("#{self.table_name}.category ASC") }
+  scope :all_except, -> (user) { where.not(id: user) }
 
   has_many :benchmark_runs, dependent: :destroy
 

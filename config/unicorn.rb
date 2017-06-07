@@ -13,8 +13,6 @@ if ENV['RAILS_ENV'] == 'production'
   pid "#{app_path}/tmp/pids/unicorn.pid"
 end
 
-timeout 30
-
 preload_app true
 
 before_fork do |server, worker|

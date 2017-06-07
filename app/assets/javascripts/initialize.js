@@ -1,10 +1,65 @@
+var onSelectChange = function (event) {
+  var $spinner = $('.spinner');
+
+  var $resultTypesForm = $('.result-types-form');
+  var xhr;
+  // http://stackoverflow.com/questions/4551175/how-to-cancel-abort-jquery-ajax-request
+  if (xhr && xhr.readyState !== 4) {
+    xhr.abort();
+  }
+
+  var organizationName = $resultTypesForm.data('organization-name');
+  var repoName = $resultTypesForm.data('repo-name');
+  var name = $resultTypesForm.data('name');
+
+  var resultType = $('#benchmark_run_benchmark_type').val() || "";
+  var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
+  var compareWithBenchmark = $('#benchmark_run_compare_with').val();
+
+  if(compareWithBenchmark) {
+    displayCompareUrlParam = "&compare_with=" + compareWithBenchmark;
+  } else {
+    displayCompareUrlParam = "";
+  }
+
+  if (benchmarkRunDisplayCount !== undefined) {
+    displayCountUrlParam = '&display_count=' + benchmarkRunDisplayCount;
+  } else {
+    displayCountUrlParam = '';
+  }
+
+  xhr = $.ajax({
+    url: ['', organizationName, repoName, name].join('/'),
+    type: 'GET',
+    data: {
+      result_type: resultType,
+      display_count: benchmarkRunDisplayCount,
+      compare_with: compareWithBenchmark
+    },
+    dataType: 'script',
+    beforeSend: function () {
+      $spinner.removeClass('hide');
+      $('#chart-container').empty();
+      $('html, body').animate({scrollTop: 0}, 0);
+
+      if (history && history.pushState) {
+        var newUrl =  '/' + organizationName +
+          '/' + repoName +
+          '/' + name +
+          '?result_type=' + resultType + displayCountUrlParam + displayCompareUrlParam;
+        history.pushState(null, '', newUrl);
+      }
+    },
+    complete: function () {
+      $spinner.addClass('hide');
+    }
+  });
+}
+
 $(document).on('turbolinks:load', function() {
   if (location.pathname) {
     $(".navbar-nav a[href='" + location.pathname + "']").addClass('current');
   }
-
-  var $resultTypesForm = $('.result-types-form');
-  var xhr;
 
   //Add left and right arrow keys to navigate benchmark types
   var $options = $('.result-types-form select.form-control:first option');
@@ -44,51 +99,5 @@ $(document).on('turbolinks:load', function() {
     e.preventDefault();  //prevent the default action (scroll / move caret)
   });
 
-  $('.result-types-form select').change(function (event) {
-    var $spinner = $('.spinner');
-
-    // http://stackoverflow.com/questions/4551175/how-to-cancel-abort-jquery-ajax-request
-    if (xhr && xhr.readyState !== 4) {
-      xhr.abort();
-    }
-
-    var organizationName = $resultTypesForm.data('organization-name');
-    var repoName = $resultTypesForm.data('repo-name');
-    var name = $resultTypesForm.data('name');
-
-    var resultType = $('.result-types-form select').val() || "";
-    var benchmarkRunDisplayCount = $('#benchmark_run_display_count').val();
-
-    if (benchmarkRunDisplayCount !== undefined) {
-      displayUrlParams = '&display_count=' + benchmarkRunDisplayCount;
-    } else {
-      displayUrlParams = '';
-    }
-
-    xhr = $.ajax({
-      url: ['', organizationName, repoName, name].join('/'),
-      type: 'GET',
-      data: {
-        result_type: resultType,
-        display_count: benchmarkRunDisplayCount
-      },
-      dataType: 'script',
-      beforeSend: function () {
-        $spinner.toggleClass('hide');
-        $('#chart-container').empty();
-        $('html, body').animate({scrollTop: 0}, 0);
-
-        if (history && history.pushState) {
-          var newUrl =  '/' + organizationName +
-                        '/' + repoName +
-                        '/' + name +
-                        '?result_type=' + resultType + displayUrlParams;
-          history.pushState(null, '', newUrl);
-        }
-      },
-      complete: function () {
-        $spinner.toggleClass('hide');
-      }
-    });
-  });
+  $('.result-types-form select').change(onSelectChange);
 });
