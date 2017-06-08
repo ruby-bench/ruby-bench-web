@@ -20,6 +20,7 @@ gem 'coffee-rails'
 gem 'responders'
 gem 'jbuilder'
 gem 'msgpack'
+gem 'octokit'
 
 group :development do
   gem 'spring'

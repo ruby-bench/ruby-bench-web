@@ -110,6 +110,8 @@ GEM
     factory_girl_rails (4.7.0)
       factory_girl (~> 4.7.0)
       railties (>= 3.0.0)
+    faraday (0.12.1)
+      multipart-post (>= 1.2, < 3)
     ffi (1.9.14)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -150,12 +152,15 @@ GEM
       metaclass (~> 0.0.1)
     msgpack (1.0.2)
     multi_json (1.12.1)
+    multipart-post (2.0.0)
     mustermann (1.0.0.beta2)
     net-ssh (3.2.0)
     newrelic_rpm (3.17.0.325)
     nio4r (1.2.1)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
+    octokit (4.7.0)
+      sawyer (~> 0.8.0, >= 0.5.3)
     parallel (1.11.2)
     parser (2.4.0.0)
       ast (~> 2.2)
@@ -243,6 +248,9 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    sawyer (0.8.1)
+      addressable (>= 2.3.5, < 2.6)
+      faraday (~> 0.8, < 1.0)
     selenium-webdriver (2.53.4)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
@@ -327,6 +335,7 @@ DEPENDENCIES
   net-ssh
   newrelic_rpm
   nokogiri (>= 1.6.8)
+  octokit
   pg
   poltergeist
   puma
