@@ -7,7 +7,7 @@ class ManualRunner
 
   def run_commits_since(date)
     fetched_commits = fetch_commits_since(date)
-    formated_commits = format_commits(fetched_commits)
+    formatted_commits = format_commits(fetched_commits)
 
     CommitsRunner.run(formated_commits)
   end

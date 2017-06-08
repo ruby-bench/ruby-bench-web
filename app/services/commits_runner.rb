@@ -1,7 +1,6 @@
-module CommitsRunner
-  module_function
+class CommitsRunner
 
-  def run(commits)
+  def self.run(commits)
     commits.each do |commit|
       if(valid?(commit))
         create(commit)
@@ -10,11 +9,13 @@ module CommitsRunner
     end
   end
 
-  def valid?(commit)
+  private
+
+  def self.valid?(commit)
     !Commit.merge_or_skip_ci?(commit[:message]) && Commit.valid_author?(commit[:author_name])
   end
 
-  def create(commit)
+  def self.create(commit)
     Commit.find_or_create_by(sha1: commit[:sha]) do |c|
       c.url = commit[:url]
       c.message = commit[:message]
@@ -22,4 +23,5 @@ module CommitsRunner
       c.created_at = commit[:created_at]
     end
   end
+
 end
