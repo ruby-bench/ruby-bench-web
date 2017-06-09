@@ -1,6 +1,6 @@
 class ManualRunner
   def initialize(repo)
-    raise "Repo doesn't exist" unless Repo.exist?(repo)
+    raise "Repo doesn't exist" unless Repo.exists?(repo.id)
     @repo = repo
     @octokit = Octokit::Client.new(access_token: Rails.application.secrets.github_api_token)
   end
@@ -19,7 +19,7 @@ class ManualRunner
   end
 
   def run_commits(page)
-    fetched_commits = @octokit.commits("#{repo.organization.name}/#{repo.name}", per_page: 100, page: page)
+    fetched_commits = @octokit.commits("#{@repo.organization.name}/#{@repo.name}", per_page: 100, page: page)
     formatted_commits = format_commits(fetched_commits)
     CommitsRunner.run(formatted_commits)
 
@@ -38,7 +38,7 @@ class ManualRunner
         url: commit['html_url'],
         created_at: commit['commit']['author']['date'],
         author: {
-          name: commit['author']['name']
+          name: commit['commit']['author']['name']
         }
       }
     end
