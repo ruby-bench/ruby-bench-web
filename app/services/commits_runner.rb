@@ -1,8 +1,7 @@
 class CommitsRunner
-
   def self.run(commits)
     commits.each do |commit|
-      if(valid?(commit))
+      if (valid?(commit))
         create(commit)
         BenchmarkPool.enqueue(commit[:repo][:name], commit[:sha])
       end
@@ -23,5 +22,4 @@ class CommitsRunner
       c.created_at = commit[:created_at]
     end
   end
-
 end

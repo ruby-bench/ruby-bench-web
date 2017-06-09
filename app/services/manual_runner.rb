@@ -1,5 +1,4 @@
 class ManualRunner
-
   def initialize(repo)
     raise "Repo doesn't exist" unless Repo.exist?(repo)
     @repo = repo
@@ -9,7 +8,7 @@ class ManualRunner
     fetched_commits = fetch_commits_since(date)
     formatted_commits = format_commits(fetched_commits)
 
-    CommitsRunner.run(formated_commits)
+    CommitsRunner.run(formatted_commits)
   end
 
   private

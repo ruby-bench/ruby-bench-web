@@ -1,9 +1,10 @@
 require 'test_helper'
 
 class CommitsRunnerTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   setup do
-    @repo = create(:repo)
-    BenchmarkPool.stubs(:enqueue)
+    @repo = create(:repo, name: 'rails')
   end
 
   test '#run' do
@@ -26,6 +27,7 @@ class CommitsRunnerTest < ActiveSupport::TestCase
     CommitsRunner.run(commits)
 
     expect_created(commits)
+    assert_enqueued_jobs(commits.count)
   end
 
   def expect_created(commits_hashes)
