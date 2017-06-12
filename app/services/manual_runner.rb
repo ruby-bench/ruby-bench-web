@@ -31,15 +31,10 @@ class ManualRunner
       {
         sha: commit['sha'],
         message: commit['commit']['message'],
-        repo: {
-          id: @repo.id,
-          name: @repo.name
-        },
+        repo: @repo,
         url: commit['html_url'],
         created_at: commit['commit']['author']['date'],
-        author: {
-          name: commit['commit']['author']['name']
-        }
+        author_name: commit['commit']['author']['name']
       }
     end
   end

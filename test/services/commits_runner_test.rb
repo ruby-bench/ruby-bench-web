@@ -12,13 +12,8 @@ class CommitsRunnerTest < ActiveSupport::TestCase
       {
         sha: '12345',
         message: 'My beautiful commit message',
-        repo: {
-          id: @repo.id,
-          name: @repo.name
-        },
-        author: {
-          name: 'bmarkons'
-        },
+        repo: @repo,
+        author_name: 'bmarkons',
         url: 'https://github.com/commit',
         created_at: 12345
       }
@@ -34,12 +29,12 @@ class CommitsRunnerTest < ActiveSupport::TestCase
     commits_hashes.each do |hash|
       commit = Commit.find_by!(sha1: hash[:sha])
 
-      assert_equal commit.sha1, hash[:sha]
-      assert_equal commit.message, hash[:message]
-      assert_equal commit.repo.id, hash[:repo][:id]
-      assert_equal commit.repo.name, hash[:repo][:name]
-      assert_equal commit.url, hash[:url]
-      refute_equal commit.created_at, hash[:created_at]
+      assert_equal hash[:sha], commit.sha1
+      assert_equal hash[:message], commit.message
+      assert_equal hash[:repo].id, commit.repo.id
+      assert_equal hash[:repo].name, commit.repo.name
+      assert_equal hash[:url], commit.url
+      refute_equal hash[:created_at], commit.created_at
     end
   end
 end

@@ -23,9 +23,8 @@ class ManualRunnerTest < ActiveSupport::TestCase
         assert commit[:message]
         assert commit[:url]
         assert commit[:created_at]
-        assert commit[:repo][:id]
-        assert commit[:repo][:name]
-        assert commit[:author][:name]
+        assert commit[:repo]
+        assert commit[:author_name]
       end
     end
 
