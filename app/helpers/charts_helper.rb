@@ -27,12 +27,8 @@ module ChartsHelper
 
   def versions_to_html(columns)
     columns.each do |column|
-      column[:data].map do |point|
-        if point.kind_of?(Array)
-          [chart_version_to_html(point[0]), point[1]]
-        else
-          point
-        end
+      if column[:data].first.kind_of?(Array)
+        column[:data] = column[:data].map { |point| [chart_version_to_html(point[0]), point[1]] }
       end
     end
   end
