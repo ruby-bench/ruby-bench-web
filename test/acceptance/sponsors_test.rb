@@ -2,6 +2,8 @@ require 'acceptance/test_helper'
 
 class SponsorsTest < AcceptanceTest
   test 'should display same number of sponsors' do
+    skip('Sponsors test is flaky')
+
     visit root_path
 
     within 'nav' do
@@ -13,6 +15,8 @@ class SponsorsTest < AcceptanceTest
   end
 
   test 'should have all sponsor names' do
+    skip('Sponsors test is flaky')
+
     if SponsorsData.count > 0
       visit root_path
       click_link 'Sponsors', match: :first
