@@ -10,7 +10,7 @@ module ChartsHelper
   # }
   #
   # and this function turns it into:
-  # Commit: b6589fc
+  # Commit Sha: b6589fc
   # Commit Date: 2017-02-23T16:20:13.338Z
   # Commit Message: fix something
   # ruby 2.2.0dev
