@@ -15,6 +15,9 @@ var drawChart = function(chartClass) {
   $(chartClass).each(function() {
     $this = $(this);
 
+    escaped = $this.attr('data-categories');
+    $this.attr('data-categories', escaped.replace(/\\#/g, "#"));
+
     if($this.length) {
       $this.highcharts({
         chart: {
