@@ -1,6 +1,6 @@
 - if script_url = benchmark.script_url
   %h2.l-align-center
-    = t('repos.script_title', graph_name: benchmark_name)
+    = t('repos.script_title', graph_name: benchmark.category.humanize)
 
     = link_to benchmark.github_url, class: 'btn btn-primary', target: '_link' do
       = t('repos.view_github')
