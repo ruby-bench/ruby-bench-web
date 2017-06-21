@@ -72,4 +72,15 @@ class CompareBenchmarks < AcceptanceTest
       end
     end
   end
+
+  test 'User should be able to see both scripts' do
+    visit commits_path(
+      organization_name: @rails_org.name,
+      repo_name: @rails_repo.name,
+      result_type: @active_record_scope_all.category,
+      compare_with: @sequel_scope_all.category
+    )
+
+    assert page.has_css?('.codehilite', count: 2)
+  end
 end
