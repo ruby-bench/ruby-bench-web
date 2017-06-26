@@ -30,11 +30,7 @@ after_success:
       openssl aes-256-cbc -K $encrypted_e5503b6e115e_key -iv $encrypted_e5503b6e115e_iv
         -in deploy/deploy_rsa.enc -out /tmp/deploy_rsa -d;
 
-      eval "$(ssh-agent -s)";
-      chmod 600 /tmp/deploy_rsa;
-      ssh-add /tmp/deploy_rsa;
-
-      ssh -o StrictHostKeyChecking=no root@$DEPLOY_HOST ./deploy;
+      ssh -i /tmp/deploy_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no root@$DEPLOY_HOST ./deploy;
     fi
 addons:
   postgresql: "9.3"
