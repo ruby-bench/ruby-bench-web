@@ -39,7 +39,6 @@ group :test do
   gem 'mocha'
   gem 'vcr'
   gem 'webmock'
-  gem 'capybara', '2.7'
   gem 'launchy'
   gem 'selenium-webdriver', '~> 2.53'
   gem 'poltergeist'
@@ -47,6 +46,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'capybara-screenshot'
+  gem 'minitest-rails-capybara'
 end
 
 group :production, :development do

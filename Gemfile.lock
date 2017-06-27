@@ -147,6 +147,20 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.9.1)
+    minitest-capybara (0.8.2)
+      capybara (~> 2.2)
+      minitest (~> 5.0)
+      rake
+    minitest-metadata (0.6.0)
+      minitest (>= 4.7, < 6.0)
+    minitest-rails (3.0.0)
+      minitest (~> 5.8)
+      railties (~> 5.0)
+    minitest-rails-capybara (3.0.1)
+      capybara (~> 2.7)
+      minitest-capybara (~> 0.8)
+      minitest-metadata (~> 0.6)
+      minitest-rails (~> 3.0)
     minitest-stub-const (0.5)
     mocha (1.2.1)
       metaclass (~> 0.0.1)
@@ -317,7 +331,6 @@ DEPENDENCIES
   bugsnag
   bullet
   byebug
-  capybara (= 2.7)
   capybara-screenshot
   coffee-rails
   database_cleaner
@@ -329,6 +342,7 @@ DEPENDENCIES
   jquery-ui-rails
   launchy
   logster
+  minitest-rails-capybara
   minitest-stub-const
   mocha
   msgpack
@@ -361,4 +375,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.14.6
+   1.15.1
