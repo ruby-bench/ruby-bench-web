@@ -1,9 +1,9 @@
 require './test/test_helper'
+require 'minitest/rails/capybara'
 
 Dir['./test/acceptance/support/**/*'].each { |file| require file }
 
-class AcceptanceTest < ActionDispatch::IntegrationTest
-  include Capybara::DSL
+class AcceptanceTest < Capybara::Rails::TestCase
   include Capybara::JavaScriptDriver
   include Capybara::Screenshot::MiniTestPlugin
 
