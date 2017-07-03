@@ -21,26 +21,26 @@ class ReposController < ApplicationController
 
   def commits
     unless @benchmark.blank?
-      @charts = @benchmark.benchmark_result_types.map do |benchmark_type|
-        chart_for(benchmark_type)
+      @charts = @benchmark.result_types.map do |result_type|
+        chart_for(result_type)
       end.compact
     end
   end
 
   def releases
     unless @benchmark.blank?
-      @charts = @benchmark.benchmark_result_types.map do |benchmark_result_type|
+      @charts = @benchmark.result_types.map do |result_type|
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
-          @benchmark.category, benchmark_result_type
+          @benchmark.label, result_type
         )
 
         next if benchmark_runs.empty?
         benchmark_runs = BenchmarkRun.sort_by_initiator_version(benchmark_runs)
-        if latest_benchmark_run = BenchmarkRun.latest_commit_benchmark_run(@benchmark.category, benchmark_result_type)
+        if latest_benchmark_run = BenchmarkRun.latest_commit_benchmark_run(@benchmark.label, result_type)
           benchmark_runs << latest_benchmark_run
         end
 
-        chart_builder = ChartBuilder.new(benchmark_runs, benchmark_result_type)
+        chart_builder = ChartBuilder.new(benchmark_runs, result_type)
         chart_builder.build_columns do |benchmark_run|
           environment = YAML.load(benchmark_run.environment)
 
@@ -61,30 +61,30 @@ class ReposController < ApplicationController
 
   private
 
-  def chart_for(benchmark_type)
-    if already_cached?(benchmark_type)
-      chart_from_cache(benchmark_type)
+  def chart_for(result_type)
+    if already_cached?(result_type)
+      chart_from_cache(result_type)
     else
-      build_and_cache_chart(benchmark_type)
+      build_and_cache_chart(result_type)
     end
   end
 
-  def already_cached?(benchmark_type)
-    $redis.exists(@cache_keys[benchmark_type])
+  def already_cached?(result_type)
+    $redis.exists(@cache_keys[result_type])
   end
 
-  def chart_from_cache(benchmark_type)
-    packed_chart = $redis.get(@cache_keys[benchmark_type])
+  def chart_from_cache(result_type)
+    packed_chart = $redis.get(@cache_keys[result_type])
     unpacked_chart = MessagePack.unpack(packed_chart, symbolize_keys: true)
-    ChartBuilder.construct_from_cache(unpacked_chart, benchmark_type)
+    ChartBuilder.construct_from_cache(unpacked_chart, result_type)
   end
 
-  def build_and_cache_chart(benchmark_type)
-    benchmark_runs = benchmark_runs_for(benchmark_type)
+  def build_and_cache_chart(result_type)
+    benchmark_runs = benchmark_runs_for(result_type)
 
     unless benchmark_runs.empty?
-      chart = build_chart(benchmark_runs, benchmark_type)
-      cache(chart, benchmark_type)
+      chart = build_chart(benchmark_runs, result_type)
+      cache(chart, result_type)
 
       chart
     else
@@ -92,24 +92,24 @@ class ReposController < ApplicationController
     end
   end
 
-  def benchmark_runs_for(benchmark_type)
+  def benchmark_runs_for(result_type)
     BenchmarkRun
-      .fetch_commit_benchmark_runs(@benchmark.category, benchmark_type, @display_count)
+      .fetch_commit_benchmark_runs(@benchmark.label, result_type, @display_count)
       .sort_by { |run| run.initiator.created_at }
   end
 
-  def comparing_runs_for(benchmark_type)
+  def comparing_runs_for(result_type)
     BenchmarkRun
-      .fetch_commit_benchmark_runs(@comparing_benchmark.category, benchmark_type, @display_count)
+      .fetch_commit_benchmark_runs(@comparing_benchmark.label, result_type, @display_count)
       .sort_by { |run| run.initiator.created_at }
   end
 
-  def build_chart(benchmark_runs, benchmark_type)
-    comparing_runs = comparing_runs_for(benchmark_type) if @comparing_benchmark.present?
+  def build_chart(benchmark_runs, result_type)
+    comparing_runs = comparing_runs_for(result_type) if @comparing_benchmark.present?
 
     chart_builder = ChartBuilder.new(
       benchmark_runs,
-      benchmark_type,
+      result_type,
       comparing_runs
     )
 
@@ -135,9 +135,9 @@ class ReposController < ApplicationController
     chart_builder
   end
 
-  def cache(chart, benchmark_type)
+  def cache(chart, result_type)
     $redis.set(
-      @cache_keys[benchmark_type],
+      @cache_keys[result_type],
       {
         datasets: chart.columns,
         versions: chart.categories
@@ -154,11 +154,11 @@ class ReposController < ApplicationController
   end
 
   def set_benchmark
-    @benchmark = @repo.benchmark_types.find_by_category(params[:result_type])
+    @benchmark = @repo.benchmarks.find_by_category(params[:result_type])
   end
 
   def set_benchmark_to_compare_with
-    @comparing_benchmark = BenchmarkType.find_by_category(params[:compare_with])
+    @comparing_benchmark = Benchmark.find_by_category(params[:compare_with])
   end
 
   def set_display_count
@@ -179,13 +179,13 @@ class ReposController < ApplicationController
   end
 
   def set_repo_benchmarks
-    @benchmarks = @repo.benchmark_types
+    @benchmarks = @repo.benchmarks
   end
 
   def set_comparable_benchmarks
     @comparable_benchmarks =
       if @benchmark.present?
-        BenchmarkType.all_except(@benchmark)
+        Benchmark.all_except(@benchmark)
       else
         []
       end
@@ -195,12 +195,12 @@ class ReposController < ApplicationController
     unless @benchmark.blank?
       @cache_keys = {}
 
-      @benchmark.benchmark_result_types.each do |benchmark_type|
-        @cache_keys[benchmark_type] =
+      @benchmark.result_types.each do |result_type|
+        @cache_keys[result_type] =
           if @comparing_benchmark.present?
-            "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}:#{BenchmarkRun.charts_cache_key(@comparing_benchmark, benchmark_type)}"
+            "#{BenchmarkRun.charts_cache_key(@benchmark, result_type)}:#{@display_count}:#{BenchmarkRun.charts_cache_key(@comparing_benchmark, result_type)}"
           else
-            "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}"
+            "#{BenchmarkRun.charts_cache_key(@benchmark, result_type)}:#{@display_count}"
           end
       end
     end
