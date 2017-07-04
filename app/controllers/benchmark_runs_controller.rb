@@ -45,7 +45,7 @@ class BenchmarkRunsController < APIController
   end
 
   def benchmark_params
-    params.require(:benchmark).permit(.label, :script_url, :digest)
+    params.require(:benchmark).permit(:label, :script_url, :digest)
   end
 
   def result_type_params
