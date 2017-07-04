@@ -18,20 +18,20 @@ class ChartBuilder
   #   name: "Memory used",
   #   unit: "Bytes"
   # }
-  attr_reader :benchmark_result_type
+  attr_reader :result_type
 
   # `cache_read` looks like
   # { datasets: [{ name: "benchmark1", data: [1.1, 1.2] }], versions: [version_hash, version_hash] }
-  def self.construct_from_cache(cache_read, benchmark_result_type)
-    chart_builder = self.new([], benchmark_result_type)
+  def self.construct_from_cache(cache_read, result_type)
+    chart_builder = self.new([], result_type)
 
     chart_builder.categories = cache_read[:versions]
     chart_builder.columns = cache_read[:datasets]
     chart_builder
   end
 
-  def initialize(benchmark_runs, benchmark_result_type, comparing_runs = [])
-    @benchmark_result_type = benchmark_result_type
+  def initialize(benchmark_runs, result_type, comparing_runs = [])
+    @result_type = result_type
     @benchmark_runs = benchmark_runs
     @columns = {}
     @comparing_runs = comparing_runs
@@ -57,8 +57,8 @@ class ChartBuilder
 
       run.result.each do |key, value|
         if @comparing_runs.present?
-          columns["#{key}_#{run.benchmark_type.category}"] ||= []
-          columns["#{key}_#{run.benchmark_type.category}"] << [version, value.to_f]
+          columns["#{key}_#{run.benchmark.label}"] ||= []
+          columns["#{key}_#{run.benchmark.label}"] << [version, value.to_f]
         else
           columns[key] ||= []
           columns[key] << value.to_f
