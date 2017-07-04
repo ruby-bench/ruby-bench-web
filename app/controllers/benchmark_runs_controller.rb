@@ -11,27 +11,27 @@ class BenchmarkRunsController < APIController
         initiator = repo.releases.find_or_create_by!(version: params[:version])
       end
 
-    benchmark_type = repo.benchmark_types.find_or_create_by!(
-      category: benchmark_type_params[:category],
-      script_url: benchmark_type_params[:script_url]
+    benchmark = repo.benchmarks.find_or_create_by!(
+      label: benchmark_params[:label],
+      script_url: benchmark_params[:script_url]
     )
 
-    benchmark_type.update_attributes(digest: benchmark_type_params[:digest])
+    benchmark.update_attributes(digest: benchmark_params[:digest])
 
-    benchmark_result_type = BenchmarkResultType.find_or_create_by!(
-      benchmark_result_type_params
+    result_type = ResultType.find_or_create_by!(
+      result_type_params
     )
 
     benchmark_run = BenchmarkRun.find_or_initialize_by(
-      initiator: initiator, benchmark_type: benchmark_type,
-      benchmark_result_type: benchmark_result_type
+      initiator: initiator, benchmark: benchmark,
+      result_type: result_type
     )
 
     benchmark_run.update_attributes(benchmark_run_params)
     benchmark_run.result = params[:benchmark_run][:result].to_unsafe_h
     benchmark_run.save!
 
-    $redis.keys("#{BenchmarkRun.charts_cache_key(benchmark_type, benchmark_result_type)}:*").each do |key|
+    $redis.keys("#{BenchmarkRun.charts_cache_key(benchmark, result_type)}:*").each do |key|
       $redis.del(key)
     end
 
@@ -44,11 +44,11 @@ class BenchmarkRunsController < APIController
     params.require(:benchmark_run).permit(:environment)
   end
 
-  def benchmark_type_params
-    params.require(:benchmark_type).permit(:category, :script_url, :digest)
+  def benchmark_params
+    params.require(:benchmark).permit(:label, :script_url, :digest)
   end
 
-  def benchmark_result_type_params
-    params.require(:benchmark_result_type).permit(:name, :unit)
+  def result_type_params
+    params.require(:result_type).permit(:name, :unit)
   end
 end

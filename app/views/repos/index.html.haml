@@ -3,19 +3,19 @@
 
   %table.table.table-striped
     %thead
-      %th= BenchmarkType.human_attribute_name(:category)
+      %th= Benchmark.human_attribute_name(:label)
       %th= t('.sparklines')
     %tbody
-      - @charts.each do |category, outputs|
+      - @charts.each do |label, outputs|
         %tr
           %td
-            %h5= link_to category, commits_path(organization_name: @organization.name,
+            %h5= link_to label, commits_path(organization_name: @organization.name,
               repo_name: @repo.name,
-              result_type: category)
+              benchmark_label: label)
 
           %td
             - outputs.each do |chart|
-              %h5= chart[:benchmark_result_type]
+              %h5= chart[:result_type]
 
               .sparkline{ data: { columns: chart[:columns].to_json } }
                 .spinner2

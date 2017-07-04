@@ -73,17 +73,17 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   test 'old benchmark_runs are invalidated' do
     @repo = create(:repo)
     release = create(:release, repo: @repo)
-    bm_type = create(:benchmark_type, repo: @repo)
+    bm_type = create(:benchmark, repo: @repo)
 
     bm_run = create(:release_benchmark_run,
-      benchmark_type: bm_type, validity: true, initiator: release
+      benchmark: bm_type, validity: true, initiator: release
     )
 
     post_results(version: release.version,
       repo: @repo.name,
       organization: @repo.organization.name,
-      benchmark_type: {
-        category: bm_type.category,
+      benchmark: {
+        label: bm_type.label,
         script_url: bm_type.script_url,
         digest: 'digestchanged'
       })
@@ -95,10 +95,10 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
 
   def assert_results(commit_or_release)
     benchmark_run = BenchmarkRun.first
-    benchmark_type = benchmark_run.benchmark_type
-    assert_equal 'allocated_objects', benchmark_type.category
-    assert_equal 'http://something.com', benchmark_type.script_url
-    assert_equal 'thisisadigest', benchmark_type.digest
+    benchmark = benchmark_run.benchmark
+    assert_equal 'allocated_objects', benchmark.label
+    assert_equal 'http://something.com', benchmark.script_url
+    assert_equal 'thisisadigest', benchmark.digest
     assert_equal commit_or_release, benchmark_run.initiator
     assert_equal @repo, benchmark_run.initiator.repo
     assert_equal @repo.organization, benchmark_run.initiator.repo.organization
@@ -107,12 +107,12 @@ class BenchmarkRunsTest < ActionDispatch::IntegrationTest
   def post_results(params = {}, attribute_params = {})
     post('/benchmark_runs',
       params: {
-        benchmark_result_type: {
+        result_type: {
           name: 'Execution time',
           unit: 'Seconds'
         },
-        benchmark_type: {
-          category: 'allocated_objects',
+        benchmark: {
+          label: 'allocated_objects',
           script_url: 'http://something.com',
           digest: 'thisisadigest'
         },

@@ -7,8 +7,8 @@
           = t('repos.select_benchmark')
 
         - @benchmarks.each do |benchmark|
-          %option{ value: benchmark.category, selected: @benchmark.present? && @benchmark.category == benchmark.category }
-            = benchmark.category
+          %option{ value: benchmark.label, selected: @benchmark.present? && @benchmark.label == benchmark.label }
+            = benchmark.label
 
     - if name == 'commits'
       .input-group
@@ -24,5 +24,4 @@
           %option{ value: "", selected: @comparing_benchmark.nil?, disabled: true }
             = @benchmark.blank? ? "" : t('repos.select_benchmark')
           - @comparable_benchmarks.each do |benchmark|
-            %option{ value: benchmark.category, selected: @comparing_benchmark.present? && @comparing_benchmark.category == benchmark.category }
-              = benchmark.category
+            %option{ value: benchmark.label, selected: @comparing_benchmark.present? && @comparing_benchmark.label == benchmark.label }

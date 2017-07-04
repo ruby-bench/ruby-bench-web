@@ -1,18 +1,18 @@
-class BenchmarkType < ApplicationRecord
-  default_scope { order("#{self.table_name}.category ASC") }
+class Benchmark < ApplicationRecord
+  default_scope { order('benchmarks.label ASC') }
   scope :all_except, -> (user) { where.not(id: user) }
 
   has_many :benchmark_runs, dependent: :destroy
 
-  has_many :benchmark_result_types, -> {
-    unscope(:order).order('benchmark_result_types.id').distinct
+  has_many :result_types, -> {
+    unscope(:order).order('benchmarks.id').distinct
   }, through: :benchmark_runs
 
   belongs_to :repo
 
   after_update :check_benchmark_runs_validity
 
-  validates :category, presence: true, uniqueness: { scope: [:repo_id, :script_url] }
+  validates :label, presence: true, uniqueness: { scope: [:repo_id, :script_url] }
   validates :script_url, presence: true
 
   def github_url

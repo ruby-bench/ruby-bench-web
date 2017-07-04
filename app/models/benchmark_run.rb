@@ -1,27 +1,27 @@
 class BenchmarkRun < ApplicationRecord
   belongs_to :initiator, polymorphic: true
-  belongs_to :benchmark_type
-  belongs_to :benchmark_result_type
+  belongs_to :benchmark
+  belongs_to :result_type
 
   validates :result, presence: true
   validates :environment, presence: true
   validates :initiator_id, presence: true
   validates :initiator_type, presence: true
-  validates :benchmark_type_id, presence: true
-  validates :benchmark_result_type_id, presence: true
+  validates :benchmark_id, presence: true
+  validates :result_type_id, presence: true
   validates :validity, presence: true
 
   # FIXME: Remove this and order by Commit#created_at
   default_scope { order("#{self.table_name}.created_at DESC") }
 
-  scope :fetch_commit_benchmark_runs, ->(form_result_type, benchmark_result_type, limit) {
+  scope :fetch_commit_benchmark_runs, -> (benchmark_label, result_type, limit) {
     unscope(:order)
-    .joins(:benchmark_type)
+    .joins(:benchmark)
     .joins('INNER JOIN commits ON commits.id = benchmark_runs.initiator_id')
     .includes(:initiator)
     .where(
-      benchmark_types: { category: form_result_type },
-      benchmark_result_type: benchmark_result_type,
+      benchmarks: { label: benchmark_label },
+      benchmark: result_type,
       initiator_type: 'Commit',
       validity: true
     )
@@ -29,12 +29,12 @@ class BenchmarkRun < ApplicationRecord
     .limit(limit)
   }
 
-  scope :fetch_release_benchmark_runs, ->(form_result_type, benchmark_result_type) {
-    joins(:benchmark_type)
+  scope :fetch_release_benchmark_runs, -> (benchmark_label, result_type) {
+    joins(:benchmark)
     .includes(:initiator)
     .where(
-      benchmark_types: { category: form_result_type },
-      benchmark_result_type: benchmark_result_type,
+      benchmarks: { label: benchmark_label },
+      result_type: result_type,
       initiator_type: 'Release',
       validity: true
     )
@@ -54,19 +54,19 @@ class BenchmarkRun < ApplicationRecord
     end
   end
 
-  def self.latest_commit_benchmark_run(benchmark_type, benchmark_result_type)
+  def self.latest_commit_benchmark_run(benchmark, result_type)
     self.unscope(:order)
-      .joins('INNER JOIN commits ON commits.id = benchmark_runs.initiator_id')
-      .where(
-        initiator_type: 'Commit',
-        benchmark_result_type: benchmark_result_type,
-        benchmark_type: benchmark_type
-      )
-      .order('commits.created_at DESC')
-      .first
+    .joins('INNER JOIN commits ON commits.id = benchmark_runs.initiator_id')
+    .where(
+      initiator_type: 'Commit',
+      result_type: result_type,
+      benchmark: benchmark
+    )
+    .order('commits.created_at DESC')
+    .first
   end
 
-  def self.charts_cache_key(benchmark_type, benchmark_result_type)
-    "charts:#{benchmark_type.id}:#{benchmark_result_type.id}"
+  def self.charts_cache_key(benchmark, result_type)
+    "charts:#{benchmark.id}:#{result_type.id}"
   end
 end
