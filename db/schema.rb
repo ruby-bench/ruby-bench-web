@@ -10,30 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161215124119) do
+ActiveRecord::Schema.define(version: 20170704094146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
-  create_table "benchmark_result_types", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "unit",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name", "unit"], name: "index_benchmark_result_types_on_name_and_unit", unique: true, using: :btree
-  end
-
   create_table "benchmark_runs", force: :cascade do |t|
-    t.hstore   "result",                                  null: false
-    t.text     "environment",                             null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.hstore   "result",                           null: false
+    t.text     "environment",                      null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.string   "initiator_type"
     t.integer  "initiator_id"
-    t.integer  "benchmark_type_id",        default: 0,    null: false
-    t.integer  "benchmark_result_type_id",                null: false
-    t.boolean  "validity",                 default: true, null: false
+    t.integer  "benchmark_type_id", default: 0,    null: false
+    t.integer  "result_type_id",                   null: false
+    t.boolean  "validity",          default: true, null: false
     t.index ["benchmark_type_id"], name: "index_benchmark_runs_on_benchmark_type_id", using: :btree
     t.index ["initiator_type", "initiator_id"], name: "index_benchmark_runs_on_initiator_type_and_initiator_id", using: :btree
   end
@@ -85,6 +77,14 @@ ActiveRecord::Schema.define(version: 20161215124119) do
     t.index ["name", "organization_id"], name: "index_repos_on_name_and_organization_id", unique: true, using: :btree
     t.index ["organization_id"], name: "index_repos_on_organization_id", using: :btree
     t.index ["url"], name: "index_repos_on_url", unique: true, using: :btree
+  end
+
+  create_table "result_types", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.string   "unit",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "unit"], name: "index_result_types_on_name_and_unit", unique: true, using: :btree
   end
 
 end
