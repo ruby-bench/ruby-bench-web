@@ -14,10 +14,10 @@ class ReposTest < ActionDispatch::IntegrationTest
   end
 
   test 'JSON generation works when there is one chart' do
-    benchmark_type = create(:benchmark_type)
-    benchmark_result_type = create(:benchmark_result_type)
+    benchmark = create(:benchmark)
+    result_type = create(:result_type)
 
-    repo = benchmark_type.repo
+    repo = benchmark.repo
     org = repo.organization
 
     commit = create(:commit, repo: repo)
@@ -25,19 +25,19 @@ class ReposTest < ActionDispatch::IntegrationTest
 
     benchmark_run = create(
       :commit_benchmark_run,
-      benchmark_result_type: benchmark_result_type,
-      benchmark_type: benchmark_type,
+      result_type: result_type,
+      benchmark: benchmark,
       initiator: commit
     )
 
     benchmark_run2 = create(
       :commit_benchmark_run,
-      benchmark_result_type: benchmark_result_type,
-      benchmark_type: benchmark_type,
+      result_type: result_type,
+      benchmark: benchmark,
       initiator: later_commit
     )
 
-    get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark_type.category}",
+    get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark.label}",
       params: { display_count: 2 }
 
     res = JSON.parse(response.body, symbolize_names: true)
@@ -52,11 +52,11 @@ class ReposTest < ActionDispatch::IntegrationTest
   end
 
   test 'JSON generation works when there are two charts' do
-    benchmark_type = create(:benchmark_type)
-    benchmark_result_type = create(:benchmark_result_type)
-    benchmark_result_type2 = create(:benchmark_result_type)
+    benchmark = create(:benchmark)
+    result_type = create(:result_type)
+    result_type2 = create(:result_type)
 
-    repo = benchmark_type.repo
+    repo = benchmark.repo
     org = repo.organization
 
     commit = create(:commit, repo: repo)
@@ -64,31 +64,31 @@ class ReposTest < ActionDispatch::IntegrationTest
 
     benchmark_run = create(
       :commit_benchmark_run,
-      benchmark_result_type: benchmark_result_type,
-      benchmark_type: benchmark_type,
+      result_type: result_type,
+      benchmark: benchmark,
       initiator: commit
     )
     benchmark_run2 = create(
       :commit_benchmark_run,
-      benchmark_result_type: benchmark_result_type,
-      benchmark_type: benchmark_type,
+      result_type: result_type,
+      benchmark: benchmark,
       initiator: later_commit
     )
 
     benchmark_run3 = create(
       :commit_benchmark_run,
-      benchmark_result_type: benchmark_result_type2,
-      benchmark_type: benchmark_type,
+      result_type: result_type2,
+      benchmark: benchmark,
       initiator: commit
     )
     benchmark_run3 = create(
       :commit_benchmark_run,
-      benchmark_result_type: benchmark_result_type2,
-      benchmark_type: benchmark_type,
+      result_type: result_type2,
+      benchmark: benchmark,
       initiator: later_commit
     )
 
-    get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark_type.category}",
+    get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark.label}",
       params: { display_count: 2 }
 
     res = JSON.parse(response.body, symbolize_names: true)
@@ -103,12 +103,12 @@ class ReposTest < ActionDispatch::IntegrationTest
   end
 
   test '#JSON generation works when there are no charts' do
-    benchmark_type = create(:benchmark_type)
-    benchmark_result_type = create(:benchmark_result_type)
-    repo = benchmark_type.repo
+    benchmark = create(:benchmark)
+    result_type = create(:result_type)
+    repo = benchmark.repo
     org = repo.organization
 
-    get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark_type.category}",
+    get "/#{org.name}/#{repo.name}/commits.json?result_type=#{benchmark.label}",
       params: { display_count: 2 }
 
     res = JSON.parse(response.body, symbolize_names: true)

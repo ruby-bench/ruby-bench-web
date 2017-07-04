@@ -18,36 +18,36 @@ class ViewBenchmarkGraphCommitModalTest < AcceptanceTest
       Capybara.current_driver = :selenium
 
       time_now = Time.zone.now
-      benchmark_type = create(:benchmark_type)
-      benchmark_result_type = create(:benchmark_result_type)
-      @repo = benchmark_type.repo
+      benchmark = create(:benchmark)
+      result_type = create(:result_type)
+      @repo = benchmark.repo
       @org = @repo.organization
 
       benchmark_run = create(
         :commit_benchmark_run,
         created_at: time_now - 1.day,
-        benchmark_type: benchmark_type,
-        benchmark_result_type: benchmark_result_type
+        benchmark: benchmark,
+        result_type: result_type
       )
 
       benchmark_run2 = create(
         :commit_benchmark_run,
         created_at: time_now,
-        benchmark_type: benchmark_type,
+        benchmark: benchmark,
         benchmark_result_type: benchmark_result_type
       )
 
       benchmark_run3 = create(
         :commit_benchmark_run,
         created_at: time_now + 1.day,
-        benchmark_type: benchmark_type,
+        benchmark: benchmark,
         benchmark_result_type: benchmark_result_type
       )
 
       visit repo_path(organization_name: @org.name, repo_name: @repo.name)
 
       within 'form' do
-        select(benchmark_type.category)
+        select(benchmark.label)
       end
 
       assert page.has_content?(I18n.t('highcharts.subtitle.commit_url'))
