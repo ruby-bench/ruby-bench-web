@@ -10,35 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170704094146) do
+ActiveRecord::Schema.define(version: 20170704094630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "benchmark_runs", force: :cascade do |t|
-    t.hstore   "result",                           null: false
-    t.text     "environment",                      null: false
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.hstore   "result",                        null: false
+    t.text     "environment",                   null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.string   "initiator_type"
     t.integer  "initiator_id"
-    t.integer  "benchmark_type_id", default: 0,    null: false
-    t.integer  "result_type_id",                   null: false
-    t.boolean  "validity",          default: true, null: false
-    t.index ["benchmark_type_id"], name: "index_benchmark_runs_on_benchmark_type_id", using: :btree
+    t.integer  "benchmark_id",   default: 0,    null: false
+    t.integer  "result_type_id",                null: false
+    t.boolean  "validity",       default: true, null: false
+    t.index ["benchmark_id"], name: "index_benchmark_runs_on_benchmark_id", using: :btree
     t.index ["initiator_type", "initiator_id"], name: "index_benchmark_runs_on_initiator_type_and_initiator_id", using: :btree
   end
 
-  create_table "benchmark_types", force: :cascade do |t|
+  create_table "benchmarks", force: :cascade do |t|
     t.string   "category",   null: false
     t.string   "script_url", null: false
     t.integer  "repo_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "digest"
-    t.index ["repo_id", "category", "script_url"], name: "index_benchmark_types_on_repo_id_and_category_and_script_url", unique: true, using: :btree
-    t.index ["repo_id"], name: "index_benchmark_types_on_repo_id", using: :btree
+    t.index ["repo_id", "category", "script_url"], name: "index_benchmarks_on_repo_id_and_category_and_script_url", unique: true, using: :btree
+    t.index ["repo_id"], name: "index_benchmarks_on_repo_id", using: :btree
   end
 
   create_table "commits", force: :cascade do |t|
