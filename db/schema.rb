@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170704094630) do
+ActiveRecord::Schema.define(version: 20170704094957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,13 +31,13 @@ ActiveRecord::Schema.define(version: 20170704094630) do
   end
 
   create_table "benchmarks", force: :cascade do |t|
-    t.string   "category",   null: false
+    t.string   "label",      null: false
     t.string   "script_url", null: false
     t.integer  "repo_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "digest"
-    t.index ["repo_id", "category", "script_url"], name: "index_benchmarks_on_repo_id_and_category_and_script_url", unique: true, using: :btree
+    t.index ["repo_id", "label", "script_url"], name: "index_benchmarks_on_repo_id_and_label_and_script_url", unique: true, using: :btree
     t.index ["repo_id"], name: "index_benchmarks_on_repo_id", using: :btree
   end
 
