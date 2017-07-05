@@ -21,6 +21,7 @@ gem 'responders'
 gem 'jbuilder'
 gem 'msgpack'
 gem 'octokit'
+gem 'bootstrap_sb_admin_base_v2'
 
 group :development do
   gem 'spring'

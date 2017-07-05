@@ -20,7 +20,6 @@
 //= require bootstrap/transition.js
 //= require bootstrap/modal.js
 //= require bootstrap/collapse.js
-//= require modules/release_chart
-//= require modules/chart
-//= require modules/sparkline
-//= require_tree .
+//= require_tree ./lib
+//= require_tree ./modules
+//= require_tree ./application
