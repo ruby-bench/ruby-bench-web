@@ -11,3 +11,8 @@
       = render 'layouts/admin/navbar'
 
     #page-wrapper
+      .row
+        .col-lg-12
+          %h1.page-header
+            = yield(:page_header)
+      = yield
