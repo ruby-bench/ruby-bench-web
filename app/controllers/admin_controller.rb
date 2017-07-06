@@ -7,7 +7,7 @@ class AdminController < ApplicationController
   layout 'admin'
 
   before_action :set_repos
-  before_action :set_repo, only: [:repo]
+  before_action :set_repo, only: [:repo, :run]
 
   def toggle_admin
     session['admin'] = !session['admin']
@@ -21,6 +21,8 @@ class AdminController < ApplicationController
   end
 
   def run
+    ManualRunner.new(@repo).run_last(params[:count].to_i)
+    redirect_to admin_repo_path(@repo.name), notice: "#{@repo.name.capitalize} suite is running for last #{params[:count].to_i} commits."
   end
 
   private

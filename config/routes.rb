@@ -26,5 +26,5 @@ Rails.application.routes.draw do
   get 'admin' => 'admin#home'
   get 'admin/repos/:repo_name' => 'admin#repo', as: :admin_repo
   get 'admin/toggle' => 'admin#toggle_admin'
-  post 'admin/repos/:repo_id/run' => 'admin#run', as: :admin_repo_run
+  post 'admin/repos/:repo_name/run' => 'admin#run', as: :admin_repo_run
 end
