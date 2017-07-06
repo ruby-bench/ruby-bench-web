@@ -1,11 +1,15 @@
 - content_for(:page_header) do
   = "#{@repo.name.capitalize} repo"
 
+- if notice.present?
+  .row
+    .alert.alert-success
+      = notice
 .row
   .col-lg-6
     .panel.panel-warning
       .panel-body
-        = form_tag(admin_repo_run_path(@repo)) do
+        = form_tag(admin_repo_run_path(@repo.name)) do
           .form-group
             = label_tag('Run last:')
             = select_tag(:count, options_for_select(ManualRunner::OPTIONS, ManualRunner::OPTIONS.last), class: 'form-control')
