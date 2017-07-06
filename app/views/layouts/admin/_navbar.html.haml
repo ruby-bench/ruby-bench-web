@@ -5,20 +5,24 @@
       %span.icon-bar
       %span.icon-bar
       %span.icon-bar
-    %a.navbar-brand{:href => '/admin'} RubyBench Admin
+    %a.navbar-brand RubyBench Admin
 
   %ul.nav.navbar-top-links.navbar-right.pull-right
     %li.dropdown
-      %a{:href => '/'}
+      %a{:href => "#{root_path}"}
         %i.fa.fa-sign-out
 
   .navbar-default.sidebar{:role => "navigation"}
     .sidebar-nav.navbar-collapse
       %ul#side-menu.nav.in
         %li
-          %a{:href => "/"}
+          %a{:href => "#{admin_path}"}
             %i.fa.fa-dashboard.fa-fw
             Dashboard
         - @repos.each do |repo|
           %li
-            = link_to repo.name, admin_repo_path(repo.name)
+            = link_to admin_repo_path(repo.name) do
+              %i.fa.fa-suitcase.fa-fw
+              = repo.name.capitalize
+
+
