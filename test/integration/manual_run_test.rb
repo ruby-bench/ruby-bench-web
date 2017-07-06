@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ManualRunTest< ActionDispatch::IntegrationTest
+class ManualRunTest < ActionDispatch::IntegrationTest
   def test_running_commits_manually
     @repo = create(:repo)
 
