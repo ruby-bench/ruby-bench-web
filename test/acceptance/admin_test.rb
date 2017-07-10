@@ -5,6 +5,7 @@ class AdminTest < AcceptanceTest
     repo = create(:repo)
 
     visit admin_repo_path(repo.name)
-    page.must_have_content 'Run last'
+    page.has_css?('label', text: I18n.t('admin.manual_run_label'))
+    page.has_css?('button', text: I18n.t('admin.manual_run_button'))
   end
 end

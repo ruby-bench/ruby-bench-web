@@ -93,3 +93,9 @@ en:
       desktop: 'Click and drag in the plot area to zoom in'
       mobile: 'Pinch the chart to zoom in'
       commit_url: Click on a point to view and compare commits on GitHub
+
+  admin:
+    wait_manual_run: 'Wait while selected runs are being queued...'
+    manual_run_label: 'Run last:'
+    manual_run_button: 'Run'
+    dashboard: 'Dashboard'

@@ -1,8 +1,5 @@
 - content_for(:page_header) do
-  = "#{@repo.name.capitalize} repo"
-
-
-
+  = @repo.name.capitalize
 
 .row
   .col-lg-6
@@ -11,12 +8,12 @@
         = notice
 
     #wait_alert.alert.alert-warning.hidden
-      = 'Wait while selected runs are queued...'
+      = t('admin.wait_manual_run')
 
     .panel.panel-warning
       .panel-body
         = form_tag(admin_repo_run_path(@repo.name), id: 'manual_run_form') do
           .form-group
-            = label_tag('Run last:')
+            = label_tag(t('admin.manual_run_label'))
             = select_tag(:count, options_for_select(ManualRunner::OPTIONS, ManualRunner::OPTIONS.last), class: 'form-control')
-          = button_tag('Run', class: 'btn btn-default')
+          = button_tag(t('admin.manual_run_button'), class: 'btn btn-default')
