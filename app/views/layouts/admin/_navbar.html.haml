@@ -9,16 +9,16 @@
 
   %ul.nav.navbar-top-links.navbar-right.pull-right
     %li.dropdown
-      %a{:href => "#{root_path}"}
+      = link_to root_path do
         %i.fa.fa-sign-out
 
   .navbar-default.sidebar{:role => "navigation"}
     .sidebar-nav.navbar-collapse
       %ul#side-menu.nav.in
         %li
-          %a{:href => "#{admin_path}"}
+          = link_to admin_path do
             %i.fa.fa-dashboard.fa-fw
-            Dashboard
+            = t('admin.dashboard')
         - @repos.each do |repo|
           %li
             = link_to admin_repo_path(repo.name) do
