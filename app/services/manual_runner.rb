@@ -1,4 +1,6 @@
 class ManualRunner
+  OPTIONS = ['20', '100', '200', '500', '750', '2000']
+
   def initialize(repo)
     raise "Repo doesn't exist" unless Repo.exists?(repo.id)
     @repo = repo

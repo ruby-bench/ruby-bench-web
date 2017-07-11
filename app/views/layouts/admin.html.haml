@@ -1,0 +1,18 @@
+%HTML{ lang: 'en' }
+  %head
+    %title RubyBench Admin
+
+    = stylesheet_link_tag 'admin', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag 'admin', 'data-turbolinks-track' => 'reload'
+    = csrf_meta_tags
+
+  %body
+    #wrapper
+      = render 'layouts/admin/navbar'
+
+    #page-wrapper
+      .row
+        .col-lg-12
+          %h1.page-header
+            = yield(:page_header)
+      = yield

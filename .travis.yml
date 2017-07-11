@@ -13,6 +13,7 @@ bundler_args: --without development:production --deployment --retry=3 --jobs=3
 before_script:
   - bundle exec rake db:create
   - bundle exec rake db:migrate
+  - bundle exec rake assets:precompile &> /dev/null
 before_install:
   - "export PATH=$PWD/travis_phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH"
   - if [ $(phantomjs --version) != '2.1.1' ]; then
