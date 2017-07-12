@@ -6,12 +6,11 @@ class AdminController < ApplicationController
 
   layout 'admin'
 
-  before_action :set_repos
+  before_action :set_repos, :set_admin
   before_action :set_repo, only: [:repo, :run]
 
-  def toggle_admin
-    session['admin'] = !session['admin']
-    redirect_to root_path
+  def set_admin
+    session['admin'] = true unless session['admin']
   end
 
   def home
