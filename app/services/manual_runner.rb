@@ -7,23 +7,23 @@ class ManualRunner
     @octokit = Octokit::Client.new(access_token: Rails.application.secrets.github_api_token)
   end
 
-  def run_last(commits_count)
-    run_paginated(commits_count)
+  def run_last(commits_count, pattern: '')
+    run_paginated(commits_count, pattern)
   end
 
   private
 
-  def run_paginated(commits_count, page = 1)
+  def run_paginated(commits_count, page: 1, pattern: '')
     unless (commits_count <= 0)
-      count_run = run_commits(page)
+      count_run = run_commits(page, pattern)
       run_paginated(commits_count - count_run, page + 1)
     end
   end
 
-  def run_commits(page)
+  def run_commits(page, pattern: '')
     fetched_commits = @octokit.commits("#{@repo.organization.name}/#{@repo.name}", per_page: 100, page: page)
     formatted_commits = format_commits(fetched_commits)
-    CommitsRunner.run(formatted_commits)
+    CommitsRunner.run(formatted_commits, pattern)
 
     fetched_commits.count
   end
