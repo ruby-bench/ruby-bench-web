@@ -1,9 +1,14 @@
 class CommitsRunner
-  def self.run(commits)
+  def self.run(commits, patterns = '')
     commits.each do |commit|
       if valid?(commit)
         create(commit)
-        BenchmarkPool.enqueue(commit[:repo].name, commit[:sha])
+
+        BenchmarkPool.enqueue(
+          commit[:repo].name,
+          commit[:sha],
+          { include_patterns: patterns }
+        )
       end
     end
   end

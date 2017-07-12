@@ -96,6 +96,7 @@ en:
 
   admin:
     wait_manual_run: 'Wait while selected runs are being queued...'
-    manual_run_label: 'Run last:'
+    manual_run_pattern_label: 'Pattern:'
+    manual_run_count_label: 'Run last:'
     manual_run_button: 'Run'
     dashboard: 'Dashboard'

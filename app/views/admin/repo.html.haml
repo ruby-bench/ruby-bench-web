@@ -14,6 +14,11 @@
       .panel-body
         = form_tag(admin_repo_run_path(@repo.name), id: 'manual_run_form') do
           .form-group
-            = label_tag(t('admin.manual_run_label'))
+            = label_tag(t('admin.manual_run_pattern_label'))
+            = text_field_tag(:patterns, 'all', class: 'form-control')
+
+          .form-group
+            = label_tag(t('admin.manual_run_count_label'))
             = select_tag(:count, options_for_select(ManualRunner::OPTIONS, ManualRunner::OPTIONS.last), class: 'form-control')
+
           = button_tag(t('admin.manual_run_button'), class: 'btn btn-default')
