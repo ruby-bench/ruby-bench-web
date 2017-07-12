@@ -15,7 +15,7 @@
         = form_tag(admin_repo_run_path(@repo.name), id: 'manual_run_form') do
           .form-group
             = label_tag(t('admin.manual_run_pattern_label'))
-            = text_field_tag(:patterns, 'all', class: 'form-control')
+            = text_field_tag(:pattern, 'all', class: 'form-control')
 
           .form-group
             = label_tag(t('admin.manual_run_count_label'))
