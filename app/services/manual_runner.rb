@@ -8,15 +8,15 @@ class ManualRunner
   end
 
   def run_last(commits_count, pattern: '')
-    run_paginated(commits_count, pattern)
+    run_paginated(commits_count, pattern: pattern)
   end
 
   private
 
   def run_paginated(commits_count, page: 1, pattern: '')
     unless (commits_count <= 0)
-      count_run = run_commits(page, pattern)
-      run_paginated(commits_count - count_run, page + 1)
+      count_run = run_commits(page, pattern: pattern)
+      run_paginated(commits_count - count_run, page: page + 1)
     end
   end
 

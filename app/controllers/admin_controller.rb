@@ -23,7 +23,7 @@ class AdminController < ApplicationController
   def run
     ManualRunner.new(@repo).run_last(
       params[:count].to_i,
-      params[:pattern] == 'all' ? '' : params[:pattern]
+      pattern: params[:pattern] == 'all' ? '' : params[:pattern]
     )
 
     redirect_to admin_repo_path(@repo.name), notice: "#{@repo.name.capitalize} suite is running for last #{params[:count].to_i} commits."
