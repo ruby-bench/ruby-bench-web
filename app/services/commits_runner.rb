@@ -1,5 +1,5 @@
 class CommitsRunner
-  def self.run(commits, patterns = '')
+  def self.run(commits, pattern = '')
     commits.each do |commit|
       if valid?(commit)
         create(commit)
@@ -7,7 +7,7 @@ class CommitsRunner
         BenchmarkPool.enqueue(
           commit[:repo].name,
           commit[:sha],
-          include_patterns: patterns
+          include_patterns: pattern
         )
       end
     end
