@@ -54,7 +54,6 @@ group :production, :development do
   gem 'unicorn'
   gem 'rack-mini-profiler'
   gem 'logster'
-  gem 'sinatra', '2.0.0.beta2'
 end
 
 group :production do
