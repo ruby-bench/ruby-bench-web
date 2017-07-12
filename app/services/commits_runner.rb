@@ -7,7 +7,7 @@ class CommitsRunner
         BenchmarkPool.enqueue(
           commit[:repo].name,
           commit[:sha],
-          { include_patterns: patterns }
+          include_patterns: patterns
         )
       end
     end
