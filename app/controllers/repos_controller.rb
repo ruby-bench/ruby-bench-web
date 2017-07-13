@@ -164,11 +164,12 @@ class ReposController < ApplicationController
   def set_display_count
     param = params[:display_count].to_i
 
-    @display_count = if param.zero? || param > default_display_count
-                       default_display_count
-                     else
-                       param
-                     end
+    @display_count =
+      if param.zero? || param > default_display_count
+        default_display_count
+      else
+        param
+      end
   end
 
   def set_repo_benchmarks
