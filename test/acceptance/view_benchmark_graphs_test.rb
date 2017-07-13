@@ -55,7 +55,7 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       URI.parse(page.current_url).request_uri,
       "/#{org.name}" \
       "/#{repo.name}/commits?result_type=" \
-      "#{benchmark_type.category}&display_count=#{BenchmarkRun::DEFAULT_PAGINATE_COUNT}"
+      "#{benchmark_type.category}&display_count=#{BenchmarkRun::MAX_DISPLAY_COUNT}"
     )
   end
 
@@ -231,5 +231,17 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
 
     assert_not page.has_css?('.release-chart .highcharts-container')
     assert page.has_content?(I18n.t('repos.no_results', category: category))
+  end
+
+  test 'User should be able to see maximum displayed results by default' do
+    benchmark_type = create(:benchmark_type)
+
+    visit commits_path(
+      organization_name: benchmark_type.repo.organization.name,
+      repo_name: benchmark_type.repo.name,
+      result_type: benchmark_type.category
+    )
+
+    assert find('#benchmark_run_display_count').value, BenchmarkRun::MAX_DISPLAY_COUNT
   end
 end

@@ -162,20 +162,13 @@ class ReposController < ApplicationController
   end
 
   def set_display_count
-    @display_count =
-      if BenchmarkRun::PAGINATE_COUNT.include?(params[:display_count].to_i)
-        if @comparing_benchmark.present? && params[:display_count].to_i > 500
-          500
-        else
-          params[:display_count].to_i
-        end
-      else
-        if @comparing_benchmark.present?
-          500
-        else
-          BenchmarkRun::DEFAULT_PAGINATE_COUNT
-        end
-      end
+    param = params[:display_count].to_i
+
+    @display_count = if param.zero? || param > default_display_count
+                       default_display_count
+                     else
+                       param
+                     end
   end
 
   def set_repo_benchmarks
@@ -203,6 +196,14 @@ class ReposController < ApplicationController
             "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}"
           end
       end
+    end
+  end
+
+  def default_display_count
+    if @comparing_benchmark.present?
+      BenchmarkRun::MAX_COMPARISON_DISPLAY_COUNT
+    else
+      BenchmarkRun::MAX_DISPLAY_COUNT
     end
   end
 end
