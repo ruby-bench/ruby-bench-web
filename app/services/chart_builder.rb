@@ -32,9 +32,16 @@ class ChartBuilder
 
   def initialize(benchmark_runs, benchmark_result_type, comparing_runs = [])
     @benchmark_result_type = benchmark_result_type
-    @benchmark_runs = benchmark_runs
     @columns = {}
-    @comparing_runs = comparing_runs
+
+    if @comparing_runs.present?
+      run_count = [@benchmark_runs.count, @comparing_runs.count].min
+      @benchmark_runs = benchmark_runs.last(run_count)
+      @comparing_runs = comparing_runs.last(run_count)
+    else
+      @benchmark_runs = benchmark_runs
+      @comparing_runs = comparing_runs
+    end
   end
 
   def build_columns
