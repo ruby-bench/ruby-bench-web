@@ -83,4 +83,15 @@ class CompareBenchmarks < AcceptanceTest
 
     assert page.has_css?('.codehilite', count: 2)
   end
+
+  test "User shouldn't be able to see maximum displayed count by default" do
+    visit commits_path(
+      organization_name: @rails_org.name,
+      repo_name: @rails_repo.name,
+      result_type: @active_record_scope_all.category,
+      compare_with: @sequel_scope_all.category
+    )
+
+    assert find('#benchmark_run_display_count').value, BenchmarkRun::MAX_COMPARISON_DISPLAY_COUNT
+  end
 end
