@@ -173,3 +173,22 @@ var drawChart = function(chartClass) {
     }
   })
 };
+
+var drawComparisonChart = function(chartClass) {
+  $(chartClass).each(function() {
+    Highcharts.stockChart(this, {
+      legend: {
+        enabled: true
+      },
+      plotOptions: {
+        series: {
+          showInNavigator: true
+        }
+      },
+      chart: {
+        zoomType: 'x',
+      },
+      series: $(this).data('series')
+    });
+  });
+};
