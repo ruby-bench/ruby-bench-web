@@ -1,0 +1,16 @@
+- if charts.present?
+  - charts.each do |chart|
+    %h2.l-align-center
+      = 'Comparison chart'
+
+    .chart{ data: { unit: chart.unit, series: chart.series.to_json } }
+
+  - benchmark_types.each do |benchmark_type|
+    = render 'script', benchmark: benchmark_type
+
+
+:javascript
+  $(function() {
+    drawComparisonChart('.chart');
+  });
+
