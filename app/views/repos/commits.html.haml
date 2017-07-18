@@ -16,6 +16,6 @@
       - if @comparing_benchmark.present?
         = render 'comparison_chart', charts: @charts, benchmark_types: [@benchmark, @comparing_benchmark]
       - else
-        = render 'commits_chart', charts: @charts, benchmark: @benchmark, comparing_benchmark: @comparing_benchmark
+        = render 'commits_chart', charts: @charts, benchmark: @benchmark
 
   = render 'chart_modal'
