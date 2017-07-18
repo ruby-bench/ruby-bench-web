@@ -11,12 +11,7 @@ class ComparisonChartBuilder
   def initialize(benchmark_result_type, benchmark_types)
     @benchmark_types = benchmark_types
     @benchmark_result_type = benchmark_result_type
-    @series = @benchmark_types.map do |benchmark_type|
-      {
-        name: benchmark_type.category,
-        data: runs_for(benchmark_type)
-      }
-    end
+    @series = build_series if benchmark_types.present?
   end
 
   def unit
@@ -28,6 +23,37 @@ class ComparisonChartBuilder
   end
 
   private
+
+  def build_series
+    series = @benchmark_types.map do |benchmark_type|
+      {
+        name: benchmark_type.category,
+        data: runs_for(benchmark_type)
+      }
+    end
+
+    strech_out(series)
+  end
+
+  def strech_out(series)
+    xmin = series.first[:data].first.first
+    xmax = series.first[:data].last.first
+
+    series.each do |s|
+      s_xmin = s[:data].first.first
+      s_xmax = s[:data].last.first
+
+      xmin = s_xmin if s_xmin < xmin
+      xmax = s_xmax if s_xmax > xmax
+    end
+
+    series.each do |s|
+      s[:data].insert(0, [xmin, s[:data].first.second]) if s[:data].first.first != xmin
+      s[:data].push([xmax, s[:data].last.second]) if s[:data].last.first != xmax
+    end
+
+    series
+  end
 
   def runs_for(benchmark_type)
     BenchmarkRun.fetch_commit_benchmark_runs(

@@ -1,7 +1,7 @@
 - if charts.present?
   - charts.each do |chart|
     %h2.l-align-center
-      = 'Comparison chart'
+      = chart.name
 
     .chart{ data: { unit: chart.unit, series: chart.series.to_json, type: chart.name } }
 
