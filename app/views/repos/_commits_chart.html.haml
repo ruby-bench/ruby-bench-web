@@ -19,7 +19,8 @@
       columns: chart.columns.to_json,
       categories: chart.categories.map { |version| chart_version_to_html(version) },
       organization: @organization.name,
-      repo: @repo.name } }
+      repo: @repo.name,
+      type: chart.benchmark_result_type.name } }
 
   = render 'script', benchmark: benchmark
 

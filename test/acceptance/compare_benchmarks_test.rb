@@ -42,16 +42,12 @@ class CompareBenchmarks < AcceptanceTest
       initiator: @sequel_commit,
       benchmark_result_type: @memory_benchmark
     )
-
-    @commit_dates = [@rails_commit.created_at, @sequel_commit.created_at].map { |date| date.strftime('%Y-%m-%d') }
   end
 
   test 'User should be able to compare benchmarks across repos' do
     visit commits_path(
       @rails_org.name,
       @rails_repo.name,
-      result_type: @active_record_scope_all.category,
-      compare_with: @sequel_scope_all.category
     )
 
     within '#benchmark_run_benchmark_type' do
@@ -62,15 +58,37 @@ class CompareBenchmarks < AcceptanceTest
       select(@sequel_scope_all.category)
     end
 
-    all('.highcharts-xaxis-labels').each do |xaxis|
-      within(xaxis) do
-        labels = all('text').map { |x| x.text }
+    assert find(".chart[data-type='#{@ips_benchmark.name}']")['data-series'],
+      [
+        {
+          name: @active_record_scope_all.category,
+          data: [
+            [@rails_ips_run.initiator.created_at.to_i * 1000, @rails_ips_run.result.values[0]]
+          ]
+        },
+        {
+          name: @sequel_scope_all.category,
+          data: [
+            [@sequel_ips_run.initiator.created_at.to_i * 1000, @sequel_ips_run.result.values[0]]
+          ]
+        }
+      ]
 
-        @commit_dates.each do |commit_date|
-          assert_includes(labels, commit_date)
-        end
-      end
-    end
+    assert find(".chart[data-type='#{@memory_benchmark.name}']")['data-series'],
+      [
+        {
+          name: @active_record_scope_all.category,
+          data: [
+            [@rails_memory_run.initiator.created_at.to_i * 1000, @rails_memory_run.result.values[0]]
+          ]
+        },
+        {
+          name: @sequel_scope_all.category,
+          data: [
+            [@sequel_ips_run.initiator.created_at.to_i * 1000, @sequel_ips_run.result.values[0]]
+          ]
+        }
+      ]
   end
 
   test 'User should be able to see both scripts' do
