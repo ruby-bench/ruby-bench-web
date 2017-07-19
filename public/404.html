@@ -1,67 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 <head>
-  <title>The page you were looking for doesn't exist (404)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-  body {
-    background-color: #EFEFEF;
-    color: #2E2F30;
-    text-align: center;
-    font-family: arial, sans-serif;
-    margin: 0;
-  }
+<title>RubyBench - Long Running Ruby Benchmark</title>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<script src='//use.typekit.net/nub3dja.js'></script>
+<script>
+  try{Typekit.load();}catch(e){}
+</script>
+<!-- Loads Freight Sans Pro font with these font weights: 300, 400, 700 -->
 
-  div.dialog {
-    width: 95%;
-    max-width: 33em;
-    margin: 4em auto 0;
-  }
+<link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Montserrat:400,700" data-turbolinks-track="reload" />
+<link rel="stylesheet" media="all" href="/assets/application.self-745519abfad0a8dbde6e0cd8fe1492f9d36e30a9f06a1a1785b8c57805501903.css?body=1" data-turbolinks-track="reload" />
 
-  div.dialog > div {
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #BBB;
-    border-top: #B00100 solid 4px;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    background-color: white;
-    padding: 7px 12% 0;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
-
-  h1 {
-    font-size: 100%;
-    color: #730E15;
-    line-height: 1.5em;
-  }
-
-  div.dialog > p {
-    margin: 0 0 1em;
-    padding: 1em;
-    background-color: #F7F7F7;
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #999;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-top-color: #DADADA;
-    color: #666;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
-  </style>
+<script src="/assets/jquery.self-bd7ddd393353a8d2480a622e80342adf488fb6006d667e8b42e4c0073393abee.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/jquery_ujs.self-784a997f6726036b1993eb2217c9cb558e1cbb801c6da88105588c56f13b466a.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/jquery-ui/widget.self-c1602241ddc51216b58391768667068867b8e15b9efc722befcd25771eda6819.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/jquery.visible.self-f7e17a4090c835c12b22e5395556ccc68f9c7db0c12a85f0c201ec95cb10ce74.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/turbolinks.self-c5acd7a204f5f25ce7a1d8a0e4d92e28d34c9e2df2c7371cd7af88e147e4ad82.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/highcharts.self-b78652159d48ee893cd70c6c33a03be426578e4e385bcca8734047371f3cd138.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/highcharts/modules/boost.self-67609e88c74c1025a67e9ec59f76347039a767b8c7bc90d9433def02ac016223.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/bootstrap/transition.self-6ad2488465135ab731a045a8ebbe3ea2fc501aed286042496eda1664fdd07ba9.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/bootstrap/modal.self-3e78617ade5663314b7ee0ea10375a5b34d59ffbade44939e3f2a4e4ef2019b3.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/bootstrap/collapse.self-2eb697f62b587bb786ff940d82dd4be88cdeeaf13ca128e3da3850c5fcaec301.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/lib/line_animation.self-553eead0737d4e2c446160c69151875e0ace0c0daa6aa7ce5b6920c53cf8ebb0.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/modules/chart.self-42d8fa6aabb7fe09bfac8ea85e14d833619dc3cdaded655226ef92c6d77e546e.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/modules/release_chart.self-5f08fb318ed5c0d73fcdb59d17a3eb3dc7bb2bccbd13c0092c58971aff005338.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/modules/sparkline.self-ef89c53a91f803703e348560a4db2a878b359c5fa92e3f2691caf15c777775cd.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/application/ga.self-5e5d0b0cbda88659c109accbd75ceb45102edc36bff6a2b952ade5f5dcb0767f.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/application/initialize.self-a5101430d12b1b9497c779192be192d61d26c0d3b157233204d2fe053ace09bf.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/application/landing.self-19f2ab57a4a954803a692eb6d94b531ff3e9dcdf45c7e59e126d3d52644ea77e.js?body=1" data-turbolinks-track="reload"></script>
+<script src="/assets/application.self-85887479625271e91df70e1fc56b650d14f42160636f96f24a3eb0582d637e77.js?body=1" data-turbolinks-track="reload"></script>
+<meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="QbPRa3sOTBxRMGO/CQ+idV4Frr3TFvxto0YNhfhCxydRM7mvHNqYbr4v5VPS8vxA3MNhnJEMyxyRMnE3aPnkHA==" />
 </head>
-
 <body>
-  <!-- This file lives in public/404.html -->
-  <div class="dialog">
-    <div>
-      <h1>The page you were looking for doesn't exist.</h1>
-      <p>You may have mistyped the address or the page may have moved.</p>
-    </div>
-    <p>If you are the application owner check the logs for more information.</p>
-  </div>
+<nav class='navbar navbar-default'>
+<div class='container'>
+<div class='navbar-header'>
+<button class='navbar-toggle collapsed' data-target='#rbn-navbar' data-toggle='collapse'>
+<span class='sr-only'>Toggle navigation</span>
+<span class='icon-bar'></span>
+<span class='icon-bar'></span>
+<span class='icon-bar'></span>
+</button>
+<a class="navbar-brand navbar-logo" alt="RubyBench Logo" href="/"></a>
+</div>
+<div class='collapse navbar-collapse' id='rbn-navbar'>
+<ul class='nav navbar-nav navbar-right'>
+<li>
+<a href="/benchmarks">Benchmarks</a>
+</li>
+<li>
+<a href="/hardware">Hardware</a>
+</li>
+<li>
+<a href="/contributing">Contribute</a>
+</li>
+<li>
+<a href="/sponsors">Sponsors</a>
+</li>
+<li>
+<a target="_blank" href="http://community.rubybench.org">Discuss</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+
+<div class='site-content'>
+<div class='container contribute'>
+<div class='row'>
+<div class='col-md-10 col-md-offset-1'>
+<h1>404</h1>
+<hr>
+<p>The page you were looking for doesn't exist</p>
+<p>You may have mistyped the address or the page may have moved.</p>
+</div>
+</div>
+</div>
+
+</div>
+<footer>
+<div class='footer'>
+<div class='container'>
+<div class='row'>
+<div class='col-xs-10 col-xs-offset-1'>
+<ul class='footer-nav-links'>
+<li>
+<a href="/ruby/ruby/releases">Releases</a>
+</li>
+<li>
+<a href="/ruby/ruby/commits">Benchmarks</a>
+</li>
+<li>
+<a href="/hardware">Hardware</a>
+</li>
+<li>
+<a href="/contributing">Contribute</a>
+</li>
+<li>
+<a href="/sponsors">Sponsors</a>
+</li>
+<li>
+<a target="_blank" href="http://community.rubybench.org">Discuss</a>
+</li>
+</ul>
+<hr class='footer-hr'>
+<div class='l-align-center'>
+<p>
+Built by
+<a target="_blank" href="https://github.com/tgxworld">@tgxworld</a>.
+Designed by
+<a target="_blank" href="https://github.com/yangshun">@yangshun</a>.
+A big thanks to our awesome
+<a target="_blank" href="https://github.com/ruby-bench/ruby-bench-web/graphs/contributors">contributors</a>!
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</footer>
+<script async type="text/javascript" id="mini-profiler" src="/mini-profiler-resources/includes.js?v=12b4b45a3c42e6e15503d7a03810ff33" data-version="12b4b45a3c42e6e15503d7a03810ff33" data-path="/mini-profiler-resources/" data-current-id="ywkbo4nfshz9o9dqqc9t" data-ids="ywkbo4nfshz9o9dqqc9t" data-position="left" data-trivial="false" data-children="false" data-max-traces="20" data-controls="false" data-authorized="true" data-toggle-shortcut="Alt+P" data-start-hidden="false" data-collapse-results="true"></script>
 </body>
 </html>
