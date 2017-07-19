@@ -101,12 +101,13 @@ class ComparisonChartBuilder
     commit_urls = []
     series_data = []
 
-    BenchmarkRun.fetch_commit_benchmark_runs(benchmark_type.category, @benchmark_result_type, nil)
-    .sort_by { |run| run.initiator.created_at }
-    .each do |run|
-      series_data << [run.initiator.created_at.to_i * 1000, run.result.values[0].to_i]
-      commit_urls << commit_url_for(run)
-    end
+    BenchmarkRun
+      .fetch_commit_benchmark_runs(benchmark_type.category, @benchmark_result_type, nil)
+      .sort_by { |run| run.initiator.created_at }
+      .each do |run|
+        series_data << [run.initiator.created_at.to_i * 1000, run.result.values[0].to_i]
+        commit_urls << commit_url_for(run)
+      end
 
     [series_data, commit_urls]
   end

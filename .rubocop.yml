@@ -8,6 +8,9 @@ AllCops:
     - "db/**/*"
     - "vendor/**/*"
 
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: aligned
+
 # Prefer &&/|| over and/or.
 Style/AndOr:
   Enabled: true

@@ -57,9 +57,10 @@ class ComparisonChartBuilderTest < ActiveSupport::TestCase
     {
       name: benchmark_type.category,
       data:
-        BenchmarkRun.fetch_commit_benchmark_runs(benchmark_type.category, @benchmark_result_type, nil)
-        .sort_by { |run| run.initiator.created_at }
-        .map { |run| [run.initiator.created_at.to_i * 1000, run.result.values[0].to_i] }
+        BenchmarkRun
+          .fetch_commit_benchmark_runs(benchmark_type.category, @benchmark_result_type, nil)
+          .sort_by { |run| run.initiator.created_at }
+          .map { |run| [run.initiator.created_at.to_i * 1000, run.result.values[0].to_i] }
     }
   end
 
@@ -67,15 +68,16 @@ class ComparisonChartBuilderTest < ActiveSupport::TestCase
     {
       name: benchmark_type.category,
       data:
-        BenchmarkRun.fetch_commit_benchmark_runs(benchmark_type.category, @benchmark_result_type, nil)
-        .sort_by { |run| run.initiator.created_at }
-        .map do |run|
-          commit = run.initiator
-          repo = commit.repo
-          organization = repo.organization
+        BenchmarkRun
+          .fetch_commit_benchmark_runs(benchmark_type.category, @benchmark_result_type, nil)
+          .sort_by { |run| run.initiator.created_at }
+          .map do |run|
+            commit = run.initiator
+            repo = commit.repo
+            organization = repo.organization
 
-          "https://github.com/#{organization.name}/#{repo.name}/commit/#{commit.sha1}"
-        end
+            "https://github.com/#{organization.name}/#{repo.name}/commit/#{commit.sha1}"
+          end
     }
   end
 end

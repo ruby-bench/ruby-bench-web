@@ -156,8 +156,8 @@ class ReposController < ApplicationController
 
   def comparing_runs_for(benchmark_type)
     BenchmarkRun
-    .fetch_commit_benchmark_runs(@comparing_benchmark.category, benchmark_type, @display_count)
-    .sort_by { |run| run.initiator.created_at }
+      .fetch_commit_benchmark_runs(@comparing_benchmark.category, benchmark_type, @display_count)
+      .sort_by { |run| run.initiator.created_at }
   end
 
   def set_organization
