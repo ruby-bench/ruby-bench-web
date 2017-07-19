@@ -148,7 +148,8 @@ class ReposController < ApplicationController
     $redis.set(
       @cache_keys[benchmark_type],
       {
-        series: chart.series
+        series: chart.series,
+        commit_urls: chart.commit_urls
       }.to_msgpack
     )
   end

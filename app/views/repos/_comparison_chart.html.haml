@@ -3,7 +3,7 @@
     %h2.l-align-center
       = chart.name
 
-    .chart{ data: { unit: chart.unit, series: chart.series.to_json, type: chart.name } }
+    .chart{ data: { unit: chart.unit, series: chart.series.to_json, commit_urls: chart.commit_urls.to_json, type: chart.name } }
 
   - benchmark_types.each do |benchmark_type|
     = render 'script', benchmark: benchmark_type

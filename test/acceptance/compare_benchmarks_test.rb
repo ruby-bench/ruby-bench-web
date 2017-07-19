@@ -42,9 +42,7 @@ class CompareBenchmarks < AcceptanceTest
       initiator: @sequel_commit,
       benchmark_result_type: @memory_benchmark
     )
-  end
 
-  test 'User should be able to compare benchmarks across repos' do
     visit commits_path(
       @rails_org.name,
       @rails_repo.name,
@@ -57,7 +55,9 @@ class CompareBenchmarks < AcceptanceTest
     within '#benchmark_run_compare_with' do
       select(@sequel_scope_all.category)
     end
+  end
 
+  test 'User should be able to see all series for benchmarks selected' do
     assert find(".chart[data-type='#{@ips_benchmark.name}']")['data-series'],
       [
         {
@@ -86,6 +86,30 @@ class CompareBenchmarks < AcceptanceTest
           name: @sequel_scope_all.category,
           data: [
             [@sequel_ips_run.initiator.created_at.to_i * 1000, @sequel_ips_run.result.values[0]]
+          ]
+        }
+      ]
+  end
+
+  test 'User should be able to follow links to github commits' do
+    assert find(".chart[data-type='#{@ips_benchmark.name}']")['data-commit-urls'],
+      [
+        {
+          name: @active_record_scope_all.category,
+          data: [
+            "https://github.com/#{@rails_org.name}/#{@rails_repo.name}/commit/#{@rails_ips_run.initiator.sha1}",
+            "https://github.com/#{@jeremyevans_org.name}/#{@sequel_repo.name}/commit/#{@sequel_ips_run.initiator.sha1}"
+          ]
+        }
+      ]
+
+    assert find(".chart[data-type='#{@memory_benchmark.name}']")['data-commit-urls'],
+      [
+        {
+          name: @active_record_scope_all.category,
+          data: [
+            "https://github.com/#{@rails_org.name}/#{@rails_repo.name}/commit/#{@rails_memory_run.initiator.sha1}",
+            "https://github.com/#{@jeremyevans_org.name}/#{@sequel_repo.name}/commit/#{@sequel_memory_run.initiator.sha1}"
           ]
         }
       ]
