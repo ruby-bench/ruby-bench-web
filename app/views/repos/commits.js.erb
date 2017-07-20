@@ -8,16 +8,31 @@ $('#benchmark-types-form-container .text-center').html(
   ) %>"
 )
 
-$('#chart-container').html(
-  "<%= escape_javascript(
-    render(
-      'repos/commits_chart',
-      charts: @charts,
-      benchmark: @benchmark,
-      comparing_benchmark: @comparing_benchmark
-    )
-  ) %>"
-);
+<% if @comparing_benchmark.present? %>
+  $('#chart-container').html(
+    "<%= escape_javascript(
+      render(
+        'repos/comparison_chart',
+        charts: @charts,
+        benchmark_types: [@benchmark, @comparing_benchmark]
+      )
+    ) %>"
+  );
+
+  drawComparisonChart('.chart');
+<% else %>
+  $('#chart-container').html(
+    "<%= escape_javascript(
+      render(
+        'repos/commits_chart',
+        charts: @charts,
+        benchmark: @benchmark
+      )
+    ) %>"
+  );
+
+  drawChart('.chart');
+<% end %>
 
 $('.result-types-form select').change(onSelectChange);
-drawChart('.chart');
+

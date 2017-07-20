@@ -35,13 +35,13 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       select(benchmark_type.category)
     end
 
-    within '.chart .highcharts-container .highcharts-yaxis-title',
+    within '.chart .highcharts-container',
       match: :first do
       assert page.has_content?(benchmark_result_type.unit)
     end
 
     assert(
-      all('.chart .highcharts-container .highcharts-yaxis-title')
+      all('.chart .highcharts-container')
       .last
       .has_content?(memory_benchmark_result_type.unit)
     )
@@ -148,14 +148,14 @@ class ViewBenchmarkGraphsTest < AcceptanceTest
       select(benchmark_type.category)
     end
 
-    within '.release-chart .highcharts-container .highcharts-yaxis-title',
+    within '.release-chart .highcharts-container',
       match: :first do
 
       assert page.has_content?(benchmark_result_type.unit)
     end
 
     assert(
-      all('.release-chart .highcharts-container .highcharts-yaxis-title')
+      all('.release-chart .highcharts-container')
       .last
       .has_content?(memory_benchmark_result_type.unit)
     )

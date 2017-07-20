@@ -15,8 +15,7 @@
 //= require jquery-ui/widget
 //= require jquery.visible
 //= require turbolinks
-//= require highcharts
-//= require highcharts/modules/boost
+//= require highstock
 //= require bootstrap/transition.js
 //= require bootstrap/modal.js
 //= require bootstrap/collapse.js

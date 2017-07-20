@@ -30,46 +30,33 @@ class ChartBuilder
     chart_builder
   end
 
-  def initialize(benchmark_runs, benchmark_result_type, comparing_runs = [])
+  def initialize(benchmark_runs, benchmark_result_type)
     @benchmark_result_type = benchmark_result_type
     @benchmark_runs = benchmark_runs
     @columns = {}
-    @comparing_runs = comparing_runs
   end
 
   def build_columns
-    columns = {}
-
-    if @comparing_runs.present?
-      runs = (@benchmark_runs + @comparing_runs)
-      .sort_by { |run| run.initiator.created_at }
-    else
-      runs = @benchmark_runs
-    end
-
-    runs.each do |run|
-      version = nil
+    @benchmark_runs.each do |benchmark_run|
       if block_given?
-        version = yield(run)
+        version = yield(benchmark_run)
         @categories ||= []
         @categories << version if version != @categories.last
       end
 
-      run.result.each do |key, value|
-        if @comparing_runs.present?
-          columns["#{key}_#{run.benchmark_type.category}"] ||= []
-          columns["#{key}_#{run.benchmark_type.category}"] << [version, value.to_f]
-        else
-          columns[key] ||= []
-          columns[key] << value.to_f
-        end
+      benchmark_run.result.each do |key, value|
+        @columns[key] ||= []
+        @columns[key] << value.to_f
       end
     end
 
-    @columns = columns.map do |name, data|
-      { name: name, data: data }
+    new_columns = []
+
+    @columns.each do |name, data|
+      new_columns << { name: name, data: data }
     end
 
+    @columns = new_columns
     self
   end
 end
