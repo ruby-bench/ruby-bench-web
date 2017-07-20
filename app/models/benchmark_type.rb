@@ -9,6 +9,7 @@ class BenchmarkType < ApplicationRecord
   }, through: :benchmark_runs
 
   belongs_to :repo
+  has_and_belongs_to_many :groups
 
   after_update :check_benchmark_runs_validity
 
