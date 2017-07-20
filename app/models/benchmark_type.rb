@@ -22,6 +22,10 @@ class BenchmarkType < ApplicationRecord
     "https://github.com#{$1}blob/#{$2}"
   end
 
+  def comparison_benchmark_types
+    BenchmarkType.joins(:groups).where('benchmark_types_groups.group_id' => groups.ids).where.not(id: id)
+  end
+
   private
 
   def check_benchmark_runs_validity
