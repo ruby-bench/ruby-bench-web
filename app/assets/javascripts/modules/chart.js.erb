@@ -173,3 +173,44 @@ var drawChart = function(chartClass) {
     }
   })
 };
+
+var drawComparisonChart = function(chartClass) {
+  $(chartClass).each(function() {
+    series = $(this).data('series');
+    commitUrls = $(this).data('commit-urls');
+
+    Highcharts.stockChart(this, {
+      legend: {
+        enabled: true
+      },
+      plotOptions: {
+        series: {
+          showInNavigator: true,
+          point: {
+            events: {
+              click: function() {
+                point = this;
+
+                obj = $.grep(commitUrls, function(obj) {
+                  return obj["name"] == point.series.name;
+                })[0];
+
+                commitUrl = obj["data"][point.index];
+                if(commitUrl != "") {
+                  window.open(commitUrl, "_blank");
+                }
+              }
+            }
+          }
+        }
+      },
+      chart: {
+        zoomType: 'x',
+      },
+      tooltip: {
+        split: true
+      },
+      series: $(this).data('series')
+    });
+  });
+};

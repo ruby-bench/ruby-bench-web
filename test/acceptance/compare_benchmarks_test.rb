@@ -43,15 +43,9 @@ class CompareBenchmarks < AcceptanceTest
       benchmark_result_type: @memory_benchmark
     )
 
-    @commit_dates = [@rails_commit.created_at, @sequel_commit.created_at].map { |date| date.strftime('%Y-%m-%d') }
-  end
-
-  test 'User should be able to compare benchmarks across repos' do
     visit commits_path(
       @rails_org.name,
       @rails_repo.name,
-      result_type: @active_record_scope_all.category,
-      compare_with: @sequel_scope_all.category
     )
 
     within '#benchmark_run_benchmark_type' do
@@ -61,16 +55,64 @@ class CompareBenchmarks < AcceptanceTest
     within '#benchmark_run_compare_with' do
       select(@sequel_scope_all.category)
     end
+  end
 
-    all('.highcharts-xaxis-labels').each do |xaxis|
-      within(xaxis) do
-        labels = all('text').map { |x| x.text }
+  test 'User should be able to see all series for benchmarks selected' do
+    assert find(".chart[data-type='#{@ips_benchmark.name}']")['data-series'],
+      [
+        {
+          name: @active_record_scope_all.category,
+          data: [
+            [@rails_ips_run.initiator.created_at.to_i * 1000, @rails_ips_run.result.values[0]]
+          ]
+        },
+        {
+          name: @sequel_scope_all.category,
+          data: [
+            [@sequel_ips_run.initiator.created_at.to_i * 1000, @sequel_ips_run.result.values[0]]
+          ]
+        }
+      ]
 
-        @commit_dates.each do |commit_date|
-          assert_includes(labels, commit_date)
-        end
-      end
-    end
+    assert find(".chart[data-type='#{@memory_benchmark.name}']")['data-series'],
+      [
+        {
+          name: @active_record_scope_all.category,
+          data: [
+            [@rails_memory_run.initiator.created_at.to_i * 1000, @rails_memory_run.result.values[0]]
+          ]
+        },
+        {
+          name: @sequel_scope_all.category,
+          data: [
+            [@sequel_ips_run.initiator.created_at.to_i * 1000, @sequel_ips_run.result.values[0]]
+          ]
+        }
+      ]
+  end
+
+  test 'User should be able to follow links to github commits' do
+    assert find(".chart[data-type='#{@ips_benchmark.name}']")['data-commit-urls'],
+      [
+        {
+          name: @active_record_scope_all.category,
+          data: [
+            "https://github.com/#{@rails_org.name}/#{@rails_repo.name}/commit/#{@rails_ips_run.initiator.sha1}",
+            "https://github.com/#{@jeremyevans_org.name}/#{@sequel_repo.name}/commit/#{@sequel_ips_run.initiator.sha1}"
+          ]
+        }
+      ]
+
+    assert find(".chart[data-type='#{@memory_benchmark.name}']")['data-commit-urls'],
+      [
+        {
+          name: @active_record_scope_all.category,
+          data: [
+            "https://github.com/#{@rails_org.name}/#{@rails_repo.name}/commit/#{@rails_memory_run.initiator.sha1}",
+            "https://github.com/#{@jeremyevans_org.name}/#{@sequel_repo.name}/commit/#{@sequel_memory_run.initiator.sha1}"
+          ]
+        }
+      ]
   end
 
   test 'User should be able to see both scripts' do
