@@ -22,6 +22,7 @@ gem 'jbuilder'
 gem 'msgpack'
 gem 'octokit'
 gem 'bootstrap_sb_admin_base_v2'
+gem 'error_page_assets'
 
 group :development do
   gem 'spring'

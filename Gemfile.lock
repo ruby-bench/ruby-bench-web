@@ -105,6 +105,7 @@ GEM
       safe_yaml (~> 1.0.0)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    error_page_assets (0.4)
     erubis (2.7.0)
     execjs (2.7.0)
     factory_girl (4.7.0)
@@ -334,6 +335,7 @@ DEPENDENCIES
   capybara-screenshot
   coffee-rails
   database_cleaner
+  error_page_assets
   factory_girl_rails
   haml
   highstock-rails
