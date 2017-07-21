@@ -23,6 +23,10 @@
           = link_to admin_groups_path do
             %i.fa.fa-object-group.fa-fw
             = t('admin.groups')
+        %br
+        %li.dropdown-header
+          = t('admin.repositories')
+
         - @repos.each do |repo|
           %li
             = link_to admin_repo_path(repo.name) do
