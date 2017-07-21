@@ -9,7 +9,7 @@ module Admin::GroupsHelper
         <div class='panel-body'>
           <p><i>#{description_for(group)}</i></p>
           <ul>
-            #{benchmarks_from(group)}
+            #{benchmark_types_from(group)}
           </ul>
         </div>
         <div class='panel-footer'>
@@ -18,7 +18,7 @@ module Admin::GroupsHelper
         </div>
       </div>
     </div>
-    "
+    ".html_safe if group.present?
   end
 
   private
@@ -41,13 +41,13 @@ module Admin::GroupsHelper
   end
 
   def edit_link(group)
-    link_to(edit_admin_group(group), class: 'btn btn-default btn-circle') do
+    link_to(edit_admin_group_path(group), class: 'btn btn-default btn-circle') do
       '<i class="fa fa-pencil"></i>'
     end
   end
 
   def destroy_link
-    link_to(destroy_admin_group(group), class: 'btn btn-danger btn-circle') do
+    link_to(destroy_admin_group_path(group), class: 'btn btn-danger btn-circle') do
       '<i class="fa fa-times"></i>'
     end
   end
