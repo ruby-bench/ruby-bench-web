@@ -50,7 +50,7 @@ class Admin::GroupsController < ApplicationController
   end
 
   def set_admin
-    session['admin'] = true unless session['admin']
+    session['admin'] = true unless session['admin'] || Rails.env.test?
   end
 
   def set_group
@@ -58,6 +58,6 @@ class Admin::GroupsController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(:name, :description, :benchmark_types)
+    params.require(:group).permit(:name, :description, benchmark_type_ids: [])
   end
 end

@@ -1,0 +1,31 @@
+= form_for(group, url: admin_groups_path(group)) do |f|
+  - if group.errors.any?
+    .alert.alert-danger
+      %h2
+        = "#{pluralize(group.errors.count, "error")} prohibited this admin_group from being saved:"
+      %ul
+        - group.errors.full_messages.each do |message|
+          %li
+            = message
+
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+
+  .form-group
+    = f.label :description
+    = f.text_area :description, class: 'form-control'
+
+  - Repo.all.each do |repo|
+    %label
+      = "#{repo.name.capitalize} benchmarks:"
+    .panel.panel-default
+      .panel-body
+        .form-group
+          = collection_check_boxes(:group, :benchmark_type_ids, repo.benchmark_types, :id, :category) do |b|
+            = b.label
+            = b.check_box
+            %br
+
+  .actions
+    = f.submit

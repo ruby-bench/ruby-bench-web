@@ -1,0 +1,6 @@
+- content_for(:page_header) do
+  = t('admin.groups.new')
+
+= render('form', group: @group)
+
+= link_to 'Cancel', admin_groups_path

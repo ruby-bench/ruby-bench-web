@@ -42,17 +42,13 @@ module Admin::GroupsHelper
 
   def edit_link(group)
     link_to(edit_admin_group_path(group), class: 'btn btn-default btn-circle') do
-      '<i class="fa fa-pencil"></i>'
-    end
-  end
-
-  def destroy_link
-    link_to(destroy_admin_group_path(group), class: 'btn btn-danger btn-circle') do
-      '<i class="fa fa-times"></i>'
+      '<i class="fa fa-pencil"></i>'.html_safe
     end
   end
 
   def destroy_link(group)
-
+    link_to(admin_group_path(group), class: 'btn btn-danger btn-circle', method: 'delete') do
+      '<i class="fa fa-times"></i>'.html_safe
+    end
   end
 end

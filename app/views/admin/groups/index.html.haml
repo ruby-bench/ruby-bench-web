@@ -1,5 +1,13 @@
 - content_for(:page_header) do
-  = t('admin.groups')
+  = t('admin.groups.title')
+  = link_to(new_admin_group_path, class: 'btn btn-primary') do
+    %i.fa.fa-plus.fa-fw
+    = 'New group'
+
+- if notice.present?
+  .row
+    #notice.alert.alert-success.alert-dismissable
+      = notice
 
 - @groups.each_slice(2) do |first, second|
   .row

@@ -100,5 +100,8 @@ en:
     manual_run_count_label: 'Run last:'
     manual_run_button: 'Run'
     dashboard: 'Dashboard'
-    groups: 'Benchmark groups'
     repositories: 'Repositories'
+    groups:
+      new: 'New group'
+      title: 'Benchmark groups'
+
