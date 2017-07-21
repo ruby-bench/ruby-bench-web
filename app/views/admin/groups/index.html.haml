@@ -1,0 +1,8 @@
+- content_for(:page_header) do
+  = t('admin.groups')
+
+- @groups.each_slice(2) do |first, second|
+  .row
+    = group_panel_html(first)
+    = group_panel_html(second)
+
