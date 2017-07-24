@@ -1,8 +1,6 @@
 = form_for(group, url: admin_groups_path(group)) do |f|
   - if group.errors.any?
     .alert.alert-danger
-      %h2
-        = "#{pluralize(group.errors.count, "error")} prohibited this admin_group from being saved:"
       %ul
         - group.errors.full_messages.each do |message|
           %li
