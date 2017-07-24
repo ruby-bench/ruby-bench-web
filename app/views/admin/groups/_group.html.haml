@@ -13,6 +13,6 @@
     .panel-footer
       = link_to(edit_admin_group_path(group), class: 'btn btn-default btn-circle') do
         %i.fa.fa-pencil
-      = link_to(admin_group_path(group), class: 'btn btn-danger btn-circle', method: 'delete') do
+      = link_to(admin_group_path(group), id: "destroy_#{group.id}", class: 'btn btn-danger btn-circle', method: 'delete') do
         %i.fa.fa-times
 

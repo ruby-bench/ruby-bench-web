@@ -64,6 +64,12 @@ class BenchmarkGroupsTest < AcceptanceTest
   end
 
   test 'Admin should be able to destroy benchmark groups' do
+    group = create(:group)
 
+    visit admin_groups_path
+
+    assert_difference('Group.count', -1) do
+      find("#destroy_#{group.id}").click
+    end
   end
 end
