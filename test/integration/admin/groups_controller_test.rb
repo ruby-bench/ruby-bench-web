@@ -5,17 +5,17 @@ class Admin::GroupsControllerTest < ActionDispatch::IntegrationTest
     @group = create(:group)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get admin_groups_url
     assert_response :success
   end
 
-  test "should get new" do
+  test 'should get new' do
     get new_admin_group_url
     assert_response :success
   end
 
-  test "should create group" do
+  test 'should create group' do
     assert_difference('Group.count') do
       post admin_groups_url, params: { group: { name: 'Group' } }
     end
@@ -23,17 +23,17 @@ class Admin::GroupsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_groups_url
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_admin_group_url(@group)
     assert_response :success
   end
 
-  test "should update group" do
+  test 'should update group' do
     patch admin_group_url(@group), params: { group: { name: 'Renamed group' } }
     assert_redirected_to admin_groups_url
   end
 
-  test "should destroy group" do
+  test 'should destroy group' do
     assert_difference('Group.count', -1) do
       delete admin_group_url(@group)
     end
