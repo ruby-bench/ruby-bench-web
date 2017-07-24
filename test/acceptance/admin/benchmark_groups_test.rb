@@ -60,7 +60,7 @@ class BenchmarkGroupsTest < AcceptanceTest
     group = Group.find(group.id)
     assert_equal group.name, group_name
     assert_equal group.description, group_description
-    assert_equal group.benchmark_types.to_a, benchmark_types.last(2)
+    assert_equal group.benchmark_types.to_a.sort, benchmark_types.last(2).sort
   end
 
   test 'Admin should be able to destroy benchmark groups' do
