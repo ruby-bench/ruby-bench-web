@@ -11,6 +11,6 @@
 
 - @groups.each_slice(2) do |first, second|
   .row
-    = group_panel_html(first)
-    = group_panel_html(second)
+    = render('group', group: first)
+    = render('group', group: second) if second.present?
 
