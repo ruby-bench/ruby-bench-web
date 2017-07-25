@@ -22,8 +22,7 @@ class BenchmarkRun < ApplicationRecord
       .where(
         benchmark_types: { category: form_result_type },
         benchmark_result_type: benchmark_result_type,
-        initiator_type: 'Commit',
-        validity: true
+        initiator_type: 'Commit'
       )
       .order('commits.created_at DESC')
       .limit(limit)
