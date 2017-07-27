@@ -9,6 +9,7 @@ class BenchmarkType < ApplicationRecord
   }, through: :benchmark_runs
 
   belongs_to :repo
+  has_and_belongs_to_many :groups
 
   after_update :check_benchmark_runs_validity
 
@@ -19,6 +20,10 @@ class BenchmarkType < ApplicationRecord
     uri = URI.parse(self.script_url)
     uri.path =~ /\A(\/[^\/]*\/[^\/]*\/)(.*)\z/
     "https://github.com#{$1}blob/#{$2}"
+  end
+
+  def comparison_benchmark_types
+    BenchmarkType.joins(:groups).where('benchmark_types_groups.group_id' => groups.ids).where.not(id: id)
   end
 
   private

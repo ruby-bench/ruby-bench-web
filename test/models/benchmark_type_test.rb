@@ -25,4 +25,15 @@ class BenchmarkTypeTest < ActiveSupport::TestCase
 
     assert bm_run.reload.validity
   end
+
+  test '#comparison_benchmark_types' do
+    benchmark_types = create_list(:benchmark_type, 5)
+    groups = create_list(:group, 2)
+
+    groups.first.benchmark_types << benchmark_types.first(3)
+    groups.second.benchmark_types << benchmark_types.last(3)
+
+    assert_equal benchmark_types.first.comparison_benchmark_types.to_a, benchmark_types[1..2]
+    assert_equal benchmark_types.third.comparison_benchmark_types.to_a, benchmark_types.first(2) + benchmark_types.last(2)
+  end
 end

@@ -200,7 +200,7 @@ class ReposController < ApplicationController
   def set_comparable_benchmarks
     @comparable_benchmarks =
       if @benchmark.present?
-        BenchmarkType.all_except(@benchmark)
+        @benchmark.comparison_benchmark_types
       else
         []
       end

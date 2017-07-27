@@ -10,7 +10,7 @@ class AdminController < ApplicationController
   before_action :set_repo, only: [:repo, :run]
 
   def set_admin
-    session['admin'] = true unless session['admin']
+    session['admin'] = true unless session['admin'] || Rails.env.test?
   end
 
   def home

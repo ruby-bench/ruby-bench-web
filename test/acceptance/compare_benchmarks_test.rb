@@ -43,6 +43,10 @@ class CompareBenchmarks < AcceptanceTest
       benchmark_result_type: @memory_benchmark
     )
 
+    group = create(:group)
+    group.benchmark_types << [@active_record_scope_all, @sequel_scope_all]
+    group.save!
+
     visit commits_path(
       @rails_org.name,
       @rails_repo.name,

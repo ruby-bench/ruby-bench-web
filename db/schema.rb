@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161215124119) do
+ActiveRecord::Schema.define(version: 20170720115144) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_trgm"
 
   create_table "benchmark_result_types", force: :cascade do |t|
     t.string   "name",       null: false
@@ -29,8 +30,8 @@ ActiveRecord::Schema.define(version: 20161215124119) do
     t.text     "environment",                             null: false
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
-    t.string   "initiator_type"
     t.integer  "initiator_id"
+    t.string   "initiator_type"
     t.integer  "benchmark_type_id",        default: 0,    null: false
     t.integer  "benchmark_result_type_id",                null: false
     t.boolean  "validity",                 default: true, null: false
@@ -49,6 +50,13 @@ ActiveRecord::Schema.define(version: 20161215124119) do
     t.index ["repo_id"], name: "index_benchmark_types_on_repo_id", using: :btree
   end
 
+  create_table "benchmark_types_groups", id: false, force: :cascade do |t|
+    t.integer "benchmark_type_id", null: false
+    t.integer "group_id",          null: false
+    t.index ["benchmark_type_id", "group_id"], name: "index_benchmark_types_groups_on_benchmark_type_id_and_group_id", using: :btree
+    t.index ["group_id", "benchmark_type_id"], name: "index_benchmark_types_groups_on_group_id_and_benchmark_type_id", using: :btree
+  end
+
   create_table "commits", force: :cascade do |t|
     t.string   "sha1",       null: false
     t.string   "url",        null: false
@@ -58,6 +66,13 @@ ActiveRecord::Schema.define(version: 20161215124119) do
     t.datetime "updated_at", null: false
     t.index ["repo_id"], name: "index_commits_on_repo_id", using: :btree
     t.index ["sha1", "repo_id"], name: "index_commits_on_sha1_and_repo_id", unique: true, using: :btree
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "organizations", force: :cascade do |t|
