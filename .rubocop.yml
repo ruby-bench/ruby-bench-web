@@ -8,9 +8,6 @@ AllCops:
     - "db/**/*"
     - "vendor/**/*"
 
-Style/MultilineMethodCallIndentation:
-  EnforcedStyle: aligned
-
 # Prefer &&/|| over and/or.
 Style/AndOr:
   Enabled: true
@@ -19,6 +16,9 @@ Style/AndOr:
 # method call.
 Style/BracesAroundHashParameters:
   Enabled: true
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: aligned
 
 # Align `when` with `case`.
 Layout/CaseIndentation:

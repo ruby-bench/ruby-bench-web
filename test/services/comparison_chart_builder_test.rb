@@ -2,41 +2,67 @@ require 'test_helper'
 
 class ComparisonChartBuilderTest < ActiveSupport::TestCase
   setup do
+    Commit.record_timestamps = false
     @benchmark_result_type = create(:benchmark_result_type)
     @benchmark_types = create_list(:benchmark_type, 3)
     @benchmark_types.each do |benchmark_type|
-      5.times do
+      5.times do |i|
         create(
-          :commit_benchmark_run,
+          :benchmark_run,
           benchmark_type: benchmark_type,
-          benchmark_result_type: @benchmark_result_type
+          benchmark_result_type: @benchmark_result_type,
+          initiator: create(:commit, created_at: Time.at(i + 1), updated_at: Time.at(i + 1))
         )
       end
     end
-    @chart_builder = ComparisonChartBuilder.new(@benchmark_result_type, @benchmark_types)
   end
 
-  test '#series' do
+  test 'series' do
+    chart_builder = ComparisonChartBuilder.new(@benchmark_result_type, @benchmark_types)
     @benchmark_types.each do |benchmark_type|
-      assert_includes @chart_builder.series, series_for(benchmark_type)
+      assert_includes chart_builder.series, series_for(benchmark_type)
     end
   end
 
-  test '#commit_urls' do
+  test 'series with irregular time intervals' do
+    xmin = 0
+    xmax = 6
+    create(
+      :benchmark_run,
+      benchmark_type: @benchmark_types.first,
+      benchmark_result_type: @benchmark_result_type,
+      initiator: create(:commit, created_at: Time.at(xmin), updated_at: Time.at(xmin))
+    )
+    create(
+      :benchmark_run,
+      benchmark_type: @benchmark_types.first,
+      benchmark_result_type: @benchmark_result_type,
+      initiator: create(:commit, created_at: Time.at(xmax), updated_at: Time.at(xmax))
+    )
+    chart_builder = ComparisonChartBuilder.new(@benchmark_result_type, @benchmark_types)
     @benchmark_types.each do |benchmark_type|
-      assert_includes @chart_builder.commit_urls, commit_urls_for(benchmark_type)
+      assert_includes chart_builder.series, streched_series(benchmark_type, min: xmin, max: xmax)
     end
   end
 
-  test '#unit' do
-    assert @chart_builder.unit, @benchmark_result_type.unit
+  test 'commit_urls' do
+    chart_builder = ComparisonChartBuilder.new(@benchmark_result_type, @benchmark_types)
+    @benchmark_types.each do |benchmark_type|
+      assert_includes chart_builder.commit_urls, commit_urls_for(benchmark_type)
+    end
   end
 
-  test '#name' do
-    assert @chart_builder.name, @benchmark_result_type.name
+  test 'unit' do
+    chart_builder = ComparisonChartBuilder.new(@benchmark_result_type, @benchmark_types)
+    assert chart_builder.unit, @benchmark_result_type.unit
   end
 
-  test '#construct_from_cache' do
+  test 'name' do
+    chart_builder = ComparisonChartBuilder.new(@benchmark_result_type, @benchmark_types)
+    assert chart_builder.name, @benchmark_result_type.name
+  end
+
+  test 'construct_from_cache' do
     cache_read = {
       series: [
         { name: 'series1', data: [1, 2, 3] }
@@ -51,6 +77,10 @@ class ComparisonChartBuilderTest < ActiveSupport::TestCase
     assert chart_builder.commit_urls = cache_read[:commit_urls]
   end
 
+  teardown do
+    Commit.record_timestamps = true
+  end
+
   private
 
   def series_for(benchmark_type)
@@ -62,6 +92,13 @@ class ComparisonChartBuilderTest < ActiveSupport::TestCase
           .sort_by { |run| run.initiator.created_at }
           .map { |run| [run.initiator.created_at.to_i * 1000, run.result.values[0].to_i] }
     }
+  end
+
+  def streched_series(benchmark_type, min:, max:)
+    series = series_for(benchmark_type)
+    series[:data].insert(0, [min * 1000, 5]) unless series[:data].first.first == min * 1000
+    series[:data].push([max * 1000, 5]) unless series[:data].last.first == max * 1000
+    series
   end
 
   def commit_urls_for(benchmark_type)
