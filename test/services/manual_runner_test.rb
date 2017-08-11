@@ -13,7 +13,7 @@ class ManualRunnerTest < ActiveSupport::TestCase
     end
   end
 
-  test 'run_last' do
+  test 'run last 200 commits' do
     organization = create(:organization, name: 'jeremyevans')
     repo = create(:repo, name: 'sequel', organization: organization)
 
@@ -26,10 +26,34 @@ class ManualRunnerTest < ActiveSupport::TestCase
         assert commit[:repo]
         assert commit[:author_name]
       end
+
+      assert 100, commits.count
     end
 
-    VCR.use_cassette('github') do
+    VCR.use_cassette('github 200 commits') do
       ManualRunner.new(repo).run_last(200)
+    end
+  end
+
+  test 'run last 20 commits' do
+    organization = create(:organization, name: 'jeremyevans')
+    repo = create(:repo, name: 'sequel', organization: organization)
+
+    CommitsRunner.expects(:run).times(1).with do |commits|
+      commits.each do |commit|
+        assert commit[:sha]
+        assert commit[:message]
+        assert commit[:url]
+        assert commit[:created_at]
+        assert commit[:repo]
+        assert commit[:author_name]
+      end
+
+      assert_equal 20, commits.count
+    end
+
+    VCR.use_cassette('github 20 commits') do
+      ManualRunner.new(repo).run_last(20)
     end
   end
 end
