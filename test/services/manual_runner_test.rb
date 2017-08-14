@@ -17,7 +17,7 @@ class ManualRunnerTest < ActiveSupport::TestCase
     organization = create(:organization, name: 'jeremyevans')
     repo = create(:repo, name: 'sequel', organization: organization)
 
-    CommitsRunner.expects(:run).times(2).with do |commits|
+    CommitsRunner.expects(:run).times(2).returns(100).with do |commits|
       commits.each do |commit|
         assert commit[:sha]
         assert commit[:message]
@@ -39,7 +39,7 @@ class ManualRunnerTest < ActiveSupport::TestCase
     organization = create(:organization, name: 'jeremyevans')
     repo = create(:repo, name: 'sequel', organization: organization)
 
-    CommitsRunner.expects(:run).times(1).with do |commits|
+    CommitsRunner.expects(:run).times(1).returns(20).with do |commits|
       commits.each do |commit|
         assert commit[:sha]
         assert commit[:message]

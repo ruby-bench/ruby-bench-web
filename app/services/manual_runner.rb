@@ -28,8 +28,6 @@ class ManualRunner
     fetched_commits = @octokit.commits("#{@repo.organization.name}/#{@repo.name}", per_page: per_page, page: page)
     formatted_commits = format_commits(fetched_commits)
     CommitsRunner.run(formatted_commits, pattern)
-
-    fetched_commits.count
   end
 
   def format_commits(commits)
