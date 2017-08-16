@@ -59,7 +59,7 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'newrelic_rpm'
-  gem 'bugsnag'
+  gem 'sentry-raven'
 end
 gem 'nokogiri', '>= 1.6.8'
 gem 'rubyzip', '>= 1.2.1'
