@@ -120,6 +120,16 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
   end
 
+  test '#perform pg_master' do
+    @ssh.expects(:exec!).with(
+      "tsp #{RemoteServerJob::PG_MASTER} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
+    )
+
+    RemoteServerJob.new.perform(
+      @commit_hash, 'pg_master', include_patterns: @patterns
+    )
+  end
+
   private
 
   def set_script_arguments

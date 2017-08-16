@@ -26,4 +26,12 @@ class BenchmarkPoolTest < ActiveSupport::TestCase
 
     assert_enqueued_jobs 1
   end
+
+  test '#enqueue for ruby-pg' do
+    assert_enqueued_with(job: RemoteServerJob) do
+      BenchmarkPool.enqueue('ruby-pg', 'abc')
+    end
+
+    assert_enqueued_jobs 1
+  end
 end

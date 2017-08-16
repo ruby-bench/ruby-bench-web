@@ -16,6 +16,8 @@ class RemoteServerJob < ActiveJob::Base
 
   BUNDLER_RELEASE = "#{SCRIPTS_PATH}/bundler/releases.sh"
 
+  PG_MASTER = "#{SCRIPTS_PATH}/pg/master.sh"
+
   # Use keyword arguments once Rails 4.2.1 has been released.
   def perform(initiator_key, benchmark_group, options = {})
     Net::SSH.start(
@@ -121,6 +123,12 @@ class RemoteServerJob < ActiveJob::Base
     patterns = options[:include_patterns]
 
     ssh_exec!(ssh, "#{BUNDLER_RELEASE} #{version} #{secrets.api_name} #{secrets.api_password} #{patterns}")
+  end
+
+  def pg_master(ssh, commit_hash, options)
+    patterns = options[:include_patterns]
+
+    ssh_exec!(ssh, "#{PG_MASTER} #{commit_hash} #{secrets.api_name} #{secrets.api_password} #{patterns}")
   end
 
   def execute_ssh_commands(ssh, commands)
