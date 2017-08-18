@@ -23,3 +23,8 @@ bugsnag:
   desc: "Detect and diagnose crashes in your applications. Bugsnag's cross platform error monitoring helps you ship with confidence."
   link: 'https://bugsnag.com/'
   class_name: 'sponsor-bugsnag'
+sentry:
+  name: 'Sentry'
+  desc: 'Open-source error tracking that helps developers monitor and fix crashes in real time. Iterate continuously. Boost workflow efficiency. Improve user experience.'
+  link: 'https://sentry.io'
+  class_name: 'sponsor-sentry'

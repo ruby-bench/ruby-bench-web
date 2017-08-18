@@ -33,7 +33,7 @@
   }
 }
 
-$sponsor-list: discourse jolly-good-code rubytune ruby-together bugsnag;
+$sponsor-list: discourse jolly-good-code rubytune ruby-together bugsnag sentry;
 
 @each $sponsor in $sponsor-list {
   .sponsor-#{$sponsor} {
