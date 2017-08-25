@@ -41,18 +41,18 @@ Motherboard | Intel Coporation S1200RP
 
 # Contribute
 
-## Dependency
-PostgreSQL 9.x in order to enable the hstore extension.
-
-Redis
+## Dependencies
+- PostgreSQL 9.x in order to enable the hstore extension.
+- Redis
+- PhantomJS
 
 ## Setup
 ```bash
 redis-server
-bundle exec rake db:setup
 
-# copy database.yml.example to database.yml and make sure you have correct configuration
-cp config/database.yml.example config/database.yml
+# Make sure that the current user has a Postgres account 
+# If not run : sudo -u postgres createuser <username> -s
+bundle exec rake db:setup
 
 unicorn -c config/unicorn.rb
 ```
