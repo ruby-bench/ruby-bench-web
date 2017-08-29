@@ -30,7 +30,7 @@ class BenchmarkType < ApplicationRecord
 
   def check_benchmark_runs_validity
     if self.digest_was && self.digest_changed?
-      self.benchmark_runs.update_all(validity: false)
+      self.benchmark_runs.where(validity: true).update_all(validity: false)
     end
   end
 end
