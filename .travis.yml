@@ -6,7 +6,7 @@ cache:
     - test/vcr_cassettes
 sudo: false
 rvm:
-  - "2.3.3"
+  - "2.4.1"
 notifications:
   email: false
 bundler_args: --without development:production --deployment --retry=3 --jobs=3
