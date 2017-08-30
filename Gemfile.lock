@@ -121,7 +121,7 @@ GEM
       activesupport (>= 4.2.0)
     haml (4.0.7)
       tilt
-    hashdiff (0.3.0)
+    hashdiff (0.3.6)
     highstock-rails (5.0.11)
       railties (>= 3.1)
     hitimes (1.2.4)
@@ -310,7 +310,7 @@ GEM
       raindrops (~> 0.7)
     uniform_notifier (1.10.0)
     vcr (3.0.3)
-    webmock (2.1.0)
+    webmock (3.0.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -372,7 +372,7 @@ DEPENDENCIES
   uglifier
   unicorn
   vcr
-  webmock
+  webmock (~> 3.0)
 
 BUNDLED WITH
-   1.15.3
+   1.15.4
