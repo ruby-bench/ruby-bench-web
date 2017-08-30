@@ -14,3 +14,13 @@ class ActiveSupport::TestCase
 end
 
 Sidekiq::Testing.fake!
+
+module MiniTest::Assertions
+  def assert_matched_arrays(expected, actual)
+    expected_array = expected.to_ary
+    assert_kind_of Array, expected_array
+    actual_array = actual.to_ary
+    assert_kind_of Array, actual_array
+    assert_equal expected_array.sort, actual_array.sort
+  end
+end

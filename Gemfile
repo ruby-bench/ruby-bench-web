@@ -39,7 +39,7 @@ end
 group :test do
   gem 'mocha'
   gem 'vcr'
-  gem 'webmock'
+  gem 'webmock', '~> 3.0'
   gem 'launchy'
   gem 'selenium-webdriver', '~> 2.53'
   gem 'poltergeist'
