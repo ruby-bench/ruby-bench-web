@@ -23,12 +23,14 @@ class BenchmarkRunsController < APIController
     )
 
     benchmark_run = BenchmarkRun.find_or_initialize_by(
-      initiator: initiator, benchmark_type: benchmark_type,
+      initiator: initiator,
+      benchmark_type: benchmark_type,
       benchmark_result_type: benchmark_result_type
     )
 
     benchmark_run.update_attributes(benchmark_run_params)
     benchmark_run.result = params[:benchmark_run][:result].to_unsafe_h
+    benchmark_run.validity = true
     benchmark_run.save!
 
     $redis.keys("#{BenchmarkRun.charts_cache_key(benchmark_type, benchmark_result_type)}:*").each do |key|
