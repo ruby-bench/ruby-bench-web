@@ -31,16 +31,23 @@ class ComparisonChartBuilder
 
   def build_chart
     @benchmark_types.each do |benchmark_type|
-      benchmark_type_series_data, benchmark_type_commit_urls = build_data_for(benchmark_type)
+      data = build_data_for(benchmark_type)
 
       @series << {
         name: benchmark_type.category,
-        data: benchmark_type_series_data
+        data: data[:series],
+        zoneAxis: 'x',
+        zones: [
+          {
+            value: data[:invalid_zone_value],
+            color: '#a9a9a9'
+          }
+        ]
       }
 
       @commit_urls << {
         name: benchmark_type.category,
-        data: benchmark_type_commit_urls
+        data: data[:commit_urls]
       }
     end
 
@@ -98,18 +105,21 @@ class ComparisonChartBuilder
   end
 
   def build_data_for(benchmark_type)
-    commit_urls = []
-    series_data = []
+    data = {
+      series: [],
+      commit_urls: []
+    }
 
     BenchmarkRun
       .fetch_commit_benchmark_runs(benchmark_type.category, @benchmark_result_type, nil)
       .sort_by { |run| run.initiator.created_at }
       .each do |run|
-        series_data << [run.initiator.created_at.to_i * 1000, run.result.values[0].to_i]
-        commit_urls << commit_url_for(run)
+        data[:series] << [timestamp_for(run), run.result.values[0].to_i]
+        data[:commit_urls] << commit_url_for(run)
+        data[:invalid_zone_value] = timestamp_for(run) if data[:invalid_zone_value].blank? && run.validity
       end
 
-    [series_data, commit_urls]
+    data
   end
 
   def commit_url_for(run)
@@ -118,5 +128,9 @@ class ComparisonChartBuilder
     organization = repo.organization
 
     "https://github.com/#{organization.name}/#{repo.name}/commit/#{commit.sha1}"
+  end
+
+  def timestamp_for(run)
+    run.initiator.created_at.to_i * 1000
   end
 end
