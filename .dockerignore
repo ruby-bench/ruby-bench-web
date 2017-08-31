@@ -1,0 +1,6 @@
+.git*
+log/*
+tmp/*
+Dockerfile
+docker-compose.yml
+README.rdoc
