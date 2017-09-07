@@ -33,7 +33,7 @@ class BenchmarkRunsController < APIController
     benchmark_run.validity = true
     benchmark_run.save!
 
-    $redis.keys("#{BenchmarkRun.charts_cache_key(benchmark_type, benchmark_result_type)}:*").each do |key|
+    $redis.keys("*#{BenchmarkRun.charts_cache_key(benchmark_type, benchmark_result_type)}*").each do |key|
       $redis.del(key)
     end
 

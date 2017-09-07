@@ -213,7 +213,7 @@ class ReposController < ApplicationController
       @benchmark.benchmark_result_types.each do |benchmark_type|
         @cache_keys[benchmark_type] =
           if @comparing_benchmark.present?
-            "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}:#{BenchmarkRun.charts_cache_key(@comparing_benchmark, benchmark_type)}"
+            "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{BenchmarkRun.charts_cache_key(@comparing_benchmark, benchmark_type)}"
           else
             "#{BenchmarkRun.charts_cache_key(@benchmark, benchmark_type)}:#{@display_count}"
           end
