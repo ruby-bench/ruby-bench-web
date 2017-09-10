@@ -5,18 +5,18 @@ class RemoteServerJob < ActiveJob::Base
 
   SCRIPTS_PATH = './ruby-bench-docker/scripts'
 
-  RUBY_TRUNK = "#{SCRIPTS_PATH}/ruby/trunk.sh"
+  RUBY_COMMIT = "#{SCRIPTS_PATH}/ruby/trunk.sh"
   RUBY_RELEASE = "#{SCRIPTS_PATH}/ruby/releases.sh"
 
-  RAILS_MASTER = "#{SCRIPTS_PATH}/rails/master.sh"
+  RAILS_COMMIT = "#{SCRIPTS_PATH}/rails/master.sh"
   RAILS_RELEASE = "#{SCRIPTS_PATH}/rails/releases.sh"
 
-  SEQUEL_MASTER = "#{SCRIPTS_PATH}/sequel/master.sh"
+  SEQUEL_COMMIT = "#{SCRIPTS_PATH}/sequel/master.sh"
   SEQUEL_RELEASE = "#{SCRIPTS_PATH}/sequel/releases.sh"
 
   BUNDLER_RELEASE = "#{SCRIPTS_PATH}/bundler/releases.sh"
 
-  PG_MASTER = "#{SCRIPTS_PATH}/pg/master.sh"
+  PG_COMMIT = "#{SCRIPTS_PATH}/pg/master.sh"
 
   # Use keyword arguments once Rails 4.2.1 has been released.
   def perform(initiator_key, benchmark_group, options = {})
@@ -32,7 +32,7 @@ class RemoteServerJob < ActiveJob::Base
 
   private
 
-  def ruby_trunk(ssh, commit_hash, options)
+  def ruby_commit(ssh, commit_hash, options)
     ruby = true
     memory = true
     optcarrot = true
@@ -41,11 +41,11 @@ class RemoteServerJob < ActiveJob::Base
 
     ssh_exec!(
       ssh,
-      "#{RUBY_TRUNK} #{ruby} #{memory} #{optcarrot} #{liquid} #{commit_hash} #{secrets.api_name} #{secrets.api_password} #{patterns}"
+      "#{RUBY_COMMIT} #{ruby} #{memory} #{optcarrot} #{liquid} #{commit_hash} #{secrets.api_name} #{secrets.api_password} #{patterns}"
     )
   end
 
-  def ruby_releases(ssh, version, options)
+  def ruby_release(ssh, version, options)
     ruby = true
     memory = true
     optcarrot = true
@@ -58,7 +58,7 @@ class RemoteServerJob < ActiveJob::Base
     )
   end
 
-  def ruby_releases_discourse(ssh, ruby_version, options)
+  def ruby_release_discourse(ssh, ruby_version, options)
     execute_ssh_commands(ssh,
       [
         'docker pull rubybench/ruby_releases_discourse',
@@ -77,7 +77,7 @@ class RemoteServerJob < ActiveJob::Base
     )
   end
 
-  def ruby_trunk_discourse(ssh, commit_hash, options)
+  def ruby_commit_discourse(ssh, commit_hash, options)
     execute_ssh_commands(ssh,
       [
         'docker pull rubybench/ruby_trunk_discourse',
@@ -94,41 +94,41 @@ class RemoteServerJob < ActiveJob::Base
     )
   end
 
-  def rails_releases(ssh, version, options)
+  def rails_release(ssh, version, options)
     prepared_statements = if version >= '4.2.5' then 1 else 0 end
     patterns = options[:include_patterns]
 
     ssh_exec!(ssh, "#{RAILS_RELEASE} #{version} #{secrets.api_name} #{secrets.api_password} #{prepared_statements} #{patterns}")
   end
 
-  def rails_trunk(ssh, commit_hash, options)
+  def rails_commit(ssh, commit_hash, options)
     patterns = options[:include_patterns]
 
-    ssh_exec!(ssh, "#{RAILS_MASTER} #{commit_hash} #{secrets.api_name} #{secrets.api_password} #{patterns}")
+    ssh_exec!(ssh, "#{RAILS_COMMIT} #{commit_hash} #{secrets.api_name} #{secrets.api_password} #{patterns}")
   end
 
-  def sequel_releases(ssh, version, options)
+  def sequel_release(ssh, version, options)
     patterns = options[:include_patterns]
 
     ssh_exec!(ssh, "#{SEQUEL_RELEASE} #{version} #{secrets.api_name} #{secrets.api_password} #{patterns}")
   end
 
-  def sequel_trunk(ssh, commit_hash, options)
+  def sequel_commit(ssh, commit_hash, options)
     patterns = options[:include_patterns]
 
-    ssh_exec!(ssh, "#{SEQUEL_MASTER} #{commit_hash} #{secrets.api_name} #{secrets.api_password} #{patterns}")
+    ssh_exec!(ssh, "#{SEQUEL_COMMIT} #{commit_hash} #{secrets.api_name} #{secrets.api_password} #{patterns}")
   end
 
-  def bundler_releases(ssh, version, options)
+  def bundler_release(ssh, version, options)
     patterns = options[:include_patterns]
 
     ssh_exec!(ssh, "#{BUNDLER_RELEASE} #{version} #{secrets.api_name} #{secrets.api_password} #{patterns}")
   end
 
-  def pg_master(ssh, commit_hash, options)
+  def pg_commit(ssh, commit_hash, options)
     patterns = options[:include_patterns]
 
-    ssh_exec!(ssh, "#{PG_MASTER} #{commit_hash} #{secrets.api_name} #{secrets.api_password} #{patterns}")
+    ssh_exec!(ssh, "#{PG_COMMIT} #{commit_hash} #{secrets.api_name} #{secrets.api_password} #{patterns}")
   end
 
   def execute_ssh_commands(ssh, commands)
