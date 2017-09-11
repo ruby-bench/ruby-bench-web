@@ -12,7 +12,7 @@ class BenchmarkPoolTest < ActiveSupport::TestCase
       BenchmarkPool.enqueue(:release, 'abc', 'ruby')
     end
 
-    assert_enqueued_jobs 2 
+    assert_enqueued_jobs 2
   end
 
   test '#enqueue for rails' do
@@ -24,14 +24,14 @@ class BenchmarkPoolTest < ActiveSupport::TestCase
       BenchmarkPool.enqueue(:release, 'abc', 'rails')
     end
 
-    assert_enqueued_jobs 2 
+    assert_enqueued_jobs 2
   end
 
   test '#enqueue for sequel' do
     assert_enqueued_with(job: RemoteServerJob) do
       BenchmarkPool.enqueue(:commit, 'abc', 'sequel')
     end
-    
+
     assert_enqueued_with(job: RemoteServerJob) do
       BenchmarkPool.enqueue(:release, 'abc', 'sequel')
     end
@@ -47,7 +47,7 @@ class BenchmarkPoolTest < ActiveSupport::TestCase
     assert_enqueued_with(job: RemoteServerJob) do
       BenchmarkPool.enqueue(:release, 'abc', 'ruby-pg')
     end
-    
-    assert_enqueued_jobs 2 
+
+    assert_enqueued_jobs 2
   end
 end

@@ -13,5 +13,4 @@ module BenchmarkPool
       raise ArgumentError, "unknown repo: #{repo_name}"
     end
   end
-
 end

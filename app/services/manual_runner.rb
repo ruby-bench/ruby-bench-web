@@ -25,21 +25,7 @@ class ManualRunner
   end
 
   def run_commits(page: 1, per_page: 100, pattern: '')
-    fetched_commits = @octokit.commits("#{@repo.organization.name}/#{@repo.name}", per_page: per_page, page: page)
-    formatted_commits = format_commits(fetched_commits)
-    CommitsRunner.run(formatted_commits, pattern)
-  end
-
-  def format_commits(commits)
-    commits.map do |commit|
-      {
-        sha: commit['sha'],
-        message: commit['commit']['message'],
-        repo: @repo,
-        url: commit['html_url'],
-        created_at: commit['commit']['author']['date'],
-        author_name: commit['commit']['author']['name']
-      }
-    end
+    commits = @octokit.commits("#{@repo.organization.name}/#{@repo.name}", per_page: per_page, page: page)
+    CommitsRunner.run(:api, commits, @repo, pattern)
   end
 end

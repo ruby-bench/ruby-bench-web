@@ -2,7 +2,7 @@ require 'test_helper'
 
 class GithubEventHandlerTest < ActionDispatch::IntegrationTest
   test '#handle for single commits pushed' do
-    BenchmarkPool.expects(:enqueue).with('ruby', '12345')
+    BenchmarkPool.expects(:enqueue).with(:commit, '12345', 'ruby', include_patterns: '')
 
     post_to_handler('ref' => 'refs/heads/master',
       'head_commit' => {
@@ -31,8 +31,8 @@ class GithubEventHandlerTest < ActionDispatch::IntegrationTest
   end
 
   test '#handle for multiple commits pushed' do
-    BenchmarkPool.expects(:enqueue).with('ruby', '12345')
-    BenchmarkPool.expects(:enqueue).with('ruby', '12346')
+    BenchmarkPool.expects(:enqueue).with(:commit, '12345', 'ruby', include_patterns: '')
+    BenchmarkPool.expects(:enqueue).with(:commit, '12346', 'ruby', include_patterns: '')
 
     post_to_handler('ref' => 'refs/heads/master',
       'commits' =>

@@ -25,19 +25,14 @@ class GithubEventHandler
     @payload['ref'].split('/')[2]
   end
 
-  # Grabs the commits hash and starts job to run benchmarks on remote server.
   def process_push
-    repo = first_or_create_repo(@payload['repository'])
+    repo = find_or_create_repo(@payload['repository'])
     commits = @payload['commits'] || [@payload['head_commit']]
 
-    commits.each do |commit|
-      if create_commit(commit, repo.id)
-        BenchmarkPool.enqueue(repo.name, commit['id'])
-      end
-    end
+    CommitsRunner.run(:webhook, commits, repo)
   end
 
-  def first_or_create_repo(repository)
+  def find_or_create_repo(repository)
     organization_name, repo_name = parse_full_name(repository['full_name'])
     repository_url = repository['html_url']
 
@@ -64,20 +59,5 @@ class GithubEventHandler
   def parse_full_name(full_name)
     full_name =~ /\A(\w+)\/(\w+)/
     [$1, $2]
-  end
-
-  def create_commit(commit, repo_id)
-    if valid_commit?(commit)
-      Commit.find_or_create_by(sha1: commit['id']) do |c|
-        c.url = commit['url']
-        c.message = commit['message']
-        c.repo_id = repo_id
-        c.created_at = commit['timestamp']
-      end
-    end
-  end
-
-  def valid_commit?(commit)
-    !Commit.merge_or_skip_ci?(commit['message']) && Commit.valid_author?(commit['author']['name'])
   end
 end
