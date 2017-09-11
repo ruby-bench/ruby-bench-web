@@ -1,12 +1,4 @@
-class Admin::GroupsController < ApplicationController
-  http_basic_authenticate_with(
-    name: 'admin',
-    password: Rails.application.secrets.admin_password
-  ) unless Rails.env.test?
-
-  layout 'admin'
-
-  before_action :set_repos, :set_admin
+class Admin::GroupsController < AdminController
   before_action :set_group, only: [:show, :edit, :update, :destroy]
 
   def index

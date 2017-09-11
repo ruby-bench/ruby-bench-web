@@ -7,6 +7,6 @@ class ManualRunTest < ActionDispatch::IntegrationTest
 
     ManualRunner.any_instance.expects(:run_last).with(100, pattern: pattern)
 
-    post(admin_repo_run_path(@repo.name), params: { count: 100, pattern: pattern })
+    post(admin_run_commits_path(@repo.name), params: { count: 100, pattern: pattern })
   end
 end

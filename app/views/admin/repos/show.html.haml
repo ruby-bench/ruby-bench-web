@@ -12,7 +12,7 @@
 
     .panel.panel-warning
       .panel-body
-        = form_tag(admin_repo_run_path(@repo.name), id: 'manual_run_form') do
+        = form_tag(admin_run_commits_path(@repo.name), id: 'manual_run_form') do
           .form-group
             = label_tag(t('admin.manual_run_pattern_label'))
             = text_field_tag(:pattern, 'all', class: 'form-control')
