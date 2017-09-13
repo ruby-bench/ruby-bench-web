@@ -95,9 +95,13 @@ en:
       commit_url: Click on a point to view and compare commits on GitHub
 
   admin:
-    wait_manual_run: 'Wait while selected runs are being queued...'
+    commits_run_header: 'Run commits'
+    releases_run_header: 'Run releases'
+    wait_commits_run: 'Wait while selected runs are being queued...'
+    wait_releases_run: 'Wait while selected versions are being queued...'
     manual_run_pattern_label: 'Pattern:'
-    manual_run_count_label: 'Run last:'
+    commits_run_count_label: 'Run last:'
+    releases_run_versions_label: 'Versions:'
     manual_run_button: 'Run'
     dashboard: 'Dashboard'
     repositories: 'Repositories'

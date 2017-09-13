@@ -29,5 +29,6 @@ Rails.application.routes.draw do
     get '' => 'dashboard#dashboard', as: :dashboard
     get 'repos/:repo_name' => 'repos#show', as: :repo
     post 'repos/:repo_name/run_commits' => 'repos#run_commits', as: :run_commits
+    post 'repos/:repo_name/run_releases' => 'repos#run_releases', as: :run_releases
   end
 end
