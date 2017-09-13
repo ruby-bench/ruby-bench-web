@@ -23,12 +23,12 @@ Rails.application.routes.draw do
   get ':organization_name/:repo_name/commits' => 'repos#commits', as: :commits
   get ':organization_name/:repo_name/releases' => 'repos#releases', as: :releases
 
-  get 'admin' => 'admin#home'
-  get 'admin/repos/:repo_name' => 'admin#repo', as: :admin_repo
-  get 'admin/toggle' => 'admin#toggle_admin'
-  post 'admin/repos/:repo_name/run' => 'admin#run', as: :admin_repo_run
-
   namespace :admin do
     resources :groups, except: [:show]
+
+    get '' => 'dashboard#dashboard', as: :dashboard
+    get 'repos/:repo_name' => 'repos#show', as: :repo
+    post 'repos/:repo_name/run_commits' => 'repos#run_commits', as: :run_commits
+    post 'repos/:repo_name/run_releases' => 'repos#run_releases', as: :run_releases
   end
 end

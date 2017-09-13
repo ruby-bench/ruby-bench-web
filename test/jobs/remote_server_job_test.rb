@@ -8,13 +8,13 @@ class RemoteServerJobTest < ActiveJob::TestCase
     set_script_arguments
   end
 
-  test '#perform ruby_trunk' do
+  test '#perform ruby_commit' do
     @ssh.expects(:exec!).with(
-      "tsp #{RemoteServerJob::RUBY_TRUNK} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::RUBY_COMMIT} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
-      @commit_hash, 'ruby_trunk', include_patterns: @patterns
+      @commit_hash, 'ruby_commit', include_patterns: @patterns
     )
   end
 
@@ -24,11 +24,11 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
 
     RemoteServerJob.new.perform(
-      @version, 'ruby_releases', include_patterns: @patterns
+      @version, 'ruby_release', include_patterns: @patterns
     )
   end
 
-  test '#perform ruby_releases_discourse' do
+  test '#perform ruby_release_discourse' do
     [
       'tsp docker pull rubybench/ruby_releases_discourse',
       'tsp docker run --name discourse_redis -d redis:2.8.19',
@@ -47,10 +47,10 @@ class RemoteServerJobTest < ActiveJob::TestCase
       @ssh.expects(:exec!).with(command)
     end
 
-    RemoteServerJob.new.perform('2.2.0', 'ruby_releases_discourse')
+    RemoteServerJob.new.perform('2.2.0', 'ruby_release_discourse')
   end
 
-  test '#perform ruby_trunk_discourse' do
+  test '#perform ruby_commit_discourse' do
     [
       'tsp docker pull rubybench/ruby_trunk_discourse',
       'tsp docker run --name discourse_redis -d redis:2.8.19',
@@ -67,66 +67,66 @@ class RemoteServerJobTest < ActiveJob::TestCase
       @ssh.expects(:exec!).with(command)
     end
 
-    RemoteServerJob.new.perform('commit_hash', 'ruby_trunk_discourse')
+    RemoteServerJob.new.perform('commit_hash', 'ruby_commit_discourse')
   end
 
-  test '#perform rails_releases' do
+  test '#perform rails_release' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::RAILS_RELEASE} #{@version} #{@api_name} #{@api_password} 0 #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
-      @version, 'rails_releases', include_patterns: @patterns
+      @version, 'rails_release', include_patterns: @patterns
     )
   end
 
-  test '#perform rails_trunk' do
+  test '#perform rails_commit' do
     @ssh.expects(:exec!).with(
-      "tsp #{RemoteServerJob::RAILS_MASTER} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::RAILS_COMMIT} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
-      @commit_hash, 'rails_trunk', include_patterns: @patterns
+      @commit_hash, 'rails_commit', include_patterns: @patterns
     )
   end
 
-  test '#perform sequel_releases' do
+  test '#perform sequel_release' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::SEQUEL_RELEASE} #{@version} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
-      @version, 'sequel_releases', include_patterns: @patterns
+      @version, 'sequel_release', include_patterns: @patterns
     )
   end
 
-  test '#perform sequel_trunk' do
+  test '#perform sequel_commit' do
     @ssh.expects(:exec!).with(
-      "tsp #{RemoteServerJob::SEQUEL_MASTER} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::SEQUEL_COMMIT} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
-      @commit_hash, 'sequel_trunk', include_patterns: @patterns
+      @commit_hash, 'sequel_commit', include_patterns: @patterns
     )
   end
 
-  test '#perform bundler_releases' do
+  test '#perform bundler_release' do
     @ssh.expects(:exec!).with(
       "tsp #{RemoteServerJob::BUNDLER_RELEASE} #{@version} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
-      @version, 'bundler_releases', include_patterns: @patterns
+      @version, 'bundler_release', include_patterns: @patterns
     )
   end
 
-  test '#perform pg_master' do
+  test '#perform pg_commit' do
     @ssh.expects(:exec!).with(
-      "tsp #{RemoteServerJob::PG_MASTER} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
+      "tsp #{RemoteServerJob::PG_COMMIT} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
     )
 
     RemoteServerJob.new.perform(
-      @commit_hash, 'pg_master', include_patterns: @patterns
+      @commit_hash, 'pg_commit', include_patterns: @patterns
     )
   end
 

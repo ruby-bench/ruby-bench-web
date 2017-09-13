@@ -1,0 +1,47 @@
+- content_for(:page_header) do
+  = @repo.name.capitalize
+
+.row
+  .col-lg-6
+    - if notice.present?
+      #notice.alert.alert-success
+        = notice
+
+    #wait_commits_alert.alert.alert-warning.hidden
+      = t('admin.wait_commits_run')
+    
+    #wait_releases_alert.alert.alert-warning.hidden
+      = t('admin.wait_releases_run')
+.row
+  .col-lg-6
+    .panel.panel-warning
+      .panel-heading
+        = t('admin.commits_run_header')
+      .panel-body
+        = form_tag(admin_run_commits_path(@repo.name), id: 'commits_run_form') do
+          .form-group
+            = label_tag(t('admin.manual_run_pattern_label'))
+            = text_field_tag(:pattern, 'all', class: 'form-control')
+
+          .form-group
+            = label_tag(t('admin.commits_run_count_label'))
+            = select_tag(:count, options_for_select(ManualRunner::OPTIONS, ManualRunner::OPTIONS.last), class: 'form-control')
+
+          = button_tag(t('admin.manual_run_button'), class: 'btn btn-default')
+
+  .col-lg-6
+    .panel.panel-warning
+      .panel-heading
+        = t('admin.releases_run_header')
+      .panel-body
+        = form_tag(admin_run_releases_path(@repo.name), id: 'releases_run_form') do
+          .form-group
+            = label_tag(t('admin.manual_run_pattern_label'))
+            = text_field_tag(:pattern, 'all', class: 'form-control')
+
+          .form-group
+            = label_tag(t('admin.releases_run_versions_label'))
+            = text_field_tag(:versions, '', class: 'form-control')
+            <p><i>For example: 3.0.0,4.0.0,5.0.0</i></p>
+
+          = button_tag(t('admin.manual_run_button'), class: 'btn btn-default')
