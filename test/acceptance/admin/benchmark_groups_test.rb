@@ -27,7 +27,7 @@ class BenchmarkGroupsTest < AcceptanceTest
     assert_difference('Group.count') do
       click_on('Create')
     end
-    assert_equal Group.last.benchmark_types, benchmark_types.first(3)
+    assert_matched_arrays Group.last.benchmark_types, benchmark_types.first(3)
     assert page.has_content?("#{group_name} group was successfully created.")
   end
 
