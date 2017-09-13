@@ -7,6 +7,10 @@ class ManualRunner
     @octokit = Octokit::Client.new(access_token: Rails.application.secrets.github_api_token)
   end
 
+  def run_releases(versions, pattern: '')
+    ReleasesRunner.run(versions, @repo, pattern)
+  end
+
   def run_last(commits_count, pattern: '')
     if commits_count < 100
       run_commits(per_page: commits_count, pattern: pattern)
