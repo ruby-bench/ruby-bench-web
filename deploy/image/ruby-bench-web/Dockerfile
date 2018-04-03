@@ -22,8 +22,7 @@ RUN useradd rubybench -s /bin/bash -m -U && \
         git config --global user.name "rubybench" && \
         git config --global user.email "https://twitter.com/tgx_world" && \
         git remote set-branches --add origin production && \
-        chown -R rubybench:rubybench /var/www/ruby-bench-web && \
-        cp config/database.yml.example config/database.yml
+        chown -R rubybench:rubybench /var/www/ruby-bench-web
 
 RUN mkdir -p /shared/gems && chown -R rubybench /shared/gems && \
       cd /var/www/ruby-bench-web && \
