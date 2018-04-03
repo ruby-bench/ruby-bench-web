@@ -15,7 +15,7 @@ params:
 templates:
   - "containers/templates/secrets.yml"
   - "templates/redis.template.yml"
-  - "templates/postgres.template.yml"
+  - "templates/postgres.10.template.yml"
 
 expose:
   - "80:80"
