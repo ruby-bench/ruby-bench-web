@@ -1,4 +1,4 @@
-FROM discourse/base:1.3.5
+FROM discourse/base:2.0.20180107
 MAINTAINER Alan Guo Xiang Tan "https://twitter.com/tgx_world"
 
 RUN sudo apt-get update && sudo apt-get install -y qt5-default libqt5webkit5-dev python-pygments
@@ -12,8 +12,8 @@ ENV PATH /root/.rbenv/bin:$PATH
 RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh && \
     echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 
-RUN /bin/bash -l -c "rbenv install 2.3.0" && \
-    /bin/bash -l -c "rbenv global 2.3.0"
+RUN /bin/bash -l -c "rbenv install 2.5.1" && \
+    /bin/bash -l -c "rbenv global 2.5.1"
 
 RUN useradd rubybench -s /bin/bash -m -U && \
     mkdir -p /var/www && cd /var/www && \
