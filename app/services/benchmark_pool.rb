@@ -9,6 +9,8 @@ module BenchmarkPool
       RemoteServerJob.perform_later(initiator, "sequel_#{initiator_type}", options)
     when 'ruby-pg'
       RemoteServerJob.perform_later(initiator, "pg_#{initiator_type}", options)
+    when 'bundler'
+      RemoteServerJob.perform_later(initiator, "bundler_#{initiator_type}", options)
     else
       raise ArgumentError, "unknown repo: #{repo_name}"
     end
