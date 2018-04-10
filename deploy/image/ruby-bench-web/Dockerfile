@@ -1,4 +1,4 @@
-FROM discourse/base:2.0.20180107
+FROM discourse/base:2.0.20180404
 MAINTAINER Alan Guo Xiang Tan "https://twitter.com/tgx_world"
 
 RUN sudo apt-get update && sudo apt-get install -y qt5-default libqt5webkit5-dev python-pygments
