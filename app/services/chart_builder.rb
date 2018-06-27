@@ -37,6 +37,7 @@ class ChartBuilder
   end
 
   def build_columns
+    keys = @benchmark_runs.map { |run| run.result.keys }.flatten.uniq
     @benchmark_runs.each do |benchmark_run|
       if block_given?
         version = yield(benchmark_run)
@@ -44,9 +45,9 @@ class ChartBuilder
         @categories << version if version != @categories.last
       end
 
-      benchmark_run.result.each do |key, value|
+      keys.each do |key|
         @columns[key] ||= []
-        @columns[key] << value.to_f
+        @columns[key] << benchmark_run.result[key]&.to_f
       end
     end
 
