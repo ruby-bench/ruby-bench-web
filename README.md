@@ -86,3 +86,20 @@ bundle exec rake test
 
 ## Discussion
 Discuss features and direction of project: http://community.rubybench.org
+
+## Operations
+This section describes how to operate the server hosting this application.
+
+### Run ruby benchmarks manually
+
+Use Admin Console:
+
+https://rubybench.org/admin/repos/ruby
+
+Pattern: "all" is replaced with "", and any other string can filter benchmarks.
+
+### Run rails console
+
+```bash
+docker exec -it [container-id] sudo -E -u rubybench bundle exec rails c
+```
