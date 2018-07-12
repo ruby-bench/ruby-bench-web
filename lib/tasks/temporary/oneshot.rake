@@ -223,4 +223,24 @@ namespace :oneshot do
       puts
     end
   end
+
+  desc 'Remove invalid preview2 2.6.0'
+  task remove_26: :environment do
+    time_result_type = BenchmarkResultType.find_by!(name: 'Execution time', unit: 'Seconds')
+    ips_result_type  = BenchmarkResultType.find_by!(name: 'Iteration per second', unit: 'i/s')
+
+    BenchmarkType.all.each do |benchmark_type|
+      unless benchmark_type.script_url.match(%r[\Ahttps://raw\.githubusercontent\.com/ruby-bench/ruby-bench-suite/master/ruby/benchmark/])
+        next
+      end
+
+      original_type = BenchmarkType.where.not(id: benchmark_type.id).find_by(category: benchmark_type.category)
+      if original_type.nil? || !original_type.script_url.match(%r[\Ahttps://raw.githubusercontent.com/ruby-bench/ruby-bench-suite/master/ruby/benchmarks/bm_])
+        next
+      end
+
+      puts "benchmark_type: #{benchmark_type.category}"
+      benchmark_type.benchmark_runs.where(benchmark_result_type: time_result_type).delete_all
+    end
+  end
 end
