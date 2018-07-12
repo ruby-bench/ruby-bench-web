@@ -42,7 +42,7 @@ class ChartBuilder
       if block_given?
         version = yield(benchmark_run)
         @categories ||= []
-        @categories << version if version != @categories.last
+        @categories << version
       end
 
       keys.each do |key|
