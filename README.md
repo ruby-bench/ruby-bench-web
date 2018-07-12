@@ -118,3 +118,13 @@ unzip /tmp/dump.zip -d /
 bundle exec rake db:drop db:create RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1
 cat /tmp/dump.sql | psql -U rubybench ruby-bench-web_development
 ```
+
+## Deployment
+
+### ruby-bench-web
+
+```
+git push origin master:production
+```
+
+and wait for TravisCI...
