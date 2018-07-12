@@ -110,6 +110,12 @@ docker exec -it [container-id] sudo -E -u rubybench bundle exec rake oneshot:xxx
 docker exec -it [container-id] sudo -E -u rubybench bundle exec rails c
 ```
 
+### Purge chart cache
+
+```bash
+docker exec -it [container-id] bash -c 'redis-cli KEYS "charts:*" | xargs redis-cli DEL'
+```
+
 ### Dump and load database
 
 ```bash
