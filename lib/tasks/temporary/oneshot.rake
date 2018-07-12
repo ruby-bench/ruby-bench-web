@@ -12,7 +12,7 @@ namespace :oneshot do
         next
       end
 
-      if run = benchmark_type.benchmark_runs.where(initiator: commit, benchmark_result_type: type)
+      if run = benchmark_type.benchmark_runs.find_by(initiator: commit, benchmark_result_type: type)
         run.destroy
       end
     end
