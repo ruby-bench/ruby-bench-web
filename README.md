@@ -108,7 +108,7 @@ docker exec -it [container-id] sudo -E -u rubybench bundle exec rails c
 
 ```bash
 docker exec -it [container-id] sudo -E -u postgres bash -c "pg_dump rubybench_production > /tmp/dump.sql"
-docker cp 328fe46ed034:/tmp/dump.sql /tmp/dump.sql
+docker cp [container-id]:/tmp/dump.sql /tmp/dump.sql
 zip /tmp/dump.zip /tmp/dump.sql
 ```
 
