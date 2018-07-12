@@ -74,7 +74,11 @@ namespace :oneshot do
         end
 
         print '.'
-        BenchmarkRun.import!(benchmark_runs, on_duplicate_key_update: [:result, :benchmark_result_type_id])
+        begin
+          BenchmarkRun.import!(benchmark_runs, on_duplicate_key_update: [:result, :benchmark_result_type_id])
+        rescue ActiveRecord::RecordInvalid => e
+          puts "#{e.class}: #{e.message}"
+        end
       end
       puts
     end
