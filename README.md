@@ -98,6 +98,12 @@ https://rubybench.org/admin/repos/ruby
 
 Pattern: "all" is replaced with "", and any other string can filter benchmarks.
 
+### Run rake task
+
+```bash
+docker exec -it [container-id] sudo -E -u rubybench bundle exec rake oneshot:xxx
+```
+
 ### Run rails console
 
 ```bash
@@ -117,6 +123,12 @@ scp ruby-bench-server:/tmp/dump.zip /tmp/dump.zip
 unzip /tmp/dump.zip -d /
 bundle exec rake db:drop db:create RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1
 cat /tmp/dump.sql | psql -U rubybench ruby-bench-web_development
+```
+
+### Update ruby-bench-web repository in container
+
+```bash
+/var/docker/launcher rebuild rubybench
 ```
 
 ## Deployment
