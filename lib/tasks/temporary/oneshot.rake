@@ -1,8 +1,3 @@
-module RubybenchOneshot
-  class << self
-  end
-end
-
 namespace :oneshot do
   desc 'Remove duplicated commit'
   task remove_duplicates: :environment do
@@ -44,5 +39,11 @@ namespace :oneshot do
         benchmark_type_id: benchmark_type.id,
       )
     end
+  end
+
+  desc 'Remove broken ones'
+  task remove_file: :environment do
+    BenchmarkType.where(category: 'file_chmod').destroy_all
+    BenchmarkType.where(category: 'file_rename').destroy_all
   end
 end
