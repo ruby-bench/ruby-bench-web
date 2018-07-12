@@ -103,3 +103,18 @@ Pattern: "all" is replaced with "", and any other string can filter benchmarks.
 ```bash
 docker exec -it [container-id] sudo -E -u rubybench bundle exec rails c
 ```
+
+### Dump and load database
+
+```bash
+docker exec -it [container-id] sudo -E -u postgres bash -c "pg_dump rubybench_production > /tmp/dump.sql"
+docker cp 328fe46ed034:/tmp/dump.sql /tmp/dump.sql
+zip /tmp/dump.zip /tmp/dump.sql
+```
+
+```bash
+scp ruby-bench-server:/tmp/dump.zip /tmp/dump.zip
+unzip /tmp/dump.zip -d /
+bundle exec rake db:drop db:create RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+cat /tmp/dump.sql | psql -U rubybench ruby-bench-web_development
+```
