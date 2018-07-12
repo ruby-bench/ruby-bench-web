@@ -21,7 +21,7 @@ class ReposController < ApplicationController
 
   def commits
     unless @benchmark.blank?
-      @charts = @benchmark.benchmark_result_types.map do |benchmark_type|
+      @charts = ips_first(@benchmark.benchmark_result_types).map do |benchmark_type|
         chart_for(benchmark_type)
       end.compact
     end
@@ -29,7 +29,7 @@ class ReposController < ApplicationController
 
   def releases
     unless @benchmark.blank?
-      @charts = @benchmark.benchmark_result_types.map do |benchmark_result_type|
+      @charts = ips_first(@benchmark.benchmark_result_types).map do |benchmark_result_type|
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
           @benchmark.category, benchmark_result_type
         )
@@ -219,5 +219,11 @@ class ReposController < ApplicationController
           end
       end
     end
+  end
+
+  # i/s is a new metric but I want to see it first
+  def ips_first(result_types)
+    ips, others = result_types.partition { |t| t.unit == 'i/s' }
+    [*ips, *others]
   end
 end
