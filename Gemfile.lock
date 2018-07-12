@@ -191,6 +191,11 @@ GEM
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    pry-rails (0.3.6)
+      pry (>= 0.10.4)
     public_suffix (2.0.4)
     puma (3.11.4)
     rack (2.0.4)
@@ -356,6 +361,7 @@ DEPENDENCIES
   octokit
   pg
   poltergeist
+  pry-rails
   puma
   rack-mini-profiler
   rails
