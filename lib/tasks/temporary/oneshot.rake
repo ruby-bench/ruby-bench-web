@@ -8,7 +8,7 @@ namespace :oneshot do
     type = BenchmarkResultType.find_by(name: 'Execution time', unit: 'Seconds')
 
     BenchmarkType.all.each do |benchmark_type|
-      unless benchmark_type.script_url.match(%r[\Ahttps://raw.githubusercontent.com/ruby-bench/ruby-bench-suite/master/ruby/benchmark/])
+      unless benchmark_type.script_url.match(%r[\Ahttps://raw\.githubusercontent\.com/ruby-bench/ruby-bench-suite/master/ruby/benchmark/])
         next
       end
 
@@ -24,12 +24,12 @@ namespace :oneshot do
     right_type = BenchmarkResultType.find_by!(name: 'RSS memory usage', unit: 'Kilobytes')
 
     BenchmarkType.all.each do |benchmark_type|
-      unless benchmark_type.script_url.match(%r[\Ahttps://raw.githubusercontent.com/ruby-bench/ruby-bench-suite/master/ruby/benchmark/])
+      unless benchmark_type.script_url.match(%r[\Ahttps://raw\.githubusercontent\.com/ruby-bench/ruby-bench-suite/master/ruby/benchmark/])
         next
       end
 
       original_type = BenchmarkType.where.not(id: benchmark_type.id).find_by(category: benchmark_type.category)
-      if original_type.nil? || !original_type.script_url.match(%r[\Ahttps://raw.githubusercontent.com/ruby-bench/ruby-bench-suite/master/ruby/benchmarks/bm_])
+      if original_type.nil? || !original_type.script_url.match(%r[\Ahttps://raw\.githubusercontent\.com/ruby-bench/ruby-bench-suite/master/ruby/benchmarks/bm_])
         next
       end
 
@@ -45,5 +45,38 @@ namespace :oneshot do
   task remove_file: :environment do
     BenchmarkType.where(category: 'file_chmod').destroy_all
     BenchmarkType.where(category: 'file_rename').destroy_all
+  end
+
+  desc 'Convert time to ips for .rb benchmark'
+  task rb_time2ips: :environment do
+    time_result_type = BenchmarkResultType.find_by!(name: 'Execution time', unit: 'Seconds')
+    ips_result_type  = BenchmarkResultType.find_by!(name: 'Iteration per second', unit: 'i/s')
+
+    BenchmarkType.all.each do |benchmark_type|
+      unless benchmark_type.script_url.match(%r[\Ahttps://raw\.githubusercontent\.com/ruby-bench/ruby-bench-suite/master/ruby/benchmark/.+\.rb])
+        next
+      end
+
+      original_type = BenchmarkType.where.not(id: benchmark_type.id).find_by(category: benchmark_type.category)
+      if original_type.nil? || !original_type.script_url.match(%r[\Ahttps://raw.githubusercontent.com/ruby-bench/ruby-bench-suite/master/ruby/benchmarks/bm_])
+        next
+      end
+
+      print "benchmark_type: #{benchmark_type.category}"
+      original_type.benchmark_runs.where(benchmark_result_type: time_result_type).find_in_batches do |benchmark_runs|
+        benchmark_runs.each do |benchmark_run|
+          result = {}
+          benchmark_run.result.each do |key, value|
+            result[key] = 1.0 / Float(value)
+          end
+          benchmark_run.result = result
+          benchmark_run.benchmark_result_type = ips_result_type
+        end
+
+        print '.'
+        BenchmarkRun.import!(benchmark_runs, on_duplicate_key_update: [:result, :benchmark_result_type_id])
+      end
+      puts
+    end
   end
 end

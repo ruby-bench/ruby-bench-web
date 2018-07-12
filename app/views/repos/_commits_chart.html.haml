@@ -10,6 +10,8 @@
   - tick_interval = (@display_count / 4) - 1
 
   - charts.each do |chart|
+    - next if chart.categories.nil? # TODO: clean up legacy records later
+
     %h2.l-align-center
       = t('repos.commits.graph_title', graph_name: benchmark.category.humanize,
           type: chart.benchmark_result_type.name)
