@@ -6,6 +6,7 @@ AllCops:
   Exclude:
     - "bin/**/*"
     - "db/**/*"
+    - "lib/tasks/temporary/oneshot.rake"
     - "vendor/**/*"
 
 # Prefer &&/|| over and/or.
