@@ -24,8 +24,7 @@ RUN useradd rubybench -s /bin/bash -m -U && \
         git remote set-branches --add origin production && \
         chown -R rubybench:rubybench /var/www/ruby-bench-web
 
-RUN mkdir -p /shared/gems && chown -R rubybench /shared/gems && \
-      cd /var/www/ruby-bench-web && \
-      sudo -u rubybench bundle install --deployment --without test:development --path=/shared/gems
+RUN cd /var/www/ruby-bench-web && \
+      sudo -u rubybench bundle install --deployment --without test:development --path=vendor/bundle
 
 WORKDIR /var/www/ruby-bench-web
