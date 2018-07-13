@@ -261,4 +261,10 @@ namespace :oneshot do
       BenchmarkType.where(id: original_type.id).delete_all
     end
   end
+
+  desc 'remove githubruby'
+  task githubruby: :environment do
+    githubruby = Release.find_by!(version: 'githubruby-2.2.0-dev')
+    BenchmarkRun.where(initiator: githubruby).delete_all
+  end
 end
