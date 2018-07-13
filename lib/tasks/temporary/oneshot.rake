@@ -243,4 +243,22 @@ namespace :oneshot do
       benchmark_type.benchmark_runs.where(benchmark_result_type: time_result_type).delete_all
     end
   end
+
+  desc 'Remove duplicates'
+  task final: :environment do
+    BenchmarkType.all.each do |benchmark_type|
+      unless benchmark_type.script_url.match(%r[\Ahttps://raw\.githubusercontent\.com/ruby-bench/ruby-bench-suite/master/ruby/benchmark/])
+        next
+      end
+
+      original_type = BenchmarkType.where.not(id: benchmark_type.id).find_by(category: benchmark_type.category)
+      if original_type.nil? || !original_type.script_url.match(%r[\Ahttps://raw.githubusercontent.com/ruby-bench/ruby-bench-suite/master/ruby/benchmarks/bm_])
+        next
+      end
+
+      puts "benchmark_type: #{benchmark_type.category}"
+      BenchmarkRun.where(benchmark_type: original_type).update_all(benchmark_type_id: benchmark_type.id)
+      BenchmarkType.where(id: original_type.id).delete_all
+    end
+  end
 end
