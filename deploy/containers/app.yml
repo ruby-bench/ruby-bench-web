@@ -76,7 +76,7 @@ hooks:
           exec 2>&1
           cd $home
           chown -R rubybench /shared/log/rails
-          exec chpst -u rubybench bundle exec sidekiq -e production -L /shared/log/rails/sidekiq.log -c 1
+          exec chpst -u rubybench bundle exec sidekiq -e production -L /shared/log/rails/sidekiq.log -c 5
     - replace:
         filename: /etc/nginx/nginx.conf
         from: pid /run/nginx.pid;
