@@ -36,7 +36,7 @@ class RemoteServerJob < ActiveJob::Base
     ruby = true
     memory = true
     optcarrot = true
-    liquid = true
+    liquid = false
     patterns = options[:include_patterns]
 
     ssh_exec!(
