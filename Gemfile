@@ -60,7 +60,6 @@ end
 
 group :production do
   gem 'rails_12factor'
-  gem 'newrelic_rpm'
   gem 'sentry-raven'
 end
 gem 'nokogiri', '>= 1.6.8'
