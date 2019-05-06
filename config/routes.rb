@@ -1,5 +1,3 @@
-require 'sidetiq/web'
-
 Rails.application.routes.draw do
   if !Rails.env.test?
     require 'sidekiq/web'
