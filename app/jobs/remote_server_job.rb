@@ -18,6 +18,8 @@ class RemoteServerJob < ActiveJob::Base
 
   PG_COMMIT = "#{SCRIPTS_PATH}/pg/master.sh"
 
+  RUBY_COMMIT_DISCOURSE = "#{SCRIPTS_PATH}/ruby/discourse/trunk.sh"
+
   # Use keyword arguments once Rails 4.2.1 has been released.
   def perform(initiator_key, benchmark_group, options = {})
     Net::SSH.start(
@@ -78,19 +80,9 @@ class RemoteServerJob < ActiveJob::Base
   end
 
   def ruby_commit_discourse(ssh, commit_hash, options)
-    execute_ssh_commands(ssh,
-      [
-        'docker pull rubybench/ruby_trunk_discourse',
-        'docker run --name discourse_redis -d redis:2.8.19',
-        'docker run --name discourse_postgres -d postgres:9.3.5',
-        "docker run --rm --link discourse_postgres:postgres
-          --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=#{commit_hash}\"
-          -e \"API_NAME=#{secrets.api_name}\"
-          -e \"API_PASSWORD=#{secrets.api_password}\"
-          rubybench/ruby_trunk_discourse".squish,
-        'docker stop discourse_postgres discourse_redis',
-        'docker rm -v discourse_postgres discourse_redis'
-      ]
+    ssh_exec!(
+      ssh,
+      "#{RUBY_COMMIT_DISCOURSE} #{commit_hash} #{secrets.api_name} #{secrets.api_password}"
     )
   end
 
