@@ -9,13 +9,18 @@ class RemoteServerJobTest < ActiveJob::TestCase
   end
 
   test '#perform ruby_commit' do
-    @ssh.expects(:exec!).with(
-      "tsp #{RemoteServerJob::RUBY_COMMIT} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
-    )
+    begin
+      @liquid = false
+      @ssh.expects(:exec!).with(
+        "tsp #{RemoteServerJob::RUBY_COMMIT} #{@ruby} #{@memory} #{@optcarrot} #{@liquid} #{@commit_hash} #{@api_name} #{@api_password} #{@patterns}"
+      )
 
-    RemoteServerJob.new.perform(
-      @commit_hash, 'ruby_commit', include_patterns: @patterns
-    )
+      RemoteServerJob.new.perform(
+        @commit_hash, 'ruby_commit', include_patterns: @patterns
+      )
+    ensure
+      @liquid = true
+    end
   end
 
   test '#perform ruby_releases' do
@@ -51,21 +56,8 @@ class RemoteServerJobTest < ActiveJob::TestCase
   end
 
   test '#perform ruby_commit_discourse' do
-    [
-      'tsp docker pull rubybench/ruby_trunk_discourse',
-      'tsp docker run --name discourse_redis -d redis:2.8.19',
-      'tsp docker run --name discourse_postgres -d postgres:9.3.5',
-      "tsp docker run --rm --link discourse_postgres:postgres
-        --link discourse_redis:redis -e \"RUBY_COMMIT_HASH=commit_hash\"
-        -e \"API_NAME=#{@api_name}\"
-        -e \"API_PASSWORD=#{@api_password}\"
-        rubybench/ruby_trunk_discourse".squish,
-      'tsp docker stop discourse_postgres discourse_redis',
-      'tsp docker rm -v discourse_postgres discourse_redis'
-    ].each do |command|
-
-      @ssh.expects(:exec!).with(command)
-    end
+    command = "tsp #{RemoteServerJob::RUBY_COMMIT_DISCOURSE} commit_hash #{@api_name} #{@api_password}"
+    @ssh.expects(:exec!).with(command)
 
     RemoteServerJob.new.perform('commit_hash', 'ruby_commit_discourse')
   end
