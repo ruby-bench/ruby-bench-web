@@ -20,6 +20,8 @@ class RemoteServerJob < ActiveJob::Base
 
   RUBY_COMMIT_DISCOURSE = "#{SCRIPTS_PATH}/ruby/discourse/trunk.sh"
 
+  RUBY_CUSTOM_SCRIPTS = "#{SCRIPTS_PATH}/ruby/custom_scripts/receiver.sh"
+
   # Use keyword arguments once Rails 4.2.1 has been released.
   def perform(initiator_key, benchmark_group, options = {})
     Net::SSH.start(
@@ -57,6 +59,15 @@ class RemoteServerJob < ActiveJob::Base
     ssh_exec!(
       ssh,
       "#{RUBY_RELEASE} #{ruby} #{memory} #{optcarrot} #{liquid} #{version} #{secrets.api_name} #{secrets.api_password} #{patterns}"
+    )
+  end
+
+  def ruby_custom_scripts(ssh, script_url, options)
+    commit_a = options[:commit_a]
+    commit_b = options[:commit_b]
+    ssh_exec!(
+      ssh,
+      "#{RUBY_CUSTOM_SCRIPTS} #{script_url} #{commit_a} #{commit_b} #{secrets.api_name} #{secrets.api_password}"
     )
   end
 

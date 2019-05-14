@@ -21,3 +21,6 @@
 .byebug_history
 
 vendor/bundle
+
+*.swp
+*.swo
