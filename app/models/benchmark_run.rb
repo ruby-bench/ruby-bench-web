@@ -31,7 +31,7 @@ class BenchmarkRun < ApplicationRecord
 
   scope :fetch_release_benchmark_runs, ->(result_type, benchmark_result_type) {
     joins(:benchmark_type)
-      .joins("INNER JOIN releases ON releases.id = benchmark_runs.initiator_id")
+      .joins('INNER JOIN releases ON releases.id = benchmark_runs.initiator_id')
       .includes(:initiator)
       .where(
         benchmark_types: { category: result_type.category },

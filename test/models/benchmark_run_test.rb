@@ -42,7 +42,7 @@ class BenchmarkRunTest < ActiveSupport::TestCase
   end
 
   test '.fetch_release_benchmark_runs' do
-    script_url = "https://raw.githubusercontent.com/org/repo/master/script/bench.rb"
+    script_url = 'https://raw.githubusercontent.com/org/repo/master/script/bench.rb'
 
     ruby = create(:repo, name: 'ruby')
     rails = create(:repo, name: 'rails')
@@ -50,8 +50,8 @@ class BenchmarkRunTest < ActiveSupport::TestCase
     ruby_release = create(:release, repo: ruby, version: '2.6.2')
     rails_release = create(:release, repo: rails, version: '6.0.0')
 
-    ruby_benchmark_type = create(:benchmark_type, category: "discourse_home", repo: ruby, script_url: script_url)
-    rails_benchmark_type = create(:benchmark_type, category: "discourse_home", repo: rails, script_url: script_url)
+    ruby_benchmark_type = create(:benchmark_type, category: 'discourse_home', repo: ruby, script_url: script_url)
+    rails_benchmark_type = create(:benchmark_type, category: 'discourse_home', repo: rails, script_url: script_url)
 
     benchmark_result_type = create(:benchmark_result_type)
     ruby_benchmark_run = create(:release_benchmark_run,
