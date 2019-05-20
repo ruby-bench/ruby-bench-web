@@ -29,13 +29,15 @@ class BenchmarkRun < ApplicationRecord
       .limit(limit)
   }
 
-  scope :fetch_release_benchmark_runs, ->(form_result_type, benchmark_result_type) {
+  scope :fetch_release_benchmark_runs, ->(result_type, benchmark_result_type) {
     joins(:benchmark_type)
+      .joins("INNER JOIN releases ON releases.id = benchmark_runs.initiator_id")
       .includes(:initiator)
       .where(
-        benchmark_types: { category: form_result_type },
+        benchmark_types: { category: result_type.category },
         benchmark_result_type: benchmark_result_type,
         initiator_type: 'Release',
+        releases: { repo_id: result_type.repo_id },
         validity: true
       )
   }

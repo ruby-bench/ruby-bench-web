@@ -31,7 +31,7 @@ class ReposController < ApplicationController
     unless @benchmark.blank?
       @charts = ips_first(@benchmark.benchmark_result_types).map do |benchmark_result_type|
         benchmark_runs = BenchmarkRun.fetch_release_benchmark_runs(
-          @benchmark.category, benchmark_result_type
+          @benchmark, benchmark_result_type
         )
 
         next if benchmark_runs.empty?
