@@ -20,3 +20,6 @@
           = link_to t('top_nav.sponsors'), sponsors_path
         %li
           = link_to t('top_nav.discuss'), AppSettings.forum_url, target: '_blank'
+    - if current_user
+      .current-user
+        = current_user.username

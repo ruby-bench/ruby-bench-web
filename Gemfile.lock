@@ -91,6 +91,10 @@ GEM
     crass (1.0.3)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    discourse_api (0.35.0)
+      faraday (~> 0.9)
+      faraday_middleware (~> 0.10)
+      rack (>= 1.6)
     erubis (2.7.0)
     execjs (2.7.0)
     factory_girl (4.7.0)
@@ -100,6 +104,8 @@ GEM
       railties (>= 3.0.0)
     faraday (0.12.1)
       multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.13.1)
+      faraday (>= 0.7.4, < 1.0)
     ffi (1.9.14)
     font-awesome-rails (4.7.0.2)
       railties (>= 3.2, < 5.2)
@@ -124,7 +130,7 @@ GEM
     kgio (2.10.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    logster (1.2.6)
+    logster (2.3.0)
     loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -320,6 +326,7 @@ DEPENDENCIES
   capybara-screenshot
   coffee-rails
   database_cleaner
+  discourse_api
   factory_girl_rails
   haml
   highstock-rails
