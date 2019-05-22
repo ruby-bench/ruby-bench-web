@@ -20,7 +20,7 @@ class SessionController < ApplicationController
     sso.return_sso_url = "#{request.base_url}/sso"
     sso.nonce = SecureRandom.hex
     sso.sso_url = "#{AppSettings.forum_url}/session/sso_provider"
-    $redis.setex(sso.nonce, 10.minutes.to_i, "/")
+    $redis.setex(sso.nonce, 10.minutes.to_i, '/')
     redirect_to sso.to_url
   end
 end
