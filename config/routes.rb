@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   get ':organization_name/:repo_name/commits' => 'repos#commits', as: :commits
   get ':organization_name/:repo_name/releases' => 'repos#releases', as: :releases
 
+  get 'login' => 'session#login'
+  get 'sso' => 'session#sso'
+
   namespace :admin do
     resources :groups, except: [:show]
 

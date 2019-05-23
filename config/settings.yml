@@ -5,7 +5,8 @@ test:
   <<: *shared
 
 development:
-  <<: *shared
+  # change to match your local discourse instance
+  forum_url: 'http://l.discourse'
 
 production:
   <<: *shared
