@@ -12,24 +12,25 @@ class ManualRunner
   end
 
   def run_last(commits_count, pattern: '')
-    if commits_count < 100
-      run_commits(per_page: commits_count, pattern: pattern)
-    else
-      run_paginated(commits_count, pattern: pattern)
-    end
+    commits = fetch_commits(commits_count)
+    CommitsRunner.run(:api, commits, @repo, pattern, smart: true)
   end
 
   private
 
-  def run_paginated(commits_count, page: 1, pattern: '')
-    unless (commits_count <= 0)
-      count_run = run_commits(page: page, pattern: pattern)
-      run_paginated(commits_count - count_run, page: page + 1, pattern: pattern)
-    end
-  end
+  def fetch_commits(commits_count)
+    commits = []
 
-  def run_commits(page: 1, per_page: 100, pattern: '')
-    commits = @octokit.commits("#{@repo.organization.name}/#{@repo.name}", per_page: per_page, page: page)
-    CommitsRunner.run(:api, commits, @repo, pattern)
+    runs = commits_count.ceil(-2) / 100
+    per_page = [commits_count, 100].min
+
+    runs.times do |n|
+      page = n + 1
+      batch = @octokit.commits("#{@repo.organization.name}/#{@repo.name}", per_page: per_page, page: page)
+      commits.push(*batch)
+    end
+
+    commits.pop(commits.size - commits_count)
+    commits
   end
 end
