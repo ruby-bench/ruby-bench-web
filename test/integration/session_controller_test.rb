@@ -1,6 +1,6 @@
 require 'test_helper'
 
-def sso_response(url)
+def sso_response(url, secret = Rails.application.secrets.sso_secret)
   parsed = Rack::Utils.parse_query(url.split('?')[-1])
   decoded = Base64.decode64(parsed['sso'])
   decoded_hash = Rack::Utils.parse_query(decoded)
@@ -16,7 +16,7 @@ def sso_response(url)
   query = Rack::Utils.build_query(user_data)
   payload = Base64.strict_encode64(query)
   escaped = CGI::escape(payload)
-  signed = OpenSSL::HMAC.hexdigest('sha256', Rails.application.secrets.sso_secret, payload)
+  signed = OpenSSL::HMAC.hexdigest('sha256', secret, payload)
 
   ["#{return_sso_url}?sso=#{escaped}&sig=#{signed}", decoded_hash['nonce']]
 end
@@ -45,6 +45,16 @@ class SessionControllerTest < ActionDispatch::IntegrationTest
 
     get url
     assert_equal(422, response.status)
+    assert_nil(controller.current_user)
+  end
+
+  test 'shouldn\'t allow users to login if incoming payload is signed with a different secret' do
+    get '/login'
+    location = response.headers['Location']
+    url, _ = sso_response(location, 'wr0ng$ecret')
+    assert_raise RuntimeError do
+      get url
+    end
     assert_nil(controller.current_user)
   end
 end
