@@ -30,6 +30,7 @@ en:
       "%{category}" does not have any results. Please select another
       Benchmark Type.
     view_github: View on Github
+    run_locally_tip: You can run this benchmark locally using the <code>rubybench_runner</code> gem. More details <a href="%{path}">here</a>.
 
     index:
       commits_benchmark: Commits Benchmarks
@@ -78,6 +79,34 @@ en:
         desc: 'Script to set up new bare metal servers.'
     sponsors:
       title: Sponsors
+    run_locally:
+      title: Run locally
+      instructions: |
+        The <a href="https://rubygems.org/gems/rubybench_runner">rubybench_runner</a> gem allows you to run the benchmarks locally. Note the gem is still under development and it's currently limited to the Rails benchmarks. Here is how you can use it:
+        <ul class="instructions-list">
+          <li>Install the gem:
+            <pre>gem install rubybench_runner</pre>
+          </li>
+          <li>Clone the Rails repository:
+            <pre>git clone https://github.com/rails/rails.git</pre>
+          </li>
+          <li>Pick one of the <a href="https://rubybench.org/rails/rails/commits">available rails benchmarks</a> and copy the GitHub link of the script (it's the "View on Github" button).</li>
+          <li>Run:
+            <pre>rubybench_runner run rails &lt;script_url&gt; &lt;path_to_rails_clone&gt;</pre>
+          </li>
+          <li>If the benchmark requires a database server, then you need to specify the <code>--db</code> option. Run <code>rubybench_runner --help</code> for details.</li>
+        </ul>
+        <h3>Database server requirement</h3>
+        Scripts that contain <code>activerecord</code> or <code>scaffold</code> in their names are the scripts that require a database server. Supported database servers are PostgreSQL and MySQL.
+        <br>
+        <br>
+        If the benchmark you want to run requires a database server, then depending on the <code>--db</code> option that you specified, the gem will install either the <code>pg</code> or <code>mysql2</code> gems which require some packages to be installed on your system. For the <code>mysql2</code> gem, you can see the required packages <a href="https://github.com/brianmario/mysql2#configuration-options">in their README</a>. For the <code>pg</code> gem, you'll need to install the <code>postgresql</code> and <code>libpq-dev</code> packages using your system package manager. On Ubuntu that would be <code>sudo apt-get install postgresql libpq-dev</code>.
+        <br>
+        <h3>Configurations</h3>
+        On the first run the gem will create a file called <code>.rubybench_runner_config</code> in your home directory. This file allows you to configure the name of the database that the gem will create to run the benchmarks, as well as the database user, host and port. If you have the database server running locally and it's configured to allow peer authentication, then you shouldn't need to change anything in this file (unless you want to change the database name which defaults to <code>rubybench</code>). Note that the database user must have sufficient privileges to create a database on the server.
+        <br>
+        <h3>Feedback</h3>
+        If you want to report an issue in the gem, propose a feature or suggest an improvment to this guide, feel free to post at <a href="https://community.rubybench.org/">community.rubybench.org</a>.
 
   top_nav:
     logo: RubyBench
