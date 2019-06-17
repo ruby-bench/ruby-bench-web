@@ -1,7 +1,6 @@
 - if script_url = benchmark.script_url
   - if show_gem_tip
-    %h4.l-align-center
-      != t('repos.run_locally_tip', path: run_locally_path)
+    != t('repos.run_locally_tip', path: run_locally_path, script: script_name)
   %h2.l-align-center
     = t('repos.script_title', graph_name: benchmark.category.humanize)
 
