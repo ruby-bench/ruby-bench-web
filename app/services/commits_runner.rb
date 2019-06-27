@@ -1,5 +1,5 @@
 module CommitsRunner
-  def self.run(trigger_source, commits, repo, pattern = '')
+  def self.run(trigger_source, commits, repo, pattern = '', smart: false)
     formatted_commits =
       if trigger_source == :webhook
         format_webhook(commits, repo)
@@ -7,6 +7,7 @@ module CommitsRunner
         format_api(commits, repo)
       end
 
+    formatted_commits = smart_reorder(formatted_commits) if smart
     formatted_commits.select { |commit| valid?(commit) }
                      .each { |commit| create_and_run(commit, pattern) }
                      .count
@@ -58,5 +59,33 @@ module CommitsRunner
       commit[:repo].name,
       include_patterns: pattern
     )
+  end
+
+  def self.smart_reorder(commits)
+    return commits if commits.size < 3
+
+    reordered = []
+    reordered << commits.first
+    reordered << commits[commits.size / 2]
+    reordered << commits.last
+
+    depth = 1
+    while (reorder_recursive(commits, 1, commits.size - 1, depth, reordered))
+      depth += 1
+    end
+    reordered
+  end
+
+  def self.reorder_recursive(commits, first, last, depth, reordered)
+    return false if last <= first
+    mid = first + (last - first) / 2
+    if (depth == 0)
+      reordered << commits[mid]
+      true
+    else
+      half1 = reorder_recursive(commits, first, mid, depth - 1, reordered)
+      half2 = reorder_recursive(commits, mid + 1, last, depth - 1, reordered)
+      half1 || half2
+    end
   end
 end

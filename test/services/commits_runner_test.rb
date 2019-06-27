@@ -26,6 +26,35 @@ class CommitsRunnerTest < ActiveSupport::TestCase
     assert_enqueued_jobs(commits.count)
   end
 
+  test '#run can do smart reorder' do
+    commits = []
+    10.times do |n|
+      commits << {
+        'sha' => "abcd#{n}",
+        'commit' => {
+          'message' => 'My beautiful commit message',
+          'author' => {
+            'date' => 12345,
+            'name' => 'bmarkons'
+          }
+        },
+        'html_url' => 'https://github.com/commit'
+      }
+    end
+    CommitsRunner.run(:api, commits, @repo, '', smart: true)
+
+    expect_created(commits)
+    assert_enqueued_jobs(commits.count)
+    order = Commit
+            .unscope(:order)
+            .where(sha1: commits.map { |c| c['sha'] })
+            .order('created_at ASC')
+            .pluck(:sha1)
+
+    expected_order = [0, 5, 9, 3, 7, 2, 4, 6, 8, 1].map { |n| "abcd#{n}" }
+    assert_equal(expected_order, order)
+  end
+
   test '#run commits triggered manually' do
     commits = [
       {

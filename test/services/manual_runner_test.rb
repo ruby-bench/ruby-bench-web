@@ -19,7 +19,7 @@ class ManualRunnerTest < ActiveSupport::TestCase
   end
 
   test 'run last 200 commits' do
-    expect_to_run count: 100, times: 2
+    expect_to_run count: 200, times: 1, smart: true
 
     VCR.use_cassette('github 200 commits') do
       ManualRunner.new(@repo).run_last(200)
@@ -27,7 +27,7 @@ class ManualRunnerTest < ActiveSupport::TestCase
   end
 
   test 'run last 20 commits' do
-    expect_to_run count: 20, times: 1
+    expect_to_run count: 20, times: 1, smart: true
 
     VCR.use_cassette('github 20 commits') do
       ManualRunner.new(@repo).run_last(20)
@@ -44,8 +44,8 @@ class ManualRunnerTest < ActiveSupport::TestCase
 
   private
 
-  def expect_to_run(count:, times:)
-    CommitsRunner.expects(:run).times(times).returns(count).with do |source, commits, repo, pattern|
+  def expect_to_run(count:, times:, smart: false)
+    CommitsRunner.expects(:run).times(times).returns(count).with do |source, commits, repo, pattern, opts|
       commits.each do |commit|
         assert commit['sha']
         assert commit['commit']['message']
@@ -58,6 +58,7 @@ class ManualRunnerTest < ActiveSupport::TestCase
       end
 
       assert_equal count, commits.count
+      assert_equal smart, opts[:smart]
     end
   end
 end
