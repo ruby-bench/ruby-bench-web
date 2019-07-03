@@ -1,0 +1,17 @@
+.user-script-form {
+  width: 70%;
+  .commit-sha {
+    width: 50%;
+  }
+
+  #response-outlet {
+    color: white;
+    background: $brand-primary;
+    border-radius: 4px;
+    padding: 6px;
+    &.white {
+      color: $text-color;
+      background: $pre-bg;
+    }
+  }
+}

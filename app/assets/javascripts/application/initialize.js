@@ -56,6 +56,48 @@ var onSelectChange = function (event) {
   });
 }
 
+function onRangeTogglerChange() {
+  if (this.checked) {
+    $("#second-sha").parent().removeClass("hidden");
+  } else {
+    $("#second-sha").parent().addClass("hidden");
+  }
+}
+
+function onSubmitScript() {
+  var name = $('#script-name').val();
+  var url = $('#script-url').val();
+  var sha = $('#first-sha').val();
+  var sha2 = $('#second-sha').val();
+
+  var submitButton = $('#submit-script');
+  submitButton.attr("disabled", true);
+
+  var outlet = $('#response-outlet')
+  $.ajax("/user-scripts.json", {
+    type: "POST",
+    data: {
+      name: name,
+      url: url,
+      sha: sha,
+      sha2: sha2
+    },
+    success: function(message) {
+      outlet.removeClass('hidden');
+      outlet.addClass('white');
+      outlet.html(message);
+    },
+    error: function(error) {
+      outlet.removeClass('white');
+      outlet.removeClass('hidden');
+      outlet.html("An error occured, status: " + error.status + "<br>" + error.responseText);
+    },
+    complete: function() {
+      submitButton.attr("disabled", false);
+    }
+  });
+}
+
 $(document).on('turbolinks:load', function() {
   if (location.pathname) {
     $(".navbar-nav a[href='" + location.pathname + "']").addClass('current');
@@ -100,4 +142,6 @@ $(document).on('turbolinks:load', function() {
   });
 
   $('.result-types-form select').change(onSelectChange);
+  $('#range-toggler').on('change', onRangeTogglerChange);
+  $('#submit-script').on('click', onSubmitScript);
 });

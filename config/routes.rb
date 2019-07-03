@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'user-scripts' => 'user_scripts#index'
+  post 'user-scripts.json' => 'user_scripts#create'
+
   if !Rails.env.test?
     require 'sidekiq/web'
 
@@ -24,6 +27,12 @@ Rails.application.routes.draw do
 
   get 'login' => 'session#login'
   get 'sso' => 'session#sso'
+
+  # this route is used to bypass SSO and login (used in tests).
+  # DON'T ENABLE IN PRODUCTION
+  if !Rails.env.production?
+    get 'become' => 'session#become'
+  end
 
   namespace :admin do
     resources :groups, except: [:show]

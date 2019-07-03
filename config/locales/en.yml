@@ -10,6 +10,28 @@ en:
 
   submit: Submit
 
+  user_scripts:
+    index:
+      title: Benchmark your Ruby script
+      login_required: You need to login to see this page.
+      login: Login
+      not_enough_permissions: You don't have enough permissions to run a benchmark.
+      script_url: Script URL
+      script_name: Benchmark Name
+      range_commits: Range of commits
+      script_url_placeholder: e.g. https://raw.githubusercontent.com/ruby-bench/ruby-bench-suite/master/ruby/benchmark/app_factorial.rb
+      commit_sha: Commit SHA
+      second_commit_sha: Second commit SHA
+      submit: Submit
+      successful_submit: "Success! Results will be published <a href=\"%{path}\">here</a>."
+    errors:
+      missing_name: Missing Benchmark Name
+      missing_url: Missing Script URL
+      missing_sha: Missing Commit SHA
+      name_already_taken: Benchmarks Name is already taken
+      bad_url: Invalid Script URL
+      unallowed_characters: "\"%{name}\" contains unallowed characters. Allowed characters are: a-z, A-Z, 0-9, hyphens and underscores"
+      bad_sha: "Couldn't find Ruby commit for SHA %{sha}"
   organizations:
     index:
       title: Benchmarks
@@ -30,6 +52,7 @@ en:
       "%{category}" does not have any results. Please select another
       Benchmark Type.
     view_github: View on Github
+    user_scripts: "user_scripts/%{name}"
     run_locally_tip: |
       <p>You can run this benchmark locally using the <code>rubybench_runner</code> gem:</p>
       <pre>gem install rubybench_runner

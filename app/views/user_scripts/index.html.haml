@@ -1,0 +1,30 @@
+.container
+  %h2= t('.title')
+  %br
+  - if !current_user
+    %p= t('.login_required')
+    = link_to t('.login'), :login, class: 'btn btn-primary'
+  - elsif !current_user.trusted
+    %p= t('.not_enough_permissions')
+  - else
+    .user-script-form
+      .form-group
+        %label= t('.script_name')
+        %input.form-control#script-name
+      .form-group
+        %label= t('.script_url')
+        %input.form-control#script-url{ placeholder: t('.script_url_placeholder') }
+      .form-group
+        %label= t('.commit_sha')
+        %input.form-control.commit-sha#first-sha
+      .form-group.hidden
+        %label= t('.second_commit_sha')
+        %input.form-control.commit-sha#second-sha
+      .checkbox
+        %label
+          %input{ type: "checkbox", id: "range-toggler" }
+          = t('.range_commits')
+      .form-group
+        %button.btn.btn-primary#submit-script
+          = t('.submit')
+      %pre.hidden#response-outlet
