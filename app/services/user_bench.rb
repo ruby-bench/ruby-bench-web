@@ -33,11 +33,11 @@ class UserBench
 
   def run
     repo = Repo.find_or_create_by!(
-      name: "ruby",
-      url: "https://github.com/tgxworld/ruby",
+      name: 'ruby',
+      url: 'https://github.com/tgxworld/ruby',
       organization: Organization.find_or_create_by!(
-        name: "ruby",
-        url: "https://github.com/tgxworld/",
+        name: 'ruby',
+        url: 'https://github.com/tgxworld/',
       )
     )
     BenchmarkType.create!(
@@ -68,7 +68,7 @@ class UserBench
   end
 
   def validate_sha(sha)
-    commit = @client.commit("ruby/ruby", sha)
+    commit = @client.commit('ruby/ruby', sha)
     add_commit(commit)
   rescue Octokit::UnprocessableEntity
     errors.push(err('bad_sha', sha: sha))

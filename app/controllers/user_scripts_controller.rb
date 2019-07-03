@@ -30,7 +30,7 @@ class UserScriptsController < ApplicationController
 
   def ensure_trusted
     if !current_user || !current_user.trusted
-      render plain: "Not allowed to post scripts", status: 403
+      render plain: 'Not allowed to post scripts', status: 403
     end
   end
 end

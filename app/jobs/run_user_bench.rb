@@ -5,15 +5,15 @@ class RunUserBench < ActiveJob::Base
     commits = fetch_commits(start_date, stop_sha)
 
     repo = Repo.find_or_create_by!(
-      name: "ruby",
-      url: "https://github.com/tgxworld/ruby",
+      name: 'ruby',
+      url: 'https://github.com/tgxworld/ruby',
       organization: Organization.find_or_create_by!(
-        name: "ruby",
-        url: "https://github.com/tgxworld/",
+        name: 'ruby',
+        url: 'https://github.com/tgxworld/',
       )
     )
 
-    CommitsRunner.run(:api, commits, repo, '', smart: true, name: name, script_url: script_url, initiator_type: "user_scripts")
+    CommitsRunner.run(:api, commits, repo, '', smart: true, name: name, script_url: script_url, initiator_type: 'user_scripts')
   end
 
   private
@@ -22,7 +22,7 @@ class RunUserBench < ActiveJob::Base
     client = Octokit::Client.new(access_token: Rails.application.secrets.github_api_token, per_page: 100)
     commits = []
     done = false
-    batch = client.commits("ruby/ruby", { until: start_date })
+    batch = client.commits('ruby/ruby', until: start_date)
     response = client.last_response
     while batch.size > 0 && !done
       index = -1

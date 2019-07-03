@@ -14,7 +14,7 @@ class BenchmarkRunsController < APIController
     benchmark_type = repo.benchmark_types.find_or_create_by!(
       category: benchmark_type_params[:category],
       script_url: benchmark_type_params[:script_url],
-      from_user: [true, "true"].include?(benchmark_type_params[:from_user])
+      from_user: [true, 'true'].include?(benchmark_type_params[:from_user])
     )
 
     benchmark_type.update_attributes(digest: benchmark_type_params[:digest])

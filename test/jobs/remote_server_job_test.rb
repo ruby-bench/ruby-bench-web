@@ -39,7 +39,7 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
 
     RemoteServerJob.new.perform(
-      @commit_hash, 'ruby_user_scripts', include_patterns: @patterns, name: "test_benchmark", script_url: "http://github.com"
+      @commit_hash, 'ruby_user_scripts', include_patterns: @patterns, name: 'test_benchmark', script_url: 'http://github.com'
     )
   end
 

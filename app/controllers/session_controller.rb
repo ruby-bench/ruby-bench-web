@@ -1,6 +1,6 @@
 class SessionController < ApplicationController
   USERNAMES = %w{john osama sam tgx patrick}
-  TRUSTED_GROUP_NAME = "trusted-users"
+  TRUSTED_GROUP_NAME = 'trusted-users'
 
   def sso
     sso = DiscourseApi::SingleSignOn.parse(request.query_string, Rails.application.secrets.sso_secret)
@@ -41,7 +41,7 @@ class SessionController < ApplicationController
       trusted: false
     }.merge(permitted.to_h.symbolize_keys.slice(:username, :external_id, :trusted))
 
-    hash[:trusted] = [true, "true"].include?(hash[:trusted])
+    hash[:trusted] = [true, 'true'].include?(hash[:trusted])
     session[:user] = hash
     redirect_to '/'
   end
