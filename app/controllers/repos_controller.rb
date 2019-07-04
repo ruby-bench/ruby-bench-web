@@ -195,6 +195,17 @@ class ReposController < ApplicationController
 
   def set_repo_benchmarks
     @benchmarks = @repo.benchmark_types
+    set_rubybench_benchmarks
+    set_users_benchmarks
+    @benchmarks
+  end
+
+  def set_rubybench_benchmarks
+    @rubybench_benchmarks = @benchmarks.where(from_user: false)
+  end
+
+  def set_users_benchmarks
+    @users_benchmarks = @benchmarks.where(from_user: true)
   end
 
   def set_comparable_benchmarks

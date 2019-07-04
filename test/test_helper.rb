@@ -11,6 +11,10 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
 
   include FactoryGirl::Syntax::Methods
+
+  def sign_in(user = {})
+    get '/become', params: user
+  end
 end
 
 Sidekiq::Testing.fake!

@@ -1,5 +1,6 @@
 module CommitsRunner
-  def self.run(trigger_source, commits, repo, pattern = '', smart: false)
+  def self.run(trigger_source, commits, repo, pattern = '', opts = {})
+    smart = !!opts[:smart]
     formatted_commits =
       if trigger_source == :webhook
         format_webhook(commits, repo)
@@ -9,7 +10,7 @@ module CommitsRunner
 
     formatted_commits = smart_reorder(formatted_commits) if smart
     formatted_commits.select { |commit| valid?(commit) }
-                     .each { |commit| create_and_run(commit, pattern) }
+                     .each { |commit| create_and_run(commit, pattern, opts) }
                      .count
   end
 
@@ -45,7 +46,7 @@ module CommitsRunner
     !Commit.merge_or_skip_ci?(commit[:message]) && Commit.valid_author?(commit[:author_name])
   end
 
-  def self.create_and_run(commit, pattern)
+  def self.create_and_run(commit, pattern, opts = {})
     Commit.find_or_create_by!(sha1: commit[:sha]) do |c|
       c.url = commit[:url]
       c.message = commit[:message]
@@ -54,10 +55,10 @@ module CommitsRunner
     end
 
     BenchmarkPool.enqueue(
-      :commit,
+      opts[:initiator_type] || :commit,
       commit[:sha],
       commit[:repo].name,
-      include_patterns: pattern
+      opts.merge(include_patterns: pattern)
     )
   end
 

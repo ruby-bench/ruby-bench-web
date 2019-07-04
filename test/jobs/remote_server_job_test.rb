@@ -33,6 +33,16 @@ class RemoteServerJobTest < ActiveJob::TestCase
     )
   end
 
+  test '#perform ruby_user_scripts' do
+    @ssh.expects(:exec!).with(
+      "tsp #{RemoteServerJob::RUBY_USER_SCRIPTS} #{@commit_hash} test_benchmark http://github.com #{@api_name} #{@api_password}"
+    )
+
+    RemoteServerJob.new.perform(
+      @commit_hash, 'ruby_user_scripts', include_patterns: @patterns, name: 'test_benchmark', script_url: 'http://github.com'
+    )
+  end
+
   test '#perform ruby_release_discourse' do
     [
       'tsp docker pull rubybench/ruby_releases_discourse',

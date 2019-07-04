@@ -6,10 +6,13 @@
         %option{ value: "", selected: @benchmark.blank? || @form, disabled: true }
           = t('repos.select_benchmark')
 
-        - @benchmarks.each do |benchmark|
+        - @rubybench_benchmarks.each do |benchmark|
           %option{ value: benchmark.category, selected: @benchmark.present? && @benchmark.category == benchmark.category }
             = benchmark.category
 
+        - @users_benchmarks.each do |benchmark|
+          %option{ value: benchmark.category, selected: @benchmark.present? && @benchmark.category == benchmark.category }
+            = t('repos.user_scripts', name: benchmark.category)
     - if name == 'commits'
       .input-group
         .input-group-addon= t('repos.commits.show_last')
