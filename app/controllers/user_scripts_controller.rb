@@ -19,8 +19,11 @@ class UserScriptsController < ApplicationController
     bench.validate!
     if bench.valid?
       bench.run
+      links = bench.names.map do |name|
+        "<a href=\"/ruby/ruby/commits?result_type=#{name}\">#{name}</a>"
+      end.join(', ')
 
-      render plain: t('.index.successful_submit', path: "/ruby/ruby/commits?result_type=#{bench.name}")
+      render plain: t('.index.successful_submit', links: links)
     else
       render plain: bench.errors.join("\n"), status: 422
     end

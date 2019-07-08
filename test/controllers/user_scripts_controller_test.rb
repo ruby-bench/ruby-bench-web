@@ -33,13 +33,18 @@ class UserScriptsControllerTest < ActionDispatch::IntegrationTest
 
   test 'trusted users can POST to #create' do
     sign_in trusted: true
+    Net::HTTP.stubs(:get).returns(<<~RUBY)
+      def xzczx
+        puts 45
+      end
+    RUBY
     assert_enqueued_with(job: RunUserBench) do
       VCR.use_cassette('github ruby 6ffef8d459') do
-        post '/user-scripts.json', params: { name: 'some_benchmark', url: 'http://script.com', sha: '6ffef8d459' }
+        post '/user-scripts.json', params: { name: 'some_benchmark', url: 'http://script.com/script.rb', sha: '6ffef8d459' }
       end
     end
     assert_response :success
-    assert_equal response.body, 'Success! Results will be published <a href="/ruby/ruby/commits?result_type=some_benchmark">here</a>.'
+    assert_equal response.body, I18n.t('user_scripts.index.successful_submit', links: '<a href="/ruby/ruby/commits?result_type=some_benchmark">some_benchmark</a>')
     assert_equal BenchmarkType.where(category: 'some_benchmark', from_user: true).count, 1
   end
 end

@@ -23,15 +23,22 @@ en:
       commit_sha: Commit SHA
       second_commit_sha: Second commit SHA
       submit: Submit
-      successful_submit: "Success! Results will be published <a href=\"%{path}\">here</a>."
+      successful_submit: "Success! Results will be published at %{links}."
     errors:
       missing_name: Missing Benchmark Name
       missing_url: Missing Script URL
       missing_sha: Missing Commit SHA
-      name_already_taken: Benchmarks Name is already taken
+      name_already_taken: "`%{names}` already exist"
       bad_url: Invalid Script URL
+      unkown_extension: "Unknown file extension in the URL %{url}"
       unallowed_characters: "\"%{name}\" contains unallowed characters. Allowed characters are: a-z, A-Z, 0-9, hyphens and underscores"
       bad_sha: "Couldn't find Ruby commit for SHA %{sha}"
+      invalid_yaml: Invalid YAML syntax
+      invalid_ruby_code: |
+        The ruby code you provided has syntax errors. The first 5 lines are:
+        %{lines}
+
+      yaml_file_without_benchmarks: The provided YAML file doesn't contain any benchmarks
   organizations:
     index:
       title: Benchmarks
