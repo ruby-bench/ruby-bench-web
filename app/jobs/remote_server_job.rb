@@ -27,7 +27,7 @@ class RemoteServerJob < ActiveJob::Base
     Net::SSH.start(
       secrets.bare_metal_server_ip,
       secrets.bare_metal_server_user,
-      password: secrets.bare_metal_server_password
+      password: secrets.bare_metal_server_password.to_s
     ) do |ssh|
 
       send(benchmark_group, ssh, initiator_key, options)
