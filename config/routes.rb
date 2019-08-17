@@ -19,7 +19,6 @@ Rails.application.routes.draw do
   get 'hardware' => 'static_pages#hardware'
   get 'contributing' => 'static_pages#contribute', as: :contribute
   get 'sponsors' => 'static_pages#sponsors',  as: :sponsors
-  get 'run-locally' => 'static_pages#run_locally', as: :run_locally
   get 'benchmarks' => 'organizations#index'
   get ':organization_name/:repo_name/commits/overview' => 'repos#index', as: :overview
   get ':organization_name/:repo_name/commits' => 'repos#commits', as: :commits
