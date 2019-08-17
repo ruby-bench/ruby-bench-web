@@ -59,12 +59,7 @@ en:
       "%{category}" does not have any results. Please select another
       Benchmark Type.
     view_github: View on Github
-    user_scripts: "user_scripts/%{name}"
-    run_locally_tip: |
-      <p>You can run this benchmark locally using the <code>rubybench_runner</code> gem:</p>
-      <pre>gem install rubybench_runner
-      rubybench_runner run rails/%{script}</pre>
-      More details <a href="%{path}">here</a>.
+    run_locally_tip: You can run this benchmark locally using the <code>rubybench_runner</code> gem. More details <a href="%{path}">here</a>.
 
     index:
       commits_benchmark: Commits Benchmarks
@@ -126,10 +121,7 @@ en:
           </li>
           <li>Pick one of the <a href="https://rubybench.org/rails/rails/commits">available rails benchmarks</a> and copy the GitHub link of the script (it's the "View on Github" button).</li>
           <li>Run:
-            <pre>rubybench_runner run rails/&lt;script_name&gt; --rails=/path/to/rails</pre>
-            You can get <code>script_name</code> from the page of the benchmark that you want to run at rubybench.org.
-            <br>
-            If you have Rails cloned in your home directory, you can omit the <code>--rails</code> flag.
+            <pre>rubybench_runner run rails &lt;script_url&gt; &lt;path_to_rails_clone&gt;</pre>
           </li>
           <li>If the benchmark requires a database server, then you need to specify the <code>--db</code> option. Run <code>rubybench_runner --help</code> for details.</li>
         </ul>
