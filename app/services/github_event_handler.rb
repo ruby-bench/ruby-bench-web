@@ -1,10 +1,8 @@
+# frozen_string_literal: true
+
 class GithubEventHandler
   PUSH = 'push'
   HEADER = 'HTTP_X_GITHUB_EVENT'
-  MAIN_BRANCHES = [
-    'master',
-    'trunk'
-  ]
 
   def initialize(request, payload)
     @request = request
@@ -18,7 +16,7 @@ class GithubEventHandler
   private
 
   def push_to_main_branch?
-    @request.env[HEADER] == PUSH && MAIN_BRANCHES.include?(branch_from_payload)
+    @request.env[HEADER] == PUSH && branch_from_payload == "master"
   end
 
   def branch_from_payload

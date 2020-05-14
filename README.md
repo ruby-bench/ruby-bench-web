@@ -9,7 +9,7 @@ RubyBench was born out from
 
 # Benchmark Scripts
 
-Ruby Scripts: https://github.com/ruby/ruby/tree/trunk/benchmark
+Ruby Scripts: https://github.com/ruby/ruby/tree/master/benchmark
 
 Discourse Scripts: https://github.com/discourse/discourse/tree/master/script
 
@@ -50,7 +50,7 @@ Motherboard | Intel Coporation S1200RP
 ```bash
 redis-server
 
-# Make sure that the current user has a Postgres account 
+# Make sure that the current user has a Postgres account
 # If not run : sudo -u postgres createuser <username> -s
 bundle exec rake db:setup
 
