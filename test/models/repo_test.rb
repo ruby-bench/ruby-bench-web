@@ -56,54 +56,54 @@ class RepoTest < ActiveSupport::TestCase
     data = repo.generate_sparkline_data
     assert_equal(
       data,
-              'Array map' => [
-          {
-            benchmark_result_type: 'Ips',
-            columns: [
-              {
-                name: 'bench_1',
-                data: [c1.id, c4.id, c7.id]
-              },
-              {
-                name: 'bench_2',
-                data: [c1.id + 1, c4.id + 1, c7.id + 1]
-              }
-            ],
-          },
-          {
-            benchmark_result_type: 'Memory',
-            columns: [
-              {
-                name: 'rss_kb',
-                data: [c1.id, c4.id, c7.id]
-              }
-            ]
-          }
-        ],
-        'String to_i' => [
-          {
-            benchmark_result_type: 'Ips',
-            columns: [
-              {
-                name: 'bench_1',
-                data: [c1.id, c4.id, c7.id]
-              },
-              {
-                name: 'bench_2',
-                data: [c1.id + 1, c4.id + 1, c7.id + 1]
-              }
-            ],
-          },
-          {
-            benchmark_result_type: 'Memory',
-            columns: [
-              {
-                name: 'rss_kb',
-                data: [c1.id, c4.id, c7.id]
-              }
-            ]
-          }
-        ]
+      'Array map' => [
+        {
+          benchmark_result_type: 'Ips',
+          columns: [
+            {
+              name: 'bench_1',
+              data: [c1.id, c4.id, c7.id]
+            },
+            {
+              name: 'bench_2',
+              data: [c1.id + 1, c4.id + 1, c7.id + 1]
+            }
+          ],
+        },
+        {
+          benchmark_result_type: 'Memory',
+          columns: [
+            {
+              name: 'rss_kb',
+              data: [c1.id, c4.id, c7.id]
+            }
+          ]
+        }
+      ],
+      'String to_i' => [
+        {
+          benchmark_result_type: 'Ips',
+          columns: [
+            {
+              name: 'bench_1',
+              data: [c1.id, c4.id, c7.id]
+            },
+            {
+              name: 'bench_2',
+              data: [c1.id + 1, c4.id + 1, c7.id + 1]
+            }
+          ],
+        },
+        {
+          benchmark_result_type: 'Memory',
+          columns: [
+            {
+              name: 'rss_kb',
+              data: [c1.id, c4.id, c7.id]
+            }
+          ]
+        }
+      ]
     )
   end
 end
