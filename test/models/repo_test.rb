@@ -47,7 +47,6 @@ class RepoTest < ActiveSupport::TestCase
       end
     end
 
-    # assert_equal([0.0, 3.0, 7.0], [index_of_c1, index_of_c4, index_of_c7])
     # We should pick the first commit from each week.
     # Since the commits are spread over a period of 3
     # weeks, we should have 3 commits. These commits
