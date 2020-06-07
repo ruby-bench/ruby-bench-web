@@ -24,3 +24,4 @@ vendor/bundle
 
 *.swp
 *.swo
+.ruby-version
