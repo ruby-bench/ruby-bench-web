@@ -22,7 +22,7 @@ before_install:
       tar -xvf $PWD/travis_phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis_phantomjs;
     fi
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - gem install bundler:1.17.3
 script:
   - bundle exec rubocop
   - bundle exec rake test
@@ -41,5 +41,14 @@ after_success:
     fi
 addons:
   postgresql: "9.3"
+  apt:
+    packages:
+      - postgresql-9.3
+      - postgresql-client-9.3
+      - postgresql-contrib-9.3
 services:
   - redis-server
+  - xvfb
+env:
+  global:
+    - PGPORT=5433

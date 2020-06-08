@@ -60,4 +60,29 @@ class ChartBuilder
     @columns = new_columns
     self
   end
+
+  def build_columns_hash
+    keys = @benchmark_runs.map { |run| run.keys }.flatten.uniq
+    @benchmark_runs.each do |benchmark_run|
+      if block_given?
+        version = yield(benchmark_run)
+        @categories ||= []
+        @categories << version
+      end
+
+      keys.each do |key|
+        @columns[key] ||= []
+        @columns[key] << benchmark_run[key]&.to_f
+      end
+    end
+
+    new_columns = []
+
+    @columns.each do |name, data|
+      new_columns << { name: name, data: data }
+    end
+
+    @columns = new_columns
+    self
+  end
 end
