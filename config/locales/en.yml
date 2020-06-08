@@ -44,6 +44,7 @@ en:
       title: Benchmarks
       commits_benchmark: Commits Benchmarks
       releases_benchmark: Releases Benchmarks
+      overview: Overview
 
   repos:
     select_benchmark: &select_benchmark
