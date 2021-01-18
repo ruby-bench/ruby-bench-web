@@ -6,7 +6,7 @@ class DataAddBenchmarkResultTypeIdToBenchmarkRuns < ActiveRecord::Migration
         .where('repos.name = ? AND organizations.name = ?', 'ruby', 'ruby')
         .first&.benchmark_types
 
-      return if ruby_benchmark_types.empty?
+      return unless ruby_benchmark_types
 
       benchmark_result_type = BenchmarkResultType.create!(
         name: 'Execution time', unit: 'Seconds'
