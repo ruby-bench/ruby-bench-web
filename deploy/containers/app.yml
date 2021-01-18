@@ -153,22 +153,21 @@ hooks:
 
     - exec:
        cmd:
-         - cd /root && git clone https://github.com/Neilpang/acme.sh.git
-         - cd /root/acme.sh && git reset --hard 6cd3a8a5492b6fd3ad7ae411a5a59164cef09093
+         - cd /root && git clone https://github.com/acmesh-official/acme.sh.git
+         - cd /root/acme.sh && git reset --hard b7a3fe05a4d8a9041159b4a773b35003166f0af0
          - touch /var/spool/cron/crontabs/root
          - install -d -m 0755 -g root -o root $LETSENCRYPT_DIR
          - cd /root/acme.sh && LE_WORKING_DIR="${LETSENCRYPT_DIR}" ./acme.sh install
 
-    - file:
-       path: /etc/runit/1.d/letsencrypt
-       chmod: "+x"
-       contents: |
-          #!/bin/bash
-          set -e
-          LE_WORKING_DIR="$$ENV_LETSENCRYPT_DIR" $$ENV_LETSENCRYPT_DIR/acme.sh issue no $$ENV_HOSTNAME no 4096
-          LE_WORKING_DIR="$$ENV_LETSENCRYPT_DIR" $$ENV_LETSENCRYPT_DIR/acme.sh installcert $$ENV_HOSTNAME /shared/ssl/$$ENV_HOSTNAME.cer /shared/ssl/$$ENV_HOSTNAME.key /shared/ssl/$$ENV_HOSTNAME.cer "sv reload nginx"
-          # After the initial install, switch to Webroot plugin
-          LE_WORKING_DIR="$$ENV_LETSENCRYPT_DIR" $$ENV_LETSENCRYPT_DIR/acme.sh _setopt $$ENV_LETSENCRYPT_DIR/$$ENV_HOSTNAME/$$ENV_HOSTNAME.conf "Le_Webroot" "=" "/var/www/discourse/public"
+    # - file:
+    #    path: /etc/runit/1.d/letsencrypt
+    #    chmod: "+x"
+    #    contents: |
+    #       #!/bin/bash
+    #       set -e
+    #       ${LETSENCRYPT_DIR}/acme.sh --issue --standalone -d $$ENV_HOSTNAME
+    #       ${LETSENCRYPT_DIR}/acme.sh --install-cert -d $$ENV_HOSTNAME --key-file /shared/ssl/$$ENV_HOSTNAME.key --fullchain-file /shared/ssl/$$ENV_HOSTNAME.cer --reloadcmd "sv reload nginx"
+    #       ${LETSENCRYPT_DIR}/acme.sh --issue -d $$ENV_HOSTNAME -w /var/www/discourse/public
 
     - exec:
        cmd:
