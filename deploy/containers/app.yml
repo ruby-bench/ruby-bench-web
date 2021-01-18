@@ -38,6 +38,7 @@ hooks:
           - git checkout production
           - git status
           - git pull --rebase origin production
+          - install -d -m 0755 -g rubybench -o rubybench /shared/gems
           - sudo -u rubybench bundle install -j4 --deployment --verbose --without test:development --path=/shared/gems
 
     - replace:
