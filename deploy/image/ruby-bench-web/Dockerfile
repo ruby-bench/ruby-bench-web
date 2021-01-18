@@ -1,19 +1,17 @@
-FROM discourse/base:2.0.20180802
+FROM discourse/base:2.0.20201214-2041
 MAINTAINER Alan Guo Xiang Tan "https://twitter.com/tgx_world"
 
 RUN sudo apt-get update && sudo apt-get install -y qt5-default libqt5webkit5-dev python-pygments
 
-RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv && \
-    git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build && \
-    ./root/.rbenv/plugins/ruby-build/install.sh
+RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv && \
+    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile && \
+    echo 'eval "$(rbenv init -)"' >> ~/.bash_profile && \
+    . ~/.bash_profile && \
+    mkdir -p "$(rbenv root)"/plugins && \
+    git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
-ENV PATH /root/.rbenv/bin:$PATH
-
-RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh && \
-    echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-
-RUN /bin/bash -l -c "rbenv install 2.5.1" && \
-    /bin/bash -l -c "rbenv global 2.5.1"
+RUN /bin/bash -l -c "rbenv install 2.7.2" && \
+    /bin/bash -l -c "rbenv global 2.7.2"
 
 RUN useradd rubybench -s /bin/bash -m -U && \
     mkdir -p /var/www && cd /var/www && \
@@ -25,6 +23,7 @@ RUN useradd rubybench -s /bin/bash -m -U && \
         chown -R rubybench:rubybench /var/www/ruby-bench-web
 
 RUN cd /var/www/ruby-bench-web && \
-      sudo -u rubybench bundle install --deployment --without test:development --path=vendor/bundle
+    bundle update --bundler && \
+    sudo -u rubybench bundle install --deployment --without test:development --path=vendor/bundle
 
 WORKDIR /var/www/ruby-bench-web
