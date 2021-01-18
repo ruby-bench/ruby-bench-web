@@ -23,7 +23,6 @@ RUN useradd rubybench -s /bin/bash -m -U && \
         chown -R rubybench:rubybench /var/www/ruby-bench-web
 
 RUN cd /var/www/ruby-bench-web && \
-    bundle update --bundler && \
     sudo -u rubybench bundle install --deployment --without test:development --path=vendor/bundle
 
 WORKDIR /var/www/ruby-bench-web

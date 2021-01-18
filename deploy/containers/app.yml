@@ -36,6 +36,7 @@ hooks:
         cd: $home
         cmd:
           - git checkout production
+          - git status
           - git pull --rebase origin production
           - sudo -u rubybench bundle install -j4 --deployment --verbose --without test:development --path=/shared/gems
 
