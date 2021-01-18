@@ -1,7 +1,7 @@
 FROM discourse/base:2.0.20201214-2041
 MAINTAINER Alan Guo Xiang Tan "https://twitter.com/tgx_world"
 
-RUN sudo apt-get update && sudo apt-get install -y qt5-default libqt5webkit5-dev python-pygments
+RUN sudo apt-get update && sudo apt-get install -y qt5-default libqt5webkit5-dev python-pygments netcat
 
 RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv && \
     echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile && \
