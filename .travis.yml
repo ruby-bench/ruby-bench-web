@@ -4,7 +4,6 @@ cache:
     - vendor/bundle
     - travis_phantomjs
     - test/vcr_cassettes
-sudo: false
 rvm:
   - "2.4.1"
 notifications:
@@ -22,7 +21,7 @@ before_install:
       tar -xvf $PWD/travis_phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis_phantomjs;
     fi
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - gem install bundler -v 1.17.3
 script:
   - bundle exec rubocop
   - bundle exec rake test
@@ -40,6 +39,7 @@ after_success:
       echo "\\nDeploy finished! Check deploy logs on server.";
     fi
 addons:
-  postgresql: "9.3"
+  postgresql: "9.6"
 services:
   - redis-server
+  - xvfb
