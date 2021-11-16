@@ -15,12 +15,15 @@
           %td
             - organization.repos.each do |repo|
               %ul.list-inline
-                %li
-                  - if !repo.releases.empty?
-                    = link_to "#{repo.title} #{t('.releases_benchmark')}",
+                - if !repo.releases.empty?
+                  %li
+                    = link_to t('.releases_benchmark'),
                         releases_path(organization_name: organization.name, repo_name: repo.name)
 
-                %li
-                  - if !repo.commits.empty?
-                    = link_to "#{repo.title} #{t('.commits_benchmark')}",
+                - if !repo.commits.empty?
+                  %li
+                    = link_to t('.commits_benchmark'),
                         commits_path(organization_name: organization.name, repo_name: repo.name), data: { no_turbolink: true }
+                  %li
+                    = link_to t('.overview'),
+                        overview_path(organization_name: organization.name, repo_name: repo.name), data: { no_turbolink: true }
